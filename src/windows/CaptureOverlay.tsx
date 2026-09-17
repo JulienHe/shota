@@ -29,6 +29,18 @@ export function CaptureOverlay() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [cancel]);
 
+  useEffect(() => {
+    // Every shota window shares one JS/CSS bundle (see App.tsx), so a plain
+    // CSS rule targeting html/body/#root would leak into the other windows'
+    // documents too. Each Tauri window is its own separate document though,
+    // so setting this directly here only affects the overlay window's own
+    // html/body/#root — safe to do without any cleanup on unmount.
+    const root = document.getElementById("root");
+    document.documentElement.style.background = "transparent";
+    document.body.style.background = "transparent";
+    if (root) root.style.background = "transparent";
+  }, []);
+
   const handleMouseDown = (e: React.MouseEvent) => {
     if (snapMode) return;
     setDrag({ startX: e.clientX, startY: e.clientY, x: e.clientX, y: e.clientY });

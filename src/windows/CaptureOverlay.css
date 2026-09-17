@@ -1,9 +1,3 @@
-html,
-body,
-#root {
-  background: transparent !important;
-}
-
 .capture-overlay {
   position: fixed;
   inset: 0;

@@ -52,6 +52,8 @@ export function Canvas({ ref }: CanvasProps) {
   const drawing = useRef<{ shape: Shape } | null>(null);
   const [liveShape, setLiveShape] = useState<Shape | null>(null);
   const [editingTextId, setEditingTextId] = useState<string | null>(null);
+  const [spacePressed, setSpacePressed] = useState(false);
+  const previousImageRef = useRef<HTMLImageElement | null>(null);
 
   useImperativeHandle(ref, () => ({
     exportDataUrl: () => {
@@ -85,18 +87,53 @@ export function Canvas({ ref }: CanvasProps) {
 
   useEffect(() => {
     if (!imageElement) return;
-    const fitScale = Math.min(
-      (stageSize.width - 40) / imageElement.width,
-      (stageSize.height - 40) / imageElement.height,
-      1,
-    );
-    setView({
-      scale: fitScale,
-      x: (stageSize.width - imageElement.width * fitScale) / 2,
-      y: (stageSize.height - imageElement.height * fitScale) / 2,
-    });
+    const isNewImage = previousImageRef.current !== imageElement;
+    previousImageRef.current = imageElement;
+
+    if (isNewImage) {
+      const fitScale = Math.min(
+        (stageSize.width - 40) / imageElement.width,
+        (stageSize.height - 40) / imageElement.height,
+        1,
+      );
+      setView({
+        scale: fitScale,
+        x: (stageSize.width - imageElement.width * fitScale) / 2,
+        y: (stageSize.height - imageElement.height * fitScale) / 2,
+      });
+    } else {
+      // Same image, just a window resize (or ResizeObserver re-fire): keep the
+      // current zoom level, but re-center it in the new viewport.
+      setView((prev) => ({
+        scale: prev.scale,
+        x: (stageSize.width - imageElement.width * prev.scale) / 2,
+        y: (stageSize.height - imageElement.height * prev.scale) / 2,
+      }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageElement]);
+  }, [imageElement, stageSize]);
+
+  useEffect(() => {
+    const isTypingTarget = () => {
+      const el = document.activeElement;
+      return el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement;
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "Space" && !isTypingTarget()) {
+        e.preventDefault();
+        setSpacePressed(true);
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Space") setSpacePressed(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, []);
 
   useEffect(() => {
     const transformer = transformerRef.current;
@@ -117,6 +154,7 @@ export function Canvas({ ref }: CanvasProps) {
 
   const handleMouseDown = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
+      if (spacePressed) return;
       const stage = stageRef.current;
       if (!stage) return;
       const point = toImagePoint(stage);
@@ -166,10 +204,11 @@ export function Canvas({ ref }: CanvasProps) {
       drawing.current = { shape };
       setLiveShape(shape);
     },
-    [activeTool, toImagePoint, selectShape, imageElement, setActiveTool, updateStyle, setCropRect, style],
+    [spacePressed, activeTool, toImagePoint, selectShape, imageElement, setActiveTool, updateStyle, setCropRect, style],
   );
 
   const handleMouseMove = useCallback(() => {
+    if (spacePressed) return;
     const stage = stageRef.current;
     if (!stage) return;
     const point = toImagePoint(stage);
@@ -193,9 +232,10 @@ export function Canvas({ ref }: CanvasProps) {
 
     drawing.current = { shape: updated };
     setLiveShape(updated);
-  }, [activeTool, cropRect, setCropRect, toImagePoint]);
+  }, [spacePressed, activeTool, cropRect, setCropRect, toImagePoint]);
 
   const handleMouseUp = useCallback(() => {
+    if (spacePressed) return;
     if (activeTool === "crop") return; // crop is confirmed explicitly, not on mouse up
 
     if (drawing.current) {
@@ -205,10 +245,11 @@ export function Canvas({ ref }: CanvasProps) {
       addShape(finished);
       if (finished.type !== "freehand") setActiveTool("select");
     }
-  }, [activeTool, addShape, setActiveTool]);
+  }, [spacePressed, activeTool, addShape, setActiveTool]);
 
   const handleStageClick = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
+      if (spacePressed) return;
       if (activeTool !== "text") return;
       const stage = stageRef.current;
       if (!stage || e.target !== stage) return;
@@ -229,7 +270,14 @@ export function Canvas({ ref }: CanvasProps) {
       setEditingTextId(shape.id);
       setActiveTool("select");
     },
-    [activeTool, toImagePoint, addShape, setActiveTool, style],
+    [spacePressed, activeTool, toImagePoint, addShape, setActiveTool, style],
+  );
+
+  const handleStageDragMove = useCallback(
+    (e: KonvaEventObject<DragEvent>) => {
+      setView((prev) => ({ ...prev, x: e.target.x(), y: e.target.y() }));
+    },
+    [setView],
   );
 
   const registerShapeRef = useCallback((id: string) => (node: Konva.Node | null) => {
@@ -249,12 +297,14 @@ export function Canvas({ ref }: CanvasProps) {
         scaleY={view.scale}
         x={view.x}
         y={view.y}
+        draggable={spacePressed}
+        onDragMove={handleStageDragMove}
         onWheel={onWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onClick={handleStageClick}
-        style={{ cursor: activeTool === "select" ? "default" : "crosshair" }}
+        style={{ cursor: spacePressed ? "grab" : activeTool === "select" ? "default" : "crosshair" }}
       >
         <Layer>
           {imageElement && (
