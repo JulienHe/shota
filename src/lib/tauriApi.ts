@@ -24,6 +24,8 @@ export const tauriApi = {
 
   openCaptureOverlay: () => invoke<void>("open_capture_overlay_command"),
 
+  overlayReady: () => invoke<void>("overlay_ready"),
+
   captureFullscreenNow: (monitorId?: number) =>
     invoke<void>("capture_fullscreen_now", { monitorId: monitorId ?? null }),
 

@@ -49,9 +49,23 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
             (max_y - min_y) as f64 / scale,
         ))
         .map_err(|e| e.to_string())?;
-    window.show().map_err(|e| e.to_string())?;
-    window.set_focus().map_err(|e| e.to_string())?;
 
+    // Left hidden here on purpose: WebView2 paints its own opaque white
+    // background before our page's JS makes it transparent, so showing the
+    // window immediately causes a white flash. The frontend calls the
+    // `overlay_ready` command once it has applied the transparent styling,
+    // which is what actually shows the window (see show_capture_overlay).
+
+    Ok(())
+}
+
+/// Called once the overlay page has applied its transparent styling, so the
+/// window only becomes visible after it can no longer flash white.
+pub fn show_capture_overlay(app: &AppHandle) -> Result<(), String> {
+    if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
+        window.show().map_err(|e| e.to_string())?;
+        window.set_focus().map_err(|e| e.to_string())?;
+    }
     Ok(())
 }
 

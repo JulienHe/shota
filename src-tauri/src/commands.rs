@@ -6,7 +6,7 @@ use crate::clipboard;
 use crate::file_save;
 use crate::hotkeys::{self, ShortcutKind};
 use crate::state::AppState;
-use crate::windows::{close_capture_overlay, open_capture_overlay, open_editor_window};
+use crate::windows::{close_capture_overlay, open_capture_overlay, open_editor_window, show_capture_overlay};
 
 #[derive(Serialize)]
 pub struct ShortcutsPayload {
@@ -33,6 +33,11 @@ pub fn list_capturable_windows() -> Result<Vec<WindowInfo>, String> {
 #[tauri::command]
 pub fn open_capture_overlay_command(app: AppHandle) -> Result<(), String> {
     open_capture_overlay(&app)
+}
+
+#[tauri::command]
+pub fn overlay_ready(app: AppHandle) -> Result<(), String> {
+    show_capture_overlay(&app)
 }
 
 #[tauri::command]

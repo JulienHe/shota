@@ -39,6 +39,16 @@ export function CaptureOverlay() {
     document.documentElement.style.background = "transparent";
     document.body.style.background = "transparent";
     if (root) root.style.background = "transparent";
+
+    // The window is created hidden (see overlay.rs) specifically so it can't
+    // flash WebView2's default white background before this runs. Wait a
+    // couple of frames so the transparent styling has actually painted
+    // before asking Rust to reveal the window.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        tauriApi.overlayReady();
+      });
+    });
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {

@@ -37,6 +37,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::list_capturable_windows,
             commands::open_capture_overlay_command,
+            commands::overlay_ready,
             commands::get_shortcuts,
             commands::set_shortcut,
             commands::finish_region_capture,
