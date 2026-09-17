@@ -5,7 +5,7 @@ A free, native Windows screenshot & annotation tool — the kind of thing [Shott
 ## Features
 
 - **Capture**: full screen, drag-select area, or snap to a window (hold `Space` while selecting an area)
-- **Shortcuts**: `Ctrl+Alt+F` full screen · `Ctrl+Alt+A` area/window (global, work from anywhere) · `Ctrl+C` copy · `Ctrl+S` save as (remembers the last folder, falls back to Desktop)
+- **Shortcuts**: `Ctrl+Shift+4` full screen · `Ctrl+Shift+5` area/window (global, work from anywhere, rebindable from the main window's settings) · `Ctrl+C` copy · `Ctrl+S` save as (remembers the last folder, falls back to Desktop)
 - **Annotate**: rectangle, ellipse, line, arrow, text, freehand pen — each with stroke-only / filled / stroke+opacity-fill styles, adjustable stroke width and corner radius
 - **Manipulate**: in-place crop, zoom, color picker (eyedropper)
 

@@ -4,9 +4,33 @@ use std::path::PathBuf;
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 
-#[derive(Serialize, Deserialize, Default, Clone)]
+use crate::hotkeys::{ShortcutKind, DEFAULT_AREA_SHORTCUT, DEFAULT_FULLSCREEN_SHORTCUT};
+
+#[derive(Serialize, Deserialize, Clone)]
 struct PersistedSettings {
     last_save_dir: Option<String>,
+    #[serde(default = "default_fullscreen_shortcut")]
+    fullscreen_shortcut: String,
+    #[serde(default = "default_area_shortcut")]
+    area_shortcut: String,
+}
+
+fn default_fullscreen_shortcut() -> String {
+    DEFAULT_FULLSCREEN_SHORTCUT.to_string()
+}
+
+fn default_area_shortcut() -> String {
+    DEFAULT_AREA_SHORTCUT.to_string()
+}
+
+impl Default for PersistedSettings {
+    fn default() -> Self {
+        Self {
+            last_save_dir: None,
+            fullscreen_shortcut: default_fullscreen_shortcut(),
+            area_shortcut: default_area_shortcut(),
+        }
+    }
 }
 
 pub struct AppState {
@@ -40,6 +64,20 @@ impl AppState {
     pub fn set_last_save_dir(&self, app: &AppHandle, dir: String) {
         let mut settings = self.settings.lock().unwrap();
         settings.last_save_dir = Some(dir);
+        let _ = write_settings(app, &settings);
+    }
+
+    pub fn shortcuts(&self) -> (String, String) {
+        let settings = self.settings.lock().unwrap();
+        (settings.fullscreen_shortcut.clone(), settings.area_shortcut.clone())
+    }
+
+    pub fn set_shortcut(&self, app: &AppHandle, kind: ShortcutKind, accelerator: String) {
+        let mut settings = self.settings.lock().unwrap();
+        match kind {
+            ShortcutKind::Fullscreen => settings.fullscreen_shortcut = accelerator,
+            ShortcutKind::Area => settings.area_shortcut = accelerator,
+        }
         let _ = write_settings(app, &settings);
     }
 }

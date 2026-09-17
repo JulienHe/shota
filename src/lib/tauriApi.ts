@@ -34,6 +34,11 @@ export const tauriApi = {
 
   saveImageAs: (pngBase64: string, suggestedName: string) =>
     invoke<string | null>("save_image_as", { pngBase64, suggestedName }),
+
+  getShortcuts: () => invoke<{ fullscreen: string; area: string }>("get_shortcuts"),
+
+  setShortcut: (kind: "fullscreen" | "area", accelerator: string) =>
+    invoke<void>("set_shortcut", { kind, accelerator }),
 };
 
 /** Strips the `data:image/png;base64,` prefix so raw base64 can cross the IPC boundary. */

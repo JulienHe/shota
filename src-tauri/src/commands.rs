@@ -1,10 +1,29 @@
+use serde::Serialize;
 use tauri::{AppHandle, Manager};
 
 use crate::capture::{self, WindowInfo};
 use crate::clipboard;
 use crate::file_save;
+use crate::hotkeys::{self, ShortcutKind};
 use crate::state::AppState;
 use crate::windows::{close_capture_overlay, open_capture_overlay, open_editor_window};
+
+#[derive(Serialize)]
+pub struct ShortcutsPayload {
+    pub fullscreen: String,
+    pub area: String,
+}
+
+#[tauri::command]
+pub fn get_shortcuts(app: AppHandle) -> ShortcutsPayload {
+    let (fullscreen, area) = app.state::<AppState>().shortcuts();
+    ShortcutsPayload { fullscreen, area }
+}
+
+#[tauri::command]
+pub fn set_shortcut(app: AppHandle, kind: ShortcutKind, accelerator: String) -> Result<(), String> {
+    hotkeys::update_shortcut(&app, kind, accelerator)
+}
 
 #[tauri::command]
 pub fn list_capturable_windows() -> Result<Vec<WindowInfo>, String> {

@@ -19,12 +19,14 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle().clone();
             app.manage(state::AppState::load(&handle));
-            hotkeys::register_shortcuts(&handle).expect("failed to register global shortcuts");
+            hotkeys::register_all(&handle).expect("failed to register global shortcuts");
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             commands::list_capturable_windows,
             commands::open_capture_overlay_command,
+            commands::get_shortcuts,
+            commands::set_shortcut,
             commands::finish_region_capture,
             commands::finish_window_capture,
             commands::cancel_capture,

@@ -7,6 +7,12 @@
   background: #ffffff;
 }
 
+.main-window__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .main-window__brand {
   font-size: 15px;
   font-weight: 600;
