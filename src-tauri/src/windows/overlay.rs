@@ -31,6 +31,7 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
     let window = WebviewWindowBuilder::new(app, OVERLAY_LABEL, WebviewUrl::App("index.html".into()))
         .title("shota-overlay")
         .transparent(true)
+        .background_color(tauri::webview::Color(0, 0, 0, 0))
         .decorations(false)
         .always_on_top(true)
         .skip_taskbar(true)

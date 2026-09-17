@@ -1,5 +1,6 @@
 html,
-body {
+body,
+#root {
   background: transparent !important;
 }
 
