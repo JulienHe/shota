@@ -2,19 +2,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: #d7d9de;
+  color: #3f3f46;
   cursor: pointer;
   transition: background 0.12s ease, color 0.12s ease;
 }
 
 .icon-button:hover:not(:disabled) {
-  background: #33353c;
-  color: #ffffff;
+  background: #f0f0f2;
+  color: #18181b;
 }
 
 .icon-button--active {
@@ -23,6 +23,6 @@
 }
 
 .icon-button:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: default;
 }

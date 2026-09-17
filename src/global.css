@@ -1,5 +1,5 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-family: "Segoe UI", -apple-system, sans-serif;
 }
 
@@ -13,8 +13,8 @@ body,
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #16171b;
-  color: #e6e7eb;
+  background: #f4f4f5;
+  color: #18181b;
 }
 
 button {

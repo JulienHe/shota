@@ -11,12 +11,12 @@ import {
   Undo2,
   Redo2,
   Copy,
-  Download,
   Trash2,
 } from "lucide-react";
 import { IconButton } from "../../../components/IconButton";
 import { useToolStore } from "../../../stores/toolStore";
 import { useDocumentStore } from "../../../stores/documentStore";
+import { StyleControls } from "./StyleControls";
 import { ToolId } from "../types";
 import "./Toolbar.css";
 
@@ -49,7 +49,7 @@ export function Toolbar({ onCopy, onSave }: ToolbarProps) {
 
   return (
     <div className="toolbar">
-      <div className="toolbar__group">
+      <div className="toolbar__row">
         {TOOLS.map((tool) => (
           <IconButton
             key={tool.id}
@@ -59,9 +59,11 @@ export function Toolbar({ onCopy, onSave }: ToolbarProps) {
             onClick={() => setActiveTool(tool.id)}
           />
         ))}
-      </div>
 
-      <div className="toolbar__group">
+        <StyleControls activeTool={activeTool} />
+
+        <div className="toolbar__divider" />
+
         <IconButton icon={Undo2} label="Undo" disabled={!canUndo} onClick={undo} />
         <IconButton icon={Redo2} label="Redo" disabled={!canRedo} onClick={redo} />
         <IconButton
@@ -70,11 +72,13 @@ export function Toolbar({ onCopy, onSave }: ToolbarProps) {
           disabled={!selectedShapeId}
           onClick={() => selectedShapeId && removeShape(selectedShapeId)}
         />
-      </div>
 
-      <div className="toolbar__group toolbar__group--end">
+        <div className="toolbar__divider" />
+
         <IconButton icon={Copy} label="Copy (Ctrl+C)" onClick={onCopy} />
-        <IconButton icon={Download} label="Save as (Ctrl+S)" onClick={onSave} />
+        <button type="button" className="toolbar__save" onClick={onSave}>
+          Save as…
+        </button>
       </div>
     </div>
   );

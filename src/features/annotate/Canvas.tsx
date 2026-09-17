@@ -257,7 +257,16 @@ export function Canvas({ ref }: CanvasProps) {
         style={{ cursor: activeTool === "select" ? "default" : "crosshair" }}
       >
         <Layer>
-          {imageElement && <KonvaImage image={imageElement} listening={false} />}
+          {imageElement && (
+            <KonvaImage
+              image={imageElement}
+              listening={false}
+              shadowColor="black"
+              shadowBlur={24}
+              shadowOpacity={0.25}
+              shadowOffsetY={6}
+            />
+          )}
 
           {shapes.map((shape) => (
             <ShapeRenderer

@@ -2,10 +2,8 @@ import { useEffect, useRef } from "react";
 import { listen } from "@tauri-apps/api/event";
 
 import { Toolbar } from "../features/annotate/toolbar/Toolbar";
-import { StylePanel } from "../features/annotate/toolbar/StylePanel";
 import { Canvas, CanvasHandle } from "../features/annotate/Canvas";
 import { useDocumentStore } from "../stores/documentStore";
-import { useToolStore } from "../stores/toolStore";
 import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
 import { tauriApi, toBase64Payload, toDataUrl } from "../lib/tauriApi";
 import "./EditorWindow.css";
@@ -13,7 +11,6 @@ import "./EditorWindow.css";
 export function EditorWindow() {
   const canvasRef = useRef<CanvasHandle>(null);
   const loadImage = useDocumentStore((s) => s.loadImage);
-  const activeTool = useToolStore((s) => s.activeTool);
 
   useEffect(() => {
     const loadFromBase64 = (base64: string) => {
@@ -50,11 +47,8 @@ export function EditorWindow() {
 
   return (
     <div className="editor-window">
+      <Canvas ref={canvasRef} />
       <Toolbar onCopy={handleCopy} onSave={handleSave} />
-      <div className="editor-window__body">
-        <Canvas ref={canvasRef} />
-        <StylePanel activeTool={activeTool} />
-      </div>
     </div>
   );
 }
