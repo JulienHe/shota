@@ -1,0 +1,22 @@
+:root {
+  color-scheme: dark;
+  font-family: "Segoe UI", -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #16171b;
+  color: #e6e7eb;
+}
+
+button {
+  font-family: inherit;
+}

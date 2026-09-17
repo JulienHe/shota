@@ -1,0 +1,13 @@
+.editor-window {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.editor-window__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}

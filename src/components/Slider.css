@@ -1,0 +1,18 @@
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: #b7b9c0;
+  width: 100%;
+}
+
+.slider__value {
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.slider input[type="range"] {
+  width: 100%;
+  accent-color: #3d7bfd;
+}

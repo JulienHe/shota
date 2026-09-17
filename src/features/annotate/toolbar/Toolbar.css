@@ -1,0 +1,22 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #202127;
+  border-bottom: 1px solid #303139;
+}
+
+.toolbar__group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-right: 12px;
+  border-right: 1px solid #303139;
+}
+
+.toolbar__group--end {
+  margin-left: auto;
+  padding-right: 0;
+  border-right: none;
+}
