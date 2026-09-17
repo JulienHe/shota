@@ -4,6 +4,7 @@ mod commands;
 mod file_save;
 mod hotkeys;
 mod state;
+mod tray;
 mod windows;
 
 use tauri::Manager;
@@ -20,7 +21,18 @@ pub fn run() {
             let handle = app.handle().clone();
             app.manage(state::AppState::load(&handle));
             hotkeys::register_all(&handle).expect("failed to register global shortcuts");
+            tray::build_tray(&handle).expect("failed to build tray icon");
             Ok(())
+        })
+        .on_window_event(|window, event| {
+            // shota lives in the tray; closing the shortcuts window just hides it
+            // instead of quitting the whole app.
+            if window.label() == "main" {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                    api.prevent_close();
+                    let _ = window.hide();
+                }
+            }
         })
         .invoke_handler(tauri::generate_handler![
             commands::list_capturable_windows,

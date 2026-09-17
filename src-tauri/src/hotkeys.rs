@@ -6,8 +6,8 @@ use crate::capture;
 use crate::state::AppState;
 use crate::windows::{open_capture_overlay, open_editor_window};
 
-pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Shift+4";
-pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Shift+5";
+pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Shift+3";
+pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Shift+4";
 
 #[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]

@@ -16,7 +16,9 @@
         "title": "shota",
         "width": 360,
         "height": 480,
-        "resizable": true
+        "resizable": true,
+        "visible": false,
+        "skipTaskbar": true
       }
     ],
     "security": {

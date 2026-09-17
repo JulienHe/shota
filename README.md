@@ -2,10 +2,12 @@
 
 A free, native Windows screenshot & annotation tool — the kind of thing [Shottr](https://shottr.cc/) is on macOS.
 
+shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Keyboard Shortcuts…" entry that opens the small settings window.
+
 ## Features
 
-- **Capture**: full screen, drag-select area, or snap to a window (hold `Space` while selecting an area)
-- **Shortcuts**: `Ctrl+Shift+4` full screen · `Ctrl+Shift+5` area/window (global, work from anywhere, rebindable from the main window's settings) · `Ctrl+C` copy · `Ctrl+S` save as (remembers the last folder, falls back to Desktop)
+- **Capture**: full screen, drag-select area, or snap to a window (hold `Space` while selecting an area) — from the global shortcuts or the tray icon menu
+- **Shortcuts**: `Ctrl+Shift+3` full screen · `Ctrl+Shift+4` area/window (global, work from anywhere, rebindable from the tray icon's "Keyboard Shortcuts…") · `Ctrl+C` copy · `Ctrl+S` save as (remembers the last folder, falls back to Desktop)
 - **Annotate**: rectangle, ellipse, line, arrow, text, freehand pen — each with stroke-only / filled / stroke+opacity-fill styles, adjustable stroke width and corner radius
 - **Manipulate**: in-place crop, zoom, color picker (eyedropper)
 
@@ -21,8 +23,9 @@ A free, native Windows screenshot & annotation tool — the kind of thing [Shott
 
 - `src-tauri/src/capture` — screen, region, and window capture (xcap)
 - `src-tauri/src/windows` — overlay & editor window lifecycle
+- `src-tauri/src/tray.rs` — the tray icon and its menu (capture actions, shortcuts, quit)
 - `src-tauri/src/hotkeys.rs`, `clipboard.rs`, `file_save.rs`, `state.rs` — global shortcuts, clipboard, save-dialog/last-folder persistence
-- `src/windows` — one component per Tauri window (`MainWindow`, `CaptureOverlay`, `EditorWindow`), routed by window label in `App.tsx`
+- `src/windows` — one component per Tauri window (`MainWindow` is the hidden-by-default shortcuts/settings window, `CaptureOverlay`, `EditorWindow`), routed by window label in `App.tsx`
 - `src/features/annotate` — the canvas, shape components, toolbar, style panel
 - `src/features/crop`, `src/features/zoom`, `src/features/color-picker` — image manipulation tools
 - `src/stores` — Zustand stores (`toolStore` for the active tool/style, `documentStore` for shapes/undo-redo)
