@@ -83,7 +83,20 @@ export function Canvas({ ref }: CanvasProps) {
     if (!el) return;
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0];
-      if (entry) setStageSize({ width: entry.contentRect.width, height: entry.contentRect.height });
+      if (!entry) return;
+      const width = entry.contentRect.width;
+      const height = entry.contentRect.height;
+      setStageSize((prev) => {
+        // ResizeObserver fires on plenty of noise that isn't a real resize
+        // (sub-pixel layout jitter, DPI/monitor changes while dragging,
+        // etc.). Recentering the view on every tick made the image visibly
+        // shift out from under an in-progress shape drag, so only actually
+        // update — and trigger the recenter effect below — on a real change.
+        if (prev && Math.abs(prev.width - width) < 1 && Math.abs(prev.height - height) < 1) {
+          return prev;
+        }
+        return { width, height };
+      });
     });
     observer.observe(el);
     return () => observer.disconnect();
