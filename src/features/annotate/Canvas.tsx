@@ -47,7 +47,11 @@ export function Canvas({ ref }: CanvasProps) {
   const transformerRef = useRef<Konva.Transformer>(null);
   const nodeRefs = useRef<Map<string, Konva.Node>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
-  const [stageSize, setStageSize] = useState({ width: 800, height: 600 });
+  // Starts null (rather than a guessed placeholder) so the very first "fit to
+  // window" calculation always uses a real, measured container size — an
+  // early guess here would produce a wrong scale that a later resize would
+  // only recenter, never correct, permanently skewing shape coordinates.
+  const [stageSize, setStageSize] = useState<{ width: number; height: number } | null>(null);
 
   const drawing = useRef<{ shape: Shape } | null>(null);
   const [liveShape, setLiveShape] = useState<Shape | null>(null);
@@ -86,7 +90,7 @@ export function Canvas({ ref }: CanvasProps) {
   }, []);
 
   useEffect(() => {
-    if (!imageElement) return;
+    if (!imageElement || !stageSize) return;
     const isNewImage = previousImageRef.current !== imageElement;
     previousImageRef.current = imageElement;
 
@@ -289,6 +293,7 @@ export function Canvas({ ref }: CanvasProps) {
 
   return (
     <div className="canvas" ref={containerRef}>
+      {stageSize && (
       <Stage
         ref={stageRef}
         width={stageSize.width}
@@ -357,6 +362,7 @@ export function Canvas({ ref }: CanvasProps) {
           )}
         </Layer>
       </Stage>
+      )}
 
       {editingShape && editingShape.type === "text" && (
         <TextEditorOverlay

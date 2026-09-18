@@ -1,5 +1,5 @@
 import { Rect } from "react-konva";
-import { RectShape as RectShapeData, fillForStyle, fillOpacityForStyle } from "../types";
+import { RectShape as RectShapeData, fillForStyle } from "../types";
 import { ShapeComponentProps } from "./ShapeRenderer";
 
 export function RectShapeView({ shape, ...common }: ShapeComponentProps<RectShapeData>) {
@@ -14,7 +14,6 @@ export function RectShapeView({ shape, ...common }: ShapeComponentProps<RectShap
       stroke={shape.style.stroke}
       strokeWidth={shape.style.strokeWidth}
       fill={fillForStyle(shape.style)}
-      fillOpacity={fillOpacityForStyle(shape.style)}
       cornerRadius={shape.style.cornerRadius}
     />
   );

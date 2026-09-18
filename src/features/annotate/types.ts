@@ -84,14 +84,26 @@ export function createShapeId(): string {
   return `shape_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function fillForStyle(style: ShapeStyle): string | undefined {
-  if (style.fillMode === "none") return undefined;
-  if (style.fillMode === "solid") return style.fillColor;
-  return style.fillColor;
+/**
+ * Konva has no `fillOpacity` attribute (it's an SVG concept, silently
+ * ignored by Konva), so the fill's alpha has to be baked into the color
+ * string itself.
+ *
+ * This always returns a real color — even at alpha 0 for "stroke only" mode
+ * — rather than `undefined`, because Konva only hit-tests a shape's interior
+ * (not just its stroke) when `fill` is set. Its hit canvas ignores the
+ * actual alpha, so a fully transparent fill still keeps the whole shape
+ * clickable/draggable while staying visually invisible.
+ */
+export function fillForStyle(style: ShapeStyle): string {
+  const alpha = style.fillMode === "none" ? 0 : style.fillMode === "solid" ? 1 : style.fillOpacity;
+  return hexToRgba(style.fillColor, alpha);
 }
 
-export function fillOpacityForStyle(style: ShapeStyle): number {
-  if (style.fillMode === "translucent") return style.fillOpacity;
-  if (style.fillMode === "solid") return 1;
-  return 0;
+function hexToRgba(hex: string, alpha: number): string {
+  const clean = hex.replace("#", "");
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
