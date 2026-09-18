@@ -13,6 +13,8 @@ export interface ShapeCommonProps {
   onClick: (e: KonvaEventObject<MouseEvent>) => void;
   onTap: (e: KonvaEventObject<Event>) => void;
   onDblClick?: (e: KonvaEventObject<MouseEvent>) => void;
+  onMouseEnter?: (e: KonvaEventObject<MouseEvent>) => void;
+  onMouseLeave?: (e: KonvaEventObject<MouseEvent>) => void;
   onDragStart?: (e: KonvaEventObject<DragEvent>) => void;
   onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
   onTransformEnd: (e: KonvaEventObject<Event>) => void;

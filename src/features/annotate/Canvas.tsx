@@ -57,6 +57,7 @@ export function Canvas({ ref }: CanvasProps) {
   const [liveShape, setLiveShape] = useState<Shape | null>(null);
   const [editingTextId, setEditingTextId] = useState<string | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
+  const [hoveredShapeId, setHoveredShapeId] = useState<string | null>(null);
   const previousImageRef = useRef<HTMLImageElement | null>(null);
 
   useImperativeHandle(ref, () => ({
@@ -144,11 +145,19 @@ export function Canvas({ ref }: CanvasProps) {
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.code === "Space") setSpacePressed(false);
     };
+    // If focus leaves the window while Space is held (switching apps, a
+    // native dialog stealing focus, etc.), the keyup fires somewhere else
+    // and never reaches us — leaving the whole canvas permanently
+    // draggable. Releasing on blur is the standard fix for a stuck
+    // modifier key.
+    const onBlur = () => setSpacePressed(false);
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onBlur);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onBlur);
     };
   }, []);
 
@@ -322,7 +331,15 @@ export function Canvas({ ref }: CanvasProps) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onClick={handleStageClick}
-        style={{ cursor: spacePressed ? "grab" : activeTool === "select" ? "default" : "crosshair" }}
+        style={{
+          cursor: spacePressed
+            ? "grab"
+            : activeTool === "select"
+              ? hoveredShapeId
+                ? "crosshair"
+                : "default"
+              : "crosshair",
+        }}
       >
         <Layer>
           {imageElement && (
@@ -345,6 +362,8 @@ export function Canvas({ ref }: CanvasProps) {
               onClick={() => activeTool === "select" && selectShape(shape.id)}
               onTap={() => activeTool === "select" && selectShape(shape.id)}
               onDblClick={() => shape.type === "text" && setEditingTextId(shape.id)}
+              onMouseEnter={() => activeTool === "select" && setHoveredShapeId(shape.id)}
+              onMouseLeave={() => setHoveredShapeId((id) => (id === shape.id ? null : id))}
               onDragStart={commit}
               onDragEnd={(e) => updateShape(shape.id, { x: e.target.x(), y: e.target.y() })}
               onTransformEnd={(e) => {
