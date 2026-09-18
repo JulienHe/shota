@@ -301,6 +301,12 @@ export function Canvas({ ref }: CanvasProps) {
 
   const handleStageDragMove = useCallback(
     (e: KonvaEventObject<DragEvent>) => {
+      // Konva drag events bubble up from whatever node is actually being
+      // dragged (a shape) through to the Stage. Without this guard, dragging
+      // a shape also ran this handler with e.target being that shape, not
+      // the Stage — writing the shape's small image-space x/y into the
+      // view's pan position and yanking the whole canvas along with it.
+      if (e.target !== e.currentTarget) return;
       setView((prev) => ({ ...prev, x: e.target.x(), y: e.target.y() }));
     },
     [setView],
