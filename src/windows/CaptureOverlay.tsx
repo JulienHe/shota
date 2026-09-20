@@ -21,6 +21,12 @@ export function CaptureOverlay() {
     tauriApi.cancelCapture();
   }, []);
 
+  // Toggling into window-snap mode mid-drag would otherwise leave a stale
+  // selection rectangle stuck on screen, since nothing else clears it.
+  useEffect(() => {
+    if (snapMode) setDrag(null);
+  }, [snapMode]);
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") cancel();
@@ -103,7 +109,7 @@ export function CaptureOverlay() {
       onMouseUp={handleMouseUp}
     >
       <div className="capture-overlay__hint">
-        {snapMode ? "Click a window to capture it" : "Drag to select an area · hold Space to snap to a window · Esc to cancel"}
+        {snapMode ? "Click a window to capture it · Space to go back" : "Drag to select an area · Space to switch to window mode · Esc to cancel"}
       </div>
 
       {snapMode && hoveredWindow && origin && (

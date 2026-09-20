@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { CapturableWindow, tauriApi } from "../../lib/tauriApi";
 
 /**
- * Tracks whether the user is holding Space (window-snap mode) and, if so,
- * which capturable window the given global cursor position currently sits over.
+ * Tracks window-snap mode, toggled by a single Space press (press once to
+ * enter, press again to leave — not held), and, while active, which
+ * capturable window the given global cursor position currently sits over.
  */
 export function useWindowSnap(globalCursor: { x: number; y: number } | null) {
   const [snapMode, setSnapMode] = useState(false);
@@ -15,20 +16,16 @@ export function useWindowSnap(globalCursor: { x: number; y: number } | null) {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
+      // e.repeat filters out the auto-repeat keydown events an OS sends for
+      // a held key — without it, holding Space would flip the toggle many
+      // times a second instead of once per physical press.
+      if (e.code === "Space" && !e.repeat) {
         e.preventDefault();
-        setSnapMode(true);
+        setSnapMode((prev) => !prev);
       }
     };
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space") setSnapMode(false);
-    };
     window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
-    };
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
   const hoveredWindow =
