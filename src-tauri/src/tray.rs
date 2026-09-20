@@ -16,7 +16,7 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     let settings = MenuItem::with_id(app, "settings", "Keyboard Shortcuts…", true, None::<&str>)
         .map_err(|e| e.to_string())?;
-    let quit = MenuItem::with_id(app, "quit", "Quit shota", true, None::<&str>)
+    let quit = MenuItem::with_id(app, "quit", "Quit Shota", true, None::<&str>)
         .map_err(|e| e.to_string())?;
 
     let menu = Menu::with_items(
@@ -39,7 +39,7 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
 
     TrayIconBuilder::new()
         .icon(icon)
-        .tooltip("shota")
+        .tooltip("Shota")
         .menu(&menu)
         .show_menu_on_left_click(true)
         .on_menu_event(|app, event| match event.id().as_ref() {

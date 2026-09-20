@@ -19,9 +19,15 @@ pub fn open_editor_window(app: &AppHandle, image_base64: String) -> Result<(), S
     }
 
     WebviewWindowBuilder::new(app, EDITOR_LABEL, WebviewUrl::App("index.html".into()))
-        .title("shota")
+        .title("Shota")
         .inner_size(1100.0, 750.0)
         .min_inner_size(480.0, 360.0)
+        // No native title bar — the frontend draws its own (merging the
+        // toolbar into the same row as custom minimize/maximize/close
+        // buttons), same idea as CleanShot's traffic-light-adjacent toolbar
+        // on macOS. The window stays resizable by its edges as normal;
+        // that's independent of the title bar itself.
+        .decorations(false)
         .build()
         .map_err(|e| e.to_string())?;
 

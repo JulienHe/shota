@@ -2,6 +2,7 @@ mod capture;
 mod clipboard;
 mod commands;
 mod file_save;
+mod fonts;
 mod hotkeys;
 mod state;
 mod tray;
@@ -47,6 +48,7 @@ pub fn run() {
             commands::take_pending_image,
             commands::copy_image_to_clipboard,
             commands::save_image_as,
+            commands::list_system_fonts,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

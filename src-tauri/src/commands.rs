@@ -6,7 +6,10 @@ use crate::clipboard;
 use crate::file_save;
 use crate::hotkeys::{self, ShortcutKind};
 use crate::state::AppState;
-use crate::windows::{close_capture_overlay, open_capture_overlay, open_editor_window, show_capture_overlay};
+use crate::windows::{
+    close_capture_overlay, hide_capture_overlay, open_capture_overlay, open_editor_window,
+    show_capture_overlay,
+};
 
 #[derive(Serialize)]
 pub struct ShortcutsPayload {
@@ -48,6 +51,11 @@ pub async fn finish_region_capture(
     width: u32,
     height: u32,
 ) -> Result<(), String> {
+    // Hide the overlay (its selection rectangle / dimming) and give the
+    // compositor a moment to actually repaint without it before capturing —
+    // otherwise the overlay's own chrome can get baked into the screenshot.
+    hide_capture_overlay(&app)?;
+    std::thread::sleep(std::time::Duration::from_millis(120));
     let image = capture::capture_region(x, y, width, height)?;
     close_capture_overlay(&app)?;
     open_editor_window(&app, image)
@@ -55,6 +63,8 @@ pub async fn finish_region_capture(
 
 #[tauri::command]
 pub async fn finish_window_capture(app: AppHandle, window_id: u32) -> Result<(), String> {
+    hide_capture_overlay(&app)?;
+    std::thread::sleep(std::time::Duration::from_millis(120));
     let image = capture::capture_window(window_id)?;
     close_capture_overlay(&app)?;
     open_editor_window(&app, image)
@@ -79,6 +89,11 @@ pub fn take_pending_image(app: AppHandle) -> Option<String> {
 #[tauri::command]
 pub fn copy_image_to_clipboard(app: AppHandle, png_base64: String) -> Result<(), String> {
     clipboard::copy_image_to_clipboard(&app, &png_base64)
+}
+
+#[tauri::command]
+pub fn list_system_fonts() -> Vec<String> {
+    crate::fonts::list_system_fonts()
 }
 
 #[tauri::command]

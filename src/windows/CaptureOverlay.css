@@ -1,7 +1,6 @@
 .capture-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25);
   cursor: crosshair;
   user-select: none;
 }
@@ -23,7 +22,6 @@
   position: absolute;
   border: 1.5px solid #3d7bfd;
   background: rgba(61, 123, 253, 0.15);
-  box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.35);
 }
 
 .capture-overlay__window-highlight {
