@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "shota",
+  "productName": "Shota",
   "version": "0.1.0",
   "identifier": "com.julie.shota",
   "build": {
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "shota",
+        "title": "Shota",
         "width": 360,
         "height": 480,
         "resizable": true,
