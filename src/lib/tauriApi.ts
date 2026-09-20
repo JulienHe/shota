@@ -41,6 +41,8 @@ export const tauriApi = {
 
   setShortcut: (kind: "fullscreen" | "area", accelerator: string) =>
     invoke<void>("set_shortcut", { kind, accelerator }),
+
+  listSystemFonts: () => invoke<string[]>("list_system_fonts"),
 };
 
 /** Strips the `data:image/png;base64,` prefix so raw base64 can cross the IPC boundary. */

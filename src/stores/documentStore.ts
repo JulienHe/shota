@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Shape } from "../features/annotate/types";
+import { Shape, ShapeStyle } from "../features/annotate/types";
 
 const MAX_HISTORY = 50;
 
@@ -17,6 +17,7 @@ interface DocumentState {
 
   addShape: (shape: Shape) => void;
   updateShape: (id: string, patch: Partial<Shape>) => void;
+  updateShapeStyle: (id: string, patch: Partial<ShapeStyle>) => void;
   removeShape: (id: string) => void;
   selectShape: (id: string | null) => void;
 
@@ -57,6 +58,15 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
     set((s) => ({
       shapes: s.shapes.map((shape) => (shape.id === id ? ({ ...shape, ...patch } as Shape) : shape)),
     })),
+
+  updateShapeStyle: (id, patch) => {
+    get().commit();
+    set((s) => ({
+      shapes: s.shapes.map((shape) =>
+        shape.id === id ? ({ ...shape, style: { ...shape.style, ...patch } } as Shape) : shape,
+      ),
+    }));
+  },
 
   removeShape: (id) => {
     get().commit();

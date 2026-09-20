@@ -7,6 +7,7 @@ import { LineShapeView } from "./LineShape";
 import { ArrowShapeView } from "./ArrowShape";
 import { TextShapeView } from "./TextShape";
 import { FreehandShapeView } from "./FreehandShape";
+import { BlurShapeView } from "./BlurShape";
 
 export interface ShapeCommonProps {
   draggable: boolean;
@@ -17,6 +18,7 @@ export interface ShapeCommonProps {
   onMouseLeave?: (e: KonvaEventObject<MouseEvent>) => void;
   onDragStart?: (e: KonvaEventObject<DragEvent>) => void;
   onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
+  onTransform?: (e: KonvaEventObject<Event>) => void;
   onTransformEnd: (e: KonvaEventObject<Event>) => void;
   ref?: (node: Konva.Node | null) => void;
 }
@@ -44,6 +46,8 @@ export function ShapeRenderer({ shape, ...common }: ShapeRendererProps) {
       return <TextShapeView shape={shape} {...common} />;
     case "freehand":
       return <FreehandShapeView shape={shape} {...common} />;
+    case "blur":
+      return <BlurShapeView shape={shape} {...common} />;
     default:
       return null;
   }

@@ -6,29 +6,44 @@ export type ToolId =
   | "arrow"
   | "text"
   | "pen"
+  | "blur"
   | "crop"
   | "eyedropper";
 
 export type FillMode = "none" | "solid" | "translucent";
+export type BlurEffect = "blur" | "pixelate";
+export type StrokeStyle = "solid" | "dashed" | "dotted";
 
 export interface ShapeStyle {
   stroke: string;
   strokeWidth: number;
+  strokeStyle: StrokeStyle;
   fillMode: FillMode;
   fillColor: string;
   fillOpacity: number;
   cornerRadius: number;
   fontSize: number;
+  fontFamily: string;
+  textStrokeEnabled: boolean;
+  textStrokeColor: string;
+  blurEffect: BlurEffect;
+  blurIntensity: number;
 }
 
 export const DEFAULT_STYLE: ShapeStyle = {
   stroke: "#ff3b30",
   strokeWidth: 3,
+  strokeStyle: "solid",
   fillMode: "none",
   fillColor: "#ff3b30",
   fillOpacity: 0.35,
   cornerRadius: 0,
   fontSize: 28,
+  fontFamily: "Segoe UI",
+  textStrokeEnabled: false,
+  textStrokeColor: "#000000",
+  blurEffect: "pixelate",
+  blurIntensity: 18,
 };
 
 interface BaseShape {
@@ -72,13 +87,20 @@ export interface FreehandShape extends BaseShape {
   points: number[];
 }
 
+export interface BlurShape extends BaseShape {
+  type: "blur";
+  width: number;
+  height: number;
+}
+
 export type Shape =
   | RectShape
   | EllipseShape
   | LineShape
   | ArrowShape
   | TextShape
-  | FreehandShape;
+  | FreehandShape
+  | BlurShape;
 
 export function createShapeId(): string {
   return `shape_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -98,6 +120,23 @@ export function createShapeId(): string {
 export function fillForStyle(style: ShapeStyle): string {
   const alpha = style.fillMode === "none" ? 0 : style.fillMode === "solid" ? 1 : style.fillOpacity;
   return hexToRgba(style.fillColor, alpha);
+}
+
+/**
+ * Konva dash arrays, in pixels, scaled to the stroke width so thick strokes
+ * don't end up with dashes/dots that look proportionally tiny. `undefined`
+ * (solid) omits the `dash` prop entirely rather than passing `[]`, since an
+ * empty array still triggers Konva's dash code path.
+ */
+export function dashForStyle(style: ShapeStyle): number[] | undefined {
+  if (style.strokeStyle === "dashed") return [style.strokeWidth * 2.5, style.strokeWidth * 1.75];
+  if (style.strokeStyle === "dotted") return [0.001, style.strokeWidth * 2.2];
+  return undefined;
+}
+
+/** Dots only render as dots (not short dashes) with a round line cap. */
+export function lineCapForStyle(style: ShapeStyle): "round" | "butt" {
+  return style.strokeStyle === "dotted" ? "round" : "butt";
 }
 
 function hexToRgba(hex: string, alpha: number): string {

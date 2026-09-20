@@ -21,7 +21,7 @@ export function useKeyboardShortcut(
     const onKeyDown = (event: KeyboardEvent) => {
       const matchesKey = event.key.toLowerCase() === key.toLowerCase();
       const matchesCtrl = ctrl ? event.ctrlKey || event.metaKey : true;
-      const matchesShift = shift ? event.shiftKey : !event.shiftKey || !shift;
+      const matchesShift = event.shiftKey === shift;
 
       if (matchesKey && matchesCtrl && matchesShift) {
         if (preventDefault) event.preventDefault();

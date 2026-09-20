@@ -1,19 +1,7 @@
-.toolbar {
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
 .toolbar__row {
   display: flex;
   align-items: center;
   gap: 2px;
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 6px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
 .toolbar__divider {
@@ -23,20 +11,8 @@
   background: #e4e4e7;
 }
 
-.toolbar__save {
-  margin-left: 2px;
-  padding: 0 14px;
-  height: 30px;
-  border: none;
-  border-radius: 8px;
-  background: #3d7bfd;
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.toolbar__save:hover {
-  background: #2f6bef;
+@media (prefers-color-scheme: dark) {
+  .toolbar__divider {
+    background: #303136;
+  }
 }

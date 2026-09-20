@@ -26,3 +26,14 @@
   opacity: 0.3;
   cursor: default;
 }
+
+@media (prefers-color-scheme: dark) {
+  .icon-button {
+    color: #d4d4d8;
+  }
+
+  .icon-button:hover:not(:disabled) {
+    background: #303136;
+    color: #ffffff;
+  }
+}

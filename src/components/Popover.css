@@ -1,8 +1,4 @@
 .popover {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
@@ -11,5 +7,12 @@
   flex-direction: column;
   gap: 10px;
   min-width: 168px;
-  z-index: 20;
+  z-index: 100;
+}
+
+@media (prefers-color-scheme: dark) {
+  .popover {
+    background: #26272c;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
 }

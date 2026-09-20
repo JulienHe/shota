@@ -1,5 +1,5 @@
 import { Line } from "react-konva";
-import { FreehandShape as FreehandShapeData } from "../types";
+import { FreehandShape as FreehandShapeData, dashForStyle } from "../types";
 import { ShapeComponentProps } from "./ShapeRenderer";
 
 export function FreehandShapeView({ shape, ...common }: ShapeComponentProps<FreehandShapeData>) {
@@ -12,6 +12,7 @@ export function FreehandShapeView({ shape, ...common }: ShapeComponentProps<Free
       rotation={shape.rotation}
       stroke={shape.style.stroke}
       strokeWidth={shape.style.strokeWidth}
+      dash={dashForStyle(shape.style)}
       lineCap="round"
       lineJoin="round"
       tension={0.4}

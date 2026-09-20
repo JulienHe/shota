@@ -1,0 +1,38 @@
+.eyedropper-hud {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.eyedropper-hud__preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  image-rendering: pixelated;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.eyedropper-hud__hex {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 8px;
+  background: #ffffff;
+  color: #18181b;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-color-scheme: dark) {
+  .eyedropper-hud__hex {
+    background: #26272c;
+    color: #e4e4e7;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+}
