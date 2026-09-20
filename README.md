@@ -8,6 +8,10 @@ A free, native Windows screenshot & annotation tool — the kind of thing [Clean
 
 Shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Keyboard Shortcuts…" entry that opens the small settings window. Capture something and it opens in a lightweight annotation editor with its own CleanShot-style title bar (toolbar merged into the same row as the window controls) and a bottom status bar for zoom/copy/save.
 
+<p align="center">
+  <img src="docs/main-window.png" alt="Shota's tray launcher window" width="360">
+</p>
+
 ## Features
 
 **Capture**
