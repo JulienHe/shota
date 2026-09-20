@@ -16,7 +16,10 @@ export function MainWindow() {
   return (
     <div className="main-window">
       <div className="main-window__header">
-        <div className="main-window__brand">Shota</div>
+        <div className="main-window__brand">
+          <img src="/logo.png" alt="" className="main-window__logo" />
+          Shota
+        </div>
         <IconButton icon={Settings} label="Keyboard shortcuts" active={settingsOpen} onClick={() => setSettingsOpen((o) => !o)} />
       </div>
 

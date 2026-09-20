@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/logo.png" alt="Shota logo" width="96" height="96">
+</p>
+
 # Shota
 
 A free, native Windows screenshot & annotation tool — the kind of thing [CleanShot X](https://cleanshot.com/) / [Shottr](https://shottr.cc/) are on macOS.
