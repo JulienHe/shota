@@ -4,9 +4,9 @@
 
 # Shota
 
-A free, native Windows screenshot & annotation tool — the kind of thing [CleanShot X](https://cleanshot.com/) / [Shottr](https://shottr.cc/) are on macOS.
+A free, native Windows screenshot & annotation tool.
 
-Shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Keyboard Shortcuts…" entry that opens the small settings window. Capture something and it opens in a lightweight annotation editor with its own CleanShot-style title bar (toolbar merged into the same row as the window controls) and a bottom status bar for zoom/copy/save.
+Shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Keyboard Shortcuts…" entry that opens the small settings window. Capture something and it opens in a lightweight annotation editor with its own title bar (toolbar merged into the same row as the window controls) and a bottom status bar for zoom/copy/save.
 
 <p align="center">
   <img src="docs/main-window.png" alt="Shota's tray launcher window" width="360">
@@ -24,7 +24,7 @@ Shota runs as a background/tray app: no taskbar window, just a tray icon with qu
 - Redaction: blur / pixelate tool for hiding sensitive content
 - Crop, in-canvas zoom & pan
 - Color picker (eyedropper) with a live magnified loupe — click to sample and copy the hex value
-- Per-tool style controls live inline in the title bar as small dropdowns (CleanShot-style): stroke color (with a gradient custom-color picker), stroke width, line style (solid/dashed/dotted), fill (none/solid/translucent), corner radius, font size, and the full list of fonts actually installed on your system
+- Per-tool style controls live inline in the title bar as small dropdowns: stroke color (with a gradient custom-color picker), stroke width, line style (solid/dashed/dotted), fill (none/solid/translucent), corner radius, font size, and the full list of fonts actually installed on your system
 - Text tool is IME-aware (composing Japanese/Chinese/Korean input doesn't prematurely submit the text box)
 - Undo/redo, and Delete/Backspace to remove the selected shape
 - Right-click the canvas background to switch it between white, a few grays, black, or "match system"

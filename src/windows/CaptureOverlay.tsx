@@ -12,6 +12,14 @@ interface DragRect {
   y: number;
 }
 
+// Empirical correction (physical px) for the window-snap highlight: even
+// using DWM's extended-frame-bounds (the standard "true visual window edge"
+// API), the box still measured off to the right on the user's machine —
+// verified as a pure horizontal translation, not a size error. 7px left it
+// ~3px short, so tuned up to 10px based on direct user feedback rather than
+// further Win32 theory.
+const HORIZONTAL_HIGHLIGHT_CORRECTION_PX = 10;
+
 export function CaptureOverlay() {
   const { cursor: globalCursor, origin, scale } = useGlobalCursor();
   const { snapMode, hoveredWindow } = useWindowSnap(globalCursor);
@@ -116,7 +124,7 @@ export function CaptureOverlay() {
         <div
           className="capture-overlay__window-highlight"
           style={{
-            left: (hoveredWindow.x - origin.x) / scale,
+            left: (hoveredWindow.x - origin.x - HORIZONTAL_HIGHLIGHT_CORRECTION_PX) / scale,
             top: (hoveredWindow.y - origin.y) / scale,
             width: hoveredWindow.width / scale,
             height: hoveredWindow.height / scale,
