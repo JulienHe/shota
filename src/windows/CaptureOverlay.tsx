@@ -76,28 +76,37 @@ export function CaptureOverlay() {
   };
 
   const handleMouseUp = async () => {
-    if (snapMode && hoveredWindow) {
-      await tauriApi.finishWindowCapture(hoveredWindow.id);
-      return;
+    try {
+      if (snapMode && hoveredWindow) {
+        await tauriApi.finishWindowCapture(hoveredWindow.id);
+        return;
+      }
+      if (!drag) return;
+
+      const resolvedOrigin = origin ?? (await getCurrentWindow().outerPosition());
+
+      const localX = Math.min(drag.startX, drag.x);
+      const localY = Math.min(drag.startY, drag.y);
+      const width = Math.abs(drag.x - drag.startX);
+      const height = Math.abs(drag.y - drag.startY);
+      setDrag(null);
+
+      if (width < 4 || height < 4) return;
+
+      await tauriApi.finishRegionCapture(
+        Math.round(resolvedOrigin.x + localX * scale),
+        Math.round(resolvedOrigin.y + localY * scale),
+        Math.round(width * scale),
+        Math.round(height * scale),
+      );
+    } catch (err) {
+      // Otherwise a failed capture leaves the overlay hidden (Rust hides it
+      // before attempting the capture) with nothing telling the user it
+      // didn't work — cancel outright instead of leaving it in limbo.
+      console.error("capture failed", err);
+      setDrag(null);
+      tauriApi.cancelCapture();
     }
-    if (!drag) return;
-
-    const resolvedOrigin = origin ?? (await getCurrentWindow().outerPosition());
-
-    const localX = Math.min(drag.startX, drag.x);
-    const localY = Math.min(drag.startY, drag.y);
-    const width = Math.abs(drag.x - drag.startX);
-    const height = Math.abs(drag.y - drag.startY);
-    setDrag(null);
-
-    if (width < 4 || height < 4) return;
-
-    await tauriApi.finishRegionCapture(
-      Math.round(resolvedOrigin.x + localX * scale),
-      Math.round(resolvedOrigin.y + localY * scale),
-      Math.round(width * scale),
-      Math.round(height * scale),
-    );
   };
 
   const selectionStyle = drag

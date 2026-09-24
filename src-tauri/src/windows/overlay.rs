@@ -1,16 +1,11 @@
-use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewUrl, WebviewWindowBuilder};
+use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
 const OVERLAY_LABEL: &str = "overlay";
+// Far enough off any real monitor that it can never be glimpsed, used only
+// while the pre-warmed window is loading (see `prewarm_capture_overlay`).
+const OFFSCREEN_POS: f64 = -32000.0;
 
-/// Opens a transparent, always-on-top, borderless window spanning the full
-/// virtual desktop (all monitors) so the user can drag out a region or hover
-/// a window to select it. Reuses an existing overlay window if one is open.
-pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
-    if let Some(existing) = app.get_webview_window(OVERLAY_LABEL) {
-        existing.set_focus().map_err(|e| e.to_string())?;
-        return Ok(());
-    }
-
+fn virtual_desktop_bounds(app: &AppHandle) -> Result<(f64, f64, f64, f64), String> {
     let monitors = app.available_monitors().map_err(|e| e.to_string())?;
     let (min_x, min_y, max_x, max_y) = monitors.iter().fold(
         (i32::MAX, i32::MAX, i32::MIN, i32::MIN),
@@ -25,9 +20,16 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
             )
         },
     );
-
     let scale = monitors.first().map(|m| m.scale_factor()).unwrap_or(1.0);
+    Ok((
+        min_x as f64 / scale,
+        min_y as f64 / scale,
+        (max_x - min_x) as f64 / scale,
+        (max_y - min_y) as f64 / scale,
+    ))
+}
 
+fn build_overlay_window(app: &AppHandle, x: f64, y: f64, width: f64, height: f64) -> Result<WebviewWindow, String> {
     let window = WebviewWindowBuilder::new(app, OVERLAY_LABEL, WebviewUrl::App("index.html".into()))
         .title("shota-overlay")
         .transparent(true)
@@ -36,30 +38,82 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
         .always_on_top(true)
         .skip_taskbar(true)
         .resizable(false)
-        .visible(false)
+        // Must be visible to actually load: WebView2 appears to defer
+        // loading/running the page entirely while a window is invisible, so
+        // `.visible(false)` here deadlocks rather than just occasionally
+        // flashing. Positioned off-screen during pre-warm instead (see
+        // `prewarm_capture_overlay`) so nothing is ever actually seen.
+        .visible(true)
         .build()
         .map_err(|e| e.to_string())?;
 
+    window.set_position(LogicalPosition::new(x, y)).map_err(|e| e.to_string())?;
     window
-        .set_position(LogicalPosition::new(min_x as f64 / scale, min_y as f64 / scale))
+        .set_size(LogicalSize::new(width, height))
         .map_err(|e| e.to_string())?;
-    window
-        .set_size(LogicalSize::new(
-            (max_x - min_x) as f64 / scale,
-            (max_y - min_y) as f64 / scale,
-        ))
-        .map_err(|e| e.to_string())?;
-
-    // Left hidden here on purpose: WebView2 paints its own opaque white
-    // background before our page's JS makes it transparent, so showing the
-    // window immediately causes a white flash. The frontend calls the
-    // `overlay_ready` command once it has applied the transparent styling,
-    // which is what actually shows the window (see show_capture_overlay).
 
     exclude_from_capture(&window);
     disable_show_animation(&window);
 
+    Ok(window)
+}
+
+/// Opens a transparent, always-on-top, borderless window spanning the full
+/// virtual desktop (all monitors) so the user can drag out a region or hover
+/// a window to select it. Reuses an existing overlay window if one is open —
+/// it's left hidden (not destroyed) after every capture specifically so it
+/// can be re-shown here instantly, already loaded and styled, instead of
+/// recreating it (and re-triggering a white flash) on every single capture.
+pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
+    let (x, y, width, height) = virtual_desktop_bounds(app)?;
+
+    if let Some(existing) = app.get_webview_window(OVERLAY_LABEL) {
+        // The pre-warmed window (or one left over from a prior capture) may
+        // still be positioned/sized for a stale monitor layout — put it back
+        // over the real bounds every time, not just on first creation.
+        existing
+            .set_position(LogicalPosition::new(x, y))
+            .map_err(|e| e.to_string())?;
+        existing
+            .set_size(LogicalSize::new(width, height))
+            .map_err(|e| e.to_string())?;
+        existing.show().map_err(|e| e.to_string())?;
+        existing.set_focus().map_err(|e| e.to_string())?;
+        return Ok(());
+    }
+
+    build_overlay_window(app, x, y, width, height)?;
     Ok(())
+}
+
+/// Creates the overlay window ahead of time, off-screen, so its page has
+/// already loaded and applied its transparent styling by the time the user
+/// actually presses the capture shortcut — otherwise the very first capture
+/// of the session has to load the page from scratch and briefly flashes
+/// WebView2's opaque default background. Hidden again once loaded; `open_capture_overlay`
+/// repositions and shows it like any other reuse.
+pub fn prewarm_capture_overlay(app: &AppHandle) {
+    let app = app.clone();
+
+    // Windows can (and did) clamp an off-screen position back onto a real
+    // monitor, which turned the "invisible" pre-warm into an actual visible
+    // flash — so the window is also sized down to 1x1px as a second,
+    // independent layer of invisibility regardless of where it ends up.
+    // `open_capture_overlay` already resets both position and size before
+    // ever showing it for real, so this doesn't need to be undone here.
+    if let Err(err) = build_overlay_window(&app, OFFSCREEN_POS, OFFSCREEN_POS, 1.0, 1.0) {
+        eprintln!("failed to pre-warm capture overlay: {err}");
+        return;
+    }
+
+    // No explicit "loaded and styled" signal is wired up for this (that's
+    // what `overlay_ready` is for during a real capture, and it's harmless
+    // to leave unused off-screen) — a fixed delay is simpler and this only
+    // runs once, invisibly, at startup rather than on any user action.
+    std::thread::spawn(move || {
+        std::thread::sleep(std::time::Duration::from_millis(700));
+        let _ = hide_capture_overlay(&app);
+    });
 }
 
 /// Marks the overlay window as excluded from screen capture at the DWM
@@ -126,19 +180,12 @@ pub fn show_capture_overlay(app: &AppHandle) -> Result<(), String> {
 }
 
 /// Hides (without destroying) the overlay window so its selection-rectangle
-/// chrome isn't still on screen when the actual pixels get captured — call
-/// this and give the compositor a moment before capturing, then close for
-/// real afterwards.
+/// chrome isn't still on screen when the actual pixels get captured, and so
+/// it's ready to be re-shown instantly (already loaded and styled) next
+/// time instead of being recreated from scratch.
 pub fn hide_capture_overlay(app: &AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
         window.hide().map_err(|e| e.to_string())?;
-    }
-    Ok(())
-}
-
-pub fn close_capture_overlay(app: &AppHandle) -> Result<(), String> {
-    if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
-        window.close().map_err(|e| e.to_string())?;
     }
     Ok(())
 }

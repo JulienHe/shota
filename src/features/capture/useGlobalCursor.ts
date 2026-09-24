@@ -12,12 +12,29 @@ export function useGlobalCursor() {
   const originRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
-    getCurrentWindow()
-      .outerPosition()
-      .then((pos) => {
+    const win = getCurrentWindow();
+    const refreshOrigin = () =>
+      win.outerPosition().then((pos) => {
         originRef.current = { x: pos.x, y: pos.y };
         setOrigin({ x: pos.x, y: pos.y });
       });
+
+    refreshOrigin();
+
+    // The overlay window is reused (repositioned, not recreated) across
+    // captures to avoid reloading its page every time — so this component
+    // only ever mounts once per app session. Without this, `origin` would
+    // stay fixed at wherever the window happened to be on that first mount
+    // (including its off-screen pre-warm spot), silently producing garbage
+    // capture coordinates on every capture after the first.
+    const unlisten = win.onMoved(({ payload }) => {
+      originRef.current = { x: payload.x, y: payload.y };
+      setOrigin({ x: payload.x, y: payload.y });
+    });
+
+    return () => {
+      unlisten.then((fn) => fn());
+    };
   }, []);
 
   useEffect(() => {

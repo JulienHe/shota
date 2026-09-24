@@ -21,6 +21,19 @@ function cacheImage(src: string, img: HTMLImageElement) {
   }
 }
 
+/**
+ * Seeds the cache with an already-decoded image so a later `useImage(src)`
+ * call (e.g. Canvas's background image) hits it synchronously instead of
+ * decoding the same multi-MB data URL a second time. EditorWindow already
+ * has to decode the capture once itself (to read width/height before it
+ * can even call `loadImage`) — without this, that decoded image was
+ * discarded and Canvas would redundantly decode the exact same bytes
+ * again, which is what made the toolbar visibly render before the image did.
+ */
+export function primeImageCache(src: string, img: HTMLImageElement) {
+  cacheImage(src, img);
+}
+
 /** Loads a data-URL image into an HTMLImageElement for use as a Konva.Image source. */
 export function useImage(src: string | null): HTMLImageElement | null {
   const [image, setImage] = useState<HTMLImageElement | null>(src ? imageCache.get(src) ?? null : null);

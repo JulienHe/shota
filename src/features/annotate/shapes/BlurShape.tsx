@@ -4,6 +4,7 @@ import Konva from "konva";
 import { useDocumentStore } from "../../../stores/documentStore";
 import { useImage } from "../../../lib/useImage";
 import { BlurShape as BlurShapeData } from "../types";
+import { bakeNodeScale } from "../transform";
 import { ShapeComponentProps } from "./ShapeRenderer";
 
 /**
@@ -70,12 +71,7 @@ export function BlurShapeView({ shape, ...common }: ShapeComponentProps<BlurShap
         // tick makes it actually resample a bigger or smaller region, same
         // as the earlier fix for resizing text.
         const node = e.target as Konva.Image;
-        const width = Math.max(1, node.width() * node.scaleX());
-        const height = Math.max(1, node.height() * node.scaleY());
-        node.width(width);
-        node.height(height);
-        node.scaleX(1);
-        node.scaleY(1);
+        const { width, height } = bakeNodeScale(node, 1);
         node.crop({ x: node.x(), y: node.y(), width, height });
         node.cache();
         node.getLayer()?.batchDraw();

@@ -6,6 +6,16 @@ use tauri::{AppHandle, Manager};
 
 use crate::hotkeys::{ShortcutKind, DEFAULT_AREA_SHORTCUT, DEFAULT_FULLSCREEN_SHORTCUT};
 
+/// A capture handed off to the editor window: the raw (never annotation-
+/// baked) image, which history entry it belongs to (if any), and whatever
+/// shapes were previously saved against that entry, if reopened from history.
+#[derive(Serialize, Clone)]
+pub struct PendingCapture {
+    pub image_base64: String,
+    pub history_id: Option<String>,
+    pub shapes_json: Option<String>,
+}
+
 #[derive(Serialize, Deserialize, Clone)]
 struct PersistedSettings {
     last_save_dir: Option<String>,
@@ -37,7 +47,7 @@ pub struct AppState {
     settings: Mutex<PersistedSettings>,
     /// Holds a freshly captured image while the editor window spins up, so it
     /// can pull it via a command instead of racing an event listener.
-    pending_image: Mutex<Option<String>>,
+    pending_capture: Mutex<Option<PendingCapture>>,
 }
 
 impl AppState {
@@ -45,16 +55,16 @@ impl AppState {
         let settings = read_settings(app).unwrap_or_default();
         Self {
             settings: Mutex::new(settings),
-            pending_image: Mutex::new(None),
+            pending_capture: Mutex::new(None),
         }
     }
 
-    pub fn set_pending_image(&self, image_base64: String) {
-        *self.pending_image.lock().unwrap() = Some(image_base64);
+    pub fn set_pending_capture(&self, capture: PendingCapture) {
+        *self.pending_capture.lock().unwrap() = Some(capture);
     }
 
-    pub fn take_pending_image(&self) -> Option<String> {
-        self.pending_image.lock().unwrap().take()
+    pub fn take_pending_capture(&self) -> Option<PendingCapture> {
+        self.pending_capture.lock().unwrap().take()
     }
 
     pub fn last_save_dir(&self) -> Option<String> {

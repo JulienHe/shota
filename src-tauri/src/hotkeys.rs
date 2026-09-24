@@ -4,10 +4,13 @@ use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 
 use crate::capture;
 use crate::state::AppState;
-use crate::windows::{open_capture_overlay, open_editor_window};
+use crate::windows::{open_capture_overlay, open_editor_with_history, toggle_history_window};
 
 pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Shift+3";
 pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Shift+4";
+/// Not user-rebindable (yet) — no entry in ShortcutKind/PersistedSettings,
+/// unlike Fullscreen/Area which have a settings UI.
+pub const HISTORY_SHORTCUT: &str = "Ctrl+Shift+6";
 
 #[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
@@ -35,7 +38,7 @@ fn register_one(app: &AppHandle, kind: ShortcutKind, accelerator: &str) -> Resul
             match kind {
                 ShortcutKind::Fullscreen => match capture::capture_fullscreen(None) {
                     Ok(image) => {
-                        let _ = open_editor_window(&handler_app, image);
+                        let _ = open_editor_with_history(&handler_app, image);
                     }
                     Err(err) => eprintln!("fullscreen capture failed: {err}"),
                 },
@@ -71,4 +74,21 @@ pub fn update_shortcut(app: &AppHandle, kind: ShortcutKind, accelerator: String)
 
     state.set_shortcut(app, kind, accelerator);
     Ok(())
+}
+
+/// Registers the fixed Ctrl+Shift+6 shortcut that toggles the history
+/// carousel — separate from `register_all` since it isn't part of the
+/// rebindable Fullscreen/Area shortcut set.
+pub fn register_history_shortcut(app: &AppHandle) -> Result<(), String> {
+    let handler_app = app.clone();
+    app.global_shortcut()
+        .on_shortcut(HISTORY_SHORTCUT, move |_app, _shortcut, event| {
+            if event.state() != ShortcutState::Pressed {
+                return;
+            }
+            if let Err(err) = toggle_history_window(&handler_app) {
+                eprintln!("failed to toggle history window: {err}");
+            }
+        })
+        .map_err(|e| e.to_string())
 }

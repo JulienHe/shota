@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { Minus, Square, Copy, X } from "lucide-react";
 import { Toolbar } from "../features/annotate/toolbar/Toolbar";
+import { closeEditor } from "../lib/editorClose";
 import "./TitleBar.css";
 
 /**
@@ -48,7 +49,7 @@ export function TitleBar() {
           type="button"
           className="title-bar__control title-bar__control--close"
           title="Close"
-          onClick={() => getCurrentWindow().close()}
+          onClick={() => closeEditor()}
         >
           <X size={16} strokeWidth={1.5} />
         </button>

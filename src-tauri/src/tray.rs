@@ -5,7 +5,7 @@ use tauri::{
 };
 
 use crate::capture;
-use crate::windows::{open_capture_overlay, open_editor_window};
+use crate::windows::{open_capture_overlay, open_editor_with_history};
 
 /// shota is a background/tray app: no taskbar presence, just a tray icon
 /// with quick capture actions and a way to reach the shortcuts window.
@@ -45,7 +45,7 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
         .on_menu_event(|app, event| match event.id().as_ref() {
             "capture_fullscreen" => match capture::capture_fullscreen(None) {
                 Ok(image) => {
-                    let _ = open_editor_window(app, image);
+                    let _ = open_editor_with_history(app, image);
                 }
                 Err(err) => eprintln!("fullscreen capture failed: {err}"),
             },

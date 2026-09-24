@@ -11,9 +11,12 @@ interface DocumentState {
   selectedShapeId: string | null;
   past: Shape[][];
   future: Shape[][];
+  /** Which history entry (if any) this document was captured/reopened from — used to persist annotations back on close. */
+  historyId: string | null;
 
   loadImage: (dataUrl: string, width: number, height: number) => void;
   replaceImage: (dataUrl: string, width: number, height: number, shapes: Shape[]) => void;
+  setHistoryId: (id: string | null) => void;
 
   addShape: (shape: Shape) => void;
   updateShape: (id: string, patch: Partial<Shape>) => void;
@@ -34,6 +37,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
   selectedShapeId: null,
   past: [],
   future: [],
+  historyId: null,
 
   loadImage: (dataUrl, width, height) =>
     set({
@@ -48,6 +52,8 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   replaceImage: (dataUrl, width, height, shapes) =>
     set({ image: dataUrl, imageWidth: width, imageHeight: height, shapes, selectedShapeId: null }),
+
+  setHistoryId: (id) => set({ historyId: id }),
 
   addShape: (shape) => {
     get().commit();

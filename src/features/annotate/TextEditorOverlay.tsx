@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { TextShape } from "./types";
 import { cssFontFamily } from "./fonts";
 import { ZoomState } from "../zoom/useZoom";
+import { imageToAbsolute, imageLengthToAbsolute } from "../zoom/viewTransform";
 
 interface TextEditorOverlayProps {
   shape: TextShape;
@@ -19,16 +20,18 @@ export function TextEditorOverlay({ shape, view, onCommit, onCancel }: TextEdito
     ref.current?.select();
   }, []);
 
+  const pos = imageToAbsolute(view, { x: shape.x, y: shape.y });
+
   return (
     <textarea
       ref={ref}
       defaultValue={shape.text}
       style={{
         position: "absolute",
-        top: shape.y * view.scale + view.y,
-        left: shape.x * view.scale + view.x,
-        width: shape.width * view.scale,
-        fontSize: shape.style.fontSize * view.scale,
+        top: pos.y,
+        left: pos.x,
+        width: imageLengthToAbsolute(view, shape.width),
+        fontSize: imageLengthToAbsolute(view, shape.style.fontSize),
         fontFamily: cssFontFamily(shape.style.fontFamily),
         color: shape.style.stroke,
         background: "rgba(20,21,26,0.85)",

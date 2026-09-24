@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Shape } from "../annotate/types";
 import { useDocumentStore } from "../../stores/documentStore";
 
@@ -9,11 +9,24 @@ export interface CropRect {
   height: number;
 }
 
-/** Owns the in-progress crop selection rect and commits it by re-rasterizing the image. */
-export function useCrop(imageElement: HTMLImageElement | null) {
+/**
+ * Owns the crop selection rect and commits it by re-rasterizing the image.
+ * Starts at the full image bounds as soon as the crop tool activates —
+ * cropping is "shrink the kept area inward from an edge" rather than
+ * "drag out a new region from nothing".
+ */
+export function useCrop(imageElement: HTMLImageElement | null, active: boolean) {
   const [cropRect, setCropRect] = useState<CropRect | null>(null);
   const replaceImage = useDocumentStore((s) => s.replaceImage);
   const shapes = useDocumentStore((s) => s.shapes);
+
+  useEffect(() => {
+    if (active && imageElement) {
+      setCropRect({ x: 0, y: 0, width: imageElement.width, height: imageElement.height });
+    } else {
+      setCropRect(null);
+    }
+  }, [active, imageElement]);
 
   const commitCrop = useCallback(() => {
     if (!cropRect || !imageElement || cropRect.width < 2 || cropRect.height < 2) {

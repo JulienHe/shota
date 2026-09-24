@@ -1,5 +1,5 @@
-import { Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Stage, Layer, Image as KonvaImage, Rect, Transformer } from "react-konva";
+import { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import { Stage, Layer, Image as KonvaImage, Transformer } from "react-konva";
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
@@ -10,12 +10,14 @@ import { CanvasBackground, useUiStore } from "../../stores/uiStore";
 import { useToastStore } from "../../stores/toastStore";
 import { useImage } from "../../lib/useImage";
 import { useZoom } from "../zoom/useZoom";
+import { absoluteToImage } from "../zoom/viewTransform";
 import { useCrop } from "../crop/useCrop";
+import { CropOverlay } from "../crop/CropOverlay";
 import { sampleColorFromImage } from "../color-picker/sampleColor";
 import { EyedropperHud } from "../color-picker/EyedropperHud";
 import { ShapeRenderer } from "./shapes/ShapeRenderer";
 import { createShapeId, Shape } from "./types";
-import { getTransformPatch } from "./transform";
+import { getTransformPatch, bakeNodeScaleX } from "./transform";
 import { TextEditorOverlay } from "./TextEditorOverlay";
 import { CanvasBackgroundMenu } from "./CanvasBackgroundMenu";
 import { MOVE_CURSOR, ROTATE_CURSOR } from "./cursors";
@@ -65,7 +67,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
   const imageElement = useImage(image);
   const { view, onWheel, setView } = useZoom();
-  const { cropRect, setCropRect, commitCrop, cancelCrop } = useCrop(imageElement);
+  const { cropRect, setCropRect, commitCrop, cancelCrop } = useCrop(imageElement, activeTool === "crop");
 
   const stageRef = useRef<Konva.Stage>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
@@ -234,7 +236,11 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
+  // useLayoutEffect, not useEffect: this runs synchronously before the
+  // browser paints, so the very first frame of a new image already has the
+  // correct fitted scale instead of briefly painting at the previous (or
+  // default 100%) zoom and then visibly snapping to fit a moment later.
+  useLayoutEffect(() => {
     if (!imageElement || !stageSize) return;
     const isNewImage = previousImageRef.current !== imageElement;
     previousImageRef.current = imageElement;
@@ -318,7 +324,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     (stage: Konva.Stage) => {
       const pointer = stage.getPointerPosition();
       if (!pointer) return null;
-      return { x: (pointer.x - view.x) / view.scale, y: (pointer.y - view.y) / view.scale };
+      return absoluteToImage(view, pointer);
     },
     [view],
   );
@@ -368,11 +374,6 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
         return;
       }
 
-      if (activeTool === "crop") {
-        setCropRect({ x: point.x, y: point.y, width: 0, height: 0 });
-        return;
-      }
-
       if (!DRAWABLE_TOOLS.has(activeTool)) return;
 
       const base = { id: createShapeId(), x: point.x, y: point.y, rotation: 0, style };
@@ -402,7 +403,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       drawing.current = { shape };
       setLiveShape(shape);
     },
-    [spacePressed, activeTool, toImagePoint, selectShape, imageElement, setActiveTool, updateStyle, setCropRect, style],
+    [spacePressed, activeTool, toImagePoint, selectShape, imageElement, setActiveTool, updateStyle, style],
   );
 
   const handleMouseMove = useCallback(
@@ -412,11 +413,6 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       if (!stage) return;
       const point = toImagePoint(stage);
       if (!point) return;
-
-      if (cropRect && activeTool === "crop") {
-        setCropRect((r) => (r ? { ...r, width: point.x - r.x, height: point.y - r.y } : r));
-        return;
-      }
 
       if (activeTool === "eyedropper") {
         const screenPoint = stage.getPointerPosition();
@@ -464,12 +460,11 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       drawing.current = { shape: updated };
       setLiveShape(updated);
     },
-    [spacePressed, activeTool, cropRect, setCropRect, toImagePoint, imageElement],
+    [spacePressed, activeTool, toImagePoint, imageElement],
   );
 
   const handleMouseUp = useCallback(() => {
     if (spacePressed) return;
-    if (activeTool === "crop") return; // crop is confirmed explicitly, not on mouse up
 
     if (drawing.current) {
       const finished = normalizeShape(drawing.current.shape);
@@ -543,8 +538,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     // and lets the text just take up the available space; height is never
     // touched here since Konva.Text already auto-grows it from the wrapped
     // line count, not from a manual drag.
-    const width = Math.max(20, node.width() * node.scaleX());
-    node.setAttrs({ width, scaleX: 1, scaleY: 1 });
+    bakeNodeScaleX(node, 20);
   }, []);
 
   const registerShapeRef = useCallback((id: string) => (node: Konva.Node | null) => {
@@ -649,17 +643,8 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
             />
           )}
 
-          {cropRect && (
-            <Rect
-              x={Math.min(cropRect.x, cropRect.x + cropRect.width)}
-              y={Math.min(cropRect.y, cropRect.y + cropRect.height)}
-              width={Math.abs(cropRect.width)}
-              height={Math.abs(cropRect.height)}
-              stroke="#ffffff"
-              dash={[6, 4]}
-              strokeWidth={1.5 / view.scale}
-              fill="rgba(61,123,253,0.15)"
-            />
+          {cropRect && imageElement && activeTool === "crop" && (
+            <CropOverlay imageElement={imageElement} cropRect={cropRect} view={view} onChange={setCropRect} />
           )}
         </Layer>
       </Stage>
@@ -691,10 +676,22 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
       {cropRect && (
         <div className="canvas__crop-actions">
-          <button type="button" onClick={commitCrop}>
-            Apply crop
+          <button
+            type="button"
+            onClick={() => {
+              commitCrop();
+              setActiveTool("select");
+            }}
+          >
+            Crop
           </button>
-          <button type="button" onClick={cancelCrop}>
+          <button
+            type="button"
+            onClick={() => {
+              cancelCrop();
+              setActiveTool("select");
+            }}
+          >
             Cancel
           </button>
         </div>

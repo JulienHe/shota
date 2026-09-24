@@ -1,6 +1,6 @@
-import { ReactNode, useRef, useState } from "react";
-import { ChevronDown, Minus, SquareRoundCorner, TypeOutline, Droplet, Grid3x3 } from "lucide-react";
-import { Popover } from "../../../components/Popover";
+import { useState } from "react";
+import { Minus, SquareRoundCorner, TypeOutline, Droplet, Grid3x3 } from "lucide-react";
+import { Dropdown } from "../../../components/Dropdown";
 import { FillMode, StrokeStyle } from "../types";
 import { useSystemFonts } from "../fonts";
 import { useStyleTarget } from "./useStyleTarget";
@@ -43,13 +43,13 @@ export function ShapeOptionsPanel() {
       <div className="toolbar__divider" />
       <div className="shape-options">
         {!showBlur && (
-          <Dropdown id="color" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<ColorSwatch color={style.stroke} />}>
+          <OptionDropdown id="color" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<ColorSwatch color={style.stroke} />}>
             <ColorPalette value={style.stroke} onPick={(c) => updateStyle({ stroke: c, fillColor: c })} />
-          </Dropdown>
+          </OptionDropdown>
         )}
 
         {showBlur && (
-          <Dropdown
+          <OptionDropdown
             id="blur"
             openMenu={openMenu}
             setOpenMenu={setOpenMenu}
@@ -83,12 +83,12 @@ export function ShapeOptionsPanel() {
                 onChange={(e) => updateStyle({ blurIntensity: Number(e.target.value) })}
               />
             </div>
-          </Dropdown>
+          </OptionDropdown>
         )}
 
         {showStroke && (
           <>
-            <Dropdown id="strokeWidth" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<Minus size={15} strokeWidth={2.5} />}>
+            <OptionDropdown id="strokeWidth" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<Minus size={15} strokeWidth={2.5} />}>
               <div className="shape-options__menu">
                 <input
                   type="range"
@@ -99,15 +99,15 @@ export function ShapeOptionsPanel() {
                   onChange={(e) => updateStyle({ strokeWidth: Number(e.target.value) })}
                 />
               </div>
-            </Dropdown>
+            </OptionDropdown>
 
-            <Dropdown id="lineStyle" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<LineStyleIcon />}>
+            <OptionDropdown id="lineStyle" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<LineStyleIcon />}>
               <div className="shape-options__menu shape-options__menu--list">
                 {STROKE_STYLES.map((s) => (
                   <button
                     key={s}
                     type="button"
-                    className={`shape-options__list-option${style.strokeStyle === s ? " shape-options__list-option--active" : ""}`}
+                    className={`dropdown__menu-item${style.strokeStyle === s ? " dropdown__menu-item--active" : ""}`}
                     onClick={() => {
                       updateStyle({ strokeStyle: s });
                       closeMenu();
@@ -118,12 +118,12 @@ export function ShapeOptionsPanel() {
                   </button>
                 ))}
               </div>
-            </Dropdown>
+            </OptionDropdown>
           </>
         )}
 
         {showFill && (
-          <Dropdown
+          <OptionDropdown
             id="fill"
             openMenu={openMenu}
             setOpenMenu={setOpenMenu}
@@ -162,11 +162,11 @@ export function ShapeOptionsPanel() {
                 />
               )}
             </div>
-          </Dropdown>
+          </OptionDropdown>
         )}
 
         {showCornerRadius && (
-          <Dropdown
+          <OptionDropdown
             id="corner"
             openMenu={openMenu}
             setOpenMenu={setOpenMenu}
@@ -182,12 +182,12 @@ export function ShapeOptionsPanel() {
                 onChange={(e) => updateStyle({ cornerRadius: Number(e.target.value) })}
               />
             </div>
-          </Dropdown>
+          </OptionDropdown>
         )}
 
         {showFontSize && (
           <>
-            <Dropdown id="fontSize" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={`${style.fontSize}px`}>
+            <OptionDropdown id="fontSize" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={`${style.fontSize}px`}>
               <div className="shape-options__menu">
                 <input
                   type="range"
@@ -198,9 +198,9 @@ export function ShapeOptionsPanel() {
                   onChange={(e) => updateStyle({ fontSize: Number(e.target.value) })}
                 />
               </div>
-            </Dropdown>
+            </OptionDropdown>
 
-            <Dropdown
+            <OptionDropdown
               id="fontFamily"
               openMenu={openMenu}
               setOpenMenu={setOpenMenu}
@@ -211,7 +211,7 @@ export function ShapeOptionsPanel() {
                   <button
                     key={name}
                     type="button"
-                    className={`shape-options__font-option${style.fontFamily === name ? " shape-options__font-option--active" : ""}`}
+                    className={`dropdown__menu-item${style.fontFamily === name ? " dropdown__menu-item--active" : ""}`}
                     style={{ fontFamily: name }}
                     onClick={() => {
                       updateStyle({ fontFamily: name });
@@ -222,7 +222,7 @@ export function ShapeOptionsPanel() {
                   </button>
                 ))}
               </div>
-            </Dropdown>
+            </OptionDropdown>
 
             <button
               type="button"
@@ -234,7 +234,7 @@ export function ShapeOptionsPanel() {
             </button>
 
             {style.textStrokeEnabled && (
-              <Dropdown
+              <OptionDropdown
                 id="outlineColor"
                 openMenu={openMenu}
                 setOpenMenu={setOpenMenu}
@@ -244,7 +244,7 @@ export function ShapeOptionsPanel() {
                   value={style.textStrokeColor}
                   onPick={(c) => updateStyle({ textStrokeColor: c, textStrokeEnabled: true })}
                 />
-              </Dropdown>
+              </OptionDropdown>
             )}
           </>
         )}
@@ -253,39 +253,19 @@ export function ShapeOptionsPanel() {
   );
 }
 
-function Dropdown({
+/** Adapts the shared `Dropdown`'s controlled open/close to this panel's "only one menu open at a time" id-based state, so call sites below don't each need their own open-state wiring. */
+function OptionDropdown({
   id,
-  trigger,
   openMenu,
   setOpenMenu,
-  align = "start",
-  children,
+  ...rest
 }: {
   id: string;
-  trigger: ReactNode;
   openMenu: string | null;
   setOpenMenu: (id: string | null) => void;
-  align?: "start" | "center";
-  children: ReactNode;
-}) {
+} & Omit<Parameters<typeof Dropdown>[0], "open" | "onToggle" | "onClose">) {
   const open = openMenu === id;
-  const anchorRef = useRef<HTMLButtonElement>(null);
-  return (
-    <div className="shape-options__anchor">
-      <button
-        ref={anchorRef}
-        type="button"
-        className={`shape-options__pill${open ? " shape-options__pill--active" : ""}`}
-        onClick={() => setOpenMenu(open ? null : id)}
-      >
-        {trigger}
-        <ChevronDown size={12} strokeWidth={2} />
-      </button>
-      <Popover open={open} onClose={() => setOpenMenu(null)} anchorRef={anchorRef} align={align}>
-        {children}
-      </Popover>
-    </div>
-  );
+  return <Dropdown open={open} onToggle={() => setOpenMenu(open ? null : id)} onClose={() => setOpenMenu(null)} {...rest} />;
 }
 
 function ColorSwatch({ color }: { color: string }) {
@@ -322,7 +302,7 @@ function FillModeSwatch({ mode, small }: { mode: FillMode; small?: boolean }) {
 function FillModeOption({ mode, active, onClick }: { mode: FillMode; active: boolean; onClick: () => void }) {
   const labels: Record<FillMode, string> = { none: "Stroke only", solid: "Filled", translucent: "Stroke + opacity" };
   return (
-    <button type="button" className={`shape-options__list-option${active ? " shape-options__list-option--active" : ""}`} onClick={onClick}>
+    <button type="button" className={`dropdown__menu-item${active ? " dropdown__menu-item--active" : ""}`} onClick={onClick}>
       <FillModeSwatch mode={mode} />
       {labels[mode]}
     </button>

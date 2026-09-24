@@ -10,6 +10,20 @@ export interface CapturableWindow {
   height: number;
 }
 
+export interface PendingCapture {
+  image_base64: string;
+  history_id: string | null;
+  shapes_json: string | null;
+}
+
+export interface HistoryListItem {
+  id: string;
+  created_at: number;
+  width: number;
+  height: number;
+  thumbnail_base64: string;
+}
+
 /** Thin, typed wrappers around every Rust command shota exposes. */
 export const tauriApi = {
   listCapturableWindows: () => invoke<CapturableWindow[]>("list_capturable_windows"),
@@ -29,7 +43,11 @@ export const tauriApi = {
   captureFullscreenNow: (monitorId?: number) =>
     invoke<void>("capture_fullscreen_now", { monitorId: monitorId ?? null }),
 
-  takePendingImage: () => invoke<string | null>("take_pending_image"),
+  takePendingCapture: () => invoke<PendingCapture | null>("take_pending_capture"),
+
+  editorReady: () => invoke<void>("editor_ready"),
+
+  closeEditorWindow: () => invoke<void>("close_editor_window"),
 
   copyImageToClipboard: (pngBase64: string) =>
     invoke<void>("copy_image_to_clipboard", { pngBase64 }),
@@ -43,6 +61,21 @@ export const tauriApi = {
     invoke<void>("set_shortcut", { kind, accelerator }),
 
   listSystemFonts: () => invoke<string[]>("list_system_fonts"),
+
+  listHistory: () => invoke<HistoryListItem[]>("list_history"),
+
+  openHistoryEntry: (id: string) => invoke<void>("open_history_entry", { id }),
+
+  updateHistoryEntry: (id: string, pngBase64: string, shapesJson: string) =>
+    invoke<void>("update_history_entry", { id, imageBase64: pngBase64, shapesJson }),
+
+  deleteHistoryEntry: (id: string) => invoke<void>("delete_history_entry", { id }),
+
+  clearHistory: () => invoke<void>("clear_history"),
+
+  historyReady: () => invoke<void>("history_ready"),
+
+  closeHistoryWindow: () => invoke<void>("close_history_window_command"),
 };
 
 /** Strips the `data:image/png;base64,` prefix so raw base64 can cross the IPC boundary. */

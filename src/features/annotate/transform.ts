@@ -2,6 +2,32 @@ import Konva from "konva";
 import { Shape } from "./types";
 
 /**
+ * Konva's Transformer live-drags a resize by applying scaleX/scaleY to the
+ * node rather than changing its width/height directly — left alone, that
+ * visibly stretches whatever's rendered (glyphs, a cached bitmap) instead of
+ * revealing more/less of it. Baking the scale into real width *and height*
+ * and resetting scale to 1 on every tick is the fix used wherever a shape
+ * needs to resample live during a resize (blur/pixelate, the crop tool).
+ */
+export function bakeNodeScale(node: Konva.Node, minSize = 1): { width: number; height: number } {
+  const width = Math.max(minSize, node.width() * node.scaleX());
+  const height = Math.max(minSize, node.height() * node.scaleY());
+  node.setAttrs({ width, height, scaleX: 1, scaleY: 1 });
+  return { width, height };
+}
+
+/**
+ * Same idea as {@link bakeNodeScale}, but for nodes (like Konva.Text) whose
+ * height is auto-derived from content rather than an explicit attr — baking
+ * a height into them would defeat that auto-sizing, so only width is baked.
+ */
+export function bakeNodeScaleX(node: Konva.Node, minWidth = 1): number {
+  const width = Math.max(minWidth, node.width() * node.scaleX());
+  node.setAttrs({ width, scaleX: 1, scaleY: 1 });
+  return width;
+}
+
+/**
  * Converts a Konva Transformer's scale/rotation delta on a node back into
  * shape-space attributes, then resets the node's scale to 1 so future drags
  * and transforms start from a clean baseline.
