@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Minus, SquareRoundCorner, TypeOutline, Droplet, Grid3x3 } from "lucide-react";
 import { Dropdown } from "../../../components/Dropdown";
 import { FillMode, StrokeStyle } from "../types";
 import { useSystemFonts } from "../fonts";
 import { useStyleTarget } from "./useStyleTarget";
+import { useUiStore } from "../../../stores/uiStore";
 import "./ShapeOptionsPanel.css";
 
 const SWATCHES = [
@@ -33,19 +34,70 @@ export function ShapeOptionsPanel() {
   const target = useStyleTarget();
   const systemFonts = useSystemFonts();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const setStyleMenuOpen = useUiStore((s) => s.setStyleMenuOpen);
+
+  // Tells the canvas to drop the selection handles while a value is being
+  // adjusted. Gated on `target` too, so a menu left open when the selection
+  // clears can't strand the handles in a hidden state.
+  const menuOpen = target !== null && openMenu !== null;
+  useEffect(() => {
+    setStyleMenuOpen(menuOpen);
+    return () => setStyleMenuOpen(false);
+  }, [menuOpen, setStyleMenuOpen]);
 
   if (!target) return null;
-  const { style, updateStyle, showStroke, showFill, showCornerRadius, showFontSize, showBlur } = target;
+  const { style, updateStyle, showStroke, showFill, showCornerRadius, showFontSize, showBlur, showSpotlight } = target;
   const closeMenu = () => setOpenMenu(null);
 
   return (
     <>
       <div className="toolbar__divider" />
       <div className="shape-options">
-        {!showBlur && (
+        {!showBlur && !showSpotlight && (
           <OptionDropdown id="color" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<ColorSwatch color={style.stroke} />}>
             <ColorPalette value={style.stroke} onPick={(c) => updateStyle({ stroke: c, fillColor: c })} />
           </OptionDropdown>
+        )}
+
+        {showSpotlight && (
+          <>
+            <OptionDropdown
+              id="spotlightColor"
+              openMenu={openMenu}
+              setOpenMenu={setOpenMenu}
+              trigger={<ColorSwatch color={style.spotlightColor} />}
+            >
+              <div className="shape-options__menu shape-options__menu--list">
+                <ColorPalette value={style.spotlightColor} onPick={(c) => updateStyle({ spotlightColor: c })} />
+                <input
+                  type="range"
+                  min={0.1}
+                  max={1}
+                  step={0.05}
+                  value={style.spotlightOpacity}
+                  onChange={(e) => updateStyle({ spotlightOpacity: Number(e.target.value) })}
+                />
+              </div>
+            </OptionDropdown>
+
+            <OptionDropdown
+              id="spotlightRadius"
+              openMenu={openMenu}
+              setOpenMenu={setOpenMenu}
+              trigger={<SquareRoundCorner size={15} strokeWidth={2} />}
+            >
+              <div className="shape-options__menu">
+                <input
+                  type="range"
+                  min={0}
+                  max={48}
+                  step={2}
+                  value={style.spotlightRadius}
+                  onChange={(e) => updateStyle({ spotlightRadius: Number(e.target.value) })}
+                />
+              </div>
+            </OptionDropdown>
+          </>
         )}
 
         {showBlur && (

@@ -16,7 +16,7 @@ import { CropOverlay } from "../crop/CropOverlay";
 import { sampleColorFromImage } from "../color-picker/sampleColor";
 import { EyedropperHud } from "../color-picker/EyedropperHud";
 import { ShapeRenderer } from "./shapes/ShapeRenderer";
-import { createShapeId, Shape } from "./types";
+import { createShapeId, radiusForFontSize, Shape } from "./types";
 import { getTransformPatch, bakeNodeScaleX } from "./transform";
 import { TextEditorOverlay } from "./TextEditorOverlay";
 import { CanvasBackgroundMenu } from "./CanvasBackgroundMenu";
@@ -33,7 +33,7 @@ const CANVAS_BACKGROUND_COLORS: Partial<Record<CanvasBackground, string>> = {
   black: "#000000",
 };
 
-const DRAWABLE_TOOLS = new Set(["rectangle", "ellipse", "line", "arrow", "pen", "blur"]);
+const DRAWABLE_TOOLS = new Set(["rectangle", "ellipse", "line", "arrow", "pen", "blur", "spotlight"]);
 
 export interface CanvasHandle {
   exportDataUrl: () => string | null;
@@ -63,6 +63,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const updateStyle = useToolStore((s) => s.updateStyle);
 
   const canvasBackground = useUiStore((s) => s.canvasBackground);
+  const styleMenuOpen = useUiStore((s) => s.styleMenuOpen);
   const [bgMenuPos, setBgMenuPos] = useState<{ x: number; y: number } | null>(null);
 
   const imageElement = useImage(image);
@@ -318,7 +319,10 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     const node = selectedShapeId ? nodeRefs.current.get(selectedShapeId) : null;
     transformer.nodes(node ? [node] : []);
     transformer.getLayer()?.batchDraw();
-  }, [selectedShapeId, shapes]);
+    // `styleMenuOpen` unmounts and remounts the Transformer, which comes back
+    // as a fresh instance with no nodes attached — without it in the deps the
+    // handles would never reappear after closing a style dropdown.
+  }, [selectedShapeId, shapes, styleMenuOpen]);
 
   const toImagePoint = useCallback(
     (stage: Konva.Stage) => {
@@ -397,6 +401,9 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
         case "blur":
           shape = { ...base, type: "blur", width: 1, height: 1 };
           break;
+        case "spotlight":
+          shape = { ...base, type: "spotlight", width: 1, height: 1 };
+          break;
         default:
           return;
       }
@@ -431,7 +438,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       const dy = point.y - shape.y;
 
       let updated: Shape = shape;
-      if (shape.type === "rectangle" || shape.type === "blur") {
+      if (shape.type === "rectangle" || shape.type === "blur" || shape.type === "spotlight") {
         if (e.evt.shiftKey) {
           const size = Math.max(Math.abs(dx), Math.abs(dy));
           updated = { ...shape, width: Math.sign(dx || 1) * size, height: Math.sign(dy || 1) * size };
@@ -478,11 +485,32 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const handleStageClick = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
       if (spacePressed) return;
-      if (activeTool !== "text") return;
+      if (activeTool !== "text" && activeTool !== "step") return;
       const stage = stageRef.current;
       if (!stage || e.target !== stage) return;
       const point = toImagePoint(stage);
       if (!point) return;
+
+      if (activeTool === "step") {
+        // Numbering is derived from the badges actually on the canvas rather
+        // than a separate counter, so undo/redo and deleting a badge stay
+        // consistent instead of drifting out of sync with a stored count.
+        const next =
+          shapes.reduce((max, existing) => (existing.type === "step" ? Math.max(max, existing.number) : max), 0) + 1;
+        addShape({
+          id: createShapeId(),
+          type: "step",
+          x: point.x,
+          y: point.y,
+          rotation: 0,
+          number: next,
+          radius: radiusForFontSize(style.fontSize),
+          style,
+        });
+        // Deliberately stays on the step tool: badges are placed in runs
+        // (1, 2, 3…), unlike text where you almost always want to type next.
+        return;
+      }
 
       const shape: Shape = {
         id: createShapeId(),
@@ -498,7 +526,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       setEditingTextId(shape.id);
       setActiveTool("select");
     },
-    [spacePressed, activeTool, toImagePoint, addShape, setActiveTool, style],
+    [spacePressed, activeTool, toImagePoint, addShape, setActiveTool, style, shapes],
   );
 
   const handleStageDragMove = useCallback(
@@ -625,11 +653,11 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
           {liveShape && <ShapeRenderer shape={liveShape} draggable={false} onClick={() => {}} onTap={() => {}} onDragEnd={() => {}} onTransformEnd={() => {}} />}
 
-          {activeTool === "select" && (
+          {activeTool === "select" && !styleMenuOpen && (
             <Transformer
               ref={transformerRef}
-              rotateEnabled={selectedShape?.type !== "blur"}
-              keepRatio={false}
+              rotateEnabled={selectedShape?.type !== "blur" && selectedShape?.type !== "spotlight"}
+              keepRatio={selectedShape?.type === "step"}
               rotateAnchorCursor={ROTATE_CURSOR}
               boundBoxFunc={handleTransformBoundBox}
               enabledAnchors={["top-left", "top-right", "bottom-left", "bottom-right"]}
@@ -741,7 +769,7 @@ function rotateBoxAroundCenter(box: Konva.Box, targetRotation: number): Konva.Bo
 const MIN_LINE_LENGTH = 12;
 
 function normalizeShape(shape: Shape): Shape {
-  if (shape.type === "rectangle" || shape.type === "blur") {
+  if (shape.type === "rectangle" || shape.type === "blur" || shape.type === "spotlight") {
     const x = Math.min(shape.x, shape.x + shape.width);
     const y = Math.min(shape.y, shape.y + shape.height);
     return { ...shape, x, y, width: Math.abs(shape.width), height: Math.abs(shape.height) };

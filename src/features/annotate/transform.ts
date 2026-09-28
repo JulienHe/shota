@@ -84,6 +84,20 @@ export function getTransformPatch(shape: Shape, node: Konva.Node): Partial<Shape
       }
       return { ...base, points };
     }
+    case "spotlight":
+      // Like "blur": the live onTransform handler already baked the scale
+      // into the node's own width/height, so read those rather than
+      // multiplying stale state by an already-reset scale.
+      return {
+        ...base,
+        width: Math.max(8, (node as Konva.Shape).width()),
+        height: Math.max(8, (node as Konva.Shape).height()),
+      };
+    case "step":
+      // A badge is a circle, so it only has one meaningful dimension — take
+      // whichever axis the user dragged furthest and keep it round (the
+      // Transformer is also set to keepRatio for this type).
+      return { ...base, radius: Math.max(8, shape.radius * Math.max(scaleX, scaleY)) };
     case "freehand":
       return {
         ...base,

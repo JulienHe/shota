@@ -6,6 +6,8 @@ export type ToolId =
   | "arrow"
   | "text"
   | "pen"
+  | "step"
+  | "spotlight"
   | "blur"
   | "crop"
   | "eyedropper";
@@ -28,6 +30,13 @@ export interface ShapeStyle {
   textStrokeColor: string;
   blurEffect: BlurEffect;
   blurIntensity: number;
+  /** Spotlight keeps its own colour/opacity/radius rather than reusing the
+   * shared stroke+fill ones: it dims everything *outside* the shape, so it
+   * wants a dark translucent default while every other tool wants a bright
+   * opaque accent, and sharing would make the two fight over one value. */
+  spotlightColor: string;
+  spotlightOpacity: number;
+  spotlightRadius: number;
 }
 
 export const DEFAULT_STYLE: ShapeStyle = {
@@ -44,6 +53,9 @@ export const DEFAULT_STYLE: ShapeStyle = {
   textStrokeColor: "#000000",
   blurEffect: "pixelate",
   blurIntensity: 18,
+  spotlightColor: "#000000",
+  spotlightOpacity: 0.65,
+  spotlightRadius: 12,
 };
 
 interface BaseShape {
@@ -87,6 +99,24 @@ export interface FreehandShape extends BaseShape {
   points: number[];
 }
 
+/** An auto-numbered circular badge, for calling out steps in a sequence. */
+export interface StepShape extends BaseShape {
+  type: "step";
+  number: number;
+  radius: number;
+}
+
+/**
+ * Dims the whole image *except* this rectangle, so the selected region reads
+ * as spotlit. The x/y/width/height describe the clear cut-out, not the
+ * overlay — the overlay always spans the full image.
+ */
+export interface SpotlightShape extends BaseShape {
+  type: "spotlight";
+  width: number;
+  height: number;
+}
+
 export interface BlurShape extends BaseShape {
   type: "blur";
   width: number;
@@ -100,7 +130,37 @@ export type Shape =
   | ArrowShape
   | TextShape
   | FreehandShape
+  | StepShape
+  | SpotlightShape
   | BlurShape;
+
+/** Badge radius for a given number size, so the existing font-size control
+ * scales the whole badge rather than overflowing the circle. */
+export function radiusForFontSize(fontSize: number): number {
+  return Math.round(fontSize * 0.95);
+}
+
+/**
+ * Black or white, whichever stays legible as the number drawn on top of a
+ * badge of the given fill. Avoids a separate "badge text colour" control
+ * that the user would otherwise have to keep in sync with the fill by hand
+ * (and get wrong on a yellow badge).
+ */
+export function contrastTextColor(hex: string): string {
+  const clean = hex.replace("#", "");
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  // Rec. 601 luma — plenty for choosing ink on a flat swatch.
+  const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luma > 0.6 ? "#1c1d22" : "#ffffff";
+}
+
+/** The spotlight's dimming colour, with its opacity baked into the string
+ * (Konva takes no separate fill-opacity — see {@link fillForStyle}). */
+export function spotlightFill(style: ShapeStyle): string {
+  return hexToRgba(style.spotlightColor, style.spotlightOpacity);
+}
 
 export function createShapeId(): string {
   return `shape_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;

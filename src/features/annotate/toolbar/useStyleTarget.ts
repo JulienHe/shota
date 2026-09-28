@@ -5,9 +5,12 @@ import { ShapeStyle } from "../types";
 const STROKE_KINDS = new Set(["rectangle", "ellipse", "line", "arrow", "pen", "freehand"]);
 const FILL_KINDS = new Set(["rectangle", "ellipse"]);
 const CORNER_RADIUS_KINDS = new Set(["rectangle"]);
-const FONT_SIZE_KINDS = new Set(["text"]);
+// "step" rides on fontSize too: it drives the badge radius, so the same
+// size control scales the whole badge.
+const FONT_SIZE_KINDS = new Set(["text", "step"]);
 const BLUR_KINDS = new Set(["blur"]);
-const RELEVANT_KINDS = new Set([...STROKE_KINDS, ...FILL_KINDS, ...FONT_SIZE_KINDS, ...BLUR_KINDS, "text"]);
+const SPOTLIGHT_KINDS = new Set(["spotlight"]);
+const RELEVANT_KINDS = new Set([...STROKE_KINDS, ...FILL_KINDS, ...FONT_SIZE_KINDS, ...BLUR_KINDS, ...SPOTLIGHT_KINDS, "text", "step"]);
 
 export interface StyleTarget {
   kind: string;
@@ -18,6 +21,7 @@ export interface StyleTarget {
   showCornerRadius: boolean;
   showFontSize: boolean;
   showBlur: boolean;
+  showSpotlight: boolean;
 }
 
 /**
@@ -62,5 +66,6 @@ export function useStyleTarget(): StyleTarget | null {
     showCornerRadius: CORNER_RADIUS_KINDS.has(kind),
     showFontSize: FONT_SIZE_KINDS.has(kind),
     showBlur: BLUR_KINDS.has(kind),
+    showSpotlight: SPOTLIGHT_KINDS.has(kind),
   };
 }
