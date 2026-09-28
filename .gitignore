@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Agent skill tooling installed by `npx skills add` — third-party, not shota's source
+.agents/
+.claude/
+skills-lock.json

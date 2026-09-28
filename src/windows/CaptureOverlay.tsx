@@ -26,6 +26,11 @@ export function CaptureOverlay() {
   const [drag, setDrag] = useState<DragRect | null>(null);
 
   const cancel = useCallback(() => {
+    // The overlay window is hidden and reused rather than destroyed, so
+    // React never remounts between captures — leaving `drag` set here would
+    // show next time's overlay with this time's stale selection rectangle
+    // still drawn (at coordinates that no longer mean anything).
+    setDrag(null);
     tauriApi.cancelCapture();
   }, []);
 

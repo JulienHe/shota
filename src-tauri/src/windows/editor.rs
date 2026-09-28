@@ -1,5 +1,8 @@
+use std::sync::Arc;
+
 use tauri::{AppHandle, Emitter, Manager, WebviewUrl, WebviewWindowBuilder};
 
+use super::cloak_window;
 use crate::history;
 use crate::state::{AppState, PendingCapture};
 
@@ -15,16 +18,21 @@ const EDITOR_LABEL: &str = "editor";
 /// just the first.
 pub fn open_editor_window(
     app: &AppHandle,
-    image_base64: String,
+    image: Arc<Vec<u8>>,
+    image_id: String,
     history_id: Option<String>,
     shapes_json: Option<String>,
 ) -> Result<(), String> {
     let capture = PendingCapture {
-        image_base64,
+        image_id: image_id.clone(),
         history_id,
         shapes_json,
     };
-    app.state::<AppState>().set_pending_capture(capture.clone());
+    let state = app.state::<AppState>();
+    // The bytes stay here and are fetched separately and raw by the editor
+    // (`take_capture_image`) — only this small id travels in the event.
+    state.put_capture(image_id, image);
+    state.set_pending_capture(capture.clone());
 
     if let Some(existing) = app.get_webview_window(EDITOR_LABEL) {
         // Stay cloaked (invisible, but still fully "shown"/running as far
@@ -101,13 +109,20 @@ pub fn prewarm_editor_window(app: &AppHandle) {
 /// that inline before opening the editor was adding a very noticeable
 /// delay to every single capture. It's best-effort besides: a history
 /// write failure shouldn't affect the capture the user actually asked for.
-pub fn open_editor_with_history(app: &AppHandle, image_base64: String) -> Result<(), String> {
+pub fn open_editor_with_history(app: &AppHandle, image: Vec<u8>) -> Result<(), String> {
     let history_id = history::new_id();
-    open_editor_window(app, image_base64.clone(), Some(history_id.clone()), None)?;
+    let image = Arc::new(image);
+    open_editor_window(
+        app,
+        image.clone(),
+        history_id.clone(),
+        Some(history_id.clone()),
+        None,
+    )?;
 
     let app = app.clone();
     std::thread::spawn(move || {
-        if let Err(err) = history::add_entry_with_id(&app, &history_id, &image_base64) {
+        if let Err(err) = history::add_entry_with_id(&app, &history_id, &image) {
             eprintln!("failed to save history entry: {err}");
         }
     });
@@ -119,7 +134,13 @@ pub fn open_editor_with_history(app: &AppHandle, image_base64: String) -> Result
 /// saved against it last time.
 pub fn open_editor_from_history(app: &AppHandle, id: &str) -> Result<(), String> {
     let entry = history::get_entry(app, id)?;
-    open_editor_window(app, entry.image_base64, Some(id.to_string()), entry.shapes_json)
+    open_editor_window(
+        app,
+        Arc::new(entry.image_bytes),
+        id.to_string(),
+        Some(id.to_string()),
+        entry.shapes_json,
+    )
 }
 
 /// Called by the frontend on every exit path (Copy, Save, the title bar's
@@ -157,30 +178,3 @@ pub fn show_editor_window(app: &AppHandle) -> Result<(), String> {
     }
     Ok(())
 }
-
-/// Toggles DWM cloaking: the window stays "shown" as far as Tauri/WebView2
-/// are concerned (keeps running its JS, keeps its position/size), but the
-/// compositor simply doesn't display it — unlike `hide()`/`show()`, which
-/// actually changes that visible state and is what a never-yet-shown
-/// window's WebView2 controller apparently waits on before initializing.
-/// Revealing is just a compositor flag flip, not a re-render, so there's
-/// nothing to visibly flash.
-#[cfg(windows)]
-fn cloak_window(window: &tauri::WebviewWindow, cloak: bool) {
-    use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMWA_CLOAK};
-
-    if let Ok(hwnd) = window.hwnd() {
-        let value: i32 = if cloak { 1 } else { 0 };
-        let _ = unsafe {
-            DwmSetWindowAttribute(
-                hwnd,
-                DWMWA_CLOAK,
-                &value as *const i32 as *const core::ffi::c_void,
-                std::mem::size_of::<i32>() as u32,
-            )
-        };
-    }
-}
-
-#[cfg(not(windows))]
-fn cloak_window(_window: &tauri::WebviewWindow, _cloak: bool) {}

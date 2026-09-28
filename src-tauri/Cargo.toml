@@ -39,6 +39,19 @@ opt-level = 3
 panic = "abort"
 strip = true
 
+# Screenshot work is all pixel-pushing inside dependencies (xcap's capture,
+# image/png's encoder), and unoptimized those run 8-17x slower — measured on a
+# 3840x2160 capture, the Rust half of a Ctrl+Shift+3 took ~1990ms at the Cargo
+# default `opt-level = 0` versus ~234ms with this. That made `tauri dev` feel
+# broken while release builds were fine, which is a trap worth not re-setting.
+# Dependencies rarely rebuild, so paying full optimization for them costs one
+# slow build; shota's own crate stays at 1 to keep incremental rebuilds quick.
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-global-shortcut = "2"
 

@@ -1,10 +1,10 @@
 use xcap::Monitor;
 
-use super::encode_png_base64;
+use super::encode_png;
 
 /// Captures an arbitrary rectangular region in virtual-screen coordinates by
 /// capturing the monitor(s) it overlaps and cropping to the requested bounds.
-pub fn capture_region(x: i32, y: i32, width: u32, height: u32) -> Result<String, String> {
+pub fn capture_region(x: i32, y: i32, width: u32, height: u32) -> Result<Vec<u8>, String> {
     if width == 0 || height == 0 {
         return Err("Region must have non-zero width and height".to_string());
     }
@@ -36,5 +36,5 @@ pub fn capture_region(x: i32, y: i32, width: u32, height: u32) -> Result<String,
     )
     .to_image();
 
-    encode_png_base64(cropped)
+    encode_png(cropped)
 }

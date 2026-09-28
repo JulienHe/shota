@@ -31,3 +31,50 @@ frontend state captured "once on mount" (e.g. `useEffect(() => {...}, [])` readi
 window's on-screen position) will go stale the first time the window is reused, since the
 React tree never remounts. If a value can change between reuses, subscribe to the Tauri
 event that reflects the change (e.g. `onMoved`) instead of reading it once.
+
+## Check the build profile before chasing "the app feels slow"
+
+Cargo's default dev profile is `opt-level = 0`, and that applies to dependencies too.
+For anything pixel-pushing (`xcap`'s capture, `image`/`png`'s encoder) that's not a
+small penalty — measured on a 3840x2160 capture, the Rust half of Ctrl+Shift+3 took
+**~1990ms unoptimized vs ~234ms optimized**:
+
+| stage | `opt-level = 0` | optimized deps |
+| --- | --- | --- |
+| `monitor.capture_image()` | 645 ms | 103 ms |
+| PNG encode (Fast/NoFilter) | 827 ms | 90 ms |
+| JSON-escaping the payload | 461 ms | 28 ms |
+| thumbnail (background) | 512 ms | 12 ms |
+
+`[profile.dev.package."*"] opt-level = 3` in `src-tauri/Cargo.toml` fixes it. This only
+ever affected `tauri dev` — release builds were always optimized — so it presents as
+"the app is broken" during development while the shipped binary is fine.
+
+**Measure before optimizing.** This was found by timing each stage in a throwaway crate
+against the real dependencies, not by reading code and guessing. Two things that
+*looked* like obvious culprits (xcap's capture, the 120ms overlay sleep) were nowhere
+near the real cost.
+
+**Changing opt-level invalidates incremental artifacts.** If a build starts failing with
+`unresolved external symbol anon.*.llvm.*` link errors after touching profile settings,
+`rm -rf src-tauri/target/debug/incremental` — it is not a code error.
+
+## Large images must not cross IPC as base64
+
+A capture reaches the editor as raw PNG bytes: Rust holds them in `AppState` keyed by an
+id, the `shota://new-capture` event carries only that id, and the frontend fetches the
+bytes via `take_capture_image`, which returns a `tauri::ipc::Response` (arrives in JS as
+an `ArrayBuffer`) and wraps them in a `blob:` URL.
+
+Do not "simplify" this back to base64-in-the-event. That inflates the payload by a third,
+JSON-escapes tens of megabytes, forces a `JSON.parse` of that string in the webview,
+builds a second multi-MB data-URL string, then base64-decodes it — roughly a second of
+work per capture, on top of the Rust side.
+
+`blob:` URLs specifically, not a custom URI scheme: blob URLs are same-origin, so the
+Konva canvas stays untainted and `stage.toDataURL()` (Copy/Save) keeps working. A custom
+protocol origin would taint the canvas and break export unless CORS is set up exactly right.
+
+Same rule applies on the way back out: the editor sends only `shapes_json` on close, never
+the image. The base image never changes there, and Rust already wrote those exact pixels
+to disk at capture time.

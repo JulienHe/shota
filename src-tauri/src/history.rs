@@ -33,13 +33,11 @@ pub struct HistoryListItem {
 
 /// What reopening a history entry in the editor needs: the editable base
 /// image (never baked with annotations) plus whatever shapes were saved
-/// against it last time, if any.
-#[derive(Serialize, Clone)]
+/// against it last time, if any. Rust-internal — the image reaches the
+/// webview as raw bytes via `take_capture_image`, never through this.
 pub struct HistoryEntryPayload {
-    pub image_base64: String,
+    pub image_bytes: Vec<u8>,
     pub shapes_json: Option<String>,
-    pub width: u32,
-    pub height: u32,
 }
 
 pub struct HistoryState {
@@ -146,13 +144,10 @@ fn remove_entry_files(app: &AppHandle, id: &str) {
 /// window immediately) — decoding, thumbnailing and writing 2+ files to
 /// disk is real work, meant to run in the background rather than block
 /// whatever's waiting on the id.
-pub fn add_entry_with_id(app: &AppHandle, id: &str, image_base64: &str) -> Result<(), String> {
-    let bytes = base64::engine::general_purpose::STANDARD
-        .decode(image_base64)
-        .map_err(|e| e.to_string())?;
-    let img = image::load_from_memory(&bytes).map_err(|e| e.to_string())?;
+pub fn add_entry_with_id(app: &AppHandle, id: &str, bytes: &[u8]) -> Result<(), String> {
+    let img = image::load_from_memory(bytes).map_err(|e| e.to_string())?;
 
-    fs::write(image_path(app, id)?, &bytes).map_err(|e| e.to_string())?;
+    fs::write(image_path(app, id)?, bytes).map_err(|e| e.to_string())?;
     write_thumbnail(app, id, &img)?;
 
     let state = app.state::<HistoryState>();
@@ -176,40 +171,44 @@ pub fn add_entry_with_id(app: &AppHandle, id: &str, image_base64: &str) -> Resul
     write_index(app, &entries)
 }
 
-/// Overwrites an existing entry's image + annotations, e.g. when the editor
-/// closes after the user cropped the image or added shapes. Keeps the
+/// Persists the annotations drawn against an existing capture. Keeps the
 /// original `created_at` so editing doesn't reorder the carousel.
+///
+/// Deliberately does NOT take the image. The base image never changes in the
+/// editor — annotations are separate shapes composited over it at export
+/// time — and `add_entry_with_id` already wrote those exact pixels to disk
+/// when the capture happened. Passing it back anyway meant shipping tens of
+/// megabytes of base64 over IPC on every single Copy/Save/close, decoding it
+/// twice, rewriting a byte-identical multi-MB file and regenerating a
+/// byte-identical thumbnail, all to persist a few hundred bytes of shapes
+/// JSON. Width/height come across as two plain numbers instead, only needed
+/// for the entry-doesn't-exist-yet race below.
 pub fn update_entry(
     app: &AppHandle,
     id: &str,
-    image_base64: &str,
     shapes_json: &str,
+    width: u32,
+    height: u32,
 ) -> Result<(), String> {
-    let bytes = base64::engine::general_purpose::STANDARD
-        .decode(image_base64)
-        .map_err(|e| e.to_string())?;
-    let img = image::load_from_memory(&bytes).map_err(|e| e.to_string())?;
-
     let state = app.state::<HistoryState>();
     let mut entries = state.entries.lock().unwrap();
     match entries.iter_mut().find(|e| e.id == id) {
         Some(meta) => {
-            meta.width = img.width();
-            meta.height = img.height();
+            meta.width = width;
+            meta.height = height;
         }
         // The editor can close (and race this in) before the capture's own
-        // background `add_entry_with_id` has landed — create the entry here
-        // instead of silently dropping the annotations in that case.
+        // background `add_entry_with_id` has landed — record the annotations
+        // now instead of silently dropping them. `add_entry_with_id` finds
+        // this entry and fills in the image and thumbnail when it lands.
         None => entries.push(HistoryMeta {
             id: id.to_string(),
             created_at: now_ms(),
-            width: img.width(),
-            height: img.height(),
+            width,
+            height,
         }),
     }
 
-    fs::write(image_path(app, id)?, &bytes).map_err(|e| e.to_string())?;
-    write_thumbnail(app, id, &img)?;
     fs::write(shapes_path(app, id)?, shapes_json).map_err(|e| e.to_string())?;
     prune(app, &mut entries);
     write_index(app, &entries)
@@ -220,11 +219,16 @@ pub fn list_entries(app: &AppHandle) -> Result<Vec<HistoryListItem>, String> {
     let mut entries = state.entries.lock().unwrap().clone();
     entries.sort_by(|a, b| b.created_at.cmp(&a.created_at));
 
-    entries
+    // Entries whose thumbnail isn't on disk yet (or at all) are skipped
+    // rather than failing the whole listing: a capture's image and thumbnail
+    // are written in the background, so an entry can legitimately exist for a
+    // moment before its files do — and one unreadable file shouldn't blank
+    // out the entire carousel.
+    Ok(entries
         .into_iter()
-        .map(|meta| {
-            let bytes = fs::read(thumb_path(app, &meta.id)?).map_err(|e| e.to_string())?;
-            Ok(HistoryListItem {
+        .filter_map(|meta| {
+            let bytes = fs::read(thumb_path(app, &meta.id).ok()?).ok()?;
+            Some(HistoryListItem {
                 id: meta.id,
                 created_at: meta.created_at,
                 width: meta.width,
@@ -232,29 +236,24 @@ pub fn list_entries(app: &AppHandle) -> Result<Vec<HistoryListItem>, String> {
                 thumbnail_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
             })
         })
-        .collect()
+        .collect())
 }
 
 pub fn get_entry(app: &AppHandle, id: &str) -> Result<HistoryEntryPayload, String> {
     let state = app.state::<HistoryState>();
-    let meta = {
+    {
         let entries = state.entries.lock().unwrap();
-        entries
-            .iter()
-            .find(|e| e.id == id)
-            .cloned()
-            .ok_or_else(|| "history entry not found".to_string())?
-    };
+        if !entries.iter().any(|e| e.id == id) {
+            return Err("history entry not found".to_string());
+        }
+    }
 
-    let bytes = fs::read(image_path(app, id)?).map_err(|e| e.to_string())?;
-    let image_base64 = base64::engine::general_purpose::STANDARD.encode(bytes);
+    let image_bytes = fs::read(image_path(app, id)?).map_err(|e| e.to_string())?;
     let shapes_json = fs::read_to_string(shapes_path(app, id)?).ok();
 
     Ok(HistoryEntryPayload {
-        image_base64,
+        image_bytes,
         shapes_json,
-        width: meta.width,
-        height: meta.height,
     })
 }
 

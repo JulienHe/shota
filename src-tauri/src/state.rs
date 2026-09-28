@@ -1,17 +1,24 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Manager};
 
 use crate::hotkeys::{ShortcutKind, DEFAULT_AREA_SHORTCUT, DEFAULT_FULLSCREEN_SHORTCUT};
 
-/// A capture handed off to the editor window: the raw (never annotation-
-/// baked) image, which history entry it belongs to (if any), and whatever
-/// shapes were previously saved against that entry, if reopened from history.
+/// A capture handed off to the editor window: a key for fetching the raw
+/// (never annotation-baked) image, which history entry it belongs to (if
+/// any), and whatever shapes were previously saved against that entry, if
+/// reopened from history.
+///
+/// Deliberately carries only an id, not the image itself. This payload is
+/// JSON-serialized into an event and parsed by the webview, so putting a
+/// multi-megabyte base64 string in it meant escaping and re-parsing tens of
+/// megabytes of JSON on every single capture. The bytes are fetched
+/// separately and raw, via `take_capture_image`.
 #[derive(Serialize, Clone)]
 pub struct PendingCapture {
-    pub image_base64: String,
+    pub image_id: String,
     pub history_id: Option<String>,
     pub shapes_json: Option<String>,
 }
@@ -43,11 +50,21 @@ impl Default for PersistedSettings {
     }
 }
 
+/// A 4K capture is tens of megabytes of PNG, so only the few most recent are
+/// retained: the editor fetches one immediately after it's stored, and older
+/// ones only matter if a window re-requests an image it already showed.
+const MAX_RETAINED_CAPTURES: usize = 3;
+
 pub struct AppState {
     settings: Mutex<PersistedSettings>,
     /// Holds a freshly captured image while the editor window spins up, so it
     /// can pull it via a command instead of racing an event listener.
     pending_capture: Mutex<Option<PendingCapture>>,
+    /// Raw PNG bytes of recent captures, keyed by image id, for the editor
+    /// window to fetch over IPC (see `take_capture_image`). Kept as `Arc` so
+    /// handing the same capture to the history writer costs a refcount bump
+    /// rather than copying tens of megabytes.
+    captures: Mutex<Vec<(String, Arc<Vec<u8>>)>>,
 }
 
 impl AppState {
@@ -56,7 +73,26 @@ impl AppState {
         Self {
             settings: Mutex::new(settings),
             pending_capture: Mutex::new(None),
+            captures: Mutex::new(Vec::new()),
         }
+    }
+
+    pub fn put_capture(&self, id: String, bytes: Arc<Vec<u8>>) {
+        let mut captures = self.captures.lock().unwrap();
+        captures.retain(|(existing, _)| existing != &id);
+        captures.push((id, bytes));
+        while captures.len() > MAX_RETAINED_CAPTURES {
+            captures.remove(0);
+        }
+    }
+
+    pub fn capture_bytes(&self, id: &str) -> Option<Arc<Vec<u8>>> {
+        self.captures
+            .lock()
+            .unwrap()
+            .iter()
+            .find(|(existing, _)| existing == id)
+            .map(|(_, bytes)| bytes.clone())
     }
 
     pub fn set_pending_capture(&self, capture: PendingCapture) {

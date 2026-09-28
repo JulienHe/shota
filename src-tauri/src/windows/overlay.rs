@@ -1,5 +1,7 @@
 use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
+use super::cloak_window;
+
 const OVERLAY_LABEL: &str = "overlay";
 // Far enough off any real monitor that it can never be glimpsed, used only
 // while the pre-warmed window is loading (see `prewarm_capture_overlay`).
@@ -41,7 +43,7 @@ fn build_overlay_window(app: &AppHandle, x: f64, y: f64, width: f64, height: f64
         // Must be visible to actually load: WebView2 appears to defer
         // loading/running the page entirely while a window is invisible, so
         // `.visible(false)` here deadlocks rather than just occasionally
-        // flashing. Positioned off-screen during pre-warm instead (see
+        // flashing. Cloaked immediately after creation instead (see
         // `prewarm_capture_overlay`) so nothing is ever actually seen.
         .visible(true)
         .build()
@@ -61,8 +63,8 @@ fn build_overlay_window(app: &AppHandle, x: f64, y: f64, width: f64, height: f64
 /// Opens a transparent, always-on-top, borderless window spanning the full
 /// virtual desktop (all monitors) so the user can drag out a region or hover
 /// a window to select it. Reuses an existing overlay window if one is open —
-/// it's left hidden (not destroyed) after every capture specifically so it
-/// can be re-shown here instantly, already loaded and styled, instead of
+/// it's cloaked (not destroyed) after every capture specifically so it can
+/// be revealed here instantly, already loaded and styled, instead of
 /// recreating it (and re-triggering a white flash) on every single capture.
 pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
     let (x, y, width, height) = virtual_desktop_bounds(app)?;
@@ -77,7 +79,7 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
         existing
             .set_size(LogicalSize::new(width, height))
             .map_err(|e| e.to_string())?;
-        existing.show().map_err(|e| e.to_string())?;
+        cloak_window(&existing, false);
         existing.set_focus().map_err(|e| e.to_string())?;
         return Ok(());
     }
@@ -86,34 +88,31 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
     Ok(())
 }
 
-/// Creates the overlay window ahead of time, off-screen, so its page has
+/// Creates the overlay window ahead of time, cloaked, so its page has
 /// already loaded and applied its transparent styling by the time the user
 /// actually presses the capture shortcut — otherwise the very first capture
 /// of the session has to load the page from scratch and briefly flashes
-/// WebView2's opaque default background. Hidden again once loaded; `open_capture_overlay`
-/// repositions and shows it like any other reuse.
+/// WebView2's opaque default background.
+///
+/// Cloaking immediately after creation (rather than the old approach of
+/// building off-screen, waiting a fixed delay, then calling `.hide()`) has
+/// no race to get wrong: there's no window of time where a real capture
+/// could beat a timer to the window and get yanked away mid-use, because
+/// nothing here is time-based at all. `open_capture_overlay` uncloaks it
+/// like any other reuse. Still built off-screen at a tiny size as a second,
+/// independent layer of invisibility in case cloaking ever fails outright
+/// (e.g. a pre-2004 Windows build, where `DwmSetWindowAttribute` for
+/// `DWMWA_CLOAK` is a no-op) — `open_capture_overlay` already resets both
+/// position and size before ever using it for real.
 pub fn prewarm_capture_overlay(app: &AppHandle) {
-    let app = app.clone();
-
-    // Windows can (and did) clamp an off-screen position back onto a real
-    // monitor, which turned the "invisible" pre-warm into an actual visible
-    // flash — so the window is also sized down to 1x1px as a second,
-    // independent layer of invisibility regardless of where it ends up.
-    // `open_capture_overlay` already resets both position and size before
-    // ever showing it for real, so this doesn't need to be undone here.
-    if let Err(err) = build_overlay_window(&app, OFFSCREEN_POS, OFFSCREEN_POS, 1.0, 1.0) {
-        eprintln!("failed to pre-warm capture overlay: {err}");
-        return;
-    }
-
-    // No explicit "loaded and styled" signal is wired up for this (that's
-    // what `overlay_ready` is for during a real capture, and it's harmless
-    // to leave unused off-screen) — a fixed delay is simpler and this only
-    // runs once, invisibly, at startup rather than on any user action.
-    std::thread::spawn(move || {
-        std::thread::sleep(std::time::Duration::from_millis(700));
-        let _ = hide_capture_overlay(&app);
-    });
+    let window = match build_overlay_window(app, OFFSCREEN_POS, OFFSCREEN_POS, 1.0, 1.0) {
+        Ok(w) => w,
+        Err(err) => {
+            eprintln!("failed to pre-warm capture overlay: {err}");
+            return;
+        }
+    };
+    cloak_window(&window, true);
 }
 
 /// Marks the overlay window as excluded from screen capture at the DWM
@@ -170,22 +169,25 @@ fn disable_show_animation(window: &tauri::WebviewWindow) {
 fn disable_show_animation(_window: &tauri::WebviewWindow) {}
 
 /// Called once the overlay page has applied its transparent styling, so the
-/// window only becomes visible after it can no longer flash white.
+/// window only becomes visible after it can no longer flash white. Only
+/// fires on the very first mount (the JS effect that calls this never runs
+/// again once the window is being reused, since React never remounts) —
+/// `open_capture_overlay` handles every later reveal directly.
 pub fn show_capture_overlay(app: &AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
-        window.show().map_err(|e| e.to_string())?;
+        cloak_window(&window, false);
         window.set_focus().map_err(|e| e.to_string())?;
     }
     Ok(())
 }
 
-/// Hides (without destroying) the overlay window so its selection-rectangle
+/// Cloaks (without destroying) the overlay window so its selection-rectangle
 /// chrome isn't still on screen when the actual pixels get captured, and so
-/// it's ready to be re-shown instantly (already loaded and styled) next
-/// time instead of being recreated from scratch.
+/// it's ready to be revealed instantly (already loaded and styled) next time
+/// instead of being recreated from scratch.
 pub fn hide_capture_overlay(app: &AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
-        window.hide().map_err(|e| e.to_string())?;
+        cloak_window(&window, true);
     }
     Ok(())
 }

@@ -56,6 +56,7 @@ pub fn run() {
             commands::cancel_capture,
             commands::capture_fullscreen_now,
             commands::take_pending_capture,
+            commands::take_capture_image,
             commands::editor_ready,
             commands::close_editor_window,
             commands::copy_image_to_clipboard,

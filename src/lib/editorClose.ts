@@ -1,5 +1,5 @@
 import { useDocumentStore } from "../stores/documentStore";
-import { tauriApi, toBase64Payload } from "./tauriApi";
+import { tauriApi } from "./tauriApi";
 
 /**
  * The editor window is cloaked (not destroyed, and not `.hide()`-d either)
@@ -14,14 +14,18 @@ import { tauriApi, toBase64Payload } from "./tauriApi";
  * Whatever annotations exist are persisted back to the capture's history
  * entry first, fire-and-forget — same reasoning as the clipboard write in
  * handleCopy: the Rust side keeps running after the window's cloaked, so
- * there's no need to block on it.
+ * there's no need to block on it. Only the shapes go back, never the image:
+ * Rust wrote those pixels at capture time and they haven't changed, so
+ * shipping them back was tens of megabytes of base64 per close for nothing.
  */
 export function closeEditor() {
-  const { historyId, image, shapes } = useDocumentStore.getState();
+  const { historyId, image, shapes, imageWidth, imageHeight } = useDocumentStore.getState();
   if (historyId && image) {
-    tauriApi.updateHistoryEntry(historyId, toBase64Payload(image), JSON.stringify(shapes)).catch((err) => {
-      console.error("failed to save history annotations", err);
-    });
+    tauriApi
+      .updateHistoryEntry(historyId, JSON.stringify(shapes), imageWidth, imageHeight)
+      .catch((err) => {
+        console.error("failed to save history annotations", err);
+      });
   }
   tauriApi.closeEditorWindow();
 }

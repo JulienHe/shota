@@ -76,7 +76,7 @@ pub fn list_windows() -> Result<Vec<WindowInfo>, String> {
         .collect())
 }
 
-pub fn capture_window(window_id: u32) -> Result<String, String> {
+pub fn capture_window(window_id: u32) -> Result<Vec<u8>, String> {
     let windows = Window::all().map_err(|e| e.to_string())?;
 
     let window = windows
@@ -85,5 +85,5 @@ pub fn capture_window(window_id: u32) -> Result<String, String> {
         .ok_or_else(|| format!("Window {window_id} not found"))?;
 
     let image = window.capture_image().map_err(|e| e.to_string())?;
-    super::encode_png_base64(image)
+    super::encode_png(image)
 }

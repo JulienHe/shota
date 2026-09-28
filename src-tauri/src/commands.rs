@@ -54,7 +54,7 @@ pub fn overlay_ready(app: AppHandle) -> Result<(), String> {
 /// The overlay is left hidden rather than destroyed (see `open_capture_overlay`),
 /// so it's already loaded and styled the next time — recreating it from
 /// scratch on every single capture was showing a full white flash each time.
-fn finish_capture(app: &AppHandle, capture_fn: impl FnOnce() -> Result<String, String>) -> Result<(), String> {
+fn finish_capture(app: &AppHandle, capture_fn: impl FnOnce() -> Result<Vec<u8>, String>) -> Result<(), String> {
     hide_capture_overlay(app)?;
     std::thread::sleep(std::time::Duration::from_millis(120));
     let image = capture_fn()?;
@@ -91,6 +91,26 @@ pub async fn capture_fullscreen_now(app: AppHandle, monitor_id: Option<u32>) -> 
 #[tauri::command]
 pub fn take_pending_capture(app: AppHandle) -> Option<PendingCapture> {
     app.state::<AppState>().take_pending_capture()
+}
+
+/// Hands the editor the raw PNG bytes for a capture, keyed by the id its
+/// `PendingCapture` carried.
+///
+/// Returns an `ipc::Response`, which crosses to the webview as raw bytes
+/// (an `ArrayBuffer`) rather than JSON. The image used to travel base64'd
+/// inside the capture event itself, which meant inflating it by a third,
+/// JSON-escaping tens of megabytes, re-parsing that string in JS and
+/// base64-decoding it again before decoding could even start. The frontend
+/// now wraps these bytes in a blob URL instead — same-origin, so the canvas
+/// stays untainted and Copy/Save keep working unchanged.
+#[tauri::command]
+pub fn take_capture_image(app: AppHandle, id: String) -> Result<tauri::ipc::Response, String> {
+    let bytes = app
+        .state::<AppState>()
+        .capture_bytes(&id)
+        .ok_or_else(|| format!("capture {id} is no longer available"))?;
+
+    Ok(tauri::ipc::Response::new(bytes.as_ref().clone()))
 }
 
 #[tauri::command]
@@ -137,10 +157,11 @@ pub fn open_history_entry(app: AppHandle, id: String) -> Result<(), String> {
 pub fn update_history_entry(
     app: AppHandle,
     id: String,
-    image_base64: String,
     shapes_json: String,
+    width: u32,
+    height: u32,
 ) -> Result<(), String> {
-    history::update_entry(&app, &id, &image_base64, &shapes_json)
+    history::update_entry(&app, &id, &shapes_json, width, height)
 }
 
 #[tauri::command]

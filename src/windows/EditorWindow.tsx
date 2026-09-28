@@ -8,7 +8,7 @@ import { Canvas, CanvasHandle } from "../features/annotate/Canvas";
 import { useDocumentStore } from "../stores/documentStore";
 import { useToastStore } from "../stores/toastStore";
 import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
-import { tauriApi, toBase64Payload, toDataUrl, PendingCapture } from "../lib/tauriApi";
+import { tauriApi, toBase64Payload, PendingCapture } from "../lib/tauriApi";
 import { primeImageCache } from "../lib/useImage";
 import { closeEditor } from "../lib/editorClose";
 import { Shape } from "../features/annotate/types";
@@ -16,6 +16,9 @@ import "./EditorWindow.css";
 
 export function EditorWindow() {
   const canvasRef = useRef<CanvasHandle>(null);
+  // The blob URL currently backing the document image, kept so it can be
+  // revoked once the next capture has decoded.
+  const objectUrlRef = useRef<string | null>(null);
   const hasImage = useDocumentStore((s) => s.image !== null);
   const loadImage = useDocumentStore((s) => s.loadImage);
   const replaceImage = useDocumentStore((s) => s.replaceImage);
@@ -28,15 +31,22 @@ export function EditorWindow() {
   const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
-    const applyCapture = (capture: PendingCapture) => {
+    const applyCapture = async (capture: PendingCapture) => {
+      // The bytes come across raw (an ArrayBuffer, not JSON) and become a
+      // blob URL here. Blob URLs are same-origin, so the Konva canvas stays
+      // untainted and `stage.toDataURL()` in Copy/Save keeps working — which
+      // a cross-origin custom protocol would have broken.
+      const bytes = await tauriApi.takeCaptureImage(capture.image_id);
+      const url = URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
+
       const img = new Image();
       img.onload = () => {
         // Canvas's background image (via useImage) reads from this exact
-        // data URL next — seed it with the element already decoded here
-        // instead of leaving it to redundantly decode the same multi-MB
-        // image a second time, which is what was delaying the image behind
-        // the toolbar/footer instead of them appearing together.
-        primeImageCache(toDataUrl(capture.image_base64), img);
+        // URL next — seed it with the element already decoded here instead
+        // of leaving it to redundantly decode the same multi-MB image a
+        // second time, which is what was delaying the image behind the
+        // toolbar/footer instead of them appearing together.
+        primeImageCache(url, img);
 
         const shapes: Shape[] | null = capture.shapes_json
           ? (() => {
@@ -49,11 +59,18 @@ export function EditorWindow() {
           : null;
 
         if (shapes) {
-          replaceImage(toDataUrl(capture.image_base64), img.width, img.height, shapes);
+          replaceImage(url, img.width, img.height, shapes);
         } else {
-          loadImage(toDataUrl(capture.image_base64), img.width, img.height);
+          loadImage(url, img.width, img.height);
         }
         setHistoryId(capture.history_id);
+
+        // Only now that the replacement has decoded — revoking earlier can
+        // pull the URL out from under an image still being decoded. Each
+        // capture is tens of MB, so without this a long session would hold
+        // every past screenshot in memory.
+        if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+        objectUrlRef.current = url;
 
         // The editor window is kept hidden by the Rust side until this
         // fires (see open_editor_window) — reveals it once the new image
@@ -66,18 +83,24 @@ export function EditorWindow() {
           });
         });
       };
-      img.onerror = () => console.error("failed to decode captured image");
-      img.src = toDataUrl(capture.image_base64);
+      img.onerror = () => {
+        console.error("failed to decode captured image");
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
     };
+
+    const apply = (capture: PendingCapture) =>
+      applyCapture(capture).catch((err) => console.error("failed to load capture", err));
 
     tauriApi
       .takePendingCapture()
       .then((pending) => {
-        if (pending) applyCapture(pending);
+        if (pending) apply(pending);
       })
       .catch((err) => console.error("failed to take pending capture", err));
 
-    const unlisten = listen<PendingCapture>("shota://new-capture", (event) => applyCapture(event.payload));
+    const unlisten = listen<PendingCapture>("shota://new-capture", (event) => apply(event.payload));
     return () => {
       unlisten.then((fn) => fn());
     };
@@ -89,11 +112,13 @@ export function EditorWindow() {
   useEffect(() => {
     const win = getCurrentWindow();
     const unlisten = win.onCloseRequested(() => {
-      const { historyId, image, shapes } = useDocumentStore.getState();
+      const { historyId, image, shapes, imageWidth, imageHeight } = useDocumentStore.getState();
       if (historyId && image) {
-        tauriApi.updateHistoryEntry(historyId, toBase64Payload(image), JSON.stringify(shapes)).catch((err) => {
-          console.error("failed to save history annotations", err);
-        });
+        tauriApi
+          .updateHistoryEntry(historyId, JSON.stringify(shapes), imageWidth, imageHeight)
+          .catch((err) => {
+            console.error("failed to save history annotations", err);
+          });
       }
     });
     return () => {

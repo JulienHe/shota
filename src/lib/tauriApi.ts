@@ -11,7 +11,9 @@ export interface CapturableWindow {
 }
 
 export interface PendingCapture {
-  image_base64: string;
+  /** Key for fetching the image itself via `takeCaptureImage` — the bytes
+   * deliberately don't ride along in this payload, which is JSON. */
+  image_id: string;
   history_id: string | null;
   shapes_json: string | null;
 }
@@ -45,6 +47,12 @@ export const tauriApi = {
 
   takePendingCapture: () => invoke<PendingCapture | null>("take_pending_capture"),
 
+  /** Raw PNG bytes for a capture. Comes back as an ArrayBuffer rather than
+   * JSON (the Rust command returns an `ipc::Response`), so a multi-megabyte
+   * screenshot never has to be base64'd, JSON-escaped, or re-parsed as a
+   * giant JS string. */
+  takeCaptureImage: (id: string) => invoke<ArrayBuffer>("take_capture_image", { id }),
+
   editorReady: () => invoke<void>("editor_ready"),
 
   closeEditorWindow: () => invoke<void>("close_editor_window"),
@@ -66,8 +74,10 @@ export const tauriApi = {
 
   openHistoryEntry: (id: string) => invoke<void>("open_history_entry", { id }),
 
-  updateHistoryEntry: (id: string, pngBase64: string, shapesJson: string) =>
-    invoke<void>("update_history_entry", { id, imageBase64: pngBase64, shapesJson }),
+  /** Persists annotations only — the base image never changes in the editor,
+   * and Rust already wrote it to disk at capture time. */
+  updateHistoryEntry: (id: string, shapesJson: string, width: number, height: number) =>
+    invoke<void>("update_history_entry", { id, shapesJson, width, height }),
 
   deleteHistoryEntry: (id: string) => invoke<void>("delete_history_entry", { id }),
 
