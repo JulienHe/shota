@@ -16,6 +16,9 @@
   border-radius: 8px;
   font-size: 13px;
   white-space: nowrap;
+  /* Above the spotlight's dimming, which is painted by a later sibling and
+     would otherwise wash over the hint. */
+  z-index: 1;
 }
 
 .capture-overlay__selection {
@@ -24,9 +27,31 @@
   background: rgba(61, 123, 253, 0.15);
 }
 
+/* Dimming for window-snap mode while the cursor isn't over anything
+   capturable, so entering and leaving the mode doesn't flash between a lit
+   and unlit desktop. Same colour as the spotlight's shadow below. */
+.capture-overlay__dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 17, 21, 0.45);
+  pointer-events: none;
+}
+
+/* The hovered window, spotlit.
+
+   The dimming is this element's *outward* box-shadow rather than a backdrop
+   with a hole cut in it: an enormous spread paints everything outside the
+   rect and nothing inside it, which is exactly the cut-out, with no second
+   element to keep in sync and no clip-path for the compositor to re-rasterise
+   on every pointer move. 200vmax guarantees coverage to every edge of the
+   virtual desktop even when the window sits in a far corner.
+
+   Deliberately no blue fill over the window itself: you're about to capture
+   it, so it should be shown at its true colours rather than tinted. The
+   border alone says which one is selected. */
 .capture-overlay__window-highlight {
   position: absolute;
   border: 2px solid #3d7bfd;
-  background: rgba(61, 123, 253, 0.2);
+  box-shadow: 0 0 0 200vmax rgba(16, 17, 21, 0.45);
   pointer-events: none;
 }

@@ -118,6 +118,11 @@ export function CaptureOverlay() {
         {snapMode ? "Click a window to capture it · Space to go back" : "Drag to select an area · Space to switch to window mode · Esc to cancel"}
       </div>
 
+      {/* Dim the desktop as soon as snap mode is on, so moving between
+          windows doesn't strobe between lit and unlit — the spotlight below
+          replaces this the moment there's something to spotlight. */}
+      {snapMode && !(hoveredWindow && origin) && <div className="capture-overlay__dim" />}
+
       {snapMode && hoveredWindow && origin && (
         <div
           className="capture-overlay__window-highlight"
