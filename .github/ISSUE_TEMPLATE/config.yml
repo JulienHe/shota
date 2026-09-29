@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Question or general feedback
+    url: https://github.com/JulienHe/shota/discussions
+    about: Not sure whether something is a bug? Want to talk through an idea first? Start here.
+  - name: Download the latest version
+    url: https://github.com/JulienHe/shota/releases/latest
+    about: Check whether your problem is already fixed in a newer build before filing.

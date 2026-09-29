@@ -1,0 +1,74 @@
+name: Bug report
+description: Something in Shota doesn't work the way it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. The fields below are the ones
+        that usually determine whether a bug can be reproduced — screen setup and
+        Windows version especially, since most of Shota's trickier bugs have come
+        from multi-monitor, DPI scaling, or compositor behaviour.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+      placeholder: I pressed Ctrl+Shift+4, selected an area, and no editor window appeared.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: If it only happens sometimes, say roughly how often and what seems to trigger it.
+      placeholder: |
+        1. Press Ctrl+Shift+4
+        2. Drag a selection across two monitors
+        3. Release
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Shota version
+      description: Shown in the tray icon menu, or the release you downloaded.
+      placeholder: v0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: Press Win+R, type `winver`, and copy the version and build line.
+      placeholder: Windows 11 24H2 (build 26100.1742)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: monitors
+    attributes:
+      label: Monitor setup
+      options:
+        - Single monitor
+        - Multiple monitors, same scaling
+        - Multiple monitors, different scaling / resolutions
+    validations:
+      required: true
+
+  - type: input
+    id: scaling
+    attributes:
+      label: Display scaling
+      description: Settings → System → Display → Scale. Mixed setups have caused real bugs here, so it's worth stating.
+      placeholder: 150% on the main monitor, 100% on the second
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else
+      description: A screenshot of the problem helps a lot — you can paste images directly into this box.

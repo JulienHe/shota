@@ -1,0 +1,48 @@
+name: Feature request
+description: Suggest a tool, an option, or a change to how something works
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Shota aims to stay fast and uncluttered, so not every request will be
+        built — but describing the problem you're hitting (rather than only the
+        solution you have in mind) makes it much more likely something good
+        comes of it.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The task or annoyance behind the request.
+      placeholder: I annotate a lot of API docs and end up needing to point at one line of a JSON response.
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like Shota to do?
+      description: If you've seen it done well elsewhere, say where — that's genuinely useful.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of Shota?
+      options:
+        - Capture (shortcuts, area select, window snap)
+        - Annotation tools
+        - Export (copy, save, file formats)
+        - History
+        - Settings / tray
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Mockups, screenshots, or examples from other tools. You can paste images directly.
