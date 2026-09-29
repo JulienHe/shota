@@ -126,7 +126,7 @@ async function deselect(page) {
  * so the result drops onto a light or dark page equally well.
  */
 async function frame(browser, png) {
-  const page = await browser.newPage({ viewport: { width: 1980, height: 1320 } });
+  const page = await browser.newPage({ viewport: { width: 2040, height: 1420 } });
   // Every dimension here is doubled, because the shot is a 2x asset: the
   // README renders it at half this width, so a 1px border would land as a
   // half-pixel and disappear. Design the frame at the size it is *displayed*
@@ -134,7 +134,13 @@ async function frame(browser, png) {
   await page.setContent(`
     <style>
       html, body { margin: 0; background: transparent; }
-      .pad { display: inline-block; padding: 60px; }
+      /* The padding is what the shadow lands on, and an element screenshot
+         clips to the element's box — so it has to be at least as deep as the
+         shadow reaches or the shadow ends in a hard straight edge. A
+         shadow of 0 34px 80px extends offset + blur/2 = 74px below, 40px to
+         the sides and only 6px above, hence the asymmetry: generous where
+         the shadow actually goes, tight where it doesn't. */
+      .pad { display: inline-block; padding: 56px 92px 132px; }
       img {
         display: block;
         width: 1760px;
