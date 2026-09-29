@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sample app</title>
+    <style>
+      /* The stand-in "something worth screenshotting" that every generated
+         shot is built on. Rendered and captured by generate.mjs, then fed to
+         the editor as if it had come from a real capture.
+
+         Written as markup rather than committed as a PNG so it stays small,
+         diffable, and adjustable — if a shot needs a different subject, this
+         is a text edit. It deliberately contains long lines of prose (for
+         the highlighter), a numbered flow (for step badges) and a field
+         holding a fake key (for the blur tool), so the annotation tools have
+         something honest to point at. */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: #f6f7f9;
+        color: #1c1d22;
+        height: 100vh;
+        display: flex;
+      }
+      .sidebar {
+        width: 232px;
+        flex: none;
+        background: #14151a;
+        color: #a1a1aa;
+        padding: 22px 16px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #fff;
+        font-weight: 650;
+        font-size: 15px;
+        margin-bottom: 26px;
+      }
+      .brand span {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #3d7bfd, #7c3aed);
+      }
+      .nav-item {
+        padding: 8px 11px;
+        border-radius: 7px;
+        font-size: 13.5px;
+        margin-bottom: 3px;
+      }
+      .nav-item.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+      .main {
+        flex: 1;
+        padding: 26px 38px;
+        overflow: hidden;
+      }
+      h1 {
+        font-size: 23px;
+        margin-bottom: 5px;
+      }
+      .sub {
+        color: #6b7280;
+        font-size: 13.5px;
+        margin-bottom: 20px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e6e7eb;
+        border-radius: 11px;
+        padding: 18px 22px;
+        margin-bottom: 14px;
+      }
+      .card h2 {
+        font-size: 15px;
+        margin-bottom: 12px;
+      }
+      .row {
+        display: flex;
+        gap: 14px;
+      }
+      .field {
+        flex: 1;
+      }
+      .label {
+        font-size: 11.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #8b8f99;
+        margin-bottom: 5px;
+      }
+      .value {
+        border: 1px solid #e6e7eb;
+        border-radius: 7px;
+        padding: 8px 11px;
+        font-family: "Cascadia Mono", Consolas, monospace;
+        font-size: 12.5px;
+        background: #fafafb;
+      }
+      p.prose {
+        font-size: 13.5px;
+        line-height: 1.75;
+        color: #3f3f46;
+        max-width: 62ch;
+      }
+      ul.steps {
+        list-style: none;
+        font-size: 13.5px;
+        line-height: 2.1;
+        color: #3f3f46;
+        padding-left: 34px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="brand"><span></span>Northwind</div>
+      <div class="nav-item">Overview</div>
+      <div class="nav-item active">Deployments</div>
+      <div class="nav-item">Environments</div>
+      <div class="nav-item">Logs</div>
+      <div class="nav-item">Settings</div>
+    </div>
+
+    <div class="main">
+      <h1>Deployments</h1>
+      <div class="sub">Production · europe-west1</div>
+
+      <div class="card">
+        <h2>Connection</h2>
+        <div class="row">
+          <div class="field">
+            <div class="label">Endpoint</div>
+            <div class="value">api.northwind.internal:8443</div>
+          </div>
+          <div class="field">
+            <div class="label">Access key</div>
+            <div class="value">sk_live_4nT8xQ2vB9wE1rY6uH3p</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Rolling out a change</h2>
+        <ul class="steps">
+          <li>Push the branch and wait for the build to go green.</li>
+          <li>Promote the build from staging to production.</li>
+          <li>Watch error rates for ten minutes before walking away.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Notes</h2>
+        <p class="prose">
+          Deployments are immutable once promoted. If something looks wrong after a rollout, roll
+          forward with a new build rather than editing the running release — the audit trail depends
+          on every deployed artifact being reproducible from a commit.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

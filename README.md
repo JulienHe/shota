@@ -20,6 +20,10 @@ Shota runs as a background/tray app: no taskbar window, just a tray icon with qu
 
 Nothing is uploaded anywhere. Captures, annotations and history all stay on your machine.
 
+<p align="center">
+  <img src="docs/screenshots/editor-annotated.png" alt="Shota's annotation editor: a screenshot with an API key blurred out, numbered step badges beside a list, and an arrow pointing at the redaction" width="900">
+</p>
+
 ## Install
 
 Grab the latest installer from the [releases page](https://github.com/JulienHe/shota/releases/latest). Windows 10 or 11.
@@ -109,6 +113,19 @@ Before opening a PR, please make sure both of these pass:
 npx tsc --noEmit          # frontend types
 cd src-tauri && cargo build   # not just `cargo check` — only a real build links
 ```
+
+### Screenshots
+
+The images in this README are generated, not posed:
+
+```bash
+npm run dev          # in one terminal
+npm run screenshots  # in another
+```
+
+That renders the real frontend in headless Chromium against a fake Tauri backend
+(`screenshots/`), draws the annotations with real mouse input, and writes
+`docs/screenshots/`. Re-run it after a UI change rather than re-staging shots by hand.
 
 `CLAUDE.md` in the repo root documents the non-obvious constraints that have already caused bugs here (build profile traps, how large images cross the IPC boundary, window reuse and stale per-mount state). Worth a skim before changing anything in those areas.
 
