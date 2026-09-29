@@ -111,9 +111,49 @@ async function deselect(page) {
   await page.waitForTimeout(200);
 }
 
-async function shoot(page, name) {
+/**
+ * Wraps a raw shot in a rounded border and a soft drop shadow, on
+ * transparency.
+ *
+ * Baked into the pixels rather than applied with CSS because GitHub strips
+ * style attributes from READMEs — a `box-shadow` on the <img> tag is simply
+ * dropped. Without it the editor's own near-white chrome dissolves into
+ * GitHub's white page and the window looks like it has no edges.
+ *
+ * Border *and* shadow, not just the shadow: on GitHub's dark theme a soft
+ * dark shadow is invisible, and the 1px edge is what still separates the
+ * window from the page. Transparent padding rather than a filled backdrop,
+ * so the result drops onto a light or dark page equally well.
+ */
+async function frame(browser, png) {
+  const page = await browser.newPage({ viewport: { width: 1900, height: 1300 } });
+  await page.setContent(`
+    <style>
+      html, body { margin: 0; background: transparent; }
+      .pad { display: inline-block; padding: 34px; }
+      img {
+        display: block;
+        width: 1700px;
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(120, 124, 136, 0.45);
+        box-shadow: 0 18px 44px rgba(12, 14, 22, 0.28), 0 3px 10px rgba(12, 14, 22, 0.14);
+      }
+    </style>
+    <div class="pad"><img src="data:image/png;base64,${png.toString("base64")}"></div>
+  `);
+  const el = page.locator(".pad");
+  // The padding is what gives the shadow somewhere to land: an element
+  // screenshot clips to the element's own box, and a shadow falls outside it.
+  const framed = await el.screenshot({ omitBackground: true });
+  await page.close();
+  return framed;
+}
+
+async function shoot(browser, page, name) {
   await page.waitForTimeout(400);
-  await page.screenshot({ path: join(OUT, `${name}.png`) });
+  const raw = await page.screenshot();
+  await writeFile(join(OUT, `${name}.png`), await frame(browser, raw));
   console.log(`  wrote docs/screenshots/${name}.png`);
 }
 
@@ -146,7 +186,7 @@ async function main() {
     await dragOn(page, [0.40, 0.10], [0.565, 0.198]); // pointing at the redaction
 
     await deselect(page);
-    await shoot(page, "editor-annotated");
+    await shoot(browser, page, "editor-annotated");
     await page.close();
   }
 
@@ -160,7 +200,7 @@ async function main() {
       await page.waitForTimeout(140);
     }
     await deselect(page);
-    await shoot(page, "editor-highlighter");
+    await shoot(browser, page, "editor-highlighter");
     await page.close();
   }
 
@@ -171,7 +211,7 @@ async function main() {
     await tool(page, "s");
     await dragOn(page, [0.186, 0.127], [0.975, 0.286]);
     await deselect(page);
-    await shoot(page, "editor-spotlight");
+    await shoot(browser, page, "editor-spotlight");
     await page.close();
   }
 
