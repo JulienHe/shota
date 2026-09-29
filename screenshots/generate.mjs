@@ -126,18 +126,22 @@ async function deselect(page) {
  * so the result drops onto a light or dark page equally well.
  */
 async function frame(browser, png) {
-  const page = await browser.newPage({ viewport: { width: 1900, height: 1300 } });
+  const page = await browser.newPage({ viewport: { width: 1980, height: 1320 } });
+  // Every dimension here is doubled, because the shot is a 2x asset: the
+  // README renders it at half this width, so a 1px border would land as a
+  // half-pixel and disappear. Design the frame at the size it is *displayed*
+  // and then double it — 3px reads as a crisp 1.5px, not as nothing.
   await page.setContent(`
     <style>
       html, body { margin: 0; background: transparent; }
-      .pad { display: inline-block; padding: 34px; }
+      .pad { display: inline-block; padding: 60px; }
       img {
         display: block;
-        width: 1700px;
+        width: 1760px;
         height: auto;
-        border-radius: 10px;
-        border: 1px solid rgba(120, 124, 136, 0.45);
-        box-shadow: 0 18px 44px rgba(12, 14, 22, 0.28), 0 3px 10px rgba(12, 14, 22, 0.14);
+        border-radius: 20px;
+        border: 3px solid rgba(101, 106, 120, 0.55);
+        box-shadow: 0 34px 80px rgba(12, 14, 22, 0.34), 0 6px 20px rgba(12, 14, 22, 0.18);
       }
     </style>
     <div class="pad"><img src="data:image/png;base64,${png.toString("base64")}"></div>
