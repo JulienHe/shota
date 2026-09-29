@@ -56,10 +56,23 @@ fn full_window_bounds(_id: u32) -> Option<(i32, i32, u32, u32)> {
 /// "snap to window" selection when the user presses Space.
 pub fn list_windows() -> Result<Vec<WindowInfo>, String> {
     let windows = Window::all().map_err(|e| e.to_string())?;
+    // Shota's own windows are never snap targets. This matters most for the
+    // capture overlay itself: it is a real, visible (merely cloaked) window
+    // spanning the entire virtual desktop, so leaving it in the list means
+    // every hover lands on it and "snap to window" highlights the whole
+    // screen instead of whatever is underneath. Matched by process id rather
+    // than title, so renaming a window can't quietly reintroduce it.
+    let own_pid = std::process::id();
 
     Ok(windows
         .into_iter()
-        .filter(|w| !w.is_minimized() && w.width() > 0 && w.height() > 0 && !w.title().is_empty())
+        .filter(|w| {
+            w.pid() != own_pid
+                && !w.is_minimized()
+                && w.width() > 0
+                && w.height() > 0
+                && !w.title().is_empty()
+        })
         .map(|w| {
             let (x, y, width, height) =
                 full_window_bounds(w.id()).unwrap_or((w.x(), w.y(), w.width(), w.height()));

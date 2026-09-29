@@ -10,9 +10,31 @@ export function useWindowSnap(globalCursor: { x: number; y: number } | null) {
   const [snapMode, setSnapMode] = useState(false);
   const [windows, setWindows] = useState<CapturableWindow[]>([]);
 
+  // Refetched every time snap mode is entered, not once on mount. The
+  // overlay window is reused rather than recreated between captures, so this
+  // component only ever mounts once per app session — and that one mount
+  // happens during pre-warm, at app startup. Fetching there meant snapping
+  // was matched against whatever windows existed the moment Shota launched:
+  // nothing opened since was selectable, anything closed or moved since had
+  // stale bounds, and a single failed enumeration at startup left the list
+  // permanently empty, so window selection silently did nothing for the rest
+  // of the session.
   useEffect(() => {
-    tauriApi.listCapturableWindows().then(setWindows).catch(() => setWindows([]));
-  }, []);
+    if (!snapMode) return;
+    let cancelled = false;
+    tauriApi
+      .listCapturableWindows()
+      .then((list) => {
+        if (!cancelled) setWindows(list);
+      })
+      .catch((err) => {
+        console.error("failed to list capturable windows", err);
+        if (!cancelled) setWindows([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [snapMode]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
