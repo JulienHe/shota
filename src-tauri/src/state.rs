@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Manager};
 
@@ -65,6 +66,17 @@ pub struct AppState {
     /// handing the same capture to the history writer costs a refcount bump
     /// rather than copying tens of megabytes.
     captures: Mutex<Vec<(String, Arc<Vec<u8>>)>>,
+    /// Whether the capture overlay's page has mounted and signalled
+    /// `overlay_ready` at least once.
+    ///
+    /// The overlay window is created (cloaked) at startup so it's already
+    /// loaded when the user first hits the capture shortcut — but creating
+    /// the window returns immediately, while loading its page does not. A
+    /// shortcut pressed inside that gap used to uncloak a window whose
+    /// React tree hadn't mounted: a full-screen, always-on-top, completely
+    /// empty overlay that also couldn't be dismissed, because Escape is
+    /// handled by the very JS that hadn't run yet.
+    overlay_ready: AtomicBool,
 }
 
 impl AppState {
@@ -74,6 +86,7 @@ impl AppState {
             settings: Mutex::new(settings),
             pending_capture: Mutex::new(None),
             captures: Mutex::new(Vec::new()),
+            overlay_ready: AtomicBool::new(false),
         }
     }
 
@@ -125,6 +138,23 @@ impl AppState {
             ShortcutKind::Area => settings.area_shortcut = accelerator,
         }
         let _ = write_settings(app, &settings);
+    }
+}
+
+
+impl AppState {
+    pub fn mark_overlay_ready(&self) {
+        self.overlay_ready.store(true, Ordering::Release);
+    }
+
+    pub fn is_overlay_ready(&self) -> bool {
+        self.overlay_ready.load(Ordering::Acquire)
+    }
+
+    /// Called when the overlay window is (re)built, since a fresh window
+    /// starts with a fresh, unmounted page.
+    pub fn reset_overlay_ready(&self) {
+        self.overlay_ready.store(false, Ordering::Release);
     }
 }
 

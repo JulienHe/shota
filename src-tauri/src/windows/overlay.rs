@@ -1,5 +1,7 @@
 use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewWindow};
 
+use crate::state::AppState;
+
 use super::{chromeless_window_builder, cloak_window, place_chromeless_window};
 
 const OVERLAY_LABEL: &str = "overlay";
@@ -59,11 +61,27 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
         existing
             .set_size(LogicalSize::new(width, height))
             .map_err(|e| e.to_string())?;
-        cloak_window(&existing, false);
-        existing.set_focus().map_err(|e| e.to_string())?;
+
+        // Only reveal a window whose page has actually mounted. Pressing the
+        // capture shortcut in the gap between the pre-warmed window being
+        // created and its page finishing load used to uncloak an empty
+        // one — a full-screen always-on-top overlay with nothing in it and
+        // no way out, since Escape is handled by the JS that hadn't run.
+        // Staying cloaked here isn't a lost capture: the page is already
+        // loading, and `overlay_ready` reveals it (at the bounds just set)
+        // the moment it mounts.
+        if app.state::<AppState>().is_overlay_ready() {
+            cloak_window(&existing, false);
+            existing.set_focus().map_err(|e| e.to_string())?;
+        } else {
+            eprintln!(
+                "capture overlay not ready yet (page still loading); it will reveal itself on mount"
+            );
+        }
         return Ok(());
     }
 
+    app.state::<AppState>().reset_overlay_ready();
     build_overlay_window(app, x, y, width, height)?;
     Ok(())
 }
@@ -85,6 +103,7 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
 /// `DWMWA_CLOAK` is a no-op) — `open_capture_overlay` already resets both
 /// position and size before ever using it for real.
 pub fn prewarm_capture_overlay(app: &AppHandle) {
+    app.state::<AppState>().reset_overlay_ready();
     let window = match build_overlay_window(app, OFFSCREEN_POS, OFFSCREEN_POS, 1.0, 1.0) {
         Ok(w) => w,
         Err(err) => {
@@ -101,11 +120,31 @@ pub fn prewarm_capture_overlay(app: &AppHandle) {
 /// again once the window is being reused, since React never remounts) —
 /// `open_capture_overlay` handles every later reveal directly.
 pub fn show_capture_overlay(app: &AppHandle) -> Result<(), String> {
+    app.state::<AppState>().mark_overlay_ready();
+
     if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
+        // On the pre-warm path this runs while the window is still parked
+        // off-screen at 1x1, so uncloaking shows nothing — which is the
+        // point. `open_capture_overlay` positions and reveals it for real.
+        // When the user beat the page to it, the window is already sized
+        // over the desktop and this is the reveal.
+        if is_prewarm_parked(&window) {
+            return Ok(());
+        }
         cloak_window(&window, false);
         window.set_focus().map_err(|e| e.to_string())?;
     }
     Ok(())
+}
+
+/// Whether the overlay is still sitting where `prewarm_capture_overlay` put
+/// it, rather than over the real desktop — i.e. nobody has asked for a
+/// capture yet.
+fn is_prewarm_parked(window: &WebviewWindow) -> bool {
+    match window.outer_position() {
+        Ok(pos) => (pos.x as f64) < OFFSCREEN_POS / 2.0 && (pos.y as f64) < OFFSCREEN_POS / 2.0,
+        Err(_) => false,
+    }
 }
 
 /// Cloaks (without destroying) the overlay window so its selection-rectangle

@@ -78,3 +78,21 @@ protocol origin would taint the canvas and break export unless CORS is set up ex
 Same rule applies on the way back out: the editor sends only `shapes_json` on close, never
 the image. The base image never changes there, and Rust already wrote those exact pixels
 to disk at capture time.
+
+## A pre-warmed window is not a ready window
+
+`prewarm_capture_overlay` / `prewarm_editor_window` return as soon as the window
+*object* exists — loading the page and mounting React happens afterwards, on the
+webview's own schedule. Anything that reveals one of these windows has to gate on
+the frontend having signalled readiness (`overlay_ready` / `editor_ready`), not on
+the window merely existing.
+
+Revealing too early is worse than it sounds for the overlay specifically: it is
+full-screen, always-on-top and transparent, so an empty one is an invisible
+click-swallowing sheet over the whole desktop — and `Esc` can't dismiss it,
+because that handler lives in the JS that hasn't run yet. `AppState::overlay_ready`
+tracks this; `open_capture_overlay` positions the window but leaves it cloaked
+until the page mounts, and `show_capture_overlay` performs the reveal instead.
+
+Symptom to recognise: "I pressed the shortcut and got an overlay with nothing in
+it", usually shortly after launch or on a loaded machine.
