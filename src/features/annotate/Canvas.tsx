@@ -468,11 +468,18 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   }, [spacePressed, activeTool, addShape, setActiveTool]);
 
   const handleStageClick = useCallback(
-    (e: KonvaEventObject<MouseEvent>) => {
+    () => {
       if (spacePressed) return;
       if (activeTool !== "text" && activeTool !== "step") return;
       const stage = stageRef.current;
-      if (!stage || e.target !== stage) return;
+      // Deliberately not `e.target === stage`. Konva reports the topmost
+      // shape under the cursor as the target, so requiring the bare stage
+      // meant text and step badges could only be placed on empty image —
+      // clicking to number a blurred region, or to label anything already
+      // annotated, silently did nothing. Neither tool has any reason to care
+      // what is underneath: shapes only respond to clicks while the Select
+      // tool is active, so nothing is competing for this one.
+      if (!stage) return;
       const point = toImagePoint(stage);
       if (!point) return;
 
