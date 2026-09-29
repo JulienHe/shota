@@ -69,18 +69,18 @@ pub(super) fn place_chromeless_window(
 /// and the transition disable) before this existed; the unsafe block now
 /// exists once.
 #[cfg(windows)]
-fn set_dwm_flag(
+fn set_dwm_value(
     window: &WebviewWindow,
     attribute: windows::Win32::Graphics::Dwm::DWMWINDOWATTRIBUTE,
-    enabled: bool,
+    value: i32,
 ) {
     use windows::Win32::Graphics::Dwm::DwmSetWindowAttribute;
 
     if let Ok(hwnd) = window.hwnd() {
-        // The Win32 BOOL these attributes expect is a plain 4-byte int, not
-        // the `windows` crate's own wrapper type (avoids depending on
-        // exactly where that type lives across crate versions).
-        let value: i32 = if enabled { 1 } else { 0 };
+        // These attributes take a plain 4-byte int — a Win32 BOOL for the
+        // flags, an enum value for the rest — not the `windows` crate's own
+        // wrapper types (avoids depending on exactly where those live across
+        // crate versions).
         let _ = unsafe {
             DwmSetWindowAttribute(
                 hwnd,
@@ -90,6 +90,30 @@ fn set_dwm_flag(
             )
         };
     }
+}
+
+#[cfg(windows)]
+fn set_dwm_flag(
+    window: &WebviewWindow,
+    attribute: windows::Win32::Graphics::Dwm::DWMWINDOWATTRIBUTE,
+    enabled: bool,
+) {
+    set_dwm_value(window, attribute, if enabled { 1 } else { 0 });
+}
+
+/// Asks DWM to round this window's corners (Windows 11).
+///
+/// Lets the window own its own corner radius rather than the page faking it
+/// with `border-radius` on a panel inside. Those two can't agree: the CSS
+/// radius clips the page's own background, but the window's Acrylic backdrop
+/// is composited by DWM underneath and keeps whatever shape the window has,
+/// so a square window showed frosted square corners poking out behind
+/// rounded content.
+#[cfg(windows)]
+pub(super) fn round_window_corners(window: &WebviewWindow) {
+    use windows::Win32::Graphics::Dwm::{DWMWA_WINDOW_CORNER_PREFERENCE, DWMWCP_ROUND};
+
+    set_dwm_value(window, DWMWA_WINDOW_CORNER_PREFERENCE, DWMWCP_ROUND.0);
 }
 
 /// Toggles DWM cloaking: the window stays "shown" as far as Tauri/WebView2
@@ -154,6 +178,9 @@ pub(super) fn exclude_from_capture(window: &WebviewWindow) {
         let _ = unsafe { SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE) };
     }
 }
+
+#[cfg(not(windows))]
+pub(super) fn round_window_corners(_window: &WebviewWindow) {}
 
 #[cfg(not(windows))]
 pub(super) fn cloak_window(_window: &WebviewWindow, _cloak: bool) {}

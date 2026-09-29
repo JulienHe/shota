@@ -2,7 +2,7 @@ use tauri::utils::config::WindowEffectsConfig;
 use tauri::window::Effect;
 use tauri::{AppHandle, Manager};
 
-use super::{chromeless_window_builder, place_chromeless_window};
+use super::{chromeless_window_builder, place_chromeless_window, round_window_corners};
 
 const HISTORY_LABEL: &str = "history";
 const BAR_HEIGHT: f64 = 150.0;
@@ -64,6 +64,7 @@ pub fn open_history_window(app: &AppHandle) -> Result<(), String> {
     // excluded from screen capture, so an open history bar can't end up
     // baked into a screenshot taken while it's on screen.
     place_chromeless_window(&window, x, y, width, BAR_HEIGHT)?;
+    round_window_corners(&window);
     Ok(())
 }
 

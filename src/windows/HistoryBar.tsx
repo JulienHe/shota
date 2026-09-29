@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { CornerDownLeft, Copy, Trash2 } from "lucide-react";
+import { Copy, Trash2, X } from "lucide-react";
 import { tauriApi, HistoryListItem, toDataUrl } from "../lib/tauriApi";
 import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
 import { useTransparentWindow } from "../lib/windowChrome";
@@ -109,6 +109,10 @@ export function HistoryBar() {
 
   return (
     <div className="history-bar">
+      <button type="button" className="history-bar__close" title="Close" aria-label="Close" onClick={close}>
+        <X size={13} strokeWidth={2.5} />
+      </button>
+
       <div
         ref={trackRef}
         className="history-bar__track"
@@ -129,7 +133,6 @@ export function HistoryBar() {
                   className="history-card__restore"
                   onClick={() => restore(item.id)}
                 >
-                  <CornerDownLeft size={14} strokeWidth={2.5} />
                   Restore
                 </button>
 
