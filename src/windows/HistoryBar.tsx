@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { tauriApi, HistoryListItem, toDataUrl } from "../lib/tauriApi";
+import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
+import { useTransparentWindow } from "../lib/windowChrome";
 import "./HistoryBar.css";
 
 /** Chromeless bottom-of-screen carousel of recent captures, opened with Ctrl+Shift+6. */
@@ -9,15 +11,9 @@ export function HistoryBar() {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ startX: number; startScroll: number; moved: boolean; id: string | null } | null>(null);
 
-  useEffect(() => {
-    // A plain CSS rule isn't reliable here — it can lose to the shared
-    // global stylesheet's opaque `#root` background depending on injection
-    // order. Setting it directly, like the capture overlay does, always wins.
-    const root = document.getElementById("root");
-    document.documentElement.style.background = "transparent";
-    document.body.style.background = "transparent";
-    if (root) root.style.background = "transparent";
+  useTransparentWindow();
 
+  useEffect(() => {
     tauriApi
       .listHistory()
       .then(setItems)
@@ -28,13 +24,7 @@ export function HistoryBar() {
     tauriApi.closeHistoryWindow();
   }, []);
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [close]);
+  useKeyboardShortcut({ key: "Escape" }, close, [close]);
 
   const onPointerDown = (e: React.PointerEvent) => {
     const track = trackRef.current;

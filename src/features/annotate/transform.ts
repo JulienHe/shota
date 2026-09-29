@@ -99,6 +99,7 @@ export function getTransformPatch(shape: Shape, node: Konva.Node): Partial<Shape
       // Transformer is also set to keepRatio for this type).
       return { ...base, radius: Math.max(8, shape.radius * Math.max(scaleX, scaleY)) };
     case "freehand":
+    case "highlight":
       return {
         ...base,
         points: shape.points.map((p, i) => (i % 2 === 0 ? p * scaleX : p * scaleY)),

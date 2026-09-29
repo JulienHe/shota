@@ -8,6 +8,26 @@ use crate::state::{AppState, PendingCapture};
 
 const EDITOR_LABEL: &str = "editor";
 
+/// The editor window's own configuration, shared by the two places that
+/// create it — the normal open path and the pre-warm path. Both used to
+/// spell the whole builder chain out separately, so a change to (say)
+/// `min_inner_size` in one would silently not apply to the window users
+/// actually get, which is the pre-warmed one.
+///
+/// `decorations(false)`: no native title bar — the frontend draws its own,
+/// merging the toolbar into the same row as custom minimize/maximize/close
+/// buttons, the same idea as CleanShot's traffic-light-adjacent toolbar on
+/// macOS. The window stays resizable by its edges as normal; that's
+/// independent of the title bar itself.
+fn editor_window_builder(app: &AppHandle, skip_taskbar: bool) -> WebviewWindowBuilder<'_, tauri::Wry, AppHandle> {
+    WebviewWindowBuilder::new(app, EDITOR_LABEL, WebviewUrl::App("index.html".into()))
+        .title("Shota")
+        .inner_size(1100.0, 750.0)
+        .min_inner_size(480.0, 360.0)
+        .decorations(false)
+        .skip_taskbar(skip_taskbar)
+}
+
 /// Opens (or focuses an existing) editor window and hands it the freshly
 /// captured image, either immediately via event or through the pending-image
 /// slot if the window is still loading. Copy/Save/the close button all
@@ -48,16 +68,7 @@ pub fn open_editor_window(
         return Ok(());
     }
 
-    WebviewWindowBuilder::new(app, EDITOR_LABEL, WebviewUrl::App("index.html".into()))
-        .title("Shota")
-        .inner_size(1100.0, 750.0)
-        .min_inner_size(480.0, 360.0)
-        // No native title bar — the frontend draws its own (merging the
-        // toolbar into the same row as custom minimize/maximize/close
-        // buttons), same idea as CleanShot's traffic-light-adjacent toolbar
-        // on macOS. The window stays resizable by its edges as normal;
-        // that's independent of the title bar itself.
-        .decorations(false)
+    editor_window_builder(app, false)
         .build()
         .map_err(|e| e.to_string())?;
 
@@ -80,14 +91,7 @@ pub fn prewarm_editor_window(app: &AppHandle) {
         return;
     }
 
-    let window = match WebviewWindowBuilder::new(app, EDITOR_LABEL, WebviewUrl::App("index.html".into()))
-        .title("Shota")
-        .inner_size(1100.0, 750.0)
-        .min_inner_size(480.0, 360.0)
-        .decorations(false)
-        .skip_taskbar(true)
-        .build()
-    {
+    let window = match editor_window_builder(app, true).build() {
         Ok(w) => w,
         Err(err) => {
             eprintln!("failed to pre-warm editor window: {err}");

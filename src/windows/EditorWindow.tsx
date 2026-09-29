@@ -10,6 +10,7 @@ import { useToastStore } from "../stores/toastStore";
 import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
 import { tauriApi, toBase64Payload, PendingCapture } from "../lib/tauriApi";
 import { primeImageCache } from "../lib/useImage";
+import { afterNextPaint } from "../lib/windowChrome";
 import { closeEditor } from "../lib/editorClose";
 import { Shape } from "../features/annotate/types";
 import "./EditorWindow.css";
@@ -77,11 +78,7 @@ export function EditorWindow() {
         // has actually had a chance to paint, rather than the instant React
         // commits the state update, which is what was showing the *previous*
         // capture for a moment on every capture after the first.
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            tauriApi.editorReady();
-          });
-        });
+        afterNextPaint().then(() => tauriApi.editorReady());
       };
       img.onerror = () => {
         console.error("failed to decode captured image");
@@ -134,8 +131,6 @@ export function EditorWindow() {
   // instead of the click just appearing to do nothing until it's already
   // done. Copy doesn't need this anymore: its export is pre-warmed by
   // Canvas's background cache, so the click itself is effectively instant.
-  const waitForPaint = () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
-
   const handleCopy = () => {
     const dataUrl = canvasRef.current?.exportDataUrl();
     if (!dataUrl) return;
@@ -152,7 +147,7 @@ export function EditorWindow() {
 
   const handleSave = async () => {
     showToast("Preparing…", 10000);
-    await waitForPaint();
+    await afterNextPaint();
     const dataUrl = canvasRef.current?.exportDataUrl();
     if (!dataUrl) {
       clearToast();

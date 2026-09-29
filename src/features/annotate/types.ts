@@ -8,6 +8,7 @@ export type ToolId =
   | "pen"
   | "step"
   | "spotlight"
+  | "highlight"
   | "blur"
   | "crop"
   | "eyedropper";
@@ -37,6 +38,12 @@ export interface ShapeStyle {
   spotlightColor: string;
   spotlightOpacity: number;
   spotlightRadius: number;
+  /** Highlighter keeps its own colour/opacity for the same reason spotlight
+   * does — it wants a pale wash, not the bright opaque accent every other
+   * tool defaults to. */
+  highlightColor: string;
+  highlightOpacity: number;
+  highlightWidth: number;
 }
 
 export const DEFAULT_STYLE: ShapeStyle = {
@@ -56,6 +63,9 @@ export const DEFAULT_STYLE: ShapeStyle = {
   spotlightColor: "#000000",
   spotlightOpacity: 0.65,
   spotlightRadius: 12,
+  highlightColor: "#fff32b",
+  highlightOpacity: 0.45,
+  highlightWidth: 22,
 };
 
 interface BaseShape {
@@ -117,6 +127,13 @@ export interface SpotlightShape extends BaseShape {
   height: number;
 }
 
+/** A marker swipe over text — a freehand stroke, multiply-blended, so what's
+ * underneath shows through instead of being covered. */
+export interface HighlightShape extends BaseShape {
+  type: "highlight";
+  points: number[];
+}
+
 export interface BlurShape extends BaseShape {
   type: "blur";
   width: number;
@@ -132,7 +149,54 @@ export type Shape =
   | FreehandShape
   | StepShape
   | SpotlightShape
+  | HighlightShape
   | BlurShape;
+
+/* ------------------------------------------------------------------ *
+ * Shape families
+ *
+ * Several behaviours apply to a *group* of shape types rather than one:
+ * how a drag sizes them, whether a backwards drag needs normalising,
+ * whether the Transformer offers a rotate handle. That membership used to
+ * be re-listed inline at every site that cared — six or seven of them — so
+ * adding a tool meant remembering all of them, and forgetting one failed
+ * silently. The spotlight tool shipped exactly that way: it was in five of
+ * the lists and missing from the two that size a drag, which is why its
+ * first drag did nothing. These predicates are the single list.
+ * ------------------------------------------------------------------ */
+
+/** Sized by dragging out a width/height box from the press point. */
+export type RectLikeShape = RectShape | BlurShape | SpotlightShape;
+/** Built from a running list of points as the pointer moves. */
+export type StrokeLikeShape = FreehandShape | HighlightShape;
+/** Two-point shapes, drawn from origin to cursor. */
+export type SegmentShape = LineShape | ArrowShape;
+
+const RECT_LIKE_TYPES = new Set<Shape["type"]>(["rectangle", "blur", "spotlight"]);
+const STROKE_LIKE_TYPES = new Set<Shape["type"]>(["freehand", "highlight"]);
+const SEGMENT_TYPES = new Set<Shape["type"]>(["line", "arrow"]);
+// Both sample or cut out the image underneath in axis-aligned image space,
+// so a rotated one would have to resample along a rotated grid — not
+// supported, so the handle is hidden rather than offering a broken result.
+const NON_ROTATABLE_TYPES = new Set<Shape["type"]>(["blur", "spotlight"]);
+
+export function isRectLike(shape: Shape): shape is RectLikeShape {
+  return RECT_LIKE_TYPES.has(shape.type);
+}
+
+export function isStrokeLike(shape: Shape): shape is StrokeLikeShape {
+  return STROKE_LIKE_TYPES.has(shape.type);
+}
+
+export function isSegment(shape: Shape): shape is SegmentShape {
+  return SEGMENT_TYPES.has(shape.type);
+}
+
+/** Whether the Transformer should offer a rotate handle. Tolerates null so
+ * callers can pass a possibly-absent selection straight through. */
+export function supportsRotation(shape: Shape | null | undefined): boolean {
+  return !shape || !NON_ROTATABLE_TYPES.has(shape.type);
+}
 
 /** Badge radius for a given number size, so the existing font-size control
  * scales the whole badge rather than overflowing the circle. */
@@ -160,6 +224,11 @@ export function contrastTextColor(hex: string): string {
  * (Konva takes no separate fill-opacity — see {@link fillForStyle}). */
 export function spotlightFill(style: ShapeStyle): string {
   return hexToRgba(style.spotlightColor, style.spotlightOpacity);
+}
+
+/** The highlighter's ink, with opacity baked in (see {@link fillForStyle}). */
+export function highlightFill(style: ShapeStyle): string {
+  return hexToRgba(style.highlightColor, style.highlightOpacity);
 }
 
 export function createShapeId(): string {

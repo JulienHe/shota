@@ -10,17 +10,18 @@ import { CanvasBackground, useUiStore } from "../../stores/uiStore";
 import { useToastStore } from "../../stores/toastStore";
 import { useImage } from "../../lib/useImage";
 import { useZoom } from "../zoom/useZoom";
-import { absoluteToImage } from "../zoom/viewTransform";
+import { absoluteToImage, centeredView } from "../zoom/viewTransform";
 import { useCrop } from "../crop/useCrop";
 import { CropOverlay } from "../crop/CropOverlay";
 import { sampleColorFromImage } from "../color-picker/sampleColor";
 import { EyedropperHud } from "../color-picker/EyedropperHud";
 import { ShapeRenderer } from "./shapes/ShapeRenderer";
-import { createShapeId, radiusForFontSize, Shape } from "./types";
+import { createShapeId, isRectLike, isSegment, isStrokeLike, radiusForFontSize, Shape, supportsRotation } from "./types";
 import { getTransformPatch, bakeNodeScaleX } from "./transform";
 import { TextEditorOverlay } from "./TextEditorOverlay";
 import { CanvasBackgroundMenu } from "./CanvasBackgroundMenu";
 import { MOVE_CURSOR, ROTATE_CURSOR } from "./cursors";
+import { isTypingTarget } from "../../lib/isTypingTarget";
 import "./Canvas.css";
 
 // "system" is left unset so the CSS `prefers-color-scheme` rule in
@@ -33,7 +34,7 @@ const CANVAS_BACKGROUND_COLORS: Partial<Record<CanvasBackground, string>> = {
   black: "#000000",
 };
 
-const DRAWABLE_TOOLS = new Set(["rectangle", "ellipse", "line", "arrow", "pen", "blur", "spotlight"]);
+const DRAWABLE_TOOLS = new Set(["rectangle", "ellipse", "line", "arrow", "pen", "blur", "spotlight", "highlight"]);
 
 export interface CanvasHandle {
   exportDataUrl: () => string | null;
@@ -195,12 +196,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
   const zoomToFit = useCallback(() => {
     if (!imageElement || !stageSize) return;
-    const fitScale = Math.min((stageSize.width - 40) / imageElement.width, (stageSize.height - 40) / imageElement.height, 1);
-    setView({
-      scale: fitScale,
-      x: (stageSize.width - imageElement.width * fitScale) / 2,
-      y: (stageSize.height - imageElement.height * fitScale) / 2,
-    });
+    setView(centeredView(imageElement, stageSize));
   }, [imageElement, stageSize, setView]);
 
   useEffect(() => {
@@ -247,40 +243,23 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     previousImageRef.current = imageElement;
 
     if (isNewImage) {
-      const fitScale = Math.min(
-        (stageSize.width - 40) / imageElement.width,
-        (stageSize.height - 40) / imageElement.height,
-        1,
-      );
-      setView({
-        scale: fitScale,
-        x: (stageSize.width - imageElement.width * fitScale) / 2,
-        y: (stageSize.height - imageElement.height * fitScale) / 2,
-      });
+      setView(centeredView(imageElement, stageSize));
     } else {
       // Same image, just a window resize (or ResizeObserver re-fire): keep the
       // current zoom level, but re-center it in the new viewport.
-      setView((prev) => ({
-        scale: prev.scale,
-        x: (stageSize.width - imageElement.width * prev.scale) / 2,
-        y: (stageSize.height - imageElement.height * prev.scale) / 2,
-      }));
+      setView((prev) => centeredView(imageElement, stageSize, prev.scale));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageElement, stageSize]);
 
   useEffect(() => {
-    const isTypingTarget = () => {
-      const el = document.activeElement;
-      return el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement;
-    };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space" && !isTypingTarget()) {
+      if (e.code === "Space" && !isTypingTarget(e.target)) {
         e.preventDefault();
         setSpacePressed(true);
       }
       if (e.key === "Shift") shiftPressedRef.current = true;
-      if ((e.key === "Delete" || e.key === "Backspace") && selectedShapeId && !isTypingTarget()) {
+      if ((e.key === "Delete" || e.key === "Backspace") && selectedShapeId && !isTypingTarget(e.target)) {
         e.preventDefault();
         removeShape(selectedShapeId);
       }
@@ -404,6 +383,9 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
         case "spotlight":
           shape = { ...base, type: "spotlight", width: 1, height: 1 };
           break;
+        case "highlight":
+          shape = { ...base, type: "highlight", points: [0, 0] };
+          break;
         default:
           return;
       }
@@ -438,7 +420,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       const dy = point.y - shape.y;
 
       let updated: Shape = shape;
-      if (shape.type === "rectangle" || shape.type === "blur" || shape.type === "spotlight") {
+      if (isRectLike(shape)) {
         if (e.evt.shiftKey) {
           const size = Math.max(Math.abs(dx), Math.abs(dy));
           updated = { ...shape, width: Math.sign(dx || 1) * size, height: Math.sign(dy || 1) * size };
@@ -462,7 +444,8 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
           ndy = Math.sin(angle) * dist;
         }
         updated = { ...shape, points: [0, 0, ndx, ndy] };
-      } else if (shape.type === "freehand") updated = { ...shape, points: [...shape.points, dx, dy] };
+      } else if (isStrokeLike(shape))
+        updated = { ...shape, points: [...shape.points, dx, dy] };
 
       drawing.current = { shape: updated };
       setLiveShape(updated);
@@ -478,7 +461,9 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       drawing.current = null;
       setLiveShape(null);
       addShape(finished);
-      if (finished.type !== "freehand") setActiveTool("select");
+      // Strokes are drawn in runs (several highlighter swipes, several pen
+      // marks), so those tools stay selected; everything else returns to Select.
+      if (!isStrokeLike(finished)) setActiveTool("select");
     }
   }, [spacePressed, activeTool, addShape, setActiveTool]);
 
@@ -656,7 +641,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
           {activeTool === "select" && !styleMenuOpen && (
             <Transformer
               ref={transformerRef}
-              rotateEnabled={selectedShape?.type !== "blur" && selectedShape?.type !== "spotlight"}
+              rotateEnabled={supportsRotation(selectedShape)}
               keepRatio={selectedShape?.type === "step"}
               rotateAnchorCursor={ROTATE_CURSOR}
               boundBoxFunc={handleTransformBoundBox}
@@ -769,12 +754,12 @@ function rotateBoxAroundCenter(box: Konva.Box, targetRotation: number): Konva.Bo
 const MIN_LINE_LENGTH = 12;
 
 function normalizeShape(shape: Shape): Shape {
-  if (shape.type === "rectangle" || shape.type === "blur" || shape.type === "spotlight") {
+  if (isRectLike(shape)) {
     const x = Math.min(shape.x, shape.x + shape.width);
     const y = Math.min(shape.y, shape.y + shape.height);
     return { ...shape, x, y, width: Math.abs(shape.width), height: Math.abs(shape.height) };
   }
-  if (shape.type === "line" || shape.type === "arrow") {
+  if (isSegment(shape)) {
     const [x1, y1, x2, y2] = shape.points;
     const length = Math.hypot(x2 - x1, y2 - y1);
     if (length < MIN_LINE_LENGTH) {

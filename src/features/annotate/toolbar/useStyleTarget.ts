@@ -10,7 +10,8 @@ const CORNER_RADIUS_KINDS = new Set(["rectangle"]);
 const FONT_SIZE_KINDS = new Set(["text", "step"]);
 const BLUR_KINDS = new Set(["blur"]);
 const SPOTLIGHT_KINDS = new Set(["spotlight"]);
-const RELEVANT_KINDS = new Set([...STROKE_KINDS, ...FILL_KINDS, ...FONT_SIZE_KINDS, ...BLUR_KINDS, ...SPOTLIGHT_KINDS, "text", "step"]);
+const HIGHLIGHT_KINDS = new Set(["highlight"]);
+const RELEVANT_KINDS = new Set([...STROKE_KINDS, ...FILL_KINDS, ...FONT_SIZE_KINDS, ...BLUR_KINDS, ...SPOTLIGHT_KINDS, ...HIGHLIGHT_KINDS, "text", "step"]);
 
 export interface StyleTarget {
   kind: string;
@@ -22,6 +23,7 @@ export interface StyleTarget {
   showFontSize: boolean;
   showBlur: boolean;
   showSpotlight: boolean;
+  showHighlight: boolean;
 }
 
 /**
@@ -48,7 +50,17 @@ export function useStyleTarget(): StyleTarget | null {
   if (selectedShape) {
     kind = selectedShape.type;
     style = selectedShape.style;
-    updateStyle = (patch) => updateShapeStyle(selectedShape.id, patch);
+    updateStyle = (patch) => {
+      updateShapeStyle(selectedShape.id, patch);
+      // A drawing tool still being active means the user is mid-flow, not
+      // retouching an old shape: `addShape` selects whatever was just drawn,
+      // so every edit here would otherwise apply to that one shape and leave
+      // the tool's own defaults untouched — the next stroke would come back
+      // in the old colour. Most tools hide this by switching to Select after
+      // one shape; the highlighter deliberately stays active for stroke after
+      // stroke, which made it read as "changing the colour does nothing".
+      if (activeTool !== "select") updateToolStyle(patch);
+    };
   } else {
     kind = activeTool;
     style = toolStyle;
@@ -67,5 +79,6 @@ export function useStyleTarget(): StyleTarget | null {
     showFontSize: FONT_SIZE_KINDS.has(kind),
     showBlur: BLUR_KINDS.has(kind),
     showSpotlight: SPOTLIGHT_KINDS.has(kind),
+    showHighlight: HIGHLIGHT_KINDS.has(kind),
   };
 }

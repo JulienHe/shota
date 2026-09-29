@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import { Minus, SquareRoundCorner, TypeOutline, Droplet, Grid3x3 } from "lucide-react";
-import { Dropdown } from "../../../components/Dropdown";
+import { ColorOption, OptionDropdown, Slider, SliderOption } from "./OptionControls";
 import { FillMode, StrokeStyle } from "../types";
 import { useSystemFonts } from "../fonts";
 import { useStyleTarget } from "./useStyleTarget";
 import { useUiStore } from "../../../stores/uiStore";
 import "./ShapeOptionsPanel.css";
 
-const SWATCHES = [
-  "#111111",
-  "#ff3b30",
-  "#ff9500",
-  "#ffcc00",
-  "#34c759",
-  "#2dd4bf",
-  "#3d7bfd",
-  "#af52de",
-  "#ff2d78",
-  "#ffffff",
+/** Highlighter inks, borrowed from the Stabilo Boss range. The general
+ * swatches are picked for ink-on-paper contrast, which is the wrong job
+ * here — a marker's colour has to survive being multiplied down to ~45%
+ * over a white page, so these are the fluorescent, deliberately
+ * over-saturated versions. */
+const HIGHLIGHTER_SWATCHES = [
+  "#fff32b", // yellow
+  "#b5e61d", // green
+  "#ff9b1a", // orange
+  "#ff5fa2", // pink
+  "#5ad2ff", // blue
+  "#b98cff", // lilac
+  "#5ce1c4", // mint
+  "#ff6b57", // coral
 ];
+
 const STROKE_STYLES: StrokeStyle[] = ["solid", "dashed", "dotted"];
 
 /**
@@ -46,57 +50,69 @@ export function ShapeOptionsPanel() {
   }, [menuOpen, setStyleMenuOpen]);
 
   if (!target) return null;
-  const { style, updateStyle, showStroke, showFill, showCornerRadius, showFontSize, showBlur, showSpotlight } = target;
+  const { style, updateStyle, showStroke, showFill, showCornerRadius, showFontSize, showBlur, showSpotlight, showHighlight } = target;
   const closeMenu = () => setOpenMenu(null);
+  const menu = { openMenu, setOpenMenu };
 
   return (
     <>
       <div className="toolbar__divider" />
       <div className="shape-options">
-        {!showBlur && !showSpotlight && (
-          <OptionDropdown id="color" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<ColorSwatch color={style.stroke} />}>
-            <ColorPalette value={style.stroke} onPick={(c) => updateStyle({ stroke: c, fillColor: c })} />
-          </OptionDropdown>
+        {!showBlur && !showSpotlight && !showHighlight && (
+          <ColorOption
+            id="color"
+            {...menu}
+            color={style.stroke}
+            onPickColor={(c) => updateStyle({ stroke: c, fillColor: c })}
+          />
+        )}
+
+        {showHighlight && (
+          <>
+            <ColorOption
+              id="highlightColor"
+              {...menu}
+              color={style.highlightColor}
+              swatches={HIGHLIGHTER_SWATCHES}
+              onPickColor={(c) => updateStyle({ highlightColor: c })}
+              opacity={style.highlightOpacity}
+              onChangeOpacity={(highlightOpacity) => updateStyle({ highlightOpacity })}
+            />
+
+            <SliderOption
+              id="highlightWidth"
+              {...menu}
+              trigger={<Minus size={15} strokeWidth={2.5} />}
+              min={6}
+              max={64}
+              step={2}
+              value={style.highlightWidth}
+              onChange={(highlightWidth) => updateStyle({ highlightWidth })}
+            />
+          </>
         )}
 
         {showSpotlight && (
           <>
-            <OptionDropdown
+            <ColorOption
               id="spotlightColor"
-              openMenu={openMenu}
-              setOpenMenu={setOpenMenu}
-              trigger={<ColorSwatch color={style.spotlightColor} />}
-            >
-              <div className="shape-options__menu shape-options__menu--list">
-                <ColorPalette value={style.spotlightColor} onPick={(c) => updateStyle({ spotlightColor: c })} />
-                <input
-                  type="range"
-                  min={0.1}
-                  max={1}
-                  step={0.05}
-                  value={style.spotlightOpacity}
-                  onChange={(e) => updateStyle({ spotlightOpacity: Number(e.target.value) })}
-                />
-              </div>
-            </OptionDropdown>
+              {...menu}
+              color={style.spotlightColor}
+              onPickColor={(c) => updateStyle({ spotlightColor: c })}
+              opacity={style.spotlightOpacity}
+              onChangeOpacity={(spotlightOpacity) => updateStyle({ spotlightOpacity })}
+            />
 
-            <OptionDropdown
+            <SliderOption
               id="spotlightRadius"
-              openMenu={openMenu}
-              setOpenMenu={setOpenMenu}
+              {...menu}
               trigger={<SquareRoundCorner size={15} strokeWidth={2} />}
-            >
-              <div className="shape-options__menu">
-                <input
-                  type="range"
-                  min={0}
-                  max={48}
-                  step={2}
-                  value={style.spotlightRadius}
-                  onChange={(e) => updateStyle({ spotlightRadius: Number(e.target.value) })}
-                />
-              </div>
-            </OptionDropdown>
+              min={0}
+              max={48}
+              step={2}
+              value={style.spotlightRadius}
+              onChange={(spotlightRadius) => updateStyle({ spotlightRadius })}
+            />
           </>
         )}
 
@@ -126,13 +142,12 @@ export function ShapeOptionsPanel() {
                   <Grid3x3 size={15} strokeWidth={2} />
                 </button>
               </div>
-              <input
-                type="range"
+              <Slider
                 min={2}
                 max={40}
                 step={1}
                 value={style.blurIntensity}
-                onChange={(e) => updateStyle({ blurIntensity: Number(e.target.value) })}
+                onChange={(blurIntensity) => updateStyle({ blurIntensity })}
               />
             </div>
           </OptionDropdown>
@@ -140,18 +155,16 @@ export function ShapeOptionsPanel() {
 
         {showStroke && (
           <>
-            <OptionDropdown id="strokeWidth" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<Minus size={15} strokeWidth={2.5} />}>
-              <div className="shape-options__menu">
-                <input
-                  type="range"
-                  min={1}
-                  max={24}
-                  step={1}
-                  value={style.strokeWidth}
-                  onChange={(e) => updateStyle({ strokeWidth: Number(e.target.value) })}
-                />
-              </div>
-            </OptionDropdown>
+            <SliderOption
+              id="strokeWidth"
+              {...menu}
+              trigger={<Minus size={15} strokeWidth={2.5} />}
+              min={1}
+              max={24}
+              step={1}
+              value={style.strokeWidth}
+              onChange={(strokeWidth) => updateStyle({ strokeWidth })}
+            />
 
             <OptionDropdown id="lineStyle" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={<LineStyleIcon />}>
               <div className="shape-options__menu shape-options__menu--list">
@@ -204,13 +217,12 @@ export function ShapeOptionsPanel() {
                 onClick={() => updateStyle({ fillMode: "translucent" })}
               />
               {style.fillMode === "translucent" && (
-                <input
-                  type="range"
+                <Slider
                   min={0.05}
                   max={1}
                   step={0.05}
                   value={style.fillOpacity}
-                  onChange={(e) => updateStyle({ fillOpacity: Number(e.target.value) })}
+                  onChange={(fillOpacity) => updateStyle({ fillOpacity })}
                 />
               )}
             </div>
@@ -218,39 +230,30 @@ export function ShapeOptionsPanel() {
         )}
 
         {showCornerRadius && (
-          <OptionDropdown
+          <SliderOption
             id="corner"
-            openMenu={openMenu}
-            setOpenMenu={setOpenMenu}
+            {...menu}
             trigger={<SquareRoundCorner size={15} strokeWidth={2} />}
-          >
-            <div className="shape-options__menu">
-              <input
-                type="range"
-                min={0}
-                max={60}
-                step={2}
-                value={style.cornerRadius}
-                onChange={(e) => updateStyle({ cornerRadius: Number(e.target.value) })}
-              />
-            </div>
-          </OptionDropdown>
+            min={0}
+            max={60}
+            step={2}
+            value={style.cornerRadius}
+            onChange={(cornerRadius) => updateStyle({ cornerRadius })}
+          />
         )}
 
         {showFontSize && (
           <>
-            <OptionDropdown id="fontSize" openMenu={openMenu} setOpenMenu={setOpenMenu} trigger={`${style.fontSize}px`}>
-              <div className="shape-options__menu">
-                <input
-                  type="range"
-                  min={12}
-                  max={96}
-                  step={2}
-                  value={style.fontSize}
-                  onChange={(e) => updateStyle({ fontSize: Number(e.target.value) })}
-                />
-              </div>
-            </OptionDropdown>
+            <SliderOption
+              id="fontSize"
+              {...menu}
+              trigger={`${style.fontSize}px`}
+              min={12}
+              max={96}
+              step={2}
+              value={style.fontSize}
+              onChange={(fontSize) => updateStyle({ fontSize })}
+            />
 
             <OptionDropdown
               id="fontFamily"
@@ -286,60 +289,17 @@ export function ShapeOptionsPanel() {
             </button>
 
             {style.textStrokeEnabled && (
-              <OptionDropdown
+              <ColorOption
                 id="outlineColor"
-                openMenu={openMenu}
-                setOpenMenu={setOpenMenu}
-                trigger={<ColorSwatch color={style.textStrokeColor} />}
-              >
-                <ColorPalette
-                  value={style.textStrokeColor}
-                  onPick={(c) => updateStyle({ textStrokeColor: c, textStrokeEnabled: true })}
-                />
-              </OptionDropdown>
+                {...menu}
+                color={style.textStrokeColor}
+                onPickColor={(c) => updateStyle({ textStrokeColor: c, textStrokeEnabled: true })}
+              />
             )}
           </>
         )}
       </div>
     </>
-  );
-}
-
-/** Adapts the shared `Dropdown`'s controlled open/close to this panel's "only one menu open at a time" id-based state, so call sites below don't each need their own open-state wiring. */
-function OptionDropdown({
-  id,
-  openMenu,
-  setOpenMenu,
-  ...rest
-}: {
-  id: string;
-  openMenu: string | null;
-  setOpenMenu: (id: string | null) => void;
-} & Omit<Parameters<typeof Dropdown>[0], "open" | "onToggle" | "onClose">) {
-  const open = openMenu === id;
-  return <Dropdown open={open} onToggle={() => setOpenMenu(open ? null : id)} onClose={() => setOpenMenu(null)} {...rest} />;
-}
-
-function ColorSwatch({ color }: { color: string }) {
-  return <span className="shape-options__color-dot" style={{ background: color }} />;
-}
-
-function ColorPalette({ value, onPick }: { value: string; onPick: (color: string) => void }) {
-  return (
-    <div className="shape-options__palette">
-      {SWATCHES.map((c) => (
-        <button
-          key={c}
-          type="button"
-          className="shape-options__swatch"
-          style={value === c ? { background: c, boxShadow: `0 0 0 2px #ffffff, 0 0 0 4px ${c}` } : { background: c }}
-          onClick={() => onPick(c)}
-        />
-      ))}
-      <label className="shape-options__custom" title="Custom color">
-        <input type="color" value={value} onChange={(e) => onPick(e.target.value)} />
-      </label>
-    </div>
   );
 }
 

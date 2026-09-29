@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { tauriApi } from "../lib/tauriApi";
+import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
+import { afterNextPaint, useTransparentWindow } from "../lib/windowChrome";
 import { useGlobalCursor } from "../features/capture/useGlobalCursor";
 import { useWindowSnap } from "../features/capture/useWindowSnap";
 import "./CaptureOverlay.css";
@@ -40,34 +42,16 @@ export function CaptureOverlay() {
     if (snapMode) setDrag(null);
   }, [snapMode]);
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") cancel();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [cancel]);
+  useKeyboardShortcut({ key: "Escape" }, cancel, [cancel]);
+
+  useTransparentWindow();
 
   useEffect(() => {
-    // Every shota window shares one JS/CSS bundle (see App.tsx), so a plain
-    // CSS rule targeting html/body/#root would leak into the other windows'
-    // documents too. Each Tauri window is its own separate document though,
-    // so setting this directly here only affects the overlay window's own
-    // html/body/#root — safe to do without any cleanup on unmount.
-    const root = document.getElementById("root");
-    document.documentElement.style.background = "transparent";
-    document.body.style.background = "transparent";
-    if (root) root.style.background = "transparent";
-
     // The window is created hidden (see overlay.rs) specifically so it can't
-    // flash WebView2's default white background before this runs. Wait a
-    // couple of frames so the transparent styling has actually painted
-    // before asking Rust to reveal the window.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        tauriApi.overlayReady();
-      });
-    });
+    // flash WebView2's default white background before this runs. Waiting for
+    // a real paint means the transparent styling above has actually landed
+    // before Rust is asked to reveal the window.
+    afterNextPaint().then(() => tauriApi.overlayReady());
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {

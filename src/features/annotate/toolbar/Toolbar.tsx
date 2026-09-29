@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { ArrowUpRight, Circle, Crop, Droplet, Minus, MousePointer2, Pencil, Pipette, Square, Type } from "lucide-react";
+import { ArrowUpRight, Circle, Crop, Droplet, Highlighter, Minus, MousePointer2, Pencil, Pipette, Square, Type } from "lucide-react";
 import { IconButton } from "../../../components/IconButton";
 import { CircleOne } from "./StepToolIcon";
 import { SpotlightRect } from "./SpotlightToolIcon";
 import { useToolStore } from "../../../stores/toolStore";
 import { ShapeOptionsPanel } from "./ShapeOptionsPanel";
 import { ToolId } from "../types";
+import { isTypingTarget } from "../../../lib/isTypingTarget";
 import "./Toolbar.css";
 
 /** `key` is both the shortcut and what the tooltip advertises, so the two
@@ -20,22 +21,12 @@ const TOOLS: { id: ToolId; icon: typeof MousePointer2; name: string; key: string
   { id: "text", icon: Type, name: "Text", key: "t" },
   { id: "pen", icon: Pencil, name: "Freehand pen", key: "p" },
   { id: "step", icon: CircleOne, name: "Numbered step", key: "n" },
+  { id: "highlight", icon: Highlighter, name: "Highlighter", key: "h" },
   { id: "spotlight", icon: SpotlightRect, name: "Spotlight", key: "s" },
   { id: "blur", icon: Droplet, name: "Blur / pixelate", key: "b" },
   { id: "crop", icon: Crop, name: "Crop", key: "c" },
   { id: "eyedropper", icon: Pipette, name: "Color picker", key: "i" },
 ];
-
-/** True while the user is typing somewhere a letter key means a letter. */
-function isTypingTarget(target: EventTarget | null): boolean {
-  if (!(target instanceof HTMLElement)) return false;
-  return (
-    target.isContentEditable ||
-    target.tagName === "INPUT" ||
-    target.tagName === "TEXTAREA" ||
-    target.tagName === "SELECT"
-  );
-}
 
 export function Toolbar() {
   const activeTool = useToolStore((s) => s.activeTool);

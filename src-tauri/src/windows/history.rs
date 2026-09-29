@@ -1,4 +1,6 @@
-use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewUrl, WebviewWindowBuilder};
+use tauri::{AppHandle, Manager};
+
+use super::{chromeless_window_builder, place_chromeless_window};
 
 const HISTORY_LABEL: &str = "history";
 const BAR_HEIGHT: f64 = 150.0;
@@ -39,29 +41,16 @@ pub fn open_history_window(app: &AppHandle) -> Result<(), String> {
     let x = work_x + (work_w - width) / 2.0;
     let y = work_y + work_h - BAR_HEIGHT - BOTTOM_MARGIN;
 
-    let window = WebviewWindowBuilder::new(app, HISTORY_LABEL, WebviewUrl::App("index.html".into()))
-        .title("shota-history")
-        .transparent(true)
-        .background_color(tauri::webview::Color(0, 0, 0, 0))
-        .decorations(false)
-        .always_on_top(true)
-        .skip_taskbar(true)
-        .resizable(false)
-        // Visible immediately — the equivalent "hidden until frontend
-        // signals ready" pattern used for the capture overlay turned out to
-        // deadlock (WebView2 appears to defer loading the page at all while
-        // a window is invisible), so it isn't safe to rely on here either.
-        .visible(true)
+    let window = chromeless_window_builder(app, HISTORY_LABEL, "shota-history")
         .build()
         .map_err(|e| e.to_string())?;
 
-    window
-        .set_position(LogicalPosition::new(x, y))
-        .map_err(|e| e.to_string())?;
-    window
-        .set_size(LogicalSize::new(width, BAR_HEIGHT))
-        .map_err(|e| e.to_string())?;
-
+    // Shares the overlay's preset, which also means it now gets the two DWM
+    // tweaks the overlay had and this window was missing: no open-fade (it's
+    // a borderless transparent strip, so the fade read as a flash) and
+    // excluded from screen capture, so an open history bar can't end up
+    // baked into a screenshot taken while it's on screen.
+    place_chromeless_window(&window, x, y, width, BAR_HEIGHT)?;
     Ok(())
 }
 

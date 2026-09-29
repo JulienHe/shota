@@ -9,6 +9,7 @@ import { TextShapeView } from "./TextShape";
 import { FreehandShapeView } from "./FreehandShape";
 import { StepShapeView } from "./StepShape";
 import { SpotlightShapeView } from "./SpotlightShape";
+import { HighlightShapeView } from "./HighlightShape";
 import { BlurShapeView } from "./BlurShape";
 
 export interface ShapeCommonProps {
@@ -52,6 +53,8 @@ export function ShapeRenderer({ shape, ...common }: ShapeRendererProps) {
       return <StepShapeView shape={shape} {...common} />;
     case "spotlight":
       return <SpotlightShapeView shape={shape} {...common} />;
+    case "highlight":
+      return <HighlightShapeView shape={shape} {...common} />;
     case "blur":
       return <BlurShapeView shape={shape} {...common} />;
     default:

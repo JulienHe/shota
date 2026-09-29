@@ -1,6 +1,6 @@
-use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
+use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewWindow};
 
-use super::cloak_window;
+use super::{chromeless_window_builder, cloak_window, place_chromeless_window};
 
 const OVERLAY_LABEL: &str = "overlay";
 // Far enough off any real monitor that it can never be glimpsed, used only
@@ -32,31 +32,11 @@ fn virtual_desktop_bounds(app: &AppHandle) -> Result<(f64, f64, f64, f64), Strin
 }
 
 fn build_overlay_window(app: &AppHandle, x: f64, y: f64, width: f64, height: f64) -> Result<WebviewWindow, String> {
-    let window = WebviewWindowBuilder::new(app, OVERLAY_LABEL, WebviewUrl::App("index.html".into()))
-        .title("shota-overlay")
-        .transparent(true)
-        .background_color(tauri::webview::Color(0, 0, 0, 0))
-        .decorations(false)
-        .always_on_top(true)
-        .skip_taskbar(true)
-        .resizable(false)
-        // Must be visible to actually load: WebView2 appears to defer
-        // loading/running the page entirely while a window is invisible, so
-        // `.visible(false)` here deadlocks rather than just occasionally
-        // flashing. Cloaked immediately after creation instead (see
-        // `prewarm_capture_overlay`) so nothing is ever actually seen.
-        .visible(true)
+    let window = chromeless_window_builder(app, OVERLAY_LABEL, "shota-overlay")
         .build()
         .map_err(|e| e.to_string())?;
 
-    window.set_position(LogicalPosition::new(x, y)).map_err(|e| e.to_string())?;
-    window
-        .set_size(LogicalSize::new(width, height))
-        .map_err(|e| e.to_string())?;
-
-    exclude_from_capture(&window);
-    disable_show_animation(&window);
-
+    place_chromeless_window(&window, x, y, width, height)?;
     Ok(window)
 }
 
@@ -114,59 +94,6 @@ pub fn prewarm_capture_overlay(app: &AppHandle) {
     };
     cloak_window(&window, true);
 }
-
-/// Marks the overlay window as excluded from screen capture at the DWM
-/// compositor level (`WDA_EXCLUDEFROMCAPTURE`, Windows 10 2004+), so its
-/// selection-rectangle chrome can never end up baked into a screenshot no
-/// matter how capture and hide/close are timed relative to each other. The
-/// existing hide-then-sleep-then-capture dance in `finish_region_capture` /
-/// `finish_window_capture` was a race — DWM doesn't necessarily finish
-/// un-compositing a hidden always-on-top layered window within a fixed
-/// delay, which is why the overlay's border would occasionally still show up
-/// in the captured pixels. This makes that race impossible instead of just
-/// less likely, so that hide/sleep step is kept only as a cheap extra safety
-/// net (e.g. in case this call silently fails on an older Windows build).
-#[cfg(windows)]
-fn exclude_from_capture(window: &tauri::WebviewWindow) {
-    use windows::Win32::UI::WindowsAndMessaging::{SetWindowDisplayAffinity, WDA_EXCLUDEFROMCAPTURE};
-
-    if let Ok(hwnd) = window.hwnd() {
-        // Best-effort: if this fails (e.g. pre-2004 Windows), the hide+sleep
-        // fallback in the capture commands still applies.
-        let _ = unsafe { SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE) };
-    }
-}
-
-#[cfg(not(windows))]
-fn exclude_from_capture(_window: &tauri::WebviewWindow) {}
-
-/// Turns off DWM's default open/close window transition (a brief fade) for
-/// the overlay. It's borderless, transparent, and covers the whole virtual
-/// desktop, so that fade reads as a stray animated flash over the screen
-/// rather than a normal window appearing — the overlay should just be there
-/// instantly, with no chrome of its own beyond the hint text the page draws.
-#[cfg(windows)]
-fn disable_show_animation(window: &tauri::WebviewWindow) {
-    use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMWA_TRANSITIONS_FORCEDISABLED};
-
-    if let Ok(hwnd) = window.hwnd() {
-        // The Win32 BOOL this attribute expects is a plain 4-byte int, not the
-        // `windows` crate's own wrapper type (avoids depending on exactly
-        // where that type lives across crate versions).
-        let disable: i32 = 1;
-        let _ = unsafe {
-            DwmSetWindowAttribute(
-                hwnd,
-                DWMWA_TRANSITIONS_FORCEDISABLED,
-                &disable as *const i32 as *const core::ffi::c_void,
-                std::mem::size_of::<i32>() as u32,
-            )
-        };
-    }
-}
-
-#[cfg(not(windows))]
-fn disable_show_animation(_window: &tauri::WebviewWindow) {}
 
 /// Called once the overlay page has applied its transparent styling, so the
 /// window only becomes visible after it can no longer flash white. Only
