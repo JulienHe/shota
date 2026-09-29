@@ -10,6 +10,11 @@ body,
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
+  /* The panel's tint lives here rather than on the scrolling track: the
+     track is masked at its edges to fade the thumbnails out, and a
+     background on it would be faded away by that same mask, punching a
+     translucent notch through the panel. */
+  background: rgba(24, 25, 30, 0.55);
   -webkit-user-select: none;
   user-select: none;
 }
@@ -26,13 +31,45 @@ body,
   overflow-y: hidden;
   scrollbar-width: none;
   cursor: grab;
-  background: rgba(24, 25, 30, 0.55);
-  /* No border-radius, and no shadow: the window itself is rounded by DWM
-     (see round_window_corners) and casts its own shadow. Rounding here too
-     would only disagree with the Acrylic backdrop underneath, which keeps
-     the window's shape whatever the page does. */
+  /* No border-radius and no shadow: the window itself is rounded by DWM (see
+     round_window_corners) and casts its own shadow. Rounding here too would
+     only disagree with the Acrylic backdrop underneath, which keeps the
+     window's shape whatever the page does. */
   padding: 0 16px;
   box-sizing: border-box;
+}
+
+/* Thumbnails dissolve into the panel at whichever edge has more strip past
+   it, so a partly-scrolled row reads as continuing rather than being cut
+   off. A mask rather than a gradient overlay: this fades the cards to
+   nothing and lets the panel show through, instead of laying a tinted
+   sliver on top that would have to match the panel's colour exactly and
+   would still darken whatever sat under it. */
+.history-bar__track[data-fade="left"] {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px);
+  mask-image: linear-gradient(to right, transparent 0, #000 32px);
+}
+
+.history-bar__track[data-fade="right"] {
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 32px);
+  mask-image: linear-gradient(to left, transparent 0, #000 32px);
+}
+
+.history-bar__track[data-fade="both"] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 32px,
+    #000 calc(100% - 32px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 32px,
+    #000 calc(100% - 32px),
+    transparent 100%
+  );
 }
 
 .history-bar__track::-webkit-scrollbar {
@@ -175,14 +212,14 @@ body,
    cross against a light desktop. */
 .history-bar__close {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 5px;
+  right: 7px;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border: none;
   border-radius: 50%;
   background: rgba(12, 13, 17, 0.7);

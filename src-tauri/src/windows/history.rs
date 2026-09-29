@@ -5,7 +5,9 @@ use tauri::{AppHandle, Manager};
 use super::{chromeless_window_builder, place_chromeless_window, round_window_corners};
 
 const HISTORY_LABEL: &str = "history";
-const BAR_HEIGHT: f64 = 150.0;
+// Sized to the thumbnails plus a little breathing room, rather than a
+// round number with the strip floating in the middle of it.
+const BAR_HEIGHT: f64 = 132.0;
 const WIDTH_FRACTION: f64 = 0.8;
 const BOTTOM_MARGIN: f64 = 14.0;
 

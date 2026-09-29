@@ -11,6 +11,9 @@ export function HistoryBar() {
   const [items, setItems] = useState<HistoryListItem[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  // Which edges have more strip hidden past them, so the fade only appears
+  // where there is actually something to scroll to.
+  const [fade, setFade] = useState<"none" | "left" | "right" | "both">("none");
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ startX: number; startScroll: number } | null>(null);
 
@@ -45,6 +48,27 @@ export function HistoryBar() {
       unlisten.then((fn) => fn());
     };
   }, [close]);
+
+  const updateFade = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const atStart = track.scrollLeft <= 1;
+    // Sub-pixel widths mean scrollLeft + clientWidth lands a fraction short of
+    // scrollWidth at the end, so this needs a tolerance rather than equality.
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+    setFade(atStart && atEnd ? "none" : atStart ? "right" : atEnd ? "left" : "both");
+  }, []);
+
+  // Re-measured on scroll, on resize, and whenever the list changes — a
+  // delete can take the strip from overflowing to fitting.
+  useEffect(() => {
+    updateFade();
+    const track = trackRef.current;
+    if (!track) return;
+    const observer = new ResizeObserver(updateFade);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [items, updateFade]);
 
   const restore = (id: string) => {
     tauriApi.openHistoryEntry(id).catch((err) => console.error("failed to open history entry", err));
@@ -116,6 +140,8 @@ export function HistoryBar() {
       <div
         ref={trackRef}
         className="history-bar__track"
+        data-fade={fade}
+        onScroll={updateFade}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
