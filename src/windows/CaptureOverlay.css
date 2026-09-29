@@ -35,6 +35,7 @@
   inset: 0;
   background: rgba(16, 17, 21, 0.45);
   pointer-events: none;
+  animation: capture-overlay-fade-in 120ms ease-out;
 }
 
 /* The hovered window, spotlit.
@@ -54,4 +55,33 @@
   border: 2px solid #3d7bfd;
   box-shadow: 0 0 0 200vmax rgba(16, 17, 21, 0.45);
   pointer-events: none;
+  /* Glide between windows rather than teleporting. React keeps the same DOM
+     node while moving from one hovered window to the next, so the geometry
+     change is a plain transition; only the first appearance has nothing to
+     animate from, which the fade below covers.
+
+     Kept short on purpose: this tracks the pointer, and anything slower
+     stops feeling like a cursor and starts feeling like lag. */
+  transition:
+    left 120ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    top 120ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    width 120ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    height 120ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation: capture-overlay-fade-in 120ms ease-out;
+}
+
+@keyframes capture-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Respect a system-level request for less movement: the spotlight still
+   moves to the right window, it just gets there immediately. */
+@media (prefers-reduced-motion: reduce) {
+  .capture-overlay__window-highlight,
+  .capture-overlay__dim {
+    transition: none;
+    animation: none;
+  }
 }
