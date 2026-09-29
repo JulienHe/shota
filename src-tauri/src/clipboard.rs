@@ -9,7 +9,16 @@ pub fn copy_image_to_clipboard(app: &AppHandle, png_base64: &str) -> Result<(), 
         .decode(png_base64)
         .map_err(|e| e.to_string())?;
 
-    let decoded = image::load_from_memory(&bytes)
+    copy_png_bytes(app, &bytes)
+}
+
+/// Writes already-decoded PNG bytes to the clipboard.
+///
+/// Used by anything that already holds the image on the Rust side (copying
+/// straight from history, say), so it doesn't have to base64 a multi-megabyte
+/// screenshot, hand it to the webview and take it straight back again.
+pub fn copy_png_bytes(app: &AppHandle, bytes: &[u8]) -> Result<(), String> {
+    let decoded = image::load_from_memory(bytes)
         .map_err(|e| e.to_string())?
         .to_rgba8();
     let (width, height) = (decoded.width(), decoded.height());

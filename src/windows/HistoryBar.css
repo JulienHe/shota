@@ -6,51 +6,30 @@ body,
 
 .history-bar {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
-  padding: 0 4px;
   -webkit-user-select: none;
   user-select: none;
 }
 
-.history-bar__close {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: #e4e4e7;
-  cursor: pointer;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
-}
-
-.history-bar__close:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
+/* The panel itself is only lightly tinted: the frosting behind it is the
+   window's Acrylic effect, applied by the OS compositor (see history.rs).
+   A heavier tint here would just mute the blur it sits on top of. */
 .history-bar__track {
   flex: 1;
-  width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
   cursor: grab;
-  background: rgba(28, 29, 34, 0.72);
-  backdrop-filter: blur(14px);
-  border-radius: 16px;
-  padding: 0 14px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  background: rgba(24, 25, 30, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+  padding: 0 16px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.42);
   box-sizing: border-box;
 }
 
@@ -62,27 +41,131 @@ body,
   cursor: grabbing;
 }
 
-.history-bar__item {
+.history-card {
   flex: none;
-  width: 140px;
-  height: 88px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  overflow: hidden;
-  background: #34343c;
-  cursor: pointer;
-  transition: border-color 0.12s ease, transform 0.12s ease;
 }
 
-.history-bar__item:hover {
-  border-color: rgba(255, 255, 255, 0.4);
+.history-card[data-busy] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.history-card__frame {
+  position: relative;
+  width: 148px;
+  height: 92px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #2a2b31;
+  /* The selected ring is an inset shadow rather than a border so it doesn't
+     change the box's size on hover — a border would nudge the thumbnail by a
+     pixel and make the whole strip twitch as the cursor moves along it. */
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.history-card__frame:hover {
+  box-shadow: inset 0 0 0 3px #3d7bfd;
   transform: translateY(-2px);
 }
 
-.history-bar__item img {
+.history-card__frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   pointer-events: none;
+}
+
+/* Actions only exist on hover, so the strip reads as a wall of screenshots
+   at rest rather than a grid of buttons. */
+.history-card__actions {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: rgba(12, 13, 17, 0.55);
+  transition: opacity 0.15s ease;
+}
+
+.history-card__frame:hover .history-card__actions,
+.history-card__actions:focus-within {
+  opacity: 1;
+}
+
+.history-card__restore {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: none;
+  border-radius: 8px;
+  background: #1d4ed8;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.history-card__restore:hover {
+  background: #1e40af;
+}
+
+.history-card__icon {
+  position: absolute;
+  right: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 7px;
+  background: rgba(24, 25, 30, 0.85);
+  color: #e4e4e7;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.history-card__icon--delete {
+  top: 7px;
+}
+
+.history-card__icon--copy {
+  bottom: 7px;
+}
+
+.history-card__icon:hover {
+  background: rgba(46, 47, 56, 0.95);
+  color: #fff;
+}
+
+.history-card__icon--delete:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+.history-card__toast {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(12, 13, 17, 0.9);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-card__frame,
+  .history-card__actions {
+    transition: none;
+  }
 }

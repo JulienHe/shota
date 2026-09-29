@@ -79,6 +79,11 @@ export const tauriApi = {
   updateHistoryEntry: (id: string, shapesJson: string, width: number, height: number) =>
     invoke<void>("update_history_entry", { id, shapesJson, width, height }),
 
+  /** Copies a stored capture to the clipboard without opening it. The bytes
+   * never cross IPC — Rust reads the file and writes the clipboard itself.
+   * Note this is the capture as taken, without any saved annotations. */
+  copyHistoryEntry: (id: string) => invoke<void>("copy_history_entry", { id }),
+
   deleteHistoryEntry: (id: string) => invoke<void>("delete_history_entry", { id }),
 
   clearHistory: () => invoke<void>("clear_history"),

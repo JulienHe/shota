@@ -65,6 +65,7 @@ pub fn run() {
             commands::list_history,
             commands::open_history_entry,
             commands::update_history_entry,
+            commands::copy_history_entry,
             commands::delete_history_entry,
             commands::clear_history,
             commands::history_ready,

@@ -1,3 +1,5 @@
+use tauri::utils::config::WindowEffectsConfig;
+use tauri::window::Effect;
 use tauri::{AppHandle, Manager};
 
 use super::{chromeless_window_builder, place_chromeless_window};
@@ -42,6 +44,17 @@ pub fn open_history_window(app: &AppHandle) -> Result<(), String> {
     let y = work_y + work_h - BAR_HEIGHT - BOTTOM_MARGIN;
 
     let window = chromeless_window_builder(app, HISTORY_LABEL, "shota-history")
+        // Real blur, done by the OS compositor. `backdrop-filter` in the page
+        // cannot do this: the window behind the panel is transparent, so
+        // there is nothing in the document for CSS to blur — it would sample
+        // emptiness and the "frosted" panel would just be a flat translucent
+        // one. Acrylic blurs what is actually behind the *window*.
+        .effects(WindowEffectsConfig {
+            effects: vec![Effect::Acrylic],
+            state: None,
+            radius: None,
+            color: None,
+        })
         .build()
         .map_err(|e| e.to_string())?;
 

@@ -164,6 +164,18 @@ pub fn update_history_entry(
     history::update_entry(&app, &id, &shapes_json, width, height)
 }
 
+/// Copies a stored capture straight to the clipboard, without opening it.
+///
+/// This is the *unannotated* capture — the pixels as taken. Annotations live
+/// alongside it as shapes and are only rendered by the editor, so anything
+/// drawn on a past capture is not included here. Open the entry to copy it
+/// with its annotations.
+#[tauri::command]
+pub fn copy_history_entry(app: AppHandle, id: String) -> Result<(), String> {
+    let entry = history::get_entry(&app, &id)?;
+    clipboard::copy_png_bytes(&app, &entry.image_bytes)
+}
+
 #[tauri::command]
 pub fn delete_history_entry(app: AppHandle, id: String) -> Result<(), String> {
     history::delete_entry(&app, &id)
