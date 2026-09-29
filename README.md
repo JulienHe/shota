@@ -20,10 +20,6 @@ Shota runs as a background/tray app: no taskbar window, just a tray icon with qu
 
 Nothing is uploaded anywhere. Captures, annotations and history all stay on your machine.
 
-<p align="center">
-  <img src="docs/main-window.png" alt="Shota's tray launcher window" width="360">
-</p>
-
 ## Install
 
 Grab the latest installer from the [releases page](https://github.com/JulienHe/shota/releases/latest). Windows 10 or 11.
