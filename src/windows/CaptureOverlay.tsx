@@ -5,6 +5,7 @@ import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
 import { afterNextPaint, useTransparentWindow } from "../lib/windowChrome";
 import { useGlobalCursor } from "../features/capture/useGlobalCursor";
 import { useWindowSnap } from "../features/capture/useWindowSnap";
+import { SpotlightMask, HoleRect } from "../features/capture/SpotlightMask";
 import "./CaptureOverlay.css";
 
 interface DragRect {
@@ -98,6 +99,18 @@ export function CaptureOverlay() {
     }
   };
 
+  // The hovered window in overlay-local CSS pixels, shared by the dimming
+  // mask and the border drawn on top of it so the two can't disagree.
+  const spotlightRect: HoleRect | null =
+    snapMode && hoveredWindow && origin
+      ? {
+          left: (hoveredWindow.x - origin.x - HORIZONTAL_HIGHLIGHT_CORRECTION_PX) / scale,
+          top: (hoveredWindow.y - origin.y) / scale,
+          width: hoveredWindow.width / scale,
+          height: hoveredWindow.height / scale,
+        }
+      : null;
+
   const selectionStyle = drag
     ? {
         left: Math.min(drag.startX, drag.x),
@@ -118,22 +131,9 @@ export function CaptureOverlay() {
         {snapMode ? "Click a window to capture it · Space to go back" : "Drag to select an area · Space to switch to window mode · Esc to cancel"}
       </div>
 
-      {/* Dim the desktop as soon as snap mode is on, so moving between
-          windows doesn't strobe between lit and unlit — the spotlight below
-          replaces this the moment there's something to spotlight. */}
-      {snapMode && !(hoveredWindow && origin) && <div className="capture-overlay__dim" />}
+      {snapMode && <SpotlightMask hole={spotlightRect} />}
 
-      {snapMode && hoveredWindow && origin && (
-        <div
-          className="capture-overlay__window-highlight"
-          style={{
-            left: (hoveredWindow.x - origin.x - HORIZONTAL_HIGHLIGHT_CORRECTION_PX) / scale,
-            top: (hoveredWindow.y - origin.y) / scale,
-            width: hoveredWindow.width / scale,
-            height: hoveredWindow.height / scale,
-          }}
-        />
-      )}
+      {spotlightRect && <div className="capture-overlay__window-highlight" style={spotlightRect} />}
 
       {selectionStyle && <div className="capture-overlay__selection" style={selectionStyle} />}
     </div>
