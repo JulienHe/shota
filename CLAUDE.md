@@ -118,3 +118,22 @@ user would have to find and run a new installer by hand. It lives outside the re
 Note this is minisign, entirely separate from Authenticode: it proves an update came
 from whoever holds the key, and does nothing about SmartScreen, which is a separate
 (paid) code-signing problem.
+
+## Running a dev build alongside an installed one
+
+Testing the updater needs a real install talking to a real release, which means
+`tauri dev` has to coexist with an installed Shota. Three things collide otherwise,
+and only one of them is obvious:
+
+- **Global shortcuts** are held by one process at a time — whichever registers first
+  wins and the other silently gets nothing. Debug builds use `Ctrl+Alt+Shift+3/4/6`
+  (see `hotkeys.rs`, switched on `debug_assertions`).
+- **Settings and history** live under the bundle identifier, so a dev build sharing
+  it reads and writes the installed app's real capture history. `npm run tauri:dev`
+  loads `tauri.dev.conf.json`, which overrides `identifier` and `productName` —
+  without it, dev scribbles on production data.
+- **The tray icon** is otherwise identical in both; the debug build's tooltip says
+  "Shota (dev)".
+
+Use `npm run tauri:dev`, not `npm run tauri dev`. The latter still works and is
+occasionally what you want, but it shares the installed app's data directory.

@@ -6,11 +6,27 @@ use crate::capture;
 use crate::state::AppState;
 use crate::windows::{open_capture_overlay, open_editor_with_history, toggle_history_window};
 
+// A global shortcut can only be held by one process at a time, so a debug
+// build and an installed release build fight over these: whichever registers
+// first wins and the other silently gets nothing. Debug builds therefore take
+// a different set, which is what makes it possible to run `tauri dev` against
+// an installed Shota — needed to test the updater, since that can only be
+// exercised by a real install talking to a real release.
+#[cfg(not(debug_assertions))]
 pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Shift+3";
+#[cfg(not(debug_assertions))]
 pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Shift+4";
 /// Not user-rebindable (yet) — no entry in ShortcutKind/PersistedSettings,
 /// unlike Fullscreen/Area which have a settings UI.
+#[cfg(not(debug_assertions))]
 pub const HISTORY_SHORTCUT: &str = "Ctrl+Shift+6";
+
+#[cfg(debug_assertions)]
+pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Alt+Shift+3";
+#[cfg(debug_assertions)]
+pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Alt+Shift+4";
+#[cfg(debug_assertions)]
+pub const HISTORY_SHORTCUT: &str = "Ctrl+Alt+Shift+6";
 
 #[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]

@@ -1,0 +1,5 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Shota Dev",
+  "identifier": "com.julie.shota.dev"
+}
