@@ -5,6 +5,7 @@ use tauri::{
 };
 
 use crate::capture;
+#[cfg(feature = "updater")]
 use crate::updater;
 use crate::windows::{open_capture_overlay, open_editor_with_history};
 
@@ -17,24 +18,24 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     let settings = MenuItem::with_id(app, "settings", "Keyboard Shortcuts…", true, None::<&str>)
         .map_err(|e| e.to_string())?;
+    // Absent entirely in a Store build: the Store owns updates there, so an
+    // item that checks GitHub would be both wrong and against policy.
+    #[cfg(feature = "updater")]
     let check_updates = MenuItem::with_id(app, "check_updates", "Check for Updates…", true, None::<&str>)
         .map_err(|e| e.to_string())?;
     let quit = MenuItem::with_id(app, "quit", "Quit Shota", true, None::<&str>)
         .map_err(|e| e.to_string())?;
 
-    let menu = Menu::with_items(
-        app,
-        &[
-            &capture_fullscreen,
-            &capture_area,
-            &PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?,
-            &settings,
-            &check_updates,
-            &PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?,
-            &quit,
-        ],
-    )
-    .map_err(|e| e.to_string())?;
+    let separator = PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?;
+    let mut items: Vec<&dyn tauri::menu::IsMenuItem<_>> =
+        vec![&capture_fullscreen, &capture_area, &separator, &settings];
+    #[cfg(feature = "updater")]
+    items.push(&check_updates);
+    let separator2 = PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?;
+    items.push(&separator2);
+    items.push(&quit);
+
+    let menu = Menu::with_items(app, &items).map_err(|e| e.to_string())?;
 
     let icon = app
         .default_window_icon()
@@ -66,6 +67,7 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
                     let _ = window.set_focus();
                 }
             }
+            #[cfg(feature = "updater")]
             "check_updates" => updater::check_for_updates(app, true),
             "quit" => app.exit(0),
             _ => {}

@@ -40,7 +40,7 @@
         "installerIcon": "icons/icon.ico"
       }
     },
-    "createUpdaterArtifacts": true
+    "createUpdaterArtifacts": false
   },
   "plugins": {
     "updater": {

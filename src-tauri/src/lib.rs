@@ -7,6 +7,7 @@ mod history;
 mod hotkeys;
 mod state;
 mod tray;
+#[cfg(feature = "updater")]
 mod updater;
 mod windows;
 
@@ -14,13 +15,17 @@ use tauri::Manager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let builder = tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
-        .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_opener::init());
+
+    #[cfg(feature = "updater")]
+    let builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
+
+    builder
         .setup(|app| {
             let handle = app.handle().clone();
             app.manage(state::AppState::load(&handle));
@@ -38,6 +43,7 @@ pub fn run() {
             // Silent: a failed check at launch (no network, GitHub down)
             // should never greet someone with an error they didn't ask for.
             // The tray's "Check for Updates…" is the loud version.
+            #[cfg(feature = "updater")]
             updater::check_for_updates(&handle, false);
             Ok(())
         })

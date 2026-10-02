@@ -12,7 +12,6 @@
     "history"
   ],
   "permissions": [
-    "global-shortcut:default",
-    "updater:default"
+    "global-shortcut:default"
   ]
 }

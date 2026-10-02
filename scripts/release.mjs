@@ -81,6 +81,10 @@ if (process.argv.includes("--no-build")) {
   run("npm", ["run", "tauri", "build"], { env: buildEnv });
 }
 
+// Produced here rather than by `tauri build`, so that Authenticode signing
+// can be inserted between the build and this line. See tauri.conf.json.
+run("npx", ["tauri", "signer", "sign", setup], { env: buildEnv });
+
 // Checked after the build as well as before it, because the build exits 0
 // even when signing fails — it prints the reason and carries on bundling.
 // The presence of this file is the only trustworthy signal.

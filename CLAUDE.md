@@ -152,6 +152,8 @@ those bytes, so a signature taken first describes a file that no longer exists â
 every client rejects the update as tampered. Nothing warns about this: the build is
 green, the release looks right, and updates simply fail verification on every machine.
 
-This is why `.github/workflows/release.yml` builds *without* `TAURI_SIGNING_PRIVATE_KEY`
-set and signs in a separate step afterwards, rather than letting `tauri build` do both
-at once the way the local script does.
+This is why `bundle.createUpdaterArtifacts` is **false** and both the workflow and
+`scripts/release.mjs` run `tauri signer sign` as a separate step after the build.
+Turning it back on does not merely change where the signature is made: `tauri build`
+then *requires* the signing key and fails without it, which forces the signature to be
+produced during the build, which is the order that breaks.
