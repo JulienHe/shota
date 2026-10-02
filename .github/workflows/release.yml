@@ -1,0 +1,110 @@
+name: Release
+
+# Pushing a v* tag builds, signs and publishes a draft release.
+#
+#   npm version minor && git push --follow-tags
+#
+# Building here rather than on a laptop isn't only convenience: the updater
+# signing key lives in repository secrets, so a release physically cannot be
+# built without it. The local path (scripts/release.mjs) relies on remembering
+# an environment variable, and forgetting it produces a release that looks
+# completely normal while silently breaking updates for every installed copy.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      # A release build compiles every dependency with full optimisation, so
+      # without this each run starts from nothing and takes the better part of
+      # fifteen minutes.
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      # Deliberately built WITHOUT the updater signing key, so no .sig is
+      # produced yet. Authenticode signing (added below once SignPath is set
+      # up) rewrites the installer, and anything signed before that would be a
+      # signature over bytes that no longer exist — the updater would reject
+      # its own release. The signature has to be taken last.
+      - name: Build
+        run: npm run tauri build
+
+      # ---------------------------------------------------------------
+      # Authenticode signing goes here, once SignPath approves the project.
+      # It has to run after the build and before the signing step below.
+      #
+      # - uses: signpath/github-action-submit-signing-request@v1
+      #   with:
+      #     api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+      #     organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+      #     project-slug: shota
+      #     signing-policy-slug: release-signing
+      #     artifact-configuration-slug: nsis-installer
+      #     wait-for-completion: true
+      # ---------------------------------------------------------------
+
+      - name: Sign the installer for the updater
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          npx tauri signer sign "src-tauri/target/release/bundle/nsis/Shota_${VERSION}_x64-setup.exe"
+
+      - name: Write the update manifest
+        run: node scripts/make-manifest.mjs
+
+      # Every artifact is checked rather than assumed: `tauri build` exits 0
+      # even when signing fails, so an exit code proves nothing here.
+      - name: Verify artifacts
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          for f in \
+            "src-tauri/target/release/bundle/nsis/Shota_${VERSION}_x64-setup.exe" \
+            "src-tauri/target/release/bundle/nsis/Shota_${VERSION}_x64-setup.exe.sig" \
+            "src-tauri/target/release/bundle/latest.json"; do
+            test -s "$f" || { echo "missing or empty: $f"; exit 1; }
+          done
+          echo "all release artifacts present"
+
+      - name: Create draft release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}"
+          NOTES="docs/release-notes/${TAG}.md"
+          BUNDLE="src-tauri/target/release/bundle"
+          if [ -f "$NOTES" ]; then NOTES_ARG=(--notes-file "$NOTES"); else NOTES_ARG=(--generate-notes); fi
+          gh release create "$TAG" \
+            --title "Shota $TAG" \
+            --draft \
+            "${NOTES_ARG[@]}" \
+            "$BUNDLE/nsis/Shota_${VERSION}_x64-setup.exe" \
+            "$BUNDLE/msi/Shota_${VERSION}_x64_en-US.msi" \
+            "$BUNDLE/latest.json"

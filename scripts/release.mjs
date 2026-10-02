@@ -20,8 +20,15 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const KEY_PATH = process.env.SHOTA_SIGNING_KEY ?? process.env.TAURI_SIGNING_PRIVATE_KEY_PATH;
 
+// `shell: true` is needed on Windows, where npm and gh are .cmd shims that
+// execFileSync can't launch directly — but it also means the shell re-splits
+// the arguments, so anything containing a space has to be quoted or it
+// arrives as two. A release title of "Shota v0.3.0" became "Shota" plus a
+// stray "v0.3.0", which gh then went looking for as an asset file.
+const quote = (arg) => (/[\s"]/.test(arg) ? `"${arg.replace(/"/g, '\\"')}"` : arg);
+
 const run = (cmd, args, opts = {}) =>
-  execFileSync(cmd, args, { cwd: ROOT, stdio: "inherit", shell: true, ...opts });
+  execFileSync(cmd, args.map(quote), { cwd: ROOT, stdio: "inherit", shell: true, ...opts });
 
 function fail(message) {
   console.error(`\n${message}\n`);
@@ -66,7 +73,13 @@ const msi = join(bundle, "msi", `Shota_${version}_x64_en-US.msi`);
 const sig = `${setup}.sig`;
 
 console.log(`\nBuilding Shota ${version}…\n`);
-run("npm", ["run", "tauri", "build"], { env: buildEnv });
+// --no-build retries the publish half after a failure without paying for a
+// full release compile again.
+if (process.argv.includes("--no-build")) {
+  console.log("Skipping build, reusing the existing artifacts.");
+} else {
+  run("npm", ["run", "tauri", "build"], { env: buildEnv });
+}
 
 // Checked after the build as well as before it, because the build exits 0
 // even when signing fails — it prints the reason and carries on bundling.

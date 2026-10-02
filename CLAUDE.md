@@ -137,3 +137,21 @@ and only one of them is obvious:
 
 Use `npm run tauri:dev`, not `npm run tauri dev`. The latter still works and is
 occasionally what you want, but it shares the installed app's data directory.
+
+## Authenticode signing must come before the updater signature
+
+Once SignPath (or any code-signing certificate) is in the release pipeline, the order
+of the two signatures is not interchangeable:
+
+1. build the installer
+2. Authenticode-sign it
+3. **then** produce the updater's minisign signature (`tauri signer sign <file>`)
+
+The updater's signature covers the installer's bytes. Authenticode signing rewrites
+those bytes, so a signature taken first describes a file that no longer exists — and
+every client rejects the update as tampered. Nothing warns about this: the build is
+green, the release looks right, and updates simply fail verification on every machine.
+
+This is why `.github/workflows/release.yml` builds *without* `TAURI_SIGNING_PRIVATE_KEY`
+set and signs in a separate step afterwards, rather than letting `tauri build` do both
+at once the way the local script does.
