@@ -129,6 +129,21 @@ That renders the real frontend in headless Chromium against a fake Tauri backend
 
 `CLAUDE.md` in the repo root documents the non-obvious constraints that have already caused bugs here (build profile traps, how large images cross the IPC boundary, window reuse and stale per-mount state). Worth a skim before changing anything in those areas.
 
+## Security and code signing
+
+Releases are built by GitHub Actions from the source in this repository
+(`.github/workflows/release.yml`), never from a maintainer's machine, and every
+release is published from a tagged commit.
+
+Updates are verified before they are installed. Each installer carries a signature
+made with a key held outside the repository, and the app checks it against a public
+key compiled into the binary — an installer that wasn't produced by this project is
+rejected rather than run. The private key is never present in CI logs, the repository,
+or any published artifact.
+
+Shota collects nothing and sends nothing anywhere. The only network request it makes
+is to GitHub, to ask whether a newer release exists.
+
 ## Tech stack
 
 - [Tauri 2](https://tauri.app/) (Rust) for the native shell, global shortcuts, screen/window capture ([xcap](https://github.com/nashaofu/xcap)), clipboard and file save
