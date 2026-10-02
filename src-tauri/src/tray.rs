@@ -5,6 +5,7 @@ use tauri::{
 };
 
 use crate::capture;
+use crate::updater;
 use crate::windows::{open_capture_overlay, open_editor_with_history};
 
 /// shota is a background/tray app: no taskbar presence, just a tray icon
@@ -16,6 +17,8 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     let settings = MenuItem::with_id(app, "settings", "Keyboard Shortcuts…", true, None::<&str>)
         .map_err(|e| e.to_string())?;
+    let check_updates = MenuItem::with_id(app, "check_updates", "Check for Updates…", true, None::<&str>)
+        .map_err(|e| e.to_string())?;
     let quit = MenuItem::with_id(app, "quit", "Quit Shota", true, None::<&str>)
         .map_err(|e| e.to_string())?;
 
@@ -26,6 +29,7 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
             &capture_area,
             &PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?,
             &settings,
+            &check_updates,
             &PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?,
             &quit,
         ],
@@ -60,6 +64,7 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
                     let _ = window.set_focus();
                 }
             }
+            "check_updates" => updater::check_for_updates(app, true),
             "quit" => app.exit(0),
             _ => {}
         })

@@ -7,6 +7,7 @@ mod history;
 mod hotkeys;
 mod state;
 mod tray;
+mod updater;
 mod windows;
 
 use tauri::Manager;
@@ -19,6 +20,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .setup(|app| {
             let handle = app.handle().clone();
             app.manage(state::AppState::load(&handle));
@@ -33,6 +35,10 @@ pub fn run() {
             // trick — see prewarm_editor_window for why.
             windows::prewarm_capture_overlay(&handle);
             windows::prewarm_editor_window(&handle);
+            // Silent: a failed check at launch (no network, GitHub down)
+            // should never greet someone with an error they didn't ask for.
+            // The tray's "Check for Updates…" is the loud version.
+            updater::check_for_updates(&handle, false);
             Ok(())
         })
         .on_window_event(|window, event| {

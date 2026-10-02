@@ -27,3 +27,8 @@ dist-ssr
 .agents/
 .claude/
 skills-lock.json
+
+# Updater signing keys. The private key must never be committed: anyone with
+# it can sign an "update" that every installed copy will accept and run.
+*.key
+*.key.pub

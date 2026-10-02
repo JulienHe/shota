@@ -96,3 +96,25 @@ until the page mounts, and `show_capture_overlay` performs the reveal instead.
 
 Symptom to recognise: "I pressed the shortcut and got an overlay with nothing in
 it", usually shortly after launch or on a loaded machine.
+
+## Releases must be signed, and an unsigned one fails silently
+
+The updater verifies every downloaded installer against a minisign public key baked
+into the installed app. That signature is produced at build time, and only if
+`TAURI_SIGNING_PRIVATE_KEY_PATH` (or `..._KEY`) is in the environment.
+
+Build without it and nothing complains: the installers are identical, the release page
+looks normal, and the only symptom is that every installed copy quietly stops finding
+updates — discovered whenever someone eventually notices they're several versions
+behind. `scripts/release.mjs` refuses to build without a key and aborts if the `.sig`
+is missing afterwards; use `npm run release` rather than `npm run tauri build` for
+anything that gets published.
+
+**The private key cannot be rotated.** Installed copies only trust the key compiled
+into them, so losing it means no existing install can ever be updated again — every
+user would have to find and run a new installer by hand. It lives outside the repo
+(`~/.shota-signing/`), is gitignored by pattern, and belongs in a password manager.
+
+Note this is minisign, entirely separate from Authenticode: it proves an update came
+from whoever holds the key, and does nothing about SmartScreen, which is a separate
+(paid) code-signing problem.
