@@ -142,7 +142,9 @@ rejected rather than run. The private key is never present in CI logs, the repos
 or any published artifact.
 
 Shota collects nothing and sends nothing anywhere. The only network request it makes
-is to GitHub, to ask whether a newer release exists.
+is to GitHub, to ask whether a newer release exists — and the Microsoft Store build
+makes none at all, since the Store handles updates itself. See the full
+[privacy policy](PRIVACY.md).
 
 ## Tech stack
 
