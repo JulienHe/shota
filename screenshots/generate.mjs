@@ -45,8 +45,11 @@ async function renderSample(browser) {
   return png;
 }
 
-async function openEditor(browser, captureBase64) {
-  const page = await browser.newPage({ viewport: EDITOR, deviceScaleFactor: 2 });
+async function openEditor(browser, captureBase64, colorScheme = "light") {
+  // The editor's chrome follows prefers-color-scheme, so telling Chromium the
+  // scheme is the whole of what shooting dark mode takes — the app's own CSS
+  // does the rest.
+  const page = await browser.newPage({ viewport: EDITOR, deviceScaleFactor: 2, colorScheme });
   await page.addInitScript(mockTauri({ label: "editor", captureBase64 }));
   await page.goto(APP_URL);
   // The editor renders nothing at all until its image has decoded, so this
@@ -258,6 +261,33 @@ async function main() {
     await dragOn(page, [0.186, 0.127], [0.975, 0.286]);
     await deselect(page);
     await shoot(browser, page, "editor-spotlight");
+    await page.close();
+  }
+
+  // ---- Dark mode, showing the shape tools the others don't ------------
+  console.log("editor-dark…");
+  {
+    const page = await openEditor(browser, sampleBase64, "dark");
+
+    await tool(page, "r");
+    await dragOn(page, [0.17, 0.33], [0.985, 0.50]); // around the rollout card
+
+    // Circles the endpoint, not the access key. Drawing attention to a
+    // credential rather than hiding it is the opposite of what this app is
+    // for, and one screenshot contradicting the pitch is worse than one
+    // fewer shape on display.
+    //
+    // An ellipse drags from its CENTRE, with the second point setting the
+    // radii — not corner to corner like a rectangle. Treating it as a corner
+    // drag gives a shape twice the intended size, centred in the wrong place.
+    await tool(page, "o");
+    await dragOn(page, [0.335, 0.228], [0.45, 0.248]);
+
+    // No arrow here: the light shot already shows one, and a third shape
+    // would crowd a composition whose job is to show the chrome in dark.
+
+    await deselect(page);
+    await shoot(browser, page, "editor-dark");
     await page.close();
   }
 
