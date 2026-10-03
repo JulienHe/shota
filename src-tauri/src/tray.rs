@@ -5,6 +5,8 @@ use tauri::{
 };
 
 use crate::capture;
+use crate::i18n;
+use crate::state::AppState;
 #[cfg(feature = "updater")]
 use crate::updater;
 use crate::windows::{open_capture_overlay, open_editor_with_history};
@@ -12,18 +14,19 @@ use crate::windows::{open_capture_overlay, open_editor_with_history};
 /// shota is a background/tray app: no taskbar presence, just a tray icon
 /// with quick capture actions and a way to reach the shortcuts window.
 pub fn build_tray(app: &AppHandle) -> Result<(), String> {
-    let capture_fullscreen = MenuItem::with_id(app, "capture_fullscreen", "Capture Full Screen", true, None::<&str>)
+    let locale = app.state::<AppState>().locale();
+    let capture_fullscreen = MenuItem::with_id(app, "capture_fullscreen", i18n::t(&locale, "tray.captureFullScreen"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
-    let capture_area = MenuItem::with_id(app, "capture_area", "Capture Area / Window", true, None::<&str>)
+    let capture_area = MenuItem::with_id(app, "capture_area", i18n::t(&locale, "tray.captureArea"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
-    let settings = MenuItem::with_id(app, "settings", "Keyboard Shortcuts…", true, None::<&str>)
+    let settings = MenuItem::with_id(app, "settings", i18n::t(&locale, "tray.shortcuts"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
     // Absent entirely in a Store build: the Store owns updates there, so an
     // item that checks GitHub would be both wrong and against policy.
     #[cfg(feature = "updater")]
-    let check_updates = MenuItem::with_id(app, "check_updates", "Check for Updates…", true, None::<&str>)
+    let check_updates = MenuItem::with_id(app, "check_updates", i18n::t(&locale, "tray.checkUpdates"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
-    let quit = MenuItem::with_id(app, "quit", "Quit Shota", true, None::<&str>)
+    let quit = MenuItem::with_id(app, "quit", i18n::t(&locale, "tray.quit"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
 
     let separator = PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?;

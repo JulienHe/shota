@@ -1,0 +1,89 @@
+{
+  "tray": {
+    "captureFullScreen": "Capture Full Screen",
+    "captureArea": "Capture Area / Window",
+    "shortcuts": "Keyboard Shortcuts…",
+    "checkUpdates": "Check for Updates…",
+    "quit": "Quit Shota"
+  },
+  "updater": {
+    "upToDateTitle": "Shota is up to date",
+    "upToDateBody": "You're on version {version}.",
+    "availableTitle": "Update available",
+    "availableBody": "Shota {version} is available — you have {current}.\n\nShota will restart once it's installed.",
+    "install": "Install and restart",
+    "notNow": "Not now",
+    "failedTitle": "Update failed",
+    "failedBody": "Shota couldn't install the update: {error}\n\nYou can download it manually from the releases page.",
+    "checkFailedTitle": "Update check failed",
+    "checkFailedBody": "Could not check for updates: {error}"
+  },
+  "tools": {
+    "select": "Select",
+    "rectangle": "Rectangle",
+    "ellipse": "Ellipse",
+    "line": "Line",
+    "arrow": "Arrow",
+    "text": "Text",
+    "pen": "Freehand pen",
+    "step": "Numbered step",
+    "highlight": "Highlighter",
+    "spotlight": "Spotlight",
+    "blur": "Blur / pixelate",
+    "crop": "Crop",
+    "eyedropper": "Color picker"
+  },
+  "editor": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "restoreWindow": "Restore",
+    "close": "Close",
+    "copy": "Copy",
+    "save": "Save as…",
+    "preparing": "Preparing…",
+    "saveFailed": "Save failed — try again",
+    "copiedHex": "Copied {hex}",
+    "copyFailed": "Copy failed — try again",
+    "cropConfirm": "Crop",
+    "cropCancel": "Cancel",
+    "zoomToFit": "Fit to window"
+  },
+  "background": {
+    "white": "White",
+    "lightGray": "Light Gray",
+    "gray": "Medium Gray",
+    "darkGray": "Dark Gray",
+    "black": "Black",
+    "system": "Match System"
+  },
+  "history": {
+    "restore": "Restore",
+    "copy": "Copy",
+    "copied": "Copied",
+    "delete": "Delete",
+    "close": "Close"
+  },
+  "overlay": {
+    "dragHint": "Drag to select an area · Space to switch to window mode · Esc to cancel",
+    "snapHint": "Click a window to capture it · Space to go back"
+  },
+  "main": {
+    "shortcutsButton": "Keyboard shortcuts",
+    "fullScreen": "Full screen",
+    "areaWindow": "Area / window",
+    "snapHint": "Hold Space while selecting an area to snap to a window."
+  },
+  "settings": {
+    "fullScreen": "Full screen",
+    "areaWindow": "Area / window",
+    "recording": "Press a key combination…",
+    "registerFailed": "That combo couldn't be registered — try another.",
+    "language": "Language",
+    "languageSystem": "Match system"
+  },
+  "error": {
+    "title": "Shota hit a problem",
+    "body": "Something in this window crashed. Closing and capturing again usually clears it.",
+    "close": "Close window"
+  }
+}

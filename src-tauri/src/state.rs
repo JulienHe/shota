@@ -31,6 +31,12 @@ struct PersistedSettings {
     fullscreen_shortcut: String,
     #[serde(default = "default_area_shortcut")]
     area_shortcut: String,
+    /// None means "follow Windows", which is the default and what most
+    /// people should stay on. Only set when the user picks a language
+    /// explicitly, so changing the OS language keeps working for everyone
+    /// who never opened the setting.
+    #[serde(default)]
+    language: Option<String>,
 }
 
 fn default_fullscreen_shortcut() -> String {
@@ -47,6 +53,7 @@ impl Default for PersistedSettings {
             last_save_dir: None,
             fullscreen_shortcut: default_fullscreen_shortcut(),
             area_shortcut: default_area_shortcut(),
+            language: None,
         }
     }
 }
@@ -124,6 +131,29 @@ impl AppState {
         let mut settings = self.settings.lock().unwrap();
         settings.last_save_dir = Some(dir);
         let _ = write_settings(app, &settings);
+    }
+
+    /// The resolved UI locale: the user's explicit choice if there is one,
+    /// otherwise whatever best matches the OS.
+    pub fn locale(&self) -> String {
+        let chosen = self.settings.lock().unwrap().language.clone();
+        match chosen {
+            Some(tag) => crate::i18n::resolve(&tag).to_string(),
+            None => crate::i18n::system_locale()
+                .map(|tag| crate::i18n::resolve(&tag).to_string())
+                .unwrap_or_else(|| "en".to_string()),
+        }
+    }
+
+    /// `None` restores "follow Windows".
+    pub fn set_language(&self, app: &AppHandle, language: Option<String>) -> Result<(), String> {
+        let mut settings = self.settings.lock().unwrap();
+        settings.language = language;
+        write_settings(app, &settings)
+    }
+
+    pub fn language(&self) -> Option<String> {
+        self.settings.lock().unwrap().language.clone()
     }
 
     pub fn shortcuts(&self) -> (String, String) {

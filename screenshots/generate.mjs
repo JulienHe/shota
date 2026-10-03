@@ -22,6 +22,7 @@ import { mockTauri } from "./mock-tauri.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT = join(HERE, "..", "docs", "screenshots");
+const STORE_OUT = join(OUT, "store");
 const APP_URL = process.env.SHOTA_URL ?? "http://localhost:1420/";
 
 const EDITOR = { width: 1360, height: 860 };
@@ -160,15 +161,50 @@ async function frame(browser, png) {
   return framed;
 }
 
+/**
+ * The Microsoft Store variant: the same framed window, composited onto an
+ * opaque 1920x1080 canvas.
+ *
+ * The README version has transparent padding so it drops onto a light or
+ * dark page equally well. The Store composites screenshots onto its own
+ * surface, where transparency either flattens to black or reads as a
+ * mistake — and the Store also expects a consistent landscape size rather
+ * than whatever shape the window happened to be.
+ */
+async function storeShot(browser, framed, name) {
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+  await page.setContent(`
+    <style>
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      body {
+        background: linear-gradient(140deg, #1b1d27 0%, #2a2338 55%, #1a2230 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      img { width: 1720px; height: auto; display: block; }
+    </style>
+    <img src="data:image/png;base64,${framed.toString("base64")}">
+  `);
+  await page.waitForTimeout(150);
+  const out = join(STORE_OUT, `${name}.png`);
+  await page.screenshot({ path: out });
+  await page.close();
+  console.log(`  wrote docs/screenshots/store/${name}.png`);
+}
+
 async function shoot(browser, page, name) {
   await page.waitForTimeout(400);
   const raw = await page.screenshot();
-  await writeFile(join(OUT, `${name}.png`), await frame(browser, raw));
+  const framed = await frame(browser, raw);
+  await writeFile(join(OUT, `${name}.png`), framed);
   console.log(`  wrote docs/screenshots/${name}.png`);
+  await storeShot(browser, framed, name);
 }
 
 async function main() {
   await mkdir(OUT, { recursive: true });
+  await mkdir(STORE_OUT, { recursive: true });
   const browser = await chromium.launch();
 
   console.log("rendering sample capture…");

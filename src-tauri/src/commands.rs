@@ -30,6 +30,29 @@ pub fn set_shortcut(app: AppHandle, kind: ShortcutKind, accelerator: String) -> 
     hotkeys::update_shortcut(&app, kind, accelerator)
 }
 
+/// The locale the UI should render in, resolved on the Rust side so the
+/// native menus and the webview can never disagree about it.
+#[tauri::command]
+pub fn get_locale(app: AppHandle) -> String {
+    app.state::<AppState>().locale()
+}
+
+/// `None` means follow Windows.
+#[tauri::command]
+pub fn set_language(app: AppHandle, language: Option<String>) -> Result<(), String> {
+    app.state::<AppState>().set_language(&app, language)
+}
+
+#[tauri::command]
+pub fn get_language(app: AppHandle) -> Option<String> {
+    app.state::<AppState>().language()
+}
+
+#[tauri::command]
+pub fn supported_locales() -> Vec<String> {
+    crate::i18n::SUPPORTED.iter().map(|s| s.to_string()).collect()
+}
+
 #[tauri::command]
 pub fn list_capturable_windows() -> Result<Vec<WindowInfo>, String> {
     capture::list_windows()

@@ -5,6 +5,7 @@ mod file_save;
 mod fonts;
 mod history;
 mod hotkeys;
+mod i18n;
 mod state;
 mod tray;
 #[cfg(feature = "updater")]
@@ -58,6 +59,10 @@ pub fn run() {
             }
         })
         .invoke_handler(tauri::generate_handler![
+            commands::get_locale,
+            commands::get_language,
+            commands::set_language,
+            commands::supported_locales,
             commands::list_capturable_windows,
             commands::open_capture_overlay_command,
             commands::overlay_ready,

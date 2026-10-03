@@ -1,6 +1,9 @@
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager};
 use tauri_plugin_dialog::{DialogExt, MessageDialogButtons, MessageDialogKind};
 use tauri_plugin_updater::UpdaterExt;
+
+use crate::i18n;
+use crate::state::AppState;
 
 /// Update checking, driven entirely from Rust.
 ///
@@ -26,7 +29,7 @@ pub fn check_for_updates(app: &AppHandle, user_initiated: bool) {
         let updater = match app.updater() {
             Ok(updater) => updater,
             Err(err) => {
-                report(&app, user_initiated, &format!("Could not check for updates: {err}"));
+                report(&app, user_initiated, &err.to_string());
                 return;
             }
         };
@@ -35,11 +38,16 @@ pub fn check_for_updates(app: &AppHandle, user_initiated: bool) {
             Ok(Some(update)) => prompt_and_install(&app, update).await,
             Ok(None) => {
                 if user_initiated {
+                    let locale = app.state::<AppState>().locale();
                     let version = app.package_info().version.to_string();
-                    info(&app, "Shota is up to date", &format!("You're on version {version}."));
+                    info(
+                        &app,
+                        &i18n::t(&locale, "updater.upToDateTitle"),
+                        &i18n::tf(&locale, "updater.upToDateBody", &[("version", &version)]),
+                    );
                 }
             }
-            Err(err) => report(&app, user_initiated, &format!("Could not check for updates: {err}")),
+            Err(err) => report(&app, user_initiated, &err.to_string()),
         }
     });
 }
@@ -48,16 +56,19 @@ async fn prompt_and_install(app: &AppHandle, update: tauri_plugin_updater::Updat
     let current = update.current_version.clone();
     let new = update.version.clone();
 
+    let locale = app.state::<AppState>().locale();
     let accepted = app
         .dialog()
-        .message(format!(
-            "Shota {new} is available — you have {current}.\n\nShota will restart once it's installed."
+        .message(i18n::tf(
+            &locale,
+            "updater.availableBody",
+            &[("version", &new), ("current", &current)],
         ))
-        .title("Update available")
+        .title(i18n::t(&locale, "updater.availableTitle"))
         .kind(MessageDialogKind::Info)
         .buttons(MessageDialogButtons::OkCancelCustom(
-            "Install and restart".to_string(),
-            "Not now".to_string(),
+            i18n::t(&locale, "updater.install"),
+            i18n::t(&locale, "updater.notNow"),
         ))
         .blocking_show();
 
@@ -70,8 +81,8 @@ async fn prompt_and_install(app: &AppHandle, update: tauri_plugin_updater::Updat
     if let Err(err) = update.download_and_install(|_chunk, _total| {}, || {}).await {
         error(
             app,
-            "Update failed",
-            &format!("Shota couldn't install the update: {err}\n\nYou can download it manually from the releases page."),
+            &i18n::t(&locale, "updater.failedTitle"),
+            &i18n::tf(&locale, "updater.failedBody", &[("error", &err.to_string())]),
         );
         return;
     }
@@ -83,9 +94,14 @@ async fn prompt_and_install(app: &AppHandle, update: tauri_plugin_updater::Updat
 /// Errors are worth interrupting someone for only when they asked the
 /// question. A failed background check is logged and otherwise ignored.
 fn report(app: &AppHandle, user_initiated: bool, message: &str) {
-    eprintln!("{message}");
+    eprintln!("update check failed: {message}");
     if user_initiated {
-        error(app, "Update check failed", message);
+        let locale = app.state::<AppState>().locale();
+        error(
+            app,
+            &i18n::t(&locale, "updater.checkFailedTitle"),
+            &i18n::tf(&locale, "updater.checkFailedBody", &[("error", message)]),
+        );
     }
 }
 
