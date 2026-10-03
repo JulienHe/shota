@@ -1,4 +1,10 @@
 import en from "../../locales/en.json";
+import fr from "../../locales/fr.json";
+import de from "../../locales/de.json";
+import es from "../../locales/es.json";
+import ja from "../../locales/ja.json";
+import ko from "../../locales/ko.json";
+import zhHans from "../../locales/zh-Hans.json";
 
 /**
  * Translation lookup for the frontend.
@@ -14,6 +20,12 @@ import en from "../../locales/en.json";
  */
 const CATALOGUES: Record<string, unknown> = {
   en,
+  fr,
+  de,
+  es,
+  ja,
+  ko,
+  "zh-Hans": zhHans,
 };
 
 export type Locale = keyof typeof CATALOGUES & string;

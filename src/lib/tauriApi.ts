@@ -63,6 +63,17 @@ export const tauriApi = {
   saveImageAs: (pngBase64: string, suggestedName: string) =>
     invoke<string | null>("save_image_as", { pngBase64, suggestedName }),
 
+  /** The UI locale, resolved on the Rust side from the user's choice or the
+   * OS language, so the native menus and the webview always agree. */
+  getLocale: () => invoke<string>("get_locale"),
+
+  /** The explicit language choice, or null when following the OS. */
+  getLanguage: () => invoke<string | null>("get_language"),
+
+  setLanguage: (language: string | null) => invoke<void>("set_language", { language }),
+
+  supportedLocales: () => invoke<string[]>("supported_locales"),
+
   getShortcuts: () => invoke<{ fullscreen: string; area: string }>("get_shortcuts"),
 
   setShortcut: (kind: "fullscreen" | "area", accelerator: string) =>

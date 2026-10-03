@@ -1,0 +1,89 @@
+{
+  "tray": {
+    "captureFullScreen": "Gesamten Bildschirm aufnehmen",
+    "captureArea": "Bereich / Fenster aufnehmen",
+    "shortcuts": "Tastenkürzel…",
+    "checkUpdates": "Nach Updates suchen…",
+    "quit": "Shota beenden"
+  },
+  "updater": {
+    "upToDateTitle": "Shota ist aktuell",
+    "upToDateBody": "Sie verwenden Version {version}.",
+    "availableTitle": "Update verfügbar",
+    "availableBody": "Shota {version} ist verfügbar — Sie haben {current}.\n\nShota startet nach der Installation neu.",
+    "install": "Installieren und neu starten",
+    "notNow": "Später",
+    "failedTitle": "Update fehlgeschlagen",
+    "failedBody": "Shota konnte das Update nicht installieren: {error}\n\nSie können es manuell von der Releases-Seite herunterladen.",
+    "checkFailedTitle": "Updatesuche fehlgeschlagen",
+    "checkFailedBody": "Nach Updates konnte nicht gesucht werden: {error}"
+  },
+  "tools": {
+    "select": "Auswählen",
+    "rectangle": "Rechteck",
+    "ellipse": "Ellipse",
+    "line": "Linie",
+    "arrow": "Pfeil",
+    "text": "Text",
+    "pen": "Freihand",
+    "step": "Nummerierter Schritt",
+    "highlight": "Textmarker",
+    "spotlight": "Spotlight",
+    "blur": "Weichzeichnen / Verpixeln",
+    "crop": "Zuschneiden",
+    "eyedropper": "Farbwähler"
+  },
+  "editor": {
+    "minimize": "Minimieren",
+    "maximize": "Maximieren",
+    "restoreWindow": "Wiederherstellen",
+    "close": "Schließen",
+    "copy": "Kopieren",
+    "save": "Speichern unter…",
+    "preparing": "Wird vorbereitet…",
+    "saveFailed": "Speichern fehlgeschlagen — bitte erneut versuchen",
+    "copiedHex": "{hex} kopiert",
+    "copyFailed": "Kopieren fehlgeschlagen — bitte erneut versuchen",
+    "cropConfirm": "Zuschneiden",
+    "cropCancel": "Abbrechen",
+    "zoomToFit": "An Fenster anpassen"
+  },
+  "background": {
+    "white": "Weiß",
+    "lightGray": "Hellgrau",
+    "gray": "Mittelgrau",
+    "darkGray": "Dunkelgrau",
+    "black": "Schwarz",
+    "system": "System folgen"
+  },
+  "history": {
+    "restore": "Wiederherstellen",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "delete": "Löschen",
+    "close": "Schließen"
+  },
+  "overlay": {
+    "dragHint": "Ziehen, um einen Bereich zu wählen · Leertaste für Fenstermodus · Esc zum Abbrechen",
+    "snapHint": "Fenster anklicken, um es aufzunehmen · Leertaste für zurück"
+  },
+  "main": {
+    "shortcutsButton": "Tastenkürzel",
+    "fullScreen": "Gesamter Bildschirm",
+    "areaWindow": "Bereich / Fenster",
+    "snapHint": "Leertaste während der Auswahl halten, um ein ganzes Fenster aufzunehmen."
+  },
+  "settings": {
+    "fullScreen": "Gesamter Bildschirm",
+    "areaWindow": "Bereich / Fenster",
+    "recording": "Tastenkombination drücken…",
+    "registerFailed": "Diese Kombination konnte nicht registriert werden — bitte eine andere wählen.",
+    "language": "Sprache",
+    "languageSystem": "System folgen"
+  },
+  "error": {
+    "title": "Shota hat ein Problem festgestellt",
+    "body": "In diesem Fenster ist etwas abgestürzt. Schließen und erneut aufnehmen behebt es meistens.",
+    "close": "Fenster schließen"
+  }
+}

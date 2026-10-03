@@ -1,0 +1,89 @@
+{
+  "tray": {
+    "captureFullScreen": "전체 화면 캡처",
+    "captureArea": "영역 / 창 캡처",
+    "shortcuts": "키보드 단축키…",
+    "checkUpdates": "업데이트 확인…",
+    "quit": "Shota 종료"
+  },
+  "updater": {
+    "upToDateTitle": "Shota가 최신 상태입니다",
+    "upToDateBody": "현재 버전은 {version}입니다.",
+    "availableTitle": "업데이트 사용 가능",
+    "availableBody": "Shota {version}을(를) 사용할 수 있습니다. 현재 버전은 {current}입니다.\n\n설치가 끝나면 Shota가 다시 시작됩니다.",
+    "install": "설치 후 다시 시작",
+    "notNow": "나중에",
+    "failedTitle": "업데이트 실패",
+    "failedBody": "업데이트를 설치하지 못했습니다: {error}\n\n릴리스 페이지에서 직접 내려받을 수 있습니다.",
+    "checkFailedTitle": "업데이트 확인 실패",
+    "checkFailedBody": "업데이트를 확인하지 못했습니다: {error}"
+  },
+  "tools": {
+    "select": "선택",
+    "rectangle": "사각형",
+    "ellipse": "타원",
+    "line": "선",
+    "arrow": "화살표",
+    "text": "텍스트",
+    "pen": "자유 곡선",
+    "step": "번호 단계",
+    "highlight": "형광펜",
+    "spotlight": "스포트라이트",
+    "blur": "흐리게 / 모자이크",
+    "crop": "자르기",
+    "eyedropper": "색 선택기"
+  },
+  "editor": {
+    "minimize": "최소화",
+    "maximize": "최대화",
+    "restoreWindow": "이전 크기로",
+    "close": "닫기",
+    "copy": "복사",
+    "save": "다른 이름으로 저장…",
+    "preparing": "준비 중…",
+    "saveFailed": "저장하지 못했습니다 — 다시 시도하세요",
+    "copiedHex": "{hex} 복사됨",
+    "copyFailed": "복사하지 못했습니다 — 다시 시도하세요",
+    "cropConfirm": "자르기",
+    "cropCancel": "취소",
+    "zoomToFit": "창에 맞추기"
+  },
+  "background": {
+    "white": "흰색",
+    "lightGray": "밝은 회색",
+    "gray": "중간 회색",
+    "darkGray": "어두운 회색",
+    "black": "검정",
+    "system": "시스템 설정 따르기"
+  },
+  "history": {
+    "restore": "복원",
+    "copy": "복사",
+    "copied": "복사됨",
+    "delete": "삭제",
+    "close": "닫기"
+  },
+  "overlay": {
+    "dragHint": "드래그하여 영역 선택 · Space로 창 모드 · Esc로 취소",
+    "snapHint": "창을 클릭하면 캡처됩니다 · Space로 돌아가기"
+  },
+  "main": {
+    "shortcutsButton": "키보드 단축키",
+    "fullScreen": "전체 화면",
+    "areaWindow": "영역 / 창",
+    "snapHint": "영역을 선택하는 동안 Space를 누르면 창 전체를 캡처합니다."
+  },
+  "settings": {
+    "fullScreen": "전체 화면",
+    "areaWindow": "영역 / 창",
+    "recording": "키 조합을 누르세요…",
+    "registerFailed": "이 조합은 등록할 수 없습니다 — 다른 조합을 사용하세요.",
+    "language": "언어",
+    "languageSystem": "시스템 설정 따르기"
+  },
+  "error": {
+    "title": "Shota에 문제가 발생했습니다",
+    "body": "이 창에서 오류가 발생했습니다. 창을 닫고 다시 캡처하면 대부분 해결됩니다.",
+    "close": "창 닫기"
+  }
+}

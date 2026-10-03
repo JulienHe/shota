@@ -177,3 +177,26 @@ Two things that bit during setup and will again:
 - A capability naming a plugin that isn't compiled in is a hard build error, which is
   why `updater:default` is absent from `capabilities/`. It was never needed: the
   updater is driven from Rust, never from the webview.
+
+## One translation catalogue, read by both halves
+
+`locales/*.json` is the single source of UI strings. Rust compiles them in with
+`include_str!` for the tray menu and the updater dialogs; the frontend imports the same
+files. Do not add a second catalogue for either side — the tray saying "Quitter Shota"
+while the editor says "Close" is the failure this prevents, and nothing would catch it.
+
+Adding a string means adding it to `en.json` first; every other locale is verified
+against English key-for-key, and a missing key falls back to English rather than
+rendering the key. A *wrong* key renders as the key itself, so the two failures look
+different on purpose.
+
+Adding a language means a new `locales/<tag>.json`, an entry in `SUPPORTED` in
+`i18n.rs`, an import in `i18n.ts`, a name in `LANGUAGE_NAMES`, and a `<Resource
+Language>` line in the MSIX manifest. Miss the last one and the Store never tells that
+market the app speaks its language.
+
+Locale resolution lives in Rust so the native menus and the webview cannot disagree:
+the frontend asks for the resolved tag at startup and renders nothing until it has it.
+Changing the language reloads the window, because the tray menu is built once at startup
+and the other windows are long-lived and reused — re-rendering one view would leave most
+of the app in the previous language.

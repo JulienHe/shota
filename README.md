@@ -51,6 +51,11 @@ Windows SmartScreen will likely warn you on first run — the installer isn't co
 - Undo/redo, and Delete/Backspace to remove the selected shape
 - Right-click the canvas background to switch it between white, a few grays, black, or "match system"
 
+**Speak your language**
+- English, French, German, Spanish, Japanese, Korean and Simplified Chinese
+- Follows your Windows language automatically, with an override in the shortcuts window
+- Translations live in `locales/` as plain JSON — corrections and new languages are a small pull request
+
 **Finish up**
 - Copy to clipboard or save as PNG (remembers the last folder you saved to, falls back to Desktop) — both close the editor immediately rather than lingering
 - Zoom control and Copy/Save live in a bottom status bar, mirroring the toolbar up top

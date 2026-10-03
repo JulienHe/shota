@@ -4,6 +4,7 @@ import { Minus, Square, Copy, X } from "lucide-react";
 import { Toolbar } from "../features/annotate/toolbar/Toolbar";
 import { closeEditor } from "../lib/editorClose";
 import "./TitleBar.css";
+import { t } from "../lib/i18n";
 
 /**
  * Replaces the native window title bar so the toolbar can live in the same
@@ -34,13 +35,13 @@ export function TitleBar() {
       </div>
 
       <div className="title-bar__window-controls">
-        <button type="button" className="title-bar__control" title="Minimize" onClick={() => getCurrentWindow().minimize()}>
+        <button type="button" className="title-bar__control" title={t("editor.minimize")} onClick={() => getCurrentWindow().minimize()}>
           <Minus size={16} strokeWidth={1.5} />
         </button>
         <button
           type="button"
           className="title-bar__control"
-          title={maximized ? "Restore" : "Maximize"}
+          title={maximized ? t("editor.restoreWindow") : t("editor.maximize")}
           onClick={() => getCurrentWindow().toggleMaximize()}
         >
           {maximized ? <Copy size={13} strokeWidth={1.5} /> : <Square size={13} strokeWidth={1.5} />}
@@ -48,7 +49,7 @@ export function TitleBar() {
         <button
           type="button"
           className="title-bar__control title-bar__control--close"
-          title="Close"
+          title={t("editor.close")}
           onClick={() => closeEditor()}
         >
           <X size={16} strokeWidth={1.5} />

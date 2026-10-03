@@ -1,0 +1,89 @@
+{
+  "tray": {
+    "captureFullScreen": "画面全体をキャプチャ",
+    "captureArea": "範囲 / ウィンドウをキャプチャ",
+    "shortcuts": "キーボードショートカット…",
+    "checkUpdates": "更新を確認…",
+    "quit": "Shota を終了"
+  },
+  "updater": {
+    "upToDateTitle": "Shota は最新です",
+    "upToDateBody": "バージョン {version} を使用しています。",
+    "availableTitle": "更新があります",
+    "availableBody": "Shota {version} が利用できます（現在は {current}）。\n\nインストール後、Shota は再起動します。",
+    "install": "インストールして再起動",
+    "notNow": "後で",
+    "failedTitle": "更新に失敗しました",
+    "failedBody": "更新をインストールできませんでした: {error}\n\nリリースページから手動でダウンロードできます。",
+    "checkFailedTitle": "更新の確認に失敗しました",
+    "checkFailedBody": "更新を確認できませんでした: {error}"
+  },
+  "tools": {
+    "select": "選択",
+    "rectangle": "長方形",
+    "ellipse": "楕円",
+    "line": "直線",
+    "arrow": "矢印",
+    "text": "テキスト",
+    "pen": "フリーハンド",
+    "step": "番号付きステップ",
+    "highlight": "蛍光ペン",
+    "spotlight": "スポットライト",
+    "blur": "ぼかし / モザイク",
+    "crop": "切り抜き",
+    "eyedropper": "スポイト"
+  },
+  "editor": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restoreWindow": "元に戻す",
+    "close": "閉じる",
+    "copy": "コピー",
+    "save": "名前を付けて保存…",
+    "preparing": "準備中…",
+    "saveFailed": "保存に失敗しました — もう一度お試しください",
+    "copiedHex": "{hex} をコピーしました",
+    "copyFailed": "コピーに失敗しました — もう一度お試しください",
+    "cropConfirm": "切り抜く",
+    "cropCancel": "キャンセル",
+    "zoomToFit": "ウィンドウに合わせる"
+  },
+  "background": {
+    "white": "白",
+    "lightGray": "ライトグレー",
+    "gray": "グレー",
+    "darkGray": "ダークグレー",
+    "black": "黒",
+    "system": "システムに合わせる"
+  },
+  "history": {
+    "restore": "復元",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "delete": "削除",
+    "close": "閉じる"
+  },
+  "overlay": {
+    "dragHint": "ドラッグで範囲を選択 · Space でウィンドウモード · Esc でキャンセル",
+    "snapHint": "ウィンドウをクリックしてキャプチャ · Space で戻る"
+  },
+  "main": {
+    "shortcutsButton": "キーボードショートカット",
+    "fullScreen": "画面全体",
+    "areaWindow": "範囲 / ウィンドウ",
+    "snapHint": "範囲選択中に Space を押すとウィンドウ単位でキャプチャできます。"
+  },
+  "settings": {
+    "fullScreen": "画面全体",
+    "areaWindow": "範囲 / ウィンドウ",
+    "recording": "キーの組み合わせを押してください…",
+    "registerFailed": "この組み合わせは登録できませんでした — 別のものをお試しください。",
+    "language": "言語",
+    "languageSystem": "システムに合わせる"
+  },
+  "error": {
+    "title": "Shota で問題が発生しました",
+    "body": "このウィンドウで問題が発生しました。閉じてもう一度キャプチャすると解決することがほとんどです。",
+    "close": "ウィンドウを閉じる"
+  }
+}

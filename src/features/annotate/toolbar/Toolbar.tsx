@@ -8,24 +8,27 @@ import { ShapeOptionsPanel } from "./ShapeOptionsPanel";
 import { ToolId } from "../types";
 import { isTypingTarget } from "../../../lib/isTypingTarget";
 import "./Toolbar.css";
+import { t } from "../../../lib/i18n";
 
 /** `key` is both the shortcut and what the tooltip advertises, so the two
  * can't drift apart (the labels promised these letters long before anything
  * actually bound them). */
+// `name` is a translation key rather than a label: the tooltip has to follow
+// the UI language, while `key` is the physical key pressed and must not.
 const TOOLS: { id: ToolId; icon: typeof MousePointer2; name: string; key: string }[] = [
-  { id: "select", icon: MousePointer2, name: "Select", key: "v" },
-  { id: "rectangle", icon: Square, name: "Rectangle", key: "r" },
-  { id: "ellipse", icon: Circle, name: "Ellipse", key: "o" },
-  { id: "line", icon: Minus, name: "Line", key: "l" },
-  { id: "arrow", icon: ArrowUpRight, name: "Arrow", key: "a" },
-  { id: "text", icon: Type, name: "Text", key: "t" },
-  { id: "pen", icon: Pencil, name: "Freehand pen", key: "p" },
-  { id: "step", icon: CircleOne, name: "Numbered step", key: "n" },
-  { id: "highlight", icon: Highlighter, name: "Highlighter", key: "h" },
-  { id: "spotlight", icon: SpotlightRect, name: "Spotlight", key: "s" },
-  { id: "blur", icon: Droplet, name: "Blur / pixelate", key: "b" },
-  { id: "crop", icon: Crop, name: "Crop", key: "c" },
-  { id: "eyedropper", icon: Pipette, name: "Color picker", key: "i" },
+  { id: "select", icon: MousePointer2, name: "tools.select", key: "v" },
+  { id: "rectangle", icon: Square, name: "tools.rectangle", key: "r" },
+  { id: "ellipse", icon: Circle, name: "tools.ellipse", key: "o" },
+  { id: "line", icon: Minus, name: "tools.line", key: "l" },
+  { id: "arrow", icon: ArrowUpRight, name: "tools.arrow", key: "a" },
+  { id: "text", icon: Type, name: "tools.text", key: "t" },
+  { id: "pen", icon: Pencil, name: "tools.pen", key: "p" },
+  { id: "step", icon: CircleOne, name: "tools.step", key: "n" },
+  { id: "highlight", icon: Highlighter, name: "tools.highlight", key: "h" },
+  { id: "spotlight", icon: SpotlightRect, name: "tools.spotlight", key: "s" },
+  { id: "blur", icon: Droplet, name: "tools.blur", key: "b" },
+  { id: "crop", icon: Crop, name: "tools.crop", key: "c" },
+  { id: "eyedropper", icon: Pipette, name: "tools.eyedropper", key: "i" },
 ];
 
 export function Toolbar() {
@@ -57,7 +60,7 @@ export function Toolbar() {
           <IconButton
             key={tool.id}
             icon={tool.icon}
-            label={`${tool.name} (${tool.key.toUpperCase()})`}
+            label={`${t(tool.name)} (${tool.key.toUpperCase()})`}
             active={activeTool === tool.id}
             onClick={() => setActiveTool(tool.id)}
           />

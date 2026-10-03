@@ -7,6 +7,7 @@ import { useGlobalCursor } from "../features/capture/useGlobalCursor";
 import { useWindowSnap } from "../features/capture/useWindowSnap";
 import { SpotlightMask, HoleRect } from "../features/capture/SpotlightMask";
 import "./CaptureOverlay.css";
+import { t } from "../lib/i18n";
 
 interface DragRect {
   startX: number;
@@ -128,7 +129,7 @@ export function CaptureOverlay() {
       onMouseUp={handleMouseUp}
     >
       <div className="capture-overlay__hint">
-        {snapMode ? "Click a window to capture it · Space to go back" : "Drag to select an area · Space to switch to window mode · Esc to cancel"}
+        {snapMode ? t("overlay.snapHint") : t("overlay.dragHint")}
       </div>
 
       {snapMode && <SpotlightMask hole={spotlightRect} />}

@@ -4,6 +4,7 @@ import { tauriApi } from "../lib/tauriApi";
 import { IconButton } from "../components/IconButton";
 import { ShortcutSettings, Shortcuts } from "../features/settings/ShortcutSettings";
 import "./MainWindow.css";
+import { t } from "../lib/i18n";
 
 export function MainWindow() {
   const [shortcuts, setShortcuts] = useState<Shortcuts | null>(null);
@@ -20,7 +21,7 @@ export function MainWindow() {
           <img src="/logo.png" alt="" className="main-window__logo" />
           Shota
         </div>
-        <IconButton icon={Settings} label="Keyboard shortcuts" active={settingsOpen} onClick={() => setSettingsOpen((o) => !o)} />
+        <IconButton icon={Settings} label={t("main.shortcutsButton")} active={settingsOpen} onClick={() => setSettingsOpen((o) => !o)} />
       </div>
 
       {settingsOpen && shortcuts ? (
@@ -30,17 +31,17 @@ export function MainWindow() {
           <div className="main-window__actions">
             <button type="button" className="main-window__action" onClick={() => tauriApi.captureFullscreenNow()}>
               <Fullscreen size={22} />
-              <span>Full screen</span>
+              <span>{t("main.fullScreen")}</span>
               <kbd>{shortcuts?.fullscreen ?? ""}</kbd>
             </button>
             <button type="button" className="main-window__action" onClick={() => tauriApi.openCaptureOverlay()}>
               <ScanLine size={22} />
-              <span>Area / window</span>
+              <span>{t("main.areaWindow")}</span>
               <kbd>{shortcuts?.area ?? ""}</kbd>
             </button>
           </div>
 
-          <p className="main-window__hint">Hold Space while selecting an area to snap to a window.</p>
+          <p className="main-window__hint">{t("main.snapHint")}</p>
         </>
       )}
     </div>

@@ -15,7 +15,15 @@ static CATALOGUES: OnceLock<HashMap<&'static str, serde_json::Value>> = OnceLock
 fn catalogues() -> &'static HashMap<&'static str, serde_json::Value> {
     CATALOGUES.get_or_init(|| {
         let mut map = HashMap::new();
-        for (tag, raw) in [("en", include_str!("../../locales/en.json"))] {
+        for (tag, raw) in [
+            ("en", include_str!("../../locales/en.json")),
+            ("fr", include_str!("../../locales/fr.json")),
+            ("de", include_str!("../../locales/de.json")),
+            ("es", include_str!("../../locales/es.json")),
+            ("ja", include_str!("../../locales/ja.json")),
+            ("ko", include_str!("../../locales/ko.json")),
+            ("zh-Hans", include_str!("../../locales/zh-Hans.json")),
+        ] {
             match serde_json::from_str(raw) {
                 Ok(value) => {
                     map.insert(tag, value);
@@ -30,7 +38,7 @@ fn catalogues() -> &'static HashMap<&'static str, serde_json::Value> {
 }
 
 /// The locales Shota ships, in the order they're offered in settings.
-pub const SUPPORTED: &[&str] = &["en"];
+pub const SUPPORTED: &[&str] = &["en", "fr", "de", "es", "ja", "ko", "zh-Hans"];
 
 /// Picks the best catalogue for an OS locale tag.
 ///

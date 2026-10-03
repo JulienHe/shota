@@ -1,0 +1,89 @@
+{
+  "tray": {
+    "captureFullScreen": "捕获全屏",
+    "captureArea": "捕获区域 / 窗口",
+    "shortcuts": "键盘快捷键…",
+    "checkUpdates": "检查更新…",
+    "quit": "退出 Shota"
+  },
+  "updater": {
+    "upToDateTitle": "Shota 已是最新版本",
+    "upToDateBody": "当前版本为 {version}。",
+    "availableTitle": "有可用更新",
+    "availableBody": "Shota {version} 已发布，你当前使用的是 {current}。\n\n安装完成后 Shota 将重新启动。",
+    "install": "安装并重启",
+    "notNow": "以后再说",
+    "failedTitle": "更新失败",
+    "failedBody": "Shota 无法安装更新：{error}\n\n你可以从发布页面手动下载。",
+    "checkFailedTitle": "检查更新失败",
+    "checkFailedBody": "无法检查更新：{error}"
+  },
+  "tools": {
+    "select": "选择",
+    "rectangle": "矩形",
+    "ellipse": "椭圆",
+    "line": "直线",
+    "arrow": "箭头",
+    "text": "文字",
+    "pen": "自由画笔",
+    "step": "编号步骤",
+    "highlight": "荧光笔",
+    "spotlight": "聚光灯",
+    "blur": "模糊 / 马赛克",
+    "crop": "裁剪",
+    "eyedropper": "取色器"
+  },
+  "editor": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restoreWindow": "还原",
+    "close": "关闭",
+    "copy": "复制",
+    "save": "另存为…",
+    "preparing": "正在准备…",
+    "saveFailed": "保存失败 — 请重试",
+    "copiedHex": "已复制 {hex}",
+    "copyFailed": "复制失败 — 请重试",
+    "cropConfirm": "裁剪",
+    "cropCancel": "取消",
+    "zoomToFit": "适应窗口"
+  },
+  "background": {
+    "white": "白色",
+    "lightGray": "浅灰",
+    "gray": "中灰",
+    "darkGray": "深灰",
+    "black": "黑色",
+    "system": "跟随系统"
+  },
+  "history": {
+    "restore": "恢复",
+    "copy": "复制",
+    "copied": "已复制",
+    "delete": "删除",
+    "close": "关闭"
+  },
+  "overlay": {
+    "dragHint": "拖动以选择区域 · 空格切换窗口模式 · Esc 取消",
+    "snapHint": "点击窗口即可捕获 · 空格返回"
+  },
+  "main": {
+    "shortcutsButton": "键盘快捷键",
+    "fullScreen": "全屏",
+    "areaWindow": "区域 / 窗口",
+    "snapHint": "选择区域时按住空格可直接捕获整个窗口。"
+  },
+  "settings": {
+    "fullScreen": "全屏",
+    "areaWindow": "区域 / 窗口",
+    "recording": "请按下组合键…",
+    "registerFailed": "该组合键无法注册 — 请换一个。",
+    "language": "语言",
+    "languageSystem": "跟随系统"
+  },
+  "error": {
+    "title": "Shota 遇到问题",
+    "body": "此窗口中的某项功能已崩溃。关闭后重新捕获通常可以解决。",
+    "close": "关闭窗口"
+  }
+}

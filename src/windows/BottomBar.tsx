@@ -3,6 +3,7 @@ import { Copy, Save } from "lucide-react";
 import { IconButton } from "../components/IconButton";
 import { Dropdown } from "../components/Dropdown";
 import "./BottomBar.css";
+import { t } from "../lib/i18n";
 
 const ZOOM_PRESETS = [0.5, 1, 1.5, 2];
 
@@ -56,8 +57,8 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave }: B
       </Dropdown>
 
       <div className="bottom-bar__actions">
-        <IconButton icon={Copy} label="Copy (Ctrl+C)" onClick={onCopy} />
-        <IconButton icon={Save} label="Save as… (Ctrl+S)" onClick={onSave} />
+        <IconButton icon={Copy} label={`${t("editor.copy")} (Ctrl+C)`} onClick={onCopy} />
+        <IconButton icon={Save} label={`${t("editor.save")} (Ctrl+S)`} onClick={onSave} />
       </div>
     </div>
   );

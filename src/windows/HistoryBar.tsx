@@ -5,6 +5,7 @@ import { tauriApi, HistoryListItem, toDataUrl } from "../lib/tauriApi";
 import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
 import { useTransparentWindow } from "../lib/windowChrome";
 import "./HistoryBar.css";
+import { t } from "../lib/i18n";
 
 /** Chromeless bottom-of-screen carousel of recent captures, opened with Ctrl+Shift+6. */
 export function HistoryBar() {
@@ -133,7 +134,7 @@ export function HistoryBar() {
 
   return (
     <div className="history-bar">
-      <button type="button" className="history-bar__close" title="Close" aria-label="Close" onClick={close}>
+      <button type="button" className="history-bar__close" title={t("history.close")} aria-label={t("history.close")} onClick={close}>
         <X size={13} strokeWidth={2.5} />
       </button>
 
@@ -159,15 +160,15 @@ export function HistoryBar() {
                   className="history-card__restore"
                   onClick={() => restore(item.id)}
                 >
-                  Restore
+                  {t("history.restore")}
                 </button>
 
                 <button
                   type="button"
                   data-action
                   className="history-card__icon history-card__icon--delete"
-                  title="Delete"
-                  aria-label="Delete"
+                  title={t("history.delete")}
+                  aria-label={t("history.delete")}
                   onClick={() => remove(item.id)}
                 >
                   <Trash2 size={14} strokeWidth={2.2} />
@@ -177,15 +178,15 @@ export function HistoryBar() {
                   type="button"
                   data-action
                   className="history-card__icon history-card__icon--copy"
-                  title={copiedId === item.id ? "Copied" : "Copy"}
-                  aria-label="Copy"
+                  title={copiedId === item.id ? t("history.copied") : t("history.copy")}
+                  aria-label={t("history.copy")}
                   onClick={() => copy(item.id)}
                 >
                   <Copy size={14} strokeWidth={2.2} />
                 </button>
               </div>
 
-              {copiedId === item.id && <div className="history-card__toast">Copied</div>}
+              {copiedId === item.id && <div className="history-card__toast">{t("history.copied")}</div>}
             </div>
           </div>
         ))}

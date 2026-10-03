@@ -35,8 +35,17 @@
     <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
   </Dependencies>
 
+  <!-- Every language the app's UI ships in. The Store uses these to decide
+       which markets see the listing as localised, so a missing entry is a
+       market that never learns the app speaks its language. -->
   <Resources>
     <Resource Language="en-us" />
+    <Resource Language="fr" />
+    <Resource Language="de" />
+    <Resource Language="es" />
+    <Resource Language="ja" />
+    <Resource Language="ko" />
+    <Resource Language="zh-Hans" />
   </Resources>
 
   <Applications>
