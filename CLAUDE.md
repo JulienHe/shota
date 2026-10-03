@@ -157,3 +157,23 @@ This is why `bundle.createUpdaterArtifacts` is **false** and both the workflow a
 Turning it back on does not merely change where the signature is made: `tauri build`
 then *requires* the signing key and fails without it, which forces the signature to be
 produced during the build, which is the order that breaks.
+
+## The Store build is a different build, not just a different package
+
+`npm run msix` builds with `--no-default-features`, which compiles the updater out
+entirely — plugin, tray entry and launch check. This is not optional: the Microsoft
+Store updates apps itself and its policy requires that, and two update mechanisms
+racing to install over each other is worse than either alone. Packaging a default
+build would produce a package that fails review *and* misbehaves after install.
+
+Verify with `cargo tree --no-default-features | grep tauri-plugin-updater` — it should
+find nothing.
+
+Two things that bit during setup and will again:
+
+- `--no-default-features` is a cargo flag, so the Tauri CLI needs it after `--`
+  (`tauri build --no-bundle -- --no-default-features`); passed directly it is rejected
+  as an unknown argument.
+- A capability naming a plugin that isn't compiled in is a hard build error, which is
+  why `updater:default` is absent from `capabilities/`. It was never needed: the
+  updater is driven from Rust, never from the webview.
