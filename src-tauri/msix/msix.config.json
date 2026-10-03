@@ -1,8 +1,8 @@
 {
-  "_comment": "Identity and publisher come from Partner Center once the app name is reserved (Product > Product identity). A package whose identity doesn't match the reservation is rejected at submission, so these are placeholders until then — pack-msix.mjs warns while they're unchanged.",
-  "identityName": "REPLACE.ME.Shota",
-  "publisher": "CN=REPLACE-ME",
-  "publisherDisplayName": "Julien Henrotte",
+  "_comment": "Identity and publisher are assigned by Partner Center (Product > Product identity) and must match the reservation exactly, or submission is rejected. publisherDisplayName must also match what Partner Center shows, not a name of your choosing.",
+  "identityName": "Shogani.dev.Shota",
+  "publisher": "CN=56B87A0B-47B9-486B-AB89-325CDBCC73C3",
+  "publisherDisplayName": "Shogani.dev",
   "displayName": "Shota",
   "description": "Free, native Windows screenshot and annotation tool. Capture, mark up, and copy or save - nothing leaves your machine."
 }
