@@ -1,0 +1,13 @@
+# Adds the "Sponsor" button to the repository header.
+#
+# Every entry here is a live link GitHub renders, so an account that doesn't
+# exist yet produces a visibly broken button rather than no button. Uncomment
+# a line only once that account is real.
+#
+# GitHub Sponsors also needs enrolling separately at
+# https://github.com/sponsors — the entry below does nothing until it is.
+
+# github: [JulienHe]
+# ko_fi: your-ko-fi-name
+# buy_me_a_coffee: your-bmac-name
+# custom: ["https://example.com/support"]

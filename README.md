@@ -118,6 +118,12 @@ Global shortcuts are rebindable from the tray icon's "Keyboard Shortcuts…" win
 
 Shota is a side project, so responses may not be instant — but every issue gets read.
 
+## Supporting Shota
+
+Shota is free and stays free. If you'd like to help it along — with money or
+without — see [buy me some tokens](FUNDING.md). The most useful free contribution
+right now is telling me where the translations read badly.
+
 ## Contributing
 
 Pull requests are welcome. For anything beyond a small fix, open an issue first so we can agree on the approach before you spend time on it.
