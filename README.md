@@ -6,8 +6,19 @@
 
 <p align="center">
   A free, native Windows screenshot &amp; annotation tool.
-  <br>
-  <a href="https://github.com/JulienHe/shota/releases/latest"><strong>Download for Windows →</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://get.microsoft.com/installer/download/9n4x6b0ctgp5?referrer=appbadge">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://get.microsoft.com/images/en-us%20light.svg">
+      <img alt="Get Shota from the Microsoft Store" src="https://get.microsoft.com/images/en-us%20dark.svg" width="200">
+    </picture>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/JulienHe/shota/releases/latest">or download the installer directly →</a>
 </p>
 
 <p align="center">
@@ -26,9 +37,13 @@ Nothing is uploaded anywhere. Captures, annotations and history all stay on your
 
 ## Install
 
-Grab the latest installer from the [releases page](https://github.com/JulienHe/shota/releases/latest). Windows 10 or 11.
+Windows 10 or 11, either way:
 
-Windows SmartScreen will likely warn you on first run — the installer isn't code-signed yet. "More info" → "Run anyway".
+**[Microsoft Store](https://apps.microsoft.com/detail/9n4x6b0ctgp5)** — the easier route. Installs and updates itself, and Windows raises no warning because Store packages are signed by Microsoft.
+
+**[Direct download](https://github.com/JulienHe/shota/releases/latest)** — the `.exe` installer, and what you want if you'd rather not go through the Store. Shota then updates itself from GitHub.
+
+A note on the direct download: SmartScreen will warn you on first run, because that installer isn't code-signed yet. Choose "More info" → "Run anyway". It's a certificate we don't have, not a judgement about the file — the source is public and every release is built by CI from a tagged commit.
 
 ## Features
 
