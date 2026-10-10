@@ -42,3 +42,35 @@
   font-size: 11px;
   color: #dc2626;
 }
+
+/* Only appears when Windows has taken Print Screen, so it is allowed to be
+   a little louder than the rest of this panel. */
+.shortcut-settings__notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: rgba(255, 149, 0, 0.12);
+  border: 1px solid rgba(255, 149, 0, 0.35);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.shortcut-settings__notice button {
+  flex: none;
+  padding: 5px 10px 7px;
+  border: none;
+  border-radius: 999px;
+  background: #1d4ed8;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.shortcut-settings__notice button:hover {
+  background: #1e40af;
+}

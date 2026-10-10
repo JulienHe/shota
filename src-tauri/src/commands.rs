@@ -30,6 +30,19 @@ pub fn set_shortcut(app: AppHandle, kind: ShortcutKind, accelerator: String) -> 
     hotkeys::update_shortcut(&app, kind, accelerator)
 }
 
+/// Whether Windows is holding Print Screen for the Snipping Tool, which
+/// would swallow Shota's default capture shortcut before it ever arrives.
+#[tauri::command]
+pub fn print_screen_owned_by_snipping_tool() -> bool {
+    crate::printscreen::owned_by_snipping_tool()
+}
+
+/// Hands Print Screen back to applications. Per-user, no elevation.
+#[tauri::command]
+pub fn release_print_screen() -> Result<(), String> {
+    crate::printscreen::release_to_apps()
+}
+
 /// The locale the UI should render in, resolved on the Rust side so the
 /// native menus and the webview can never disagree about it.
 #[tauri::command]

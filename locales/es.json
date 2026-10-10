@@ -79,7 +79,9 @@
     "recording": "Pulsa una combinación de teclas…",
     "registerFailed": "Esa combinación no se pudo registrar ~ prueba con otra.",
     "language": "Idioma",
-    "languageSystem": "Seguir el sistema"
+    "languageSystem": "Seguir el sistema",
+    "printScreenOwned": "Windows usa la tecla Impr Pant para la Herramienta Recortes, así que Shota nunca la recibe.",
+    "printScreenFix": "Asignársela a Shota"
   },
   "error": {
     "title": "Shota ha encontrado un problema",

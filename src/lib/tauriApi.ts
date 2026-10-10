@@ -63,6 +63,13 @@ export const tauriApi = {
   saveImageAs: (pngBase64: string, suggestedName: string) =>
     invoke<string | null>("save_image_as", { pngBase64, suggestedName }),
 
+  /** Whether Windows is holding Print Screen for the Snipping Tool, which
+   * silently swallows Shota's default capture shortcut. */
+  printScreenOwnedBySnippingTool: () => invoke<boolean>("print_screen_owned_by_snipping_tool"),
+
+  /** Hands Print Screen back to applications. Per-user, no elevation. */
+  releasePrintScreen: () => invoke<void>("release_print_screen"),
+
   /** The UI locale, resolved on the Rust side from the user's choice or the
    * OS language, so the native menus and the webview always agree. */
   getLocale: () => invoke<string>("get_locale"),

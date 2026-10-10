@@ -79,7 +79,9 @@
     "recording": "キーの組み合わせを押してください…",
     "registerFailed": "この組み合わせは登録できませんでした ~ 別のものをお試しください。",
     "language": "言語",
-    "languageSystem": "システムに合わせる"
+    "languageSystem": "システムに合わせる",
+    "printScreenOwned": "Windows が Print Screen キーを Snipping Tool に割り当てているため、Shota には届きません。",
+    "printScreenFix": "Shota に割り当てる"
   },
   "error": {
     "title": "Shota で問題が発生しました",

@@ -79,7 +79,9 @@
     "recording": "Tastenkombination drücken…",
     "registerFailed": "Diese Kombination konnte nicht registriert werden ~ bitte eine andere wählen.",
     "language": "Sprache",
-    "languageSystem": "System folgen"
+    "languageSystem": "System folgen",
+    "printScreenOwned": "Windows verwendet die Druck-Taste für das Snipping Tool, Shota bekommt sie deshalb nie.",
+    "printScreenFix": "Shota zuweisen"
   },
   "error": {
     "title": "Shota hat ein Problem festgestellt",

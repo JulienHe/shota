@@ -11,6 +11,27 @@ use crate::state::AppState;
 use crate::updater;
 use crate::windows::{open_capture_overlay, open_editor_with_history};
 
+/// The green-on-black mark, used only by debug builds.
+///
+/// A dev build and an installed one sit side by side in the tray while the
+/// updater or anything else is being tested, and two identical icons make it
+/// far too easy to quit the wrong one. Decoded with the `image` crate rather
+/// than Tauri's own PNG support, which would mean enabling another feature
+/// for one icon.
+#[cfg(debug_assertions)]
+fn dev_icon() -> Option<tauri::image::Image<'static>> {
+    let decoded = image::load_from_memory(include_bytes!("../icons/dev-icon.png"))
+        .ok()?
+        .to_rgba8();
+    let (width, height) = (decoded.width(), decoded.height());
+    Some(tauri::image::Image::new_owned(decoded.into_raw(), width, height))
+}
+
+#[cfg(not(debug_assertions))]
+fn dev_icon() -> Option<tauri::image::Image<'static>> {
+    None
+}
+
 /// shota is a background/tray app: no taskbar presence, just a tray icon
 /// with quick capture actions and a way to reach the shortcuts window.
 pub fn build_tray(app: &AppHandle) -> Result<(), String> {
@@ -40,10 +61,11 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
 
     let menu = Menu::with_items(app, &items).map_err(|e| e.to_string())?;
 
-    let icon = app
-        .default_window_icon()
-        .cloned()
-        .ok_or("missing default window icon for tray")?;
+    let icon = dev_icon().map(Ok).unwrap_or_else(|| {
+        app.default_window_icon()
+            .cloned()
+            .ok_or_else(|| "missing default window icon for tray".to_string())
+    })?;
 
     TrayIconBuilder::new()
         .icon(icon)

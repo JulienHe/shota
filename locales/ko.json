@@ -79,7 +79,9 @@
     "recording": "키 조합을 누르세요…",
     "registerFailed": "이 조합은 등록할 수 없습니다 ~ 다른 조합을 사용하세요.",
     "language": "언어",
-    "languageSystem": "시스템 설정 따르기"
+    "languageSystem": "시스템 설정 따르기",
+    "printScreenOwned": "Windows가 Print Screen 키를 캡처 도구에 사용하고 있어 Shota가 받지 못합니다.",
+    "printScreenFix": "Shota에 할당"
   },
   "error": {
     "title": "Shota에 문제가 발생했습니다",

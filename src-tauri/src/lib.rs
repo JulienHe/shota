@@ -6,6 +6,7 @@ mod fonts;
 mod history;
 mod hotkeys;
 mod i18n;
+mod printscreen;
 mod state;
 mod tray;
 #[cfg(feature = "updater")]
@@ -59,6 +60,8 @@ pub fn run() {
             }
         })
         .invoke_handler(tauri::generate_handler![
+            commands::print_screen_owned_by_snipping_tool,
+            commands::release_print_screen,
             commands::get_locale,
             commands::get_language,
             commands::set_language,

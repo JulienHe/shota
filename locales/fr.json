@@ -79,7 +79,9 @@
     "recording": "Appuyez sur une combinaison…",
     "registerFailed": "Cette combinaison n'a pas pu être enregistrée ~ essayez-en une autre.",
     "language": "Langue",
-    "languageSystem": "Suivre le système"
+    "languageSystem": "Suivre le système",
+    "printScreenOwned": "Windows réserve la touche Impr. écran à l'outil Capture d'écran, Shota ne la reçoit donc jamais.",
+    "printScreenFix": "L'attribuer à Shota"
   },
   "error": {
     "title": "Shota a rencontré un problème",

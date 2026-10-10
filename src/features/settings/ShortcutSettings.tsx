@@ -35,9 +35,15 @@ export function ShortcutSettings({ shortcuts, onChange }: ShortcutSettingsProps)
   const [language, setLanguage] = useState<string | null>(null);
   const [locales, setLocales] = useState<string[]>([]);
 
+  const [printScreenTaken, setPrintScreenTaken] = useState(false);
+
   useEffect(() => {
     tauriApi.supportedLocales().then(setLocales).catch(() => setLocales([]));
     tauriApi.getLanguage().then(setLanguage).catch(() => setLanguage(null));
+    tauriApi
+      .printScreenOwnedBySnippingTool()
+      .then(setPrintScreenTaken)
+      .catch(() => setPrintScreenTaken(false));
   }, []);
 
   useEffect(() => {
@@ -82,6 +88,27 @@ export function ShortcutSettings({ shortcuts, onChange }: ShortcutSettingsProps)
         </div>
       ))}
       {error && <p className="shortcut-settings__error">{error}</p>}
+
+      {/* Windows 11 binds Print Screen to the Snipping Tool by default, which
+          swallows Shota's capture shortcut with no error and no clue as to
+          why. The toggle is a per-user registry value, so rather than telling
+          someone to go hunting through Settings, offer to flip it. */}
+      {printScreenTaken && (
+        <div className="shortcut-settings__notice">
+          <span>{t("settings.printScreenOwned")}</span>
+          <button
+            type="button"
+            onClick={() => {
+              tauriApi
+                .releasePrintScreen()
+                .then(() => setPrintScreenTaken(false))
+                .catch((err) => console.error("could not release Print Screen", err));
+            }}
+          >
+            {t("settings.printScreenFix")}
+          </button>
+        </div>
+      )}
 
       <div className="shortcut-settings__row">
         <span className="shortcut-settings__label">{t("settings.language")}</span>

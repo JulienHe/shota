@@ -79,7 +79,9 @@
     "recording": "请按下组合键…",
     "registerFailed": "该组合键无法注册 ~ 请换一个。",
     "language": "语言",
-    "languageSystem": "跟随系统"
+    "languageSystem": "跟随系统",
+    "printScreenOwned": "Windows 将 Print Screen 键用于截图工具，因此 Shota 收不到。",
+    "printScreenFix": "分配给 Shota"
   },
   "error": {
     "title": "Shota 遇到问题",

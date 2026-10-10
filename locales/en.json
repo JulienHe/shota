@@ -79,7 +79,9 @@
     "recording": "Press a key combination…",
     "registerFailed": "That combo couldn't be registered ~ try another.",
     "language": "Language",
-    "languageSystem": "Match system"
+    "languageSystem": "Match system",
+    "printScreenOwned": "Windows is using Print Screen for the Snipping Tool, so Shota never sees it.",
+    "printScreenFix": "Give it to Shota"
   },
   "error": {
     "title": "Shota hit a problem",

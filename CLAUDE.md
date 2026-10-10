@@ -200,3 +200,26 @@ the frontend asks for the resolved tag at startup and renders nothing until it h
 Changing the language reloads the window, because the tray menu is built once at startup
 and the other windows are long-lived and reused ~ re-rendering one view would leave most
 of the app in the previous language.
+
+## Print Screen is the default capture key, and Windows may be holding it
+
+Shota's default shortcuts follow Windows convention, not macOS: `PrintScreen` for
+region, `Ctrl+PrintScreen` for full screen, `Shift+PrintScreen` for history. The
+previous `Ctrl+Shift+3/4` were `Cmd+Shift+3/4` carried over from macOS, which nobody
+on Windows reaches for. Every established Windows tool puts capture on Print Screen,
+and puts *region* there rather than full screen.
+
+Windows 11 binds Print Screen to the Snipping Tool by default, and that binding can
+swallow the press before Shota sees it, silently. `RegisterHotKey` still succeeds for
+`VK_SNAPSHOT` (verified: registering it returns true rather than
+`ERROR_HOTKEY_ALREADY_REGISTERED`, so the Snipping Tool's binding is not a competing
+RegisterHotKey), but succeeding at registration is not the same as receiving the key.
+
+`printscreen.rs` reads `HKCU\Control Panel\Keyboard\PrintScreenKeyForSnippingEnabled`
+to detect it and can clear it on request. An **absent** value counts as taken, because
+Windows 11 treats absent as enabled, which is exactly the clean-install case. The value
+is per-user, so clearing it needs no elevation ~ but it is still the user's machine, so
+it only ever happens behind a button in settings, never automatically.
+
+Changing these defaults is safe for existing users: shortcuts persist in settings.json
+and the defaults only apply to a fresh install.

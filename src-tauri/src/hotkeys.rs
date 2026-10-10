@@ -12,21 +12,27 @@ use crate::windows::{open_capture_overlay, open_editor_with_history, toggle_hist
 // a different set, which is what makes it possible to run `tauri dev` against
 // an installed Shota ~ needed to test the updater, since that can only be
 // exercised by a real install talking to a real release.
+// Windows convention, not macOS. The previous defaults (Ctrl+Shift+3/4)
+// were Cmd+Shift+3/4 carried over from macOS, which nobody on Windows
+// reaches for. Every established Windows tool ~ Greenshot, Lightshot,
+// Snagit, and the built-in Snipping Tool ~ puts capture on Print Screen,
+// and puts *region* there rather than full screen, because region is what
+// people want most of the time.
 #[cfg(not(debug_assertions))]
-pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Shift+3";
+pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+PrintScreen";
 #[cfg(not(debug_assertions))]
-pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Shift+4";
+pub const DEFAULT_AREA_SHORTCUT: &str = "PrintScreen";
 /// Not user-rebindable (yet) ~ no entry in ShortcutKind/PersistedSettings,
 /// unlike Fullscreen/Area which have a settings UI.
 #[cfg(not(debug_assertions))]
-pub const HISTORY_SHORTCUT: &str = "Ctrl+Shift+6";
+pub const HISTORY_SHORTCUT: &str = "Shift+PrintScreen";
 
 #[cfg(debug_assertions)]
-pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Alt+Shift+3";
+pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Alt+3";
 #[cfg(debug_assertions)]
-pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Alt+Shift+4";
+pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Alt+4";
 #[cfg(debug_assertions)]
-pub const HISTORY_SHORTCUT: &str = "Ctrl+Alt+Shift+6";
+pub const HISTORY_SHORTCUT: &str = "Ctrl+Alt+5";
 
 #[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
