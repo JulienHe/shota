@@ -18,7 +18,7 @@ const REPO = process.env.GITHUB_REPOSITORY ?? "JulienHe/shota";
 export function makeManifest({ version, sigPath, outPath }) {
   if (!existsSync(sigPath)) {
     throw new Error(
-      `${sigPath} is missing — the installer is unsigned, so every installed copy would silently stop finding updates.`,
+      `${sigPath} is missing ~ the installer is unsigned, so every installed copy would silently stop finding updates.`,
     );
   }
 
@@ -33,7 +33,7 @@ export function makeManifest({ version, sigPath, outPath }) {
         // against the public key compiled into the installed app, which is
         // what stops a tampered installer being accepted.
         signature: readFileSync(sigPath, "utf8").trim(),
-        // Must be the direct asset download, not the release page — the
+        // Must be the direct asset download, not the release page ~ the
         // updater fetches this URL expecting installer bytes.
         url: `https://github.com/${REPO}/releases/download/${tag}/Shota_${version}_x64-setup.exe`,
       },

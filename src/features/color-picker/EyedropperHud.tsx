@@ -11,7 +11,7 @@ interface EyedropperHudProps {
   sampleX: number;
   sampleY: number;
   hex: string;
-  /** On-screen pixels per source pixel — scroll while picking to adjust. */
+  /** On-screen pixels per source pixel ~ scroll while picking to adjust. */
   zoom: number;
 }
 

@@ -41,9 +41,9 @@
     "copy": "复制",
     "save": "另存为…",
     "preparing": "正在准备…",
-    "saveFailed": "保存失败 — 请重试",
+    "saveFailed": "保存失败 ~ 请重试",
     "copiedHex": "已复制 {hex}",
-    "copyFailed": "复制失败 — 请重试",
+    "copyFailed": "复制失败 ~ 请重试",
     "cropConfirm": "裁剪",
     "cropCancel": "取消",
     "zoomToFit": "适应窗口"
@@ -77,7 +77,7 @@
     "fullScreen": "全屏",
     "areaWindow": "区域 / 窗口",
     "recording": "请按下组合键…",
-    "registerFailed": "该组合键无法注册 — 请换一个。",
+    "registerFailed": "该组合键无法注册 ~ 请换一个。",
     "language": "语言",
     "languageSystem": "跟随系统"
   },

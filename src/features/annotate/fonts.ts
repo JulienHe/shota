@@ -26,7 +26,7 @@ function loadSystemFonts(): Promise<string[]> {
  * renders blank, and always quotes the family name itself. Unquoted works
  * for plain ASCII names like "Segoe UI", but real installed-font lists
  * (queried straight from DirectWrite, no filtering) can include names with
- * characters that aren't valid in an unquoted CSS ident — a font string the
+ * characters that aren't valid in an unquoted CSS ident ~ a font string the
  * canvas 2D context silently fails to parse falls back to its *previous*
  * font, so every width/line-wrap measurement Konva does for that text is
  * for the wrong font entirely, throwing off the auto-computed box height
@@ -39,7 +39,7 @@ export function cssFontFamily(name: string): string {
 
 /**
  * Fonts actually installed on this machine (queried from Rust via
- * DirectWrite) — nothing bundled or downloaded, so the list is exactly what
+ * DirectWrite) ~ nothing bundled or downloaded, so the list is exactly what
  * will really render. Starts with a small safe fallback and swaps in the
  * real list once the (cheap, one-time) native call resolves.
  */

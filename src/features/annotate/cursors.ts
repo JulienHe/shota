@@ -15,7 +15,7 @@ function iconCursor(paths: string[], hotspot = 12): string {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") ${hotspot} ${hotspot}`;
 }
 
-/** Lucide "move" icon — used while hovering/dragging a shape on the canvas. */
+/** Lucide "move" icon ~ used while hovering/dragging a shape on the canvas. */
 export const MOVE_CURSOR = `${iconCursor([
   "M12 2v20",
   "m15 19-3 3-3-3",
@@ -25,7 +25,7 @@ export const MOVE_CURSOR = `${iconCursor([
   "m9 5 3-3 3 3",
 ])}, move`;
 
-/** Lucide "rotate-cw" icon — used for the Transformer's rotation handle. */
+/** Lucide "rotate-cw" icon ~ used for the Transformer's rotation handle. */
 export const ROTATE_CURSOR = `${iconCursor([
   "M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8",
   "M21 3v5h-5",

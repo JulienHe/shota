@@ -46,7 +46,7 @@ jobs:
       # Deliberately built WITHOUT the updater signing key, so no .sig is
       # produced yet. Authenticode signing (added below once SignPath is set
       # up) rewrites the installer, and anything signed before that would be a
-      # signature over bytes that no longer exist — the updater would reject
+      # signature over bytes that no longer exist ~ the updater would reject
       # its own release. The signature has to be taken last.
       - name: Build
         run: npm run tauri build

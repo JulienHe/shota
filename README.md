@@ -39,11 +39,11 @@ Nothing is uploaded anywhere. Captures, annotations and history all stay on your
 
 Windows 10 or 11, either way:
 
-**[Microsoft Store](https://apps.microsoft.com/detail/9n4x6b0ctgp5)** — the easier route. Installs and updates itself, and Windows raises no warning because Store packages are signed by Microsoft.
+**[Microsoft Store](https://apps.microsoft.com/detail/9n4x6b0ctgp5)** ~ the easier route. Installs and updates itself, and Windows raises no warning because Store packages are signed by Microsoft.
 
-**[Direct download](https://github.com/JulienHe/shota/releases/latest)** — the `.exe` installer, and what you want if you'd rather not go through the Store. Shota then updates itself from GitHub.
+**[Direct download](https://github.com/JulienHe/shota/releases/latest)** ~ the `.exe` installer, and what you want if you'd rather not go through the Store. Shota then updates itself from GitHub.
 
-A note on the direct download: SmartScreen will warn you on first run, because that installer isn't code-signed yet. Choose "More info" → "Run anyway". It's a certificate we don't have, not a judgement about the file — the source is public and every release is built by CI from a tagged commit.
+A note on the direct download: SmartScreen will warn you on first run, because that installer isn't code-signed yet. Choose "More info" → "Run anyway". It's a certificate we don't have, not a judgement about the file ~ the source is public and every release is built by CI from a tagged commit.
 
 ## Features
 
@@ -60,7 +60,7 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Spotlight: dim everything except a region you drag out, with adjustable corner radius and dimming colour
 - Redaction: blur / pixelate tool for hiding sensitive content
 - Crop, in-canvas zoom & pan
-- Color picker (eyedropper) with a live magnified loupe — click to sample and copy the hex value
+- Color picker (eyedropper) with a live magnified loupe ~ click to sample and copy the hex value
 - Per-tool style controls live inline in the title bar as small dropdowns: colour (with a custom-colour picker), stroke width, line style (solid/dashed/dotted), fill (none/solid/translucent), corner radius, font size, and the full list of fonts actually installed on your system
 - Text tool is IME-aware (composing Japanese/Chinese/Korean input doesn't prematurely submit the text box)
 - Undo/redo, and Delete/Backspace to remove the selected shape
@@ -69,10 +69,10 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 **Speak your language**
 - English, French, German, Spanish, Japanese, Korean and Simplified Chinese
 - Follows your Windows language automatically, with an override in the shortcuts window
-- Translations live in `locales/` as plain JSON — corrections and new languages are a small pull request
+- Translations live in `locales/` as plain JSON ~ corrections and new languages are a small pull request
 
 **Finish up**
-- Copy to clipboard or save as PNG (remembers the last folder you saved to, falls back to Desktop) — both close the editor immediately rather than lingering
+- Copy to clipboard or save as PNG (remembers the last folder you saved to, falls back to Desktop) ~ both close the editor immediately rather than lingering
 - Zoom control and Copy/Save live in a bottom status bar, mirroring the toolbar up top
 
 ## Keyboard shortcuts
@@ -112,16 +112,16 @@ Global shortcuts are rebindable from the tray icon's "Keyboard Shortcuts…" win
 
 ## Feedback, bugs and feature requests
 
-- **Something broken?** [Open a bug report](https://github.com/JulienHe/shota/issues/new?template=bug_report.yml) — the template asks for your Windows version and what you were capturing, which is usually what it comes down to.
+- **Something broken?** [Open a bug report](https://github.com/JulienHe/shota/issues/new?template=bug_report.yml) ~ the template asks for your Windows version and what you were capturing, which is usually what it comes down to.
 - **Want a tool or an option that isn't there?** [Open a feature request](https://github.com/JulienHe/shota/issues/new?template=feature_request.yml).
 - **Not sure, or want to talk it through?** Use [Discussions](https://github.com/JulienHe/shota/discussions).
 
-Shota is a side project, so responses may not be instant — but every issue gets read.
+Shota is a side project, so responses may not be instant ~ but every issue gets read.
 
 ## Supporting Shota
 
-Shota is free and stays free. If you'd like to help it along — with money or
-without — see [buy me some tokens](FUNDING.md). The most useful free contribution
+Shota is free and stays free. If you'd like to help it along ~ with money or
+without ~ see [buy me some tokens](FUNDING.md). The most useful free contribution
 right now is telling me where the translations read badly.
 
 ## Contributing
@@ -137,7 +137,7 @@ Before opening a PR, please make sure both of these pass:
 
 ```bash
 npx tsc --noEmit          # frontend types
-cd src-tauri && cargo build   # not just `cargo check` — only a real build links
+cd src-tauri && cargo build   # not just `cargo check` ~ only a real build links
 ```
 
 ### Screenshots
@@ -163,12 +163,12 @@ release is published from a tagged commit.
 
 Updates are verified before they are installed. Each installer carries a signature
 made with a key held outside the repository, and the app checks it against a public
-key compiled into the binary — an installer that wasn't produced by this project is
+key compiled into the binary ~ an installer that wasn't produced by this project is
 rejected rather than run. The private key is never present in CI logs, the repository,
 or any published artifact.
 
 Shota collects nothing and sends nothing anywhere. The only network request it makes
-is to GitHub, to ask whether a newer release exists — and the Microsoft Store build
+is to GitHub, to ask whether a newer release exists ~ and the Microsoft Store build
 makes none at all, since the Store handles updates itself. See the full
 [privacy policy](PRIVACY.md).
 
@@ -182,15 +182,15 @@ makes none at all, since the Store handles updates itself. See the full
 
 ## Project layout
 
-- `src-tauri/src/capture` — screen, region, and window capture (xcap)
-- `src-tauri/src/windows` — overlay, editor and history window lifecycle
-- `src-tauri/src/tray.rs` — the tray icon and its menu (capture actions, shortcuts, quit)
-- `src-tauri/src/hotkeys.rs`, `clipboard.rs`, `file_save.rs`, `state.rs`, `history.rs` — global shortcuts, clipboard, save-dialog/last-folder persistence, capture history
-- `src-tauri/src/fonts.rs` — system font enumeration (DirectWrite)
-- `src/windows` — one component per Tauri window (`MainWindow` is the hidden-by-default shortcuts/settings window, `CaptureOverlay`, `EditorWindow`, `HistoryBar`, plus the shared `TitleBar`/`BottomBar`), routed by window label in `App.tsx`
-- `src/features/annotate` — the canvas, shape components, toolbar, and per-tool style dropdowns
-- `src/features/crop`, `src/features/zoom`, `src/features/color-picker` — image manipulation tools
-- `src/stores` — Zustand stores (`toolStore` for the active tool/style, `documentStore` for shapes/undo-redo, `uiStore` for canvas background, `toastStore` for the shared confirmation toast)
+- `src-tauri/src/capture` ~ screen, region, and window capture (xcap)
+- `src-tauri/src/windows` ~ overlay, editor and history window lifecycle
+- `src-tauri/src/tray.rs` ~ the tray icon and its menu (capture actions, shortcuts, quit)
+- `src-tauri/src/hotkeys.rs`, `clipboard.rs`, `file_save.rs`, `state.rs`, `history.rs` ~ global shortcuts, clipboard, save-dialog/last-folder persistence, capture history
+- `src-tauri/src/fonts.rs` ~ system font enumeration (DirectWrite)
+- `src/windows` ~ one component per Tauri window (`MainWindow` is the hidden-by-default shortcuts/settings window, `CaptureOverlay`, `EditorWindow`, `HistoryBar`, plus the shared `TitleBar`/`BottomBar`), routed by window label in `App.tsx`
+- `src/features/annotate` ~ the canvas, shape components, toolbar, and per-tool style dropdowns
+- `src/features/crop`, `src/features/zoom`, `src/features/color-picker` ~ image manipulation tools
+- `src/stores` ~ Zustand stores (`toolStore` for the active tool/style, `documentStore` for shapes/undo-redo, `uiStore` for canvas background, `toastStore` for the shared confirmation toast)
 
 ## Build
 

@@ -6,7 +6,7 @@
  *
  * This exists because the manual steps have a silent failure mode. The
  * updater only works if the build was signed, and an unsigned build looks
- * completely normal — same installers, same release page, no warning
+ * completely normal ~ same installers, same release page, no warning
  * anywhere. The only symptom is that every installed copy quietly stops
  * finding updates. So the signing key is checked here *before* anything is
  * built, and the run aborts rather than producing artifacts that can't be
@@ -21,7 +21,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const KEY_PATH = process.env.SHOTA_SIGNING_KEY ?? process.env.TAURI_SIGNING_PRIVATE_KEY_PATH;
 
 // `shell: true` is needed on Windows, where npm and gh are .cmd shims that
-// execFileSync can't launch directly — but it also means the shell re-splits
+// execFileSync can't launch directly ~ but it also means the shell re-splits
 // the arguments, so anything containing a space has to be quoted or it
 // arrives as two. A release title of "Shota v0.3.0" became "Shota" plus a
 // stray "v0.3.0", which gh then went looking for as an asset file.
@@ -38,7 +38,7 @@ function fail(message) {
 if (!KEY_PATH && !process.env.TAURI_SIGNING_PRIVATE_KEY) {
   fail(
     [
-      "No signing key in the environment — refusing to build.",
+      "No signing key in the environment ~ refusing to build.",
       "",
       "Without it the installers build fine and the release looks normal, but",
       "no .sig files are produced and every installed copy silently stops",
@@ -55,7 +55,7 @@ if (KEY_PATH && !existsSync(KEY_PATH)) {
 
 // Tauri wants the key *contents* in TAURI_SIGNING_PRIVATE_KEY. It documents
 // accepting a path there too, and the key generator advertises a separate
-// TAURI_SIGNING_PRIVATE_KEY_PATH, but neither was honoured in practice — the
+// TAURI_SIGNING_PRIVATE_KEY_PATH, but neither was honoured in practice ~ the
 // build printed "a public key has been found, but no private key", produced
 // no .sig, and still exited 0. Reading the file here and passing the contents
 // is the form that actually works.
@@ -86,10 +86,10 @@ if (process.argv.includes("--no-build")) {
 run("npx", ["tauri", "signer", "sign", setup], { env: buildEnv });
 
 // Checked after the build as well as before it, because the build exits 0
-// even when signing fails — it prints the reason and carries on bundling.
+// even when signing fails ~ it prints the reason and carries on bundling.
 // The presence of this file is the only trustworthy signal.
 if (!existsSync(sig)) {
-  fail(`Build finished but ${sig} is missing — the installers are unsigned and updates would not work.`);
+  fail(`Build finished but ${sig} is missing ~ the installers are unsigned and updates would not work.`);
 }
 
 // The manifest the updater fetches. `signature` is the .sig file's contents,

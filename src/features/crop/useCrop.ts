@@ -11,7 +11,7 @@ export interface CropRect {
 
 /**
  * Owns the crop selection rect and commits it by re-rasterizing the image.
- * Starts at the full image bounds as soon as the crop tool activates —
+ * Starts at the full image bounds as soon as the crop tool activates ~
  * cropping is "shrink the kept area inward from an edge" rather than
  * "drag out a new region from nothing".
  */

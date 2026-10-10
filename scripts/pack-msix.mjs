@@ -67,7 +67,7 @@ if (config.identityName.includes("REPLACE") || config.publisher.includes("REPLAC
       "",
       "WARNING: msix.config.json still has placeholder identity values.",
       "The package will build and can be installed locally for testing, but the",
-      "Store will reject it — identity must match the name reserved in Partner",
+      "Store will reject it ~ identity must match the name reserved in Partner",
       "Center (Product > Product identity).",
       "",
     ].join("\n"),
@@ -86,7 +86,7 @@ if (!process.argv.includes("--no-build")) {
 }
 
 const exe = join(ROOT, "src-tauri", "target", "release", "shota.exe");
-if (!existsSync(exe)) fail(`${exe} is missing — run without --no-build.`);
+if (!existsSync(exe)) fail(`${exe} is missing ~ run without --no-build.`);
 
 // Fresh staging directory every time: a leftover file from a previous run
 // would be silently included in the package.
@@ -98,12 +98,12 @@ cpSync(exe, join(STAGE, "shota.exe"));
 const icons = join(ROOT, "src-tauri", "icons");
 for (const asset of ["StoreLogo.png", "Square150x150Logo.png", "Square44x44Logo.png"]) {
   const from = join(icons, asset);
-  if (!existsSync(from)) fail(`Missing icon ${from} — the manifest references it.`);
+  if (!existsSync(from)) fail(`Missing icon ${from} ~ the manifest references it.`);
   cpSync(from, join(STAGE, "Assets", asset));
 }
 
 // MSIX versions are always four parts, and the Store requires the revision to
-// be 0 — it reserves that field for its own rebuilds.
+// be 0 ~ it reserves that field for its own rebuilds.
 const manifest = readFileSync(join(MSIX_DIR, "AppxManifest.xml"), "utf8")
   .replace(/{{IDENTITY_NAME}}/g, config.identityName)
   .replace(/{{PUBLISHER}}/g, config.publisher)
@@ -126,7 +126,7 @@ console.log(
     "",
     `Packed ${out}`,
     "",
-    "The package is unsigned, which is correct for Store submission — Microsoft",
+    "The package is unsigned, which is correct for Store submission ~ Microsoft",
     "signs it on their side. To install it locally for testing you need to sign",
     "it with a self-signed certificate whose subject matches Identity/Publisher",
     "and trust that certificate first.",

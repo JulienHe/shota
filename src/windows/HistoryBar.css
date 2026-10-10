@@ -97,7 +97,7 @@ body,
   overflow: hidden;
   background: #2a2b31;
   /* The selected ring is an inset shadow rather than a border so it doesn't
-     change the box's size on hover — a border would nudge the thumbnail by a
+     change the box's size on hover ~ a border would nudge the thumbnail by a
      pixel and make the whole strip twitch as the cursor moves along it. */
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   transition: box-shadow 0.15s ease, transform 0.15s ease;
@@ -139,7 +139,7 @@ body,
   padding: 5px 12px 8px;
   border: none;
   /* Fully rounded. Not literally 100%: on a wider-than-tall button that
-     resolves per-axis and bows the sides into an ellipse — a large fixed
+     resolves per-axis and bows the sides into an ellipse ~ a large fixed
      radius clamps to a true pill at any width. */
   border-radius: 999px;
   background: #fff;

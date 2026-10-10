@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
-/// Translations for the native side — the tray menu and the updater dialogs.
+/// Translations for the native side ~ the tray menu and the updater dialogs.
 ///
 /// Reads the same `locales/*.json` files the frontend imports, compiled in
 /// with `include_str!`. Two catalogues would drift: the tray says "Quit
@@ -75,7 +75,7 @@ fn lookup(locale: &str, key: &str) -> Option<String> {
 }
 
 /// Translates a dotted key, falling back to English and then to the key
-/// itself — a wrong key should be visibly wrong, a missing translation
+/// itself ~ a wrong key should be visibly wrong, a missing translation
 /// should merely be in English.
 pub fn t(locale: &str, key: &str) -> String {
     lookup(locale, key)

@@ -3,7 +3,7 @@
  *
  * Shota's frontend is an ordinary web app; the only thing it needs that a
  * plain browser doesn't provide is the IPC bridge. `@tauri-apps/api` routes
- * everything — commands, events, window handles — through
+ * everything ~ commands, events, window handles ~ through
  * `window.__TAURI_INTERNALS__`, so defining that object is enough to run the
  * real UI, unmodified, in headless Chromium.
  *
@@ -36,7 +36,7 @@ export function mockTauri({ label, captureBase64, historyThumbnails = [] }) {
           history_id: "sample",
           shapes_json: null,
         }),
-        // Returns an ArrayBuffer, exactly as the real raw-IPC command does —
+        // Returns an ArrayBuffer, exactly as the real raw-IPC command does ~
         // the frontend wraps it in a blob URL without caring where it came from.
         take_capture_image: () => bytes(CAPTURE_BASE64),
         list_system_fonts: () => ["Segoe UI", "Arial", "Georgia", "Consolas"],

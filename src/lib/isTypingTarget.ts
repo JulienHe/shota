@@ -18,9 +18,9 @@ const NON_TEXT_INPUT_TYPES = new Set([
  * True while the user is typing somewhere a key press means a character
  * rather than a shortcut.
  *
- * Lives here, shared, because it existed twice before — once in the toolbar
+ * Lives here, shared, because it existed twice before ~ once in the toolbar
  * (guarding the tool letters) and once in the canvas (guarding Space-to-pan
- * and Delete-to-remove) — and only one copy got the slider fix, so half the
+ * and Delete-to-remove) ~ and only one copy got the slider fix, so half the
  * shortcuts in the editor stayed broken after using a style slider.
  *
  * Pass an event's `target` where there is one; with no argument it falls

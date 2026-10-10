@@ -35,7 +35,7 @@ export function EditorWindow() {
     const applyCapture = async (capture: PendingCapture) => {
       // The bytes come across raw (an ArrayBuffer, not JSON) and become a
       // blob URL here. Blob URLs are same-origin, so the Konva canvas stays
-      // untainted and `stage.toDataURL()` in Copy/Save keeps working — which
+      // untainted and `stage.toDataURL()` in Copy/Save keeps working ~ which
       // a cross-origin custom protocol would have broken.
       const bytes = await tauriApi.takeCaptureImage(capture.image_id);
       const url = URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
@@ -43,7 +43,7 @@ export function EditorWindow() {
       const img = new Image();
       img.onload = () => {
         // Canvas's background image (via useImage) reads from this exact
-        // URL next — seed it with the element already decoded here instead
+        // URL next ~ seed it with the element already decoded here instead
         // of leaving it to redundantly decode the same multi-MB image a
         // second time, which is what was delaying the image behind the
         // toolbar/footer instead of them appearing together.
@@ -66,7 +66,7 @@ export function EditorWindow() {
         }
         setHistoryId(capture.history_id);
 
-        // Only now that the replacement has decoded — revoking earlier can
+        // Only now that the replacement has decoded ~ revoking earlier can
         // pull the URL out from under an image still being decoded. Each
         // capture is tens of MB, so without this a long session would hold
         // every past screenshot in memory.
@@ -74,7 +74,7 @@ export function EditorWindow() {
         objectUrlRef.current = url;
 
         // The editor window is kept hidden by the Rust side until this
-        // fires (see open_editor_window) — reveals it once the new image
+        // fires (see open_editor_window) ~ reveals it once the new image
         // has actually had a chance to paint, rather than the instant React
         // commits the state update, which is what was showing the *previous*
         // capture for a moment on every capture after the first.
@@ -105,7 +105,7 @@ export function EditorWindow() {
 
   // Safety net for a close path that isn't Copy/Save/the title bar's X
   // (all of which already persist annotations via `closeEditor` before
-  // hiding) — e.g. Alt+F4 or the OS otherwise sending a real close request.
+  // hiding) ~ e.g. Alt+F4 or the OS otherwise sending a real close request.
   useEffect(() => {
     const win = getCurrentWindow();
     const unlisten = win.onCloseRequested(() => {
@@ -125,7 +125,7 @@ export function EditorWindow() {
 
   // Rendering the shapes/image at full native resolution and PNG-encoding
   // that (exportDataUrl) is a genuinely slow, synchronous, main-thread-
-  // blocking operation for a large screenshot — nothing can paint while it
+  // blocking operation for a large screenshot ~ nothing can paint while it
   // runs. Setting the "Preparing…" toast first and waiting a couple of
   // frames lets the browser actually paint it before that freeze starts,
   // instead of the click just appearing to do nothing until it's already
@@ -134,7 +134,7 @@ export function EditorWindow() {
   const handleCopy = () => {
     const dataUrl = canvasRef.current?.exportDataUrl();
     if (!dataUrl) return;
-    // The window closing immediately *is* the confirmation — like
+    // The window closing immediately *is* the confirmation ~ like
     // CleanShot, there's no reason to linger once the export is handed off.
     // The clipboard write itself doesn't depend on this window staying
     // open (it runs in the Rust process, not the webview), so it's safe to
@@ -156,7 +156,7 @@ export function EditorWindow() {
     const name = `shota-${new Date().toISOString().replace(/[:.]/g, "-")}.png`;
     try {
       const path = await tauriApi.saveImageAs(toBase64Payload(dataUrl), name);
-      // `path` is null if the user cancelled the native save dialog — stay
+      // `path` is null if the user cancelled the native save dialog ~ stay
       // open in that case since nothing actually happened. On an actual
       // save, close right away rather than clearing the toast and lingering.
       if (path) {
@@ -166,7 +166,7 @@ export function EditorWindow() {
       }
     } catch (err) {
       console.error("save failed", err);
-      showToast("Save failed — try again");
+      showToast("Save failed ~ try again");
     }
   };
 
@@ -177,7 +177,7 @@ export function EditorWindow() {
 
   // Rendering the title bar/footer chrome before the image has decoded was
   // exactly the "window appears, then toolbar, then image" staggered
-  // reveal that reads as the app blinking — holding off until there's an
+  // reveal that reads as the app blinking ~ holding off until there's an
   // image makes everything appear together in one frame instead.
   if (!hasImage) return null;
 

@@ -22,7 +22,7 @@ export function useGlobalCursor() {
     refreshOrigin();
 
     // The overlay window is reused (repositioned, not recreated) across
-    // captures to avoid reloading its page every time — so this component
+    // captures to avoid reloading its page every time ~ so this component
     // only ever mounts once per app session. Without this, `origin` would
     // stay fixed at wherever the window happened to be on that first mount
     // (including its off-screen pre-warm spot), silently producing garbage

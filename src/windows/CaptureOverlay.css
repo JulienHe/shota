@@ -29,7 +29,7 @@
 
 /* One of the four panels that surround the spotlight hole. Full-size and
    positioned entirely by transform (see SpotlightMask.tsx), so moving the
-   spotlight is a compositor job — no layout, no repaint — rather than
+   spotlight is a compositor job ~ no layout, no repaint ~ rather than
    recomputing a screen-sized box-shadow on every frame, which is what this
    replaced. */
 .capture-overlay__mask {

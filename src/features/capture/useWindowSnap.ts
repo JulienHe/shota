@@ -3,7 +3,7 @@ import { CapturableWindow, tauriApi } from "../../lib/tauriApi";
 
 /**
  * Tracks window-snap mode, toggled by a single Space press (press once to
- * enter, press again to leave — not held), and, while active, which
+ * enter, press again to leave ~ not held), and, while active, which
  * capturable window the given global cursor position currently sits over.
  */
 export function useWindowSnap(globalCursor: { x: number; y: number } | null) {
@@ -12,7 +12,7 @@ export function useWindowSnap(globalCursor: { x: number; y: number } | null) {
 
   // Refetched every time snap mode is entered, not once on mount. The
   // overlay window is reused rather than recreated between captures, so this
-  // component only ever mounts once per app session — and that one mount
+  // component only ever mounts once per app session ~ and that one mount
   // happens during pre-warm, at app startup. Fetching there meant snapping
   // was matched against whatever windows existed the moment Shota launched:
   // nothing opened since was selectable, anything closed or moved since had
@@ -39,7 +39,7 @@ export function useWindowSnap(globalCursor: { x: number; y: number } | null) {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       // e.repeat filters out the auto-repeat keydown events an OS sends for
-      // a held key — without it, holding Space would flip the toggle many
+      // a held key ~ without it, holding Space would flip the toggle many
       // times a second instead of once per physical press.
       if (e.code === "Space" && !e.repeat) {
         e.preventDefault();

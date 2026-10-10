@@ -41,9 +41,9 @@
     "copy": "コピー",
     "save": "名前を付けて保存…",
     "preparing": "準備中…",
-    "saveFailed": "保存に失敗しました — もう一度お試しください",
+    "saveFailed": "保存に失敗しました ~ もう一度お試しください",
     "copiedHex": "{hex} をコピーしました",
-    "copyFailed": "コピーに失敗しました — もう一度お試しください",
+    "copyFailed": "コピーに失敗しました ~ もう一度お試しください",
     "cropConfirm": "切り抜く",
     "cropCancel": "キャンセル",
     "zoomToFit": "ウィンドウに合わせる"
@@ -77,7 +77,7 @@
     "fullScreen": "画面全体",
     "areaWindow": "範囲 / ウィンドウ",
     "recording": "キーの組み合わせを押してください…",
-    "registerFailed": "この組み合わせは登録できませんでした — 別のものをお試しください。",
+    "registerFailed": "この組み合わせは登録できませんでした ~ 別のものをお試しください。",
     "language": "言語",
     "languageSystem": "システムに合わせる"
   },

@@ -9,7 +9,7 @@ import "./ShapeOptionsPanel.css";
 
 /** Highlighter inks, borrowed from the Stabilo Boss range. The general
  * swatches are picked for ink-on-paper contrast, which is the wrong job
- * here — a marker's colour has to survive being multiplied down to ~45%
+ * here ~ a marker's colour has to survive being multiplied down to ~45%
  * over a white page, so these are the fluorescent, deliberately
  * over-saturated versions. */
 const HIGHLIGHTER_SWATCHES = [
@@ -27,7 +27,7 @@ const STROKE_STYLES: StrokeStyle[] = ["solid", "dashed", "dotted"];
 
 /**
  * Style controls for the active drawing tool or the currently selected
- * shape, each living inline in the toolbar as its own small pill — click one
+ * shape, each living inline in the toolbar as its own small pill ~ click one
  * to reveal just that control (a color palette, a size slider, a font list,
  * …) in a dropdown below it, CleanShot-style, rather than showing every
  * slider at once or burying them all behind one shared icon. Only rendered
@@ -329,7 +329,7 @@ const STROKE_DASH: Record<StrokeStyle, string | undefined> = {
 
 /**
  * Fixed "line style" glyph (three stacked rows: solid, dashed, dotted) for
- * the dropdown trigger — doesn't mirror the currently selected style like
+ * the dropdown trigger ~ doesn't mirror the currently selected style like
  * `LinePreview` does, because a plain solid line there looks identical to
  * the width pill's Minus icon right next to it and made the two impossible
  * to tell apart at a glance.

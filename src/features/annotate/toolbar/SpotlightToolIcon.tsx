@@ -1,7 +1,7 @@
 import { createLucideIcon } from "lucide-react";
 
 /**
- * A dimmed frame with one bright rectangle inside it — the tool's own
+ * A dimmed frame with one bright rectangle inside it ~ the tool's own
  * output in miniature. Built with lucide's factory so stroke width, caps and
  * sizing match the rest of the toolbar.
  */

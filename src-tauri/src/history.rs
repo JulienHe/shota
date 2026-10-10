@@ -6,7 +6,7 @@ use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tauri::{AppHandle, Manager};
 
-/// Ctrl+Shift+6's carousel shows at most this many recent captures — older
+/// Ctrl+Shift+6's carousel shows at most this many recent captures ~ older
 /// ones are evicted (files deleted) as new ones come in.
 const MAX_HISTORY: usize = 20;
 const THUMB_MAX_SIDE: u32 = 320;
@@ -33,7 +33,7 @@ pub struct HistoryListItem {
 
 /// What reopening a history entry in the editor needs: the editable base
 /// image (never baked with annotations) plus whatever shapes were saved
-/// against it last time, if any. Rust-internal — the image reaches the
+/// against it last time, if any. Rust-internal ~ the image reaches the
 /// webview as raw bytes via `take_capture_image`, never through this.
 pub struct HistoryEntryPayload {
     pub image_bytes: Vec<u8>,
@@ -97,7 +97,7 @@ fn now_ms() -> i64 {
 }
 
 /// Cheap and synchronous (just a timestamp), unlike the rest of history
-/// persistence — callers on a latency-sensitive path (opening the editor)
+/// persistence ~ callers on a latency-sensitive path (opening the editor)
 /// can grab an id immediately and do the actual disk/image work later, in
 /// the background, via `add_entry_with_id`.
 pub fn new_id() -> String {
@@ -141,7 +141,7 @@ fn remove_entry_files(app: &AppHandle, id: &str) {
 /// Saves a freshly captured image as a new history entry (no annotations
 /// yet), evicting the oldest entry past MAX_HISTORY. Takes an id the
 /// caller already generated via `new_id` (e.g. to hand to the editor
-/// window immediately) — decoding, thumbnailing and writing 2+ files to
+/// window immediately) ~ decoding, thumbnailing and writing 2+ files to
 /// disk is real work, meant to run in the background rather than block
 /// whatever's waiting on the id.
 pub fn add_entry_with_id(app: &AppHandle, id: &str, bytes: &[u8]) -> Result<(), String> {
@@ -153,7 +153,7 @@ pub fn add_entry_with_id(app: &AppHandle, id: &str, bytes: &[u8]) -> Result<(), 
     let state = app.state::<HistoryState>();
     let mut entries = state.entries.lock().unwrap();
     // `update_entry` can race this and insert the same id first if the
-    // editor closes very quickly after the capture — update in place
+    // editor closes very quickly after the capture ~ update in place
     // rather than pushing a duplicate in that case.
     match entries.iter_mut().find(|e| e.id == id) {
         Some(meta) => {
@@ -175,8 +175,8 @@ pub fn add_entry_with_id(app: &AppHandle, id: &str, bytes: &[u8]) -> Result<(), 
 /// original `created_at` so editing doesn't reorder the carousel.
 ///
 /// Deliberately does NOT take the image. The base image never changes in the
-/// editor — annotations are separate shapes composited over it at export
-/// time — and `add_entry_with_id` already wrote those exact pixels to disk
+/// editor ~ annotations are separate shapes composited over it at export
+/// time ~ and `add_entry_with_id` already wrote those exact pixels to disk
 /// when the capture happened. Passing it back anyway meant shipping tens of
 /// megabytes of base64 over IPC on every single Copy/Save/close, decoding it
 /// twice, rewriting a byte-identical multi-MB file and regenerating a
@@ -198,7 +198,7 @@ pub fn update_entry(
             meta.height = height;
         }
         // The editor can close (and race this in) before the capture's own
-        // background `add_entry_with_id` has landed — record the annotations
+        // background `add_entry_with_id` has landed ~ record the annotations
         // now instead of silently dropping them. `add_entry_with_id` finds
         // this entry and fills in the image and thumbnail when it lands.
         None => entries.push(HistoryMeta {
@@ -222,7 +222,7 @@ pub fn list_entries(app: &AppHandle) -> Result<Vec<HistoryListItem>, String> {
     // Entries whose thumbnail isn't on disk yet (or at all) are skipped
     // rather than failing the whole listing: a capture's image and thumbnail
     // are written in the background, so an entry can legitimately exist for a
-    // moment before its files do — and one unreadable file shouldn't blank
+    // moment before its files do ~ and one unreadable file shouldn't blank
     // out the entire carousel.
     Ok(entries
         .into_iter()

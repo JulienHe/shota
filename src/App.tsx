@@ -13,7 +13,7 @@ function App() {
   const [label, setLabel] = useState<string | null>(null);
   // Nothing renders until the locale is known. Rust resolves it so the native
   // tray and these windows can never disagree, and painting English for one
-  // frame and then swapping would be worse than waiting — that frame is the
+  // frame and then swapping would be worse than waiting ~ that frame is the
   // whole lifetime of some of these windows.
   const [localeReady, setLocaleReady] = useState(false);
 

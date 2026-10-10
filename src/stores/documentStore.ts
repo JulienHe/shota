@@ -11,7 +11,7 @@ interface DocumentState {
   selectedShapeId: string | null;
   past: Shape[][];
   future: Shape[][];
-  /** Which history entry (if any) this document was captured/reopened from — used to persist annotations back on close. */
+  /** Which history entry (if any) this document was captured/reopened from ~ used to persist annotations back on close. */
   historyId: string | null;
 
   loadImage: (dataUrl: string, width: number, height: number) => void;

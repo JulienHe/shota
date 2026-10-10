@@ -11,7 +11,7 @@ export interface CapturableWindow {
 }
 
 export interface PendingCapture {
-  /** Key for fetching the image itself via `takeCaptureImage` — the bytes
+  /** Key for fetching the image itself via `takeCaptureImage` ~ the bytes
    * deliberately don't ride along in this payload, which is JSON. */
   image_id: string;
   history_id: string | null;
@@ -85,13 +85,13 @@ export const tauriApi = {
 
   openHistoryEntry: (id: string) => invoke<void>("open_history_entry", { id }),
 
-  /** Persists annotations only — the base image never changes in the editor,
+  /** Persists annotations only ~ the base image never changes in the editor,
    * and Rust already wrote it to disk at capture time. */
   updateHistoryEntry: (id: string, shapesJson: string, width: number, height: number) =>
     invoke<void>("update_history_entry", { id, shapesJson, width, height }),
 
   /** Copies a stored capture to the clipboard without opening it. The bytes
-   * never cross IPC — Rust reads the file and writes the clipboard itself.
+   * never cross IPC ~ Rust reads the file and writes the clipboard itself.
    * Note this is the capture as taken, without any saved annotations. */
   copyHistoryEntry: (id: string) => invoke<void>("copy_history_entry", { id }),
 

@@ -7,7 +7,7 @@ function toHex(channel: number): string {
 
 /**
  * A full-resolution copy of the current image, redrawn only when the image
- * itself changes (not just when its dimensions happen to match — two
+ * itself changes (not just when its dimensions happen to match ~ two
  * different captures can be the same size). Shared by color sampling and
  * the eyedropper's magnifier preview so both read from the same canvas
  * instead of each keeping their own copy.

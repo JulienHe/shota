@@ -18,7 +18,7 @@ interface DragRect {
 
 // Empirical correction (physical px) for the window-snap highlight: even
 // using DWM's extended-frame-bounds (the standard "true visual window edge"
-// API), the box still measured off to the right on the user's machine —
+// API), the box still measured off to the right on the user's machine ~
 // verified as a pure horizontal translation, not a size error. 7px left it
 // ~3px short, so tuned up to 10px based on direct user feedback rather than
 // further Win32 theory.
@@ -31,7 +31,7 @@ export function CaptureOverlay() {
 
   const cancel = useCallback(() => {
     // The overlay window is hidden and reused rather than destroyed, so
-    // React never remounts between captures — leaving `drag` set here would
+    // React never remounts between captures ~ leaving `drag` set here would
     // show next time's overlay with this time's stale selection rectangle
     // still drawn (at coordinates that no longer mean anything).
     setDrag(null);
@@ -93,7 +93,7 @@ export function CaptureOverlay() {
     } catch (err) {
       // Otherwise a failed capture leaves the overlay hidden (Rust hides it
       // before attempting the capture) with nothing telling the user it
-      // didn't work — cancel outright instead of leaving it in limbo.
+      // didn't work ~ cancel outright instead of leaving it in limbo.
       console.error("capture failed", err);
       setDrag(null);
       tauriApi.cancelCapture();

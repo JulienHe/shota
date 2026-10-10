@@ -39,7 +39,7 @@ export interface ShapeStyle {
   spotlightOpacity: number;
   spotlightRadius: number;
   /** Highlighter keeps its own colour/opacity for the same reason spotlight
-   * does — it wants a pale wash, not the bright opaque accent every other
+   * does ~ it wants a pale wash, not the bright opaque accent every other
    * tool defaults to. */
   highlightColor: string;
   highlightOpacity: number;
@@ -119,7 +119,7 @@ export interface StepShape extends BaseShape {
 /**
  * Dims the whole image *except* this rectangle, so the selected region reads
  * as spotlit. The x/y/width/height describe the clear cut-out, not the
- * overlay — the overlay always spans the full image.
+ * overlay ~ the overlay always spans the full image.
  */
 export interface SpotlightShape extends BaseShape {
   type: "spotlight";
@@ -127,7 +127,7 @@ export interface SpotlightShape extends BaseShape {
   height: number;
 }
 
-/** A marker swipe over text — a freehand stroke, multiply-blended, so what's
+/** A marker swipe over text ~ a freehand stroke, multiply-blended, so what's
  * underneath shows through instead of being covered. */
 export interface HighlightShape extends BaseShape {
   type: "highlight";
@@ -158,7 +158,7 @@ export type Shape =
  * Several behaviours apply to a *group* of shape types rather than one:
  * how a drag sizes them, whether a backwards drag needs normalising,
  * whether the Transformer offers a rotate handle. That membership used to
- * be re-listed inline at every site that cared — six or seven of them — so
+ * be re-listed inline at every site that cared ~ six or seven of them ~ so
  * adding a tool meant remembering all of them, and forgetting one failed
  * silently. The spotlight tool shipped exactly that way: it was in five of
  * the lists and missing from the two that size a drag, which is why its
@@ -176,7 +176,7 @@ const RECT_LIKE_TYPES = new Set<Shape["type"]>(["rectangle", "blur", "spotlight"
 const STROKE_LIKE_TYPES = new Set<Shape["type"]>(["freehand", "highlight"]);
 const SEGMENT_TYPES = new Set<Shape["type"]>(["line", "arrow"]);
 // Both sample or cut out the image underneath in axis-aligned image space,
-// so a rotated one would have to resample along a rotated grid — not
+// so a rotated one would have to resample along a rotated grid ~ not
 // supported, so the handle is hidden rather than offering a broken result.
 const NON_ROTATABLE_TYPES = new Set<Shape["type"]>(["blur", "spotlight"]);
 
@@ -215,13 +215,13 @@ export function contrastTextColor(hex: string): string {
   const r = parseInt(clean.substring(0, 2), 16);
   const g = parseInt(clean.substring(2, 4), 16);
   const b = parseInt(clean.substring(4, 6), 16);
-  // Rec. 601 luma — plenty for choosing ink on a flat swatch.
+  // Rec. 601 luma ~ plenty for choosing ink on a flat swatch.
   const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   return luma > 0.6 ? "#1c1d22" : "#ffffff";
 }
 
 /** The spotlight's dimming colour, with its opacity baked into the string
- * (Konva takes no separate fill-opacity — see {@link fillForStyle}). */
+ * (Konva takes no separate fill-opacity ~ see {@link fillForStyle}). */
 export function spotlightFill(style: ShapeStyle): string {
   return hexToRgba(style.spotlightColor, style.spotlightOpacity);
 }
@@ -240,8 +240,8 @@ export function createShapeId(): string {
  * ignored by Konva), so the fill's alpha has to be baked into the color
  * string itself.
  *
- * This always returns a real color — even at alpha 0 for "stroke only" mode
- * — rather than `undefined`, because Konva only hit-tests a shape's interior
+ * This always returns a real color ~ even at alpha 0 for "stroke only" mode
+ * ~ rather than `undefined`, because Konva only hit-tests a shape's interior
  * (not just its stroke) when `fill` is set. Its hit canvas ignores the
  * actual alpha, so a fully transparent fill still keeps the whole shape
  * clickable/draggable while staying visually invisible.

@@ -7,7 +7,7 @@ import { ShapeComponentProps } from "./ShapeRenderer";
  *
  * Two deliberate choices make it behave like a real marker:
  *
- * Multiply blending, rather than a plain translucent stroke — multiply keeps
+ * Multiply blending, rather than a plain translucent stroke ~ multiply keeps
  * dark text underneath fully dark while tinting only the light background. A
  * straight alpha stroke washes the text out along with the page and reads as
  * a sticker laid on top of it.

@@ -18,7 +18,7 @@ interface PopoverProps {
  * Small floating panel anchored to a toolbar button; closes on outside
  * click. Portals into `document.body` and positions itself with `fixed`
  * coordinates measured from the anchor, rather than sitting `position:
- * absolute` inside the anchor's own DOM subtree — the toolbar it usually
+ * absolute` inside the anchor's own DOM subtree ~ the toolbar it usually
  * triggers from clips overflow (for its own horizontal-scroll-avoidance
  * reasons unrelated to this panel), which silently clipped/scrollbar'd the
  * panel instead of letting it float freely below the bar.

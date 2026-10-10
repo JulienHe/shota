@@ -60,7 +60,7 @@ export function HistoryBar() {
     setFade(atStart && atEnd ? "none" : atStart ? "right" : atEnd ? "left" : "both");
   }, []);
 
-  // Re-measured on scroll, on resize, and whenever the list changes — a
+  // Re-measured on scroll, on resize, and whenever the list changes ~ a
   // delete can take the strip from overflowing to fitting.
   useEffect(() => {
     updateFade();
@@ -108,12 +108,12 @@ export function HistoryBar() {
 
   // Drag-to-scroll the strip. Opening an entry is now an explicit Restore
   // button rather than a click on the thumbnail, so this no longer has to
-  // tell a drag from a tap — it only has to stay out of the buttons' way.
+  // tell a drag from a tap ~ it only has to stay out of the buttons' way.
   const onPointerDown = (e: React.PointerEvent) => {
     const track = trackRef.current;
     if (!track) return;
     // A press that starts on one of the hover actions is a button press, not
-    // a drag — leave it entirely to the button's own click handler.
+    // a drag ~ leave it entirely to the button's own click handler.
     if ((e.target as HTMLElement).closest("[data-action]")) return;
     dragRef.current = { startX: e.clientX, startScroll: track.scrollLeft };
     track.setPointerCapture(e.pointerId);

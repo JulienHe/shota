@@ -1,7 +1,7 @@
 import { createLucideIcon } from "lucide-react";
 
 /**
- * A circled "1" — what the step tool actually draws. Lucide has no circled
+ * A circled "1" ~ what the step tool actually draws. Lucide has no circled
  * digit, so this is built with its own factory rather than hand-rolled SVG,
  * which keeps the stroke width, line caps and sizing identical to every
  * other icon in the toolbar.

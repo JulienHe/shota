@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 // Keyed by data-URL source. The background screenshot and every blur/
 // pixelate region (each a separate Konva.Image reading the same source)
 // used to independently `new Image()` + reload the full capture from its
-// data URL — for a multi-MB 4K screenshot, redundant decode work for every
+// data URL ~ for a multi-MB 4K screenshot, redundant decode work for every
 // extra shape. The background image is always the first thing loaded after
 // a capture, so by the time any shape needs the same source, this is
 // already warm.
@@ -12,7 +12,7 @@ const MAX_CACHED_IMAGES = 3;
 
 function cacheImage(src: string, img: HTMLImageElement) {
   imageCache.set(src, img);
-  // Each capture can be several MB decoded — without a cap, a long session
+  // Each capture can be several MB decoded ~ without a cap, a long session
   // with many captures would hold every past screenshot in memory forever.
   while (imageCache.size > MAX_CACHED_IMAGES) {
     const oldest = imageCache.keys().next().value;
@@ -26,7 +26,7 @@ function cacheImage(src: string, img: HTMLImageElement) {
  * call (e.g. Canvas's background image) hits it synchronously instead of
  * decoding the same multi-MB data URL a second time. EditorWindow already
  * has to decode the capture once itself (to read width/height before it
- * can even call `loadImage`) — without this, that decoded image was
+ * can even call `loadImage`) ~ without this, that decoded image was
  * discarded and Canvas would redundantly decode the exact same bytes
  * again, which is what made the toolbar visibly render before the image did.
  */

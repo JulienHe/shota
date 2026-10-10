@@ -10,7 +10,7 @@ interface UiState {
    * selection handles while it is: they sit directly on the corners you're
    * judging when dragging a corner-radius slider or picking a colour, so
    * leaving them up means you can't actually see what you're changing. The
-   * shape stays selected throughout — only the handles are hidden — so they
+   * shape stays selected throughout ~ only the handles are hidden ~ so they
    * come straight back when the dropdown closes.
    */
   styleMenuOpen: boolean;

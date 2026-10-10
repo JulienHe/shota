@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to report this. The fields below are the ones
-        that usually determine whether a bug can be reproduced — screen setup and
+        that usually determine whether a bug can be reproduced ~ screen setup and
         Windows version especially, since most of Shota's trickier bugs have come
         from multi-monitor, DPI scaling, or compositor behaviour.
 
@@ -71,4 +71,4 @@ body:
     id: extra
     attributes:
       label: Screenshots or anything else
-      description: A screenshot of the problem helps a lot — you can paste images directly into this box.
+      description: A screenshot of the problem helps a lot ~ you can paste images directly into this box.

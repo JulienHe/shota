@@ -10,13 +10,13 @@ use crate::windows::{open_capture_overlay, open_editor_with_history, toggle_hist
 // build and an installed release build fight over these: whichever registers
 // first wins and the other silently gets nothing. Debug builds therefore take
 // a different set, which is what makes it possible to run `tauri dev` against
-// an installed Shota — needed to test the updater, since that can only be
+// an installed Shota ~ needed to test the updater, since that can only be
 // exercised by a real install talking to a real release.
 #[cfg(not(debug_assertions))]
 pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Shift+3";
 #[cfg(not(debug_assertions))]
 pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Shift+4";
-/// Not user-rebindable (yet) — no entry in ShortcutKind/PersistedSettings,
+/// Not user-rebindable (yet) ~ no entry in ShortcutKind/PersistedSettings,
 /// unlike Fullscreen/Area which have a settings UI.
 #[cfg(not(debug_assertions))]
 pub const HISTORY_SHORTCUT: &str = "Ctrl+Shift+6";
@@ -93,7 +93,7 @@ pub fn update_shortcut(app: &AppHandle, kind: ShortcutKind, accelerator: String)
 }
 
 /// Registers the fixed Ctrl+Shift+6 shortcut that toggles the history
-/// carousel — separate from `register_all` since it isn't part of the
+/// carousel ~ separate from `register_all` since it isn't part of the
 /// rebindable Fullscreen/Area shortcut set.
 pub fn register_history_shortcut(app: &AppHandle) -> Result<(), String> {
     let handler_app = app.clone();

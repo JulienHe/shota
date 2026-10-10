@@ -26,8 +26,8 @@ function roundedRectPath(ctx: CanvasRenderingContext2D, w: number, h: number, ra
  * rectangle punched out of it, so the selection reads as spotlit.
  *
  * The hole is cut with an even-odd fill of two subpaths (whole image, then
- * the cut-out) in a single shape. The alternative — a full-size scrim plus a
- * `destination-out` rect — would need the pair wrapped in a cached Group to
+ * the cut-out) in a single shape. The alternative ~ a full-size scrim plus a
+ * `destination-out` rect ~ would need the pair wrapped in a cached Group to
  * stop the erase leaking onto the photo underneath, and caching a
  * full-resolution offscreen canvas on every edit is very expensive at 4K.
  */
@@ -46,7 +46,7 @@ export function SpotlightShapeView({ shape, ...common }: ShapeComponentProps<Spo
       width={Math.max(1, shape.width)}
       height={Math.max(1, shape.height)}
       rotation={shape.rotation}
-      // Redraw when any of these change — Konva can't see into sceneFunc.
+      // Redraw when any of these change ~ Konva can't see into sceneFunc.
       sceneFunc={(ctx, node) => {
         const raw = ctx._context;
         const w = Math.max(1, node.width());

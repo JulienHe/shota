@@ -53,7 +53,7 @@ export interface MenuProps {
  * A pill that opens a single slider. Six of these were written out
  * longhand (stroke width, corner radius, font size, spotlight radius,
  * highlighter thickness, and the blur intensity that still lives inline
- * with its effect toggle) — identical but for the id, icon and range.
+ * with its effect toggle) ~ identical but for the id, icon and range.
  */
 export function SliderOption({
   id,
@@ -85,7 +85,7 @@ export function SliderOption({
 
 /**
  * A colour dot that opens a palette, optionally with a strength slider
- * under it — the spotlight and highlighter both need exactly that pairing,
+ * under it ~ the spotlight and highlighter both need exactly that pairing,
  * and had it written out twice, identically, differing in one word.
  */
 export function ColorOption({

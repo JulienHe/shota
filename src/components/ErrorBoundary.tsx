@@ -12,7 +12,7 @@ interface State {
 /**
  * Every window here draws its own chrome (decorations(false)), so if a
  * window's React tree throws during render there's no native title bar
- * left to close it with — it's just stuck. This catches that instead of
+ * left to close it with ~ it's just stuck. This catches that instead of
  * leaving a blank, unclosable window, and surfaces the actual error so it
  * can be diagnosed instead of guessed at.
  */

@@ -3,7 +3,7 @@ import { Shape } from "./types";
 
 /**
  * Konva's Transformer live-drags a resize by applying scaleX/scaleY to the
- * node rather than changing its width/height directly — left alone, that
+ * node rather than changing its width/height directly ~ left alone, that
  * visibly stretches whatever's rendered (glyphs, a cached bitmap) instead of
  * revealing more/less of it. Baking the scale into real width *and height*
  * and resetting scale to 1 on every tick is the fix used wherever a shape
@@ -18,7 +18,7 @@ export function bakeNodeScale(node: Konva.Node, minSize = 1): { width: number; h
 
 /**
  * Same idea as {@link bakeNodeScale}, but for nodes (like Konva.Text) whose
- * height is auto-derived from content rather than an explicit attr — baking
+ * height is auto-derived from content rather than an explicit attr ~ baking
  * a height into them would defeat that auto-sizing, so only width is baked.
  */
 export function bakeNodeScaleX(node: Konva.Node, minWidth = 1): number {
@@ -51,7 +51,7 @@ export function getTransformPatch(shape: Shape, node: Konva.Node): Partial<Shape
       // Same reasoning as "text" below: the live onTransform handler (see
       // BlurShape.tsx) already bakes scale into the node's own width/height
       // and resets scale to 1 on every tick, so that's the authoritative
-      // current size — `shape.width * scaleX` here would multiply the stale
+      // current size ~ `shape.width * scaleX` here would multiply the stale
       // pre-resize width by an already-reset (1) scale and discard the
       // resize entirely.
       return {
@@ -65,7 +65,7 @@ export function getTransformPatch(shape: Shape, node: Konva.Node): Partial<Shape
       // Not `shape.width * scaleX`: the live onTransform handler (see
       // Canvas.tsx) already continuously resets the node's own scale to 1
       // and bakes the size change straight into its `width` on every tick,
-      // so that's the authoritative current size — by the time this runs,
+      // so that's the authoritative current size ~ by the time this runs,
       // scaleX is back to 1 and multiplying the *stale* React-state width by
       // it would just discard the resize.
       return { ...base, width: Math.max(20, (node as Konva.Text).width() * scaleX) };
@@ -94,7 +94,7 @@ export function getTransformPatch(shape: Shape, node: Konva.Node): Partial<Shape
         height: Math.max(8, (node as Konva.Shape).height()),
       };
     case "step":
-      // A badge is a circle, so it only has one meaningful dimension — take
+      // A badge is a circle, so it only has one meaningful dimension ~ take
       // whichever axis the user dragged furthest and keep it round (the
       // Transformer is also set to keepRatio for this type).
       return { ...base, radius: Math.max(8, shape.radius * Math.max(scaleX, scaleY)) };

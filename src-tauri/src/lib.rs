@@ -38,7 +38,7 @@ pub fn run() {
             // the very first real capture of the session doesn't have to
             // bootstrap either page from scratch (white flash). The editor
             // uses DWM cloaking rather than the overlay's off-screen/hidden
-            // trick — see prewarm_editor_window for why.
+            // trick ~ see prewarm_editor_window for why.
             windows::prewarm_capture_overlay(&handle);
             windows::prewarm_editor_window(&handle);
             // Silent: a failed check at launch (no network, GitHub down)

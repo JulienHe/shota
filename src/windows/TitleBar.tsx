@@ -11,7 +11,7 @@ import { t } from "../lib/i18n";
  * row as the window controls, CleanShot-style. `data-tauri-drag-region`
  * (deep mode) makes every bit of empty space in the bar draggable/
  * double-click-to-maximize while leaving buttons, the select, etc. fully
- * clickable — Tauri's drag script only intercepts a mousedown whose actual
+ * clickable ~ Tauri's drag script only intercepts a mousedown whose actual
  * target isn't itself a clickable element.
  */
 export function TitleBar() {

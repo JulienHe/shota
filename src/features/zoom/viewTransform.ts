@@ -8,7 +8,7 @@ export interface Point {
 /**
  * Converts a point in image-space (the coordinate system the screenshot and
  * every shape live in) to absolute stage-space (pixels within the Konva
- * Stage's own container, accounting for the current pan/zoom) — and back.
+ * Stage's own container, accounting for the current pan/zoom) ~ and back.
  * Re-derived independently in a few places before this existed (the crop
  * tool's drag/resize clamping, the cursor→image-point conversion, the text
  * editor's overlay positioning); this is the one place that math lives now.
@@ -41,7 +41,7 @@ const FIT_PADDING = 40;
 
 /**
  * The zoom level that fits an image inside the viewport, never magnifying
- * past 1:1 — a small screenshot should sit at its real size rather than
+ * past 1:1 ~ a small screenshot should sit at its real size rather than
  * being blown up to fill the window.
  */
 export function fitScale(image: Size, viewport: Size): number {
@@ -56,9 +56,9 @@ export function fitScale(image: Size, viewport: Size): number {
  * A complete view (scale + pan) that centres an image in the viewport at
  * the given scale, or at the fitted scale when none is given.
  *
- * Both halves of this used to be written out twice in Canvas — once in
+ * Both halves of this used to be written out twice in Canvas ~ once in
  * `zoomToFit` and again in the layout effect that reacts to a new image or
- * a resize — including the padding constant, which is exactly the kind of
+ * a resize ~ including the padding constant, which is exactly the kind of
  * thing that drifts between two copies.
  */
 export function centeredView(image: Size, viewport: Size, scale = fitScale(image, viewport)): ZoomState {

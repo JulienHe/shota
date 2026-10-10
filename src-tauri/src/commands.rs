@@ -70,12 +70,12 @@ pub fn overlay_ready(app: AppHandle) -> Result<(), String> {
 
 /// Shared by `finish_region_capture` and `finish_window_capture`: hide the
 /// overlay (its selection rectangle / dimming) and give the compositor a
-/// moment to actually repaint without it before grabbing pixels — otherwise
-/// the overlay's own chrome can get baked into the screenshot — then hand
+/// moment to actually repaint without it before grabbing pixels ~ otherwise
+/// the overlay's own chrome can get baked into the screenshot ~ then hand
 /// whatever `capture_fn` actually captured off to the editor.
 ///
 /// The overlay is left hidden rather than destroyed (see `open_capture_overlay`),
-/// so it's already loaded and styled the next time — recreating it from
+/// so it's already loaded and styled the next time ~ recreating it from
 /// scratch on every single capture was showing a full white flash each time.
 fn finish_capture(app: &AppHandle, capture_fn: impl FnOnce() -> Result<Vec<u8>, String>) -> Result<(), String> {
     hide_capture_overlay(app)?;
@@ -124,7 +124,7 @@ pub fn take_pending_capture(app: AppHandle) -> Option<PendingCapture> {
 /// inside the capture event itself, which meant inflating it by a third,
 /// JSON-escaping tens of megabytes, re-parsing that string in JS and
 /// base64-decoding it again before decoding could even start. The frontend
-/// now wraps these bytes in a blob URL instead — same-origin, so the canvas
+/// now wraps these bytes in a blob URL instead ~ same-origin, so the canvas
 /// stays untainted and Copy/Save keep working unchanged.
 #[tauri::command]
 pub fn take_capture_image(app: AppHandle, id: String) -> Result<tauri::ipc::Response, String> {
@@ -189,7 +189,7 @@ pub fn update_history_entry(
 
 /// Copies a stored capture straight to the clipboard, without opening it.
 ///
-/// This is the *unannotated* capture — the pixels as taken. Annotations live
+/// This is the *unannotated* capture ~ the pixels as taken. Annotations live
 /// alongside it as shapes and are only rendered by the editor, so anything
 /// drawn on a past capture is not included here. Open the entry to copy it
 /// with its annotations.

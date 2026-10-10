@@ -12,7 +12,7 @@ const WIDTH_FRACTION: f64 = 0.8;
 const BOTTOM_MARGIN: f64 = 14.0;
 
 /// Opens the history carousel if it isn't already open, or closes it if it
-/// is — Ctrl+Shift+6 toggles the same way the capture area shortcut toggles
+/// is ~ Ctrl+Shift+6 toggles the same way the capture area shortcut toggles
 /// window-snap mode.
 pub fn toggle_history_window(app: &AppHandle) -> Result<(), String> {
     if app.get_webview_window(HISTORY_LABEL).is_some() {
@@ -48,7 +48,7 @@ pub fn open_history_window(app: &AppHandle) -> Result<(), String> {
     let window = chromeless_window_builder(app, HISTORY_LABEL, "shota-history")
         // Real blur, done by the OS compositor. `backdrop-filter` in the page
         // cannot do this: the window behind the panel is transparent, so
-        // there is nothing in the document for CSS to blur — it would sample
+        // there is nothing in the document for CSS to blur ~ it would sample
         // emptiness and the "frosted" panel would just be a flat translucent
         // one. Acrylic blurs what is actually behind the *window*.
         .effects(WindowEffectsConfig {

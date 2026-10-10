@@ -10,7 +10,7 @@ import zhHans from "../../locales/zh-Hans.json";
  * Translation lookup for the frontend.
  *
  * The catalogues live in `locales/` at the repo root rather than under `src/`
- * because Rust reads the same files — the tray menu and the updater dialogs
+ * because Rust reads the same files ~ the tray menu and the updater dialogs
  * are native, and keeping two copies of "Quit Shota" in two languages each
  * is how they end up disagreeing.
  *

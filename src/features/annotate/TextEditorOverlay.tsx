@@ -46,7 +46,7 @@ export function TextEditorOverlay({ shape, view, onCommit, onCancel }: TextEdito
       onKeyDown={(e) => {
         if (e.key === "Escape") onCancel();
         // e.nativeEvent.isComposing is true while an IME (Japanese, Chinese,
-        // Korean, …) is still resolving a candidate — the Enter that
+        // Korean, …) is still resolving a candidate ~ the Enter that
         // confirms the composition also matches this key/shiftKey check, so
         // without this guard it both finalized the IME text AND committed
         // the whole text box out from under it, sometimes leaving a stray

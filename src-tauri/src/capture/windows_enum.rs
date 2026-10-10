@@ -19,7 +19,7 @@ pub struct WindowInfo {
 
 /// xcap reports each window's *client-area* rect (`GetWindowInfo().rcClient`,
 /// which excludes the title bar and border) rather than its full visible
-/// bounds — fine for the pixel capture itself, but it left our window-snap
+/// bounds ~ fine for the pixel capture itself, but it left our window-snap
 /// highlight sitting inset from the window's actual edges (~10px off on the
 /// left, more on top). Re-querying DWM's extended frame bounds ourselves
 /// gives the true on-screen rect; `id` is the HWND xcap already handed back

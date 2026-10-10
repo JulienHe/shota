@@ -7,7 +7,7 @@ use crate::state::AppState;
 
 /// Update checking, driven entirely from Rust.
 ///
-/// Shota has no main window — it lives in the tray, and the windows it does
+/// Shota has no main window ~ it lives in the tray, and the windows it does
 /// own are a capture overlay, an editor and a history strip, none of which
 /// is a sensible host for "a new version is available". Running the whole
 /// flow here means the updater never needs a webview to exist, so a check
@@ -24,7 +24,7 @@ pub fn check_for_updates(app: &AppHandle, user_initiated: bool) {
     let app = app.clone();
     // Spawned because downloading and installing are long-running, and this
     // is called from the tray's menu handler, which runs on the main thread
-    // — blocking it would freeze the tray menu and every window with it.
+    // ~ blocking it would freeze the tray menu and every window with it.
     tauri::async_runtime::spawn(async move {
         let updater = match app.updater() {
             Ok(updater) => updater,

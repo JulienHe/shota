@@ -9,7 +9,7 @@ import { ShapeComponentProps } from "./ShapeRenderer";
 
 /**
  * Renders a cropped copy of the screenshot itself, blurred or pixelated, on
- * top of the real image — redacts whatever's underneath rather than
+ * top of the real image ~ redacts whatever's underneath rather than
  * covering it with an opaque shape. Konva filters only apply to a cached
  * bitmap snapshot of the node, so it has to be explicitly re-cached
  * whenever the crop region, effect, or intensity changes.
@@ -49,7 +49,7 @@ export function BlurShapeView({ shape, ...common }: ShapeComponentProps<BlurShap
       pixelSize={blurEffect === "pixelate" ? blurIntensity : undefined}
       onDragMove={(e) => {
         // `crop` is a React-controlled prop bound to shape.x/y, so it only
-        // reflects the *committed* position — Konva moves the node's actual
+        // reflects the *committed* position ~ Konva moves the node's actual
         // x/y live during the drag without touching that. Left alone, the
         // patch drags around still showing whatever was blurred at its
         // original spot, only re-sampling the real content once the drag
@@ -65,7 +65,7 @@ export function BlurShapeView({ shape, ...common }: ShapeComponentProps<BlurShap
       onTransform={(e) => {
         // Same problem as dragging, but for resize: Konva's default is to
         // apply a live scaleX/scaleY to the node, which just stretches the
-        // already-cached blurred bitmap — the redaction visibly distorts
+        // already-cached blurred bitmap ~ the redaction visibly distorts
         // instead of revealing more/less of the source. Baking the scale
         // into width/height and re-cropping/re-caching from those on every
         // tick makes it actually resample a bigger or smaller region, same

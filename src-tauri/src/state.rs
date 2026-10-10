@@ -77,7 +77,7 @@ pub struct AppState {
     /// `overlay_ready` at least once.
     ///
     /// The overlay window is created (cloaked) at startup so it's already
-    /// loaded when the user first hits the capture shortcut — but creating
+    /// loaded when the user first hits the capture shortcut ~ but creating
     /// the window returns immediately, while loading its page does not. A
     /// shortcut pressed inside that gap used to uncloak a window whose
     /// React tree hadn't mounted: a full-screen, always-on-top, completely

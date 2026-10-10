@@ -14,7 +14,7 @@ export interface HoleRect {
  * Built from four panels around the hole rather than one element with a
  * giant `box-shadow` spread (the obvious way to punch a hole, and what this
  * replaced). The shadow version made every animation frame recompute and
- * repaint a screen-sized blur-less shadow — on a 4K or multi-monitor desktop
+ * repaint a screen-sized blur-less shadow ~ on a 4K or multi-monitor desktop
  * that is a lot of pixels per frame for something tracking the pointer.
  *
  * Each panel is instead a full-size div moved and resized purely by
@@ -24,7 +24,7 @@ export interface HoleRect {
  * composites while width/height does not.
  *
  * A null `hole` collapses to a zero-size rectangle in the middle, which
- * leaves the panels covering everything — so "nothing hovered" is a plain
+ * leaves the panels covering everything ~ so "nothing hovered" is a plain
  * full dim, reached by the same animation rather than by swapping elements
  * in and out.
  */

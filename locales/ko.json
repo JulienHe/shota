@@ -41,9 +41,9 @@
     "copy": "복사",
     "save": "다른 이름으로 저장…",
     "preparing": "준비 중…",
-    "saveFailed": "저장하지 못했습니다 — 다시 시도하세요",
+    "saveFailed": "저장하지 못했습니다 ~ 다시 시도하세요",
     "copiedHex": "{hex} 복사됨",
-    "copyFailed": "복사하지 못했습니다 — 다시 시도하세요",
+    "copyFailed": "복사하지 못했습니다 ~ 다시 시도하세요",
     "cropConfirm": "자르기",
     "cropCancel": "취소",
     "zoomToFit": "창에 맞추기"
@@ -77,7 +77,7 @@
     "fullScreen": "전체 화면",
     "areaWindow": "영역 / 창",
     "recording": "키 조합을 누르세요…",
-    "registerFailed": "이 조합은 등록할 수 없습니다 — 다른 조합을 사용하세요.",
+    "registerFailed": "이 조합은 등록할 수 없습니다 ~ 다른 조합을 사용하세요.",
     "language": "언어",
     "languageSystem": "시스템 설정 따르기"
   },

@@ -16,7 +16,7 @@ interface DropdownProps {
 }
 
 /**
- * A small pill that opens a Popover menu below (or above) it on click — the
+ * A small pill that opens a Popover menu below (or above) it on click ~ the
  * shared trigger+panel wiring behind every dropdown-style control in the
  * toolbar and status bar (color/stroke/fill pickers, the zoom menu, …), so
  * each one doesn't hand-roll its own open-state/anchor-ref/Popover plumbing.

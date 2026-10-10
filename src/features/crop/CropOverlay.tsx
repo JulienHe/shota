@@ -38,7 +38,7 @@ export function CropOverlay({ imageElement, cropRect, view, onChange }: CropOver
 
   // Konva's Transformer boundBoxFunc works in absolute (stage-scaled)
   // coordinates, not the image-local pixel space the rest of the app's
-  // shapes live in — the image's own bounds have to be converted into that
+  // shapes live in ~ the image's own bounds have to be converted into that
   // same space to clamp a resize against them.
   const boundBoxFunc = (oldBox: Konva.Box, newBox: Konva.Box): Konva.Box => {
     const { x: minX, y: minY } = imageToAbsolute(view, { x: 0, y: 0 });
@@ -86,7 +86,7 @@ export function CropOverlay({ imageElement, cropRect, view, onChange }: CropOver
 
   // Corner handles are small squares; edge handles are elongated pills
   // (wide-and-short on the top/bottom edges, tall-and-narrow on the
-  // left/right ones) — Konva draws every anchor identically by default, so
+  // left/right ones) ~ Konva draws every anchor identically by default, so
   // this reshapes each one by its anchor name. Anchors are positioned by
   // their center via offsetX/offsetY, which has to move in lockstep with
   // width/height or the handle drifts off its actual drag point.

@@ -12,7 +12,7 @@ export function StepShapeView({ shape, ...common }: ShapeComponentProps<StepShap
         text={String(shape.number)}
         // Konva lays text out from its top-left, so centring it on the
         // circle's origin means a box the size of the badge, offset by the
-        // radius — not `align` alone, which only centres within that box.
+        // radius ~ not `align` alone, which only centres within that box.
         width={diameter}
         height={diameter}
         offsetX={shape.radius}

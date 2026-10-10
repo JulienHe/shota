@@ -11,7 +11,7 @@ import { useEffect } from "react";
  *
  * Written out longhand as nested `requestAnimationFrame` calls in three
  * places (the overlay's ready signal, the editor's, and the Save toast)
- * before this existed — the nesting reads like a typo unless you already
+ * before this existed ~ the nesting reads like a typo unless you already
  * know why it's there.
  */
 export function afterNextPaint(): Promise<void> {

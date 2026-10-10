@@ -77,7 +77,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const nodeRefs = useRef<Map<string, Konva.Node>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
   // Starts null (rather than a guessed placeholder) so the very first "fit to
-  // window" calculation always uses a real, measured container size — an
+  // window" calculation always uses a real, measured container size ~ an
   // early guess here would produce a wrong scale that a later resize would
   // only recenter, never correct, permanently skewing shape coordinates.
   const [stageSize, setStageSize] = useState<{ width: number; height: number } | null>(null);
@@ -89,7 +89,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const [hoveredShapeId, setHoveredShapeId] = useState<string | null>(null);
   const previousImageRef = useRef<HTMLImageElement | null>(null);
   // Read from Transformer's boundBoxFunc, which Konva calls with no access to
-  // the originating keyboard event — a ref avoids re-rendering on every
+  // the originating keyboard event ~ a ref avoids re-rendering on every
   // keystroke just to make the current Shift state available there.
   const shiftPressedRef = useRef(false);
 
@@ -105,7 +105,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
   // Renders the stage to a PNG data URL at the image's exact native
   // resolution. Deliberately doesn't touch React selection state (only the
-  // Transformer's own Konva-level `nodes([])`) — hiding and restoring it
+  // Transformer's own Konva-level `nodes([])`) ~ hiding and restoring it
   // happens within one synchronous call, so nothing ever actually paints
   // with the selection handles removed; going through `selectShape` instead
   // would trigger a React re-render, which matters once this same function
@@ -117,13 +117,13 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     transformerRef.current?.nodes([]);
     // The drop shadow is purely editor chrome (it falls outside the crop
     // rect below anyway), but Konva still has to rasterize the blur while
-    // drawing the layer for export — a 24px gaussian-style blur redrawn at
+    // drawing the layer for export ~ a 24px gaussian-style blur redrawn at
     // full native resolution (often a multi-x upscale from the on-screen
     // preview) is real, avoidable CPU cost on every copy/save.
     const imageNode = imageNodeRef.current;
     imageNode?.shadowEnabled(false);
     // width/height here are in on-screen (zoomed) pixels, then pixelRatio
-    // upsamples back to native resolution — `1 / view.scale` as the ratio
+    // upsamples back to native resolution ~ `1 / view.scale` as the ratio
     // doesn't exactly cancel out imageElement.width * view.scale once Konva
     // rounds that screen-space width to a whole pixel internally, so the
     // export came out a pixel short. Deriving pixelRatio from the
@@ -144,7 +144,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   }, [imageElement, view]);
 
   // Caches the last export, keyed on the exact shapes/image references that
-  // produced it — both only ever change at discrete commit points (shape
+  // produced it ~ both only ever change at discrete commit points (shape
   // added, drag/transform finished, style edited), never mid-gesture, so
   // reference equality is a cheap and correct "has anything actually
   // changed" check.
@@ -168,7 +168,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   }, [shapes, image]);
 
   // Primes the cache in the background, debounced, whenever the document
-  // actually changes — by the time the user clicks Copy/Save, the expensive
+  // actually changes ~ by the time the user clicks Copy/Save, the expensive
   // render+encode has usually already happened, so the click just reuses it
   // instead of paying for it right then.
   useEffect(() => {
@@ -222,7 +222,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
         // (sub-pixel layout jitter, DPI/monitor changes while dragging,
         // etc.). Recentering the view on every tick made the image visibly
         // shift out from under an in-progress shape drag, so only actually
-        // update — and trigger the recenter effect below — on a real change.
+        // update ~ and trigger the recenter effect below ~ on a real change.
         if (prev && Math.abs(prev.width - width) < 1 && Math.abs(prev.height - height) < 1) {
           return prev;
         }
@@ -270,7 +270,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     };
     // If focus leaves the window while Space is held (switching apps, a
     // native dialog stealing focus, etc.), the keyup fires somewhere else
-    // and never reaches us — leaving the whole canvas permanently
+    // and never reaches us ~ leaving the whole canvas permanently
     // draggable. Releasing on blur is the standard fix for a stuck
     // modifier key.
     const onBlur = () => {
@@ -299,7 +299,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     transformer.nodes(node ? [node] : []);
     transformer.getLayer()?.batchDraw();
     // `styleMenuOpen` unmounts and remounts the Transformer, which comes back
-    // as a fresh instance with no nodes attached — without it in the deps the
+    // as a fresh instance with no nodes attached ~ without it in the deps the
     // handles would never reappear after closing a style dropdown.
   }, [selectedShapeId, shapes, styleMenuOpen]);
 
@@ -346,13 +346,13 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
         if (!hex) return;
         updateStyle({ stroke: hex, fillColor: hex });
         // Optimistic: confirm and return to Select right away rather than
-        // waiting on the async clipboard write — it's effectively always
+        // waiting on the async clipboard write ~ it's effectively always
         // fast, so waiting just adds a felt delay.
         showToast(`Copied ${hex.toUpperCase()}`);
         setActiveTool("select");
         writeText(hex).catch((err) => {
           console.error("copy hex failed", err);
-          showToast("Copy failed — try again");
+          showToast("Copy failed ~ try again");
         });
         return;
       }
@@ -474,7 +474,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       const stage = stageRef.current;
       // Deliberately not `e.target === stage`. Konva reports the topmost
       // shape under the cursor as the target, so requiring the bare stage
-      // meant text and step badges could only be placed on empty image —
+      // meant text and step badges could only be placed on empty image ~
       // clicking to number a blurred region, or to label anything already
       // annotated, silently did nothing. Neither tool has any reason to care
       // what is underneath: shapes only respond to clicks while the Select
@@ -526,7 +526,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       // Konva drag events bubble up from whatever node is actually being
       // dragged (a shape) through to the Stage. Without this guard, dragging
       // a shape also ran this handler with e.target being that shape, not
-      // the Stage — writing the shape's small image-space x/y into the
+      // the Stage ~ writing the shape's small image-space x/y into the
       // view's pan position and yanking the whole canvas along with it.
       if (e.target !== e.currentTarget) return;
       setView((prev) => ({ ...prev, x: e.target.x(), y: e.target.y() }));
@@ -537,7 +537,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const handleTransformBoundBox = useCallback((oldBox: Konva.Box, newBox: Konva.Box): Konva.Box => {
     if (transformerRef.current?.getActiveAnchor() !== "rotater" || !shiftPressedRef.current) return newBox;
     // Snapping newBox.rotation in place (leaving x/y as Konva computed them
-    // for the raw angle) rotates the shape around the wrong pivot — x/y and
+    // for the raw angle) rotates the shape around the wrong pivot ~ x/y and
     // rotation both encode "rotate around the box's center", so changing one
     // without the other visibly translates the shape instead of just turning
     // it in place. Re-deriving the whole box from oldBox with the snapped
@@ -552,7 +552,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     const node = e.target;
     if (node.getClassName() !== "Text") return;
     // Left to Konva's default, live-dragging a resize handle stretches the
-    // Text node's own scaleX/scaleY — visibly squishing/stretching the
+    // Text node's own scaleX/scaleY ~ visibly squishing/stretching the
     // glyphs instead of resizing the box. Reflowing into the new width and
     // resetting scale back to 1 on every tick keeps the font looking normal
     // and lets the text just take up the available space; height is never
@@ -683,7 +683,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
             updateShape(editingShape.id, { text: text.replace(/\n+$/, "") });
             setEditingTextId(null);
             // Konva.Text's height is auto-derived from wrapped line count,
-            // not an attr the Transformer's own change-listeners watch for —
+            // not an attr the Transformer's own change-listeners watch for ~
             // its cached selection box can end up one text change behind
             // (visibly wrong until something else, like a font-size tweak,
             // happens to force a recompute). One extra frame after the
@@ -737,7 +737,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 /**
  * Re-derives a Transformer bounding box ({x,y,width,height,rotation}, all in
  * absolute coordinates, rotation in radians) at a new target rotation while
- * keeping its center fixed — the same "rotate around center" math Konva uses
+ * keeping its center fixed ~ the same "rotate around center" math Konva uses
  * internally, exposed here so a caller can substitute a snapped target angle
  * and still get a correctly-translated x/y to go with it.
  */
@@ -753,7 +753,7 @@ function rotateBoxAroundCenter(box: Konva.Box, targetRotation: number): Konva.Bo
 }
 
 // A very short/near-zero-length line has a near-degenerate bounding box, and
-// Konva's Transformer can't derive a usable rotate handle from that — the
+// Konva's Transformer can't derive a usable rotate handle from that ~ the
 // handle ends up sitting on top of (or inside) the resize anchors instead of
 // clear of them. Arrow never hits this because its arrowhead has its own
 // fixed minimum visual size regardless of point length; a plain line has no

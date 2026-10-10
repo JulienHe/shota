@@ -31,7 +31,7 @@ requests at all**. Updates are handled by the Microsoft Store itself.
 
 The version distributed directly from GitHub makes exactly one kind of request: it asks
 GitHub whether a newer release of Shota exists, when it starts and when you choose
-"Check for Updates". That request sends nothing about you or your screenshots — it
+"Check for Updates". That request sends nothing about you or your screenshots ~ it
 retrieves a small public file listing the latest version number. If an update is
 available and you agree to install it, Shota then downloads that release from GitHub.
 

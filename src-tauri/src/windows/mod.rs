@@ -16,7 +16,7 @@ use tauri::{AppHandle, LogicalPosition, LogicalSize, WebviewUrl, WebviewWindow, 
 /// no taskbar entry, not resizable.
 ///
 /// Both windows had this same seven-call chain written out separately,
-/// which is how they drifted — only one of them was excluded from screen
+/// which is how they drifted ~ only one of them was excluded from screen
 /// capture and had its open animation disabled, for no reason anyone chose.
 /// `finish_chromeless_window` applies those two.
 ///
@@ -77,8 +77,8 @@ fn set_dwm_value(
     use windows::Win32::Graphics::Dwm::DwmSetWindowAttribute;
 
     if let Ok(hwnd) = window.hwnd() {
-        // These attributes take a plain 4-byte int — a Win32 BOOL for the
-        // flags, an enum value for the rest — not the `windows` crate's own
+        // These attributes take a plain 4-byte int ~ a Win32 BOOL for the
+        // flags, an enum value for the rest ~ not the `windows` crate's own
         // wrapper types (avoids depending on exactly where those live across
         // crate versions).
         let _ = unsafe {
@@ -121,20 +121,20 @@ pub(super) fn round_window_corners(window: &WebviewWindow) {
 /// `WS_VISIBLE` true), but the compositor simply doesn't display it.
 ///
 /// This is a direct `DwmSetWindowAttribute` call via the raw HWND
-/// (`window.hwnd()`, a cheap field read) — deliberately NOT going through
+/// (`window.hwnd()`, a cheap field read) ~ deliberately NOT going through
 /// any of Tauri's own window-dispatch machinery (`.hide()`/`.show()`,
 /// `.with_webview()`, `.center()`, `.outer_position()`, ...). Those are all
 /// message-passed to the main event loop and, when called from a command
 /// that's itself already running inline on the main thread (which is how a
 /// *sync* command invoked via the webview's own IPC channel executes),
-/// re-enter that same dispatch machinery from inside its own callback —
+/// re-enter that same dispatch machinery from inside its own callback ~
 /// which is exactly what hung Shota outright on Escape/close when this was
 /// briefly swapped for real `hide()`/`show()` plus an explicit
 /// `with_webview` call to the WebView2 controller. Cloaking's raw HWND call
 /// sidesteps all of that.
 ///
 /// Known trade-off, not yet solved: cloaking is DWM/compositor-level state,
-/// which doesn't survive a Windows session change — logging off and back in
+/// which doesn't survive a Windows session change ~ logging off and back in
 /// (or an RDP/lock-screen cycle) can reset it, un-hiding a cloaked window
 /// showing whatever it last had on screen (the last screenshot). That's a
 /// real but rarer and far less disruptive bug than a hang, so this is the
@@ -147,7 +147,7 @@ pub(super) fn cloak_window(window: &WebviewWindow, cloak: bool) {
 /// Turns off DWM's default open/close window transition (a brief fade).
 /// A chromeless window is borderless and transparent, so that fade reads as
 /// a stray animated flash over the screen rather than a normal window
-/// appearing — these should just be there instantly.
+/// appearing ~ these should just be there instantly.
 #[cfg(windows)]
 pub(super) fn disable_show_animation(window: &WebviewWindow) {
     set_dwm_flag(
@@ -161,7 +161,7 @@ pub(super) fn disable_show_animation(window: &WebviewWindow) {
 /// level (`WDA_EXCLUDEFROMCAPTURE`, Windows 10 2004+), so its chrome can
 /// never end up baked into a screenshot no matter how capture and hide are
 /// timed relative to each other. The hide-then-sleep-then-capture dance in
-/// `finish_region_capture` / `finish_window_capture` was a race — DWM
+/// `finish_region_capture` / `finish_window_capture` was a race ~ DWM
 /// doesn't necessarily finish un-compositing a hidden always-on-top layered
 /// window within a fixed delay, which is why the overlay's border would
 /// occasionally still show up in the captured pixels. This makes that race

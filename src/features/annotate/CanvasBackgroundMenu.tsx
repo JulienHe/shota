@@ -7,7 +7,7 @@ import { t } from "../../lib/i18n";
 interface Option {
   id: CanvasBackground;
   label: string;
-  swatch: string | null; // null = "system" — shown as a SunMoon icon instead of a color swatch
+  swatch: string | null; // null = "system" ~ shown as a SunMoon icon instead of a color swatch
 }
 
 // `label` is a translation key, resolved at render rather than here: this

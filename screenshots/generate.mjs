@@ -33,7 +33,7 @@ const SAMPLE_SCALE = 2;
 const IMAGE = { width: SAMPLE.width * SAMPLE_SCALE, height: SAMPLE.height * SAMPLE_SCALE };
 
 // Mirrors fitScale/centeredView in src/features/zoom/viewTransform.ts. Kept
-// in sync by hand, which is fine for a tooling script — if it drifts, shots
+// in sync by hand, which is fine for a tooling script ~ if it drifts, shots
 // land in the wrong place and it's obvious on sight.
 const FIT_PADDING = 40;
 
@@ -47,7 +47,7 @@ async function renderSample(browser) {
 
 async function openEditor(browser, captureBase64, colorScheme = "light") {
   // The editor's chrome follows prefers-color-scheme, so telling Chromium the
-  // scheme is the whole of what shooting dark mode takes — the app's own CSS
+  // scheme is the whole of what shooting dark mode takes ~ the app's own CSS
   // does the rest.
   const page = await browser.newPage({ viewport: EDITOR, deviceScaleFactor: 2, colorScheme });
   await page.addInitScript(mockTauri({ label: "editor", captureBase64 }));
@@ -64,7 +64,7 @@ async function openEditor(browser, captureBase64, colorScheme = "light") {
  *
  * Coordinates have to be image-relative, not canvas-relative: the canvas is
  * a viewport onto a zoomed, centred image, so a fraction of the canvas box
- * lands somewhere arbitrary on the picture. Getting this wrong is silent —
+ * lands somewhere arbitrary on the picture. Getting this wrong is silent ~
  * the annotation is drawn perfectly, just not over the thing it's meant to
  * point at.
  */
@@ -104,7 +104,7 @@ async function tool(page, key) {
 }
 
 /**
- * Drops the selection so no transform handles end up in the shot — by
+ * Drops the selection so no transform handles end up in the shot ~ by
  * clicking the empty canvas *outside* the image, which is what actually
  * clears it (Escape isn't bound to deselect).
  */
@@ -120,7 +120,7 @@ async function deselect(page) {
  * transparency.
  *
  * Baked into the pixels rather than applied with CSS because GitHub strips
- * style attributes from READMEs — a `box-shadow` on the <img> tag is simply
+ * style attributes from READMEs ~ a `box-shadow` on the <img> tag is simply
  * dropped. Without it the editor's own near-white chrome dissolves into
  * GitHub's white page and the window looks like it has no edges.
  *
@@ -134,12 +134,12 @@ async function frame(browser, png) {
   // Every dimension here is doubled, because the shot is a 2x asset: the
   // README renders it at half this width, so a 1px border would land as a
   // half-pixel and disappear. Design the frame at the size it is *displayed*
-  // and then double it — 3px reads as a crisp 1.5px, not as nothing.
+  // and then double it ~ 3px reads as a crisp 1.5px, not as nothing.
   await page.setContent(`
     <style>
       html, body { margin: 0; background: transparent; }
       /* The padding is what the shadow lands on, and an element screenshot
-         clips to the element's box — so it has to be at least as deep as the
+         clips to the element's box ~ so it has to be at least as deep as the
          shadow reaches or the shadow ends in a hard straight edge. A
          shadow of 0 34px 80px extends offset + blur/2 = 74px below, 40px to
          the sides and only 6px above, hence the asymmetry: generous where
@@ -171,7 +171,7 @@ async function frame(browser, png) {
  * The README version has transparent padding so it drops onto a light or
  * dark page equally well. The Store composites screenshots onto its own
  * surface, where transparency either flattens to black or reads as a
- * mistake — and the Store also expects a consistent landscape size rather
+ * mistake ~ and the Store also expects a consistent landscape size rather
  * than whatever shape the window happened to be.
  */
 async function storeShot(browser, framed, name) {
@@ -278,7 +278,7 @@ async function main() {
     // fewer shape on display.
     //
     // An ellipse drags from its CENTRE, with the second point setting the
-    // radii — not corner to corner like a rectangle. Treating it as a corner
+    // radii ~ not corner to corner like a rectangle. Treating it as a corner
     // drag gives a shape twice the intended size, centred in the wrong place.
     await tool(page, "o");
     await dragOn(page, [0.335, 0.228], [0.45, 0.248]);
@@ -292,7 +292,7 @@ async function main() {
   }
 
   await browser.close();
-  console.log("\ndone — docs/screenshots/");
+  console.log("\ndone ~ docs/screenshots/");
 }
 
 main().catch((err) => {

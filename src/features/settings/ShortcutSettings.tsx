@@ -17,7 +17,7 @@ interface ShortcutSettingsProps {
   onChange: (shortcuts: Shortcuts) => void;
 }
 
-/** Each language named in itself, which is what people scan for — a French
+/** Each language named in itself, which is what people scan for ~ a French
  * speaker looks for "Français", not for "French". */
 const LANGUAGE_NAMES: Record<string, string> = {
   en: "English",
