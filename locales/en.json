@@ -2,7 +2,7 @@
   "tray": {
     "captureFullScreen": "Capture Full Screen",
     "captureArea": "Capture Area / Window",
-    "shortcuts": "Keyboard Shortcuts…",
+    "settings": "Settings…",
     "checkUpdates": "Check for Updates…",
     "quit": "Quit Shota"
   },
@@ -68,7 +68,7 @@
     "snapHint": "Click a window to capture it · Space to go back"
   },
   "main": {
-    "shortcutsButton": "Keyboard shortcuts",
+    "settingsButton": "Settings",
     "fullScreen": "Full screen",
     "areaWindow": "Area / window",
     "snapHint": "Hold Space while selecting an area to snap to a window."

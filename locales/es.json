@@ -2,7 +2,7 @@
   "tray": {
     "captureFullScreen": "Capturar pantalla completa",
     "captureArea": "Capturar área / ventana",
-    "shortcuts": "Atajos de teclado…",
+    "settings": "Ajustes…",
     "checkUpdates": "Buscar actualizaciones…",
     "quit": "Salir de Shota"
   },
@@ -68,7 +68,7 @@
     "snapHint": "Haz clic en una ventana para capturarla · Espacio para volver"
   },
   "main": {
-    "shortcutsButton": "Atajos de teclado",
+    "settingsButton": "Ajustes",
     "fullScreen": "Pantalla completa",
     "areaWindow": "Área / ventana",
     "snapHint": "Mantén Espacio mientras seleccionas para capturar una ventana entera."

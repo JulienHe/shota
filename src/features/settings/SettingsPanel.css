@@ -1,22 +1,22 @@
-.shortcut-settings {
+.settings-panel {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.shortcut-settings__row {
+.settings-panel__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.shortcut-settings__label {
+.settings-panel__label {
   font-size: 12px;
   color: #52525b;
 }
 
-.shortcut-settings__value {
+.settings-panel__value {
   font-size: 11px;
   font-family: inherit;
   color: #3f3f46;
@@ -27,17 +27,17 @@
   cursor: pointer;
 }
 
-.shortcut-settings__value:hover {
+.settings-panel__value:hover {
   background: #e4e4e7;
 }
 
-.shortcut-settings__recording {
+.settings-panel__recording {
   font-size: 11px;
   color: #3d7bfd;
   padding: 4px 8px;
 }
 
-.shortcut-settings__error {
+.settings-panel__error {
   margin: 0;
   font-size: 11px;
   color: #dc2626;
@@ -45,7 +45,7 @@
 
 /* Only appears when Windows has taken Print Screen, so it is allowed to be
    a little louder than the rest of this panel. */
-.shortcut-settings__notice {
+.settings-panel__notice {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -58,7 +58,7 @@
   line-height: 1.45;
 }
 
-.shortcut-settings__notice button {
+.settings-panel__notice button {
   flex: none;
   padding: 5px 10px 7px;
   border: none;
@@ -71,6 +71,6 @@
   cursor: pointer;
 }
 
-.shortcut-settings__notice button:hover {
+.settings-panel__notice button:hover {
   background: #1e40af;
 }

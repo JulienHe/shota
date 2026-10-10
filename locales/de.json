@@ -2,7 +2,7 @@
   "tray": {
     "captureFullScreen": "Gesamten Bildschirm aufnehmen",
     "captureArea": "Bereich / Fenster aufnehmen",
-    "shortcuts": "Tastenkürzel…",
+    "settings": "Einstellungen…",
     "checkUpdates": "Nach Updates suchen…",
     "quit": "Shota beenden"
   },
@@ -68,7 +68,7 @@
     "snapHint": "Fenster anklicken, um es aufzunehmen · Leertaste für zurück"
   },
   "main": {
-    "shortcutsButton": "Tastenkürzel",
+    "settingsButton": "Einstellungen",
     "fullScreen": "Gesamter Bildschirm",
     "areaWindow": "Bereich / Fenster",
     "snapHint": "Leertaste während der Auswahl halten, um ein ganzes Fenster aufzunehmen."

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Fullscreen, ScanLine, Settings } from "lucide-react";
 import { tauriApi } from "../lib/tauriApi";
 import { IconButton } from "../components/IconButton";
-import { ShortcutSettings, Shortcuts } from "../features/settings/ShortcutSettings";
+import { SettingsPanel, Shortcuts } from "../features/settings/SettingsPanel";
 import "./MainWindow.css";
 import { t } from "../lib/i18n";
 
@@ -21,11 +21,11 @@ export function MainWindow() {
           <img src="/logo.png" alt="" className="main-window__logo" />
           Shota
         </div>
-        <IconButton icon={Settings} label={t("main.shortcutsButton")} active={settingsOpen} onClick={() => setSettingsOpen((o) => !o)} />
+        <IconButton icon={Settings} label={t("main.settingsButton")} active={settingsOpen} onClick={() => setSettingsOpen((o) => !o)} />
       </div>
 
       {settingsOpen && shortcuts ? (
-        <ShortcutSettings shortcuts={shortcuts} onChange={setShortcuts} />
+        <SettingsPanel shortcuts={shortcuts} onChange={setShortcuts} />
       ) : (
         <>
           <div className="main-window__actions">

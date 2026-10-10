@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { tauriApi } from "../../lib/tauriApi";
 import { formatAccelerator } from "./formatAccelerator";
-import "./ShortcutSettings.css";
+import "./SettingsPanel.css";
 import { t } from "../../lib/i18n";
 
 export type ShortcutKind = "fullscreen" | "area";
@@ -12,7 +12,7 @@ const LABEL_KEYS: Record<ShortcutKind, string> = {
   area: "settings.areaWindow",
 };
 
-interface ShortcutSettingsProps {
+interface SettingsPanelProps {
   shortcuts: Shortcuts;
   onChange: (shortcuts: Shortcuts) => void;
 }
@@ -29,7 +29,7 @@ const LANGUAGE_NAMES: Record<string, string> = {
   "zh-Hans": "简体中文",
 };
 
-export function ShortcutSettings({ shortcuts, onChange }: ShortcutSettingsProps) {
+export function SettingsPanel({ shortcuts, onChange }: SettingsPanelProps) {
   const [recording, setRecording] = useState<ShortcutKind | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [language, setLanguage] = useState<string | null>(null);
@@ -74,27 +74,27 @@ export function ShortcutSettings({ shortcuts, onChange }: ShortcutSettingsProps)
   }, [recording, shortcuts, onChange]);
 
   return (
-    <div className="shortcut-settings">
+    <div className="settings-panel">
       {(Object.keys(LABEL_KEYS) as ShortcutKind[]).map((kind) => (
-        <div key={kind} className="shortcut-settings__row">
-          <span className="shortcut-settings__label">{t(LABEL_KEYS[kind])}</span>
+        <div key={kind} className="settings-panel__row">
+          <span className="settings-panel__label">{t(LABEL_KEYS[kind])}</span>
           {recording === kind ? (
-            <span className="shortcut-settings__recording">{t("settings.recording")}</span>
+            <span className="settings-panel__recording">{t("settings.recording")}</span>
           ) : (
-            <button type="button" className="shortcut-settings__value" onClick={() => setRecording(kind)}>
+            <button type="button" className="settings-panel__value" onClick={() => setRecording(kind)}>
               {shortcuts[kind]}
             </button>
           )}
         </div>
       ))}
-      {error && <p className="shortcut-settings__error">{error}</p>}
+      {error && <p className="settings-panel__error">{error}</p>}
 
       {/* Windows 11 binds Print Screen to the Snipping Tool by default, which
           swallows Shota's capture shortcut with no error and no clue as to
           why. The toggle is a per-user registry value, so rather than telling
           someone to go hunting through Settings, offer to flip it. */}
       {printScreenTaken && (
-        <div className="shortcut-settings__notice">
+        <div className="settings-panel__notice">
           <span>{t("settings.printScreenOwned")}</span>
           <button
             type="button"
@@ -110,10 +110,10 @@ export function ShortcutSettings({ shortcuts, onChange }: ShortcutSettingsProps)
         </div>
       )}
 
-      <div className="shortcut-settings__row">
-        <span className="shortcut-settings__label">{t("settings.language")}</span>
+      <div className="settings-panel__row">
+        <span className="settings-panel__label">{t("settings.language")}</span>
         <select
-          className="shortcut-settings__value"
+          className="settings-panel__value"
           value={language ?? ""}
           onChange={(e) => {
             const next = e.target.value || null;

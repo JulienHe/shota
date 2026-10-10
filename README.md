@@ -27,7 +27,7 @@
   <img alt="Platform: Windows" src="https://img.shields.io/badge/platform-Windows-0078d4">
 </p>
 
-Shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Keyboard Shortcuts…" entry that opens the small settings window. Capture something and it opens in a lightweight annotation editor with its own title bar (toolbar merged into the same row as the window controls) and a bottom status bar for zoom/copy/save.
+Shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Settings…" entry that opens the small settings window. Capture something and it opens in a lightweight annotation editor with its own title bar (toolbar merged into the same row as the window controls) and a bottom status bar for zoom/copy/save.
 
 Nothing is uploaded anywhere. Captures, annotations and history all stay on your machine.
 
@@ -85,7 +85,7 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 | `Ctrl+Shift+4` | Capture area / window (press `Space` to snap to a window) |
 | `Ctrl+Shift+6` | Open the capture history carousel |
 
-Global shortcuts are rebindable from the tray icon's "Keyboard Shortcuts…" window.
+Global shortcuts are rebindable from the tray icon's "Settings…" window, which is also where the interface language lives.
 
 ### In the editor
 

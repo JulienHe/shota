@@ -2,7 +2,7 @@
   "tray": {
     "captureFullScreen": "전체 화면 캡처",
     "captureArea": "영역 / 창 캡처",
-    "shortcuts": "키보드 단축키…",
+    "settings": "설정…",
     "checkUpdates": "업데이트 확인…",
     "quit": "Shota 종료"
   },
@@ -68,7 +68,7 @@
     "snapHint": "창을 클릭하면 캡처됩니다 · Space로 돌아가기"
   },
   "main": {
-    "shortcutsButton": "키보드 단축키",
+    "settingsButton": "설정",
     "fullScreen": "전체 화면",
     "areaWindow": "영역 / 창",
     "snapHint": "영역을 선택하는 동안 Space를 누르면 창 전체를 캡처합니다."

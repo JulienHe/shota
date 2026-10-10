@@ -2,7 +2,7 @@
   "tray": {
     "captureFullScreen": "画面全体をキャプチャ",
     "captureArea": "範囲 / ウィンドウをキャプチャ",
-    "shortcuts": "キーボードショートカット…",
+    "settings": "設定…",
     "checkUpdates": "更新を確認…",
     "quit": "Shota を終了"
   },
@@ -68,7 +68,7 @@
     "snapHint": "ウィンドウをクリックしてキャプチャ · Space で戻る"
   },
   "main": {
-    "shortcutsButton": "キーボードショートカット",
+    "settingsButton": "設定",
     "fullScreen": "画面全体",
     "areaWindow": "範囲 / ウィンドウ",
     "snapHint": "範囲選択中に Space を押すとウィンドウ単位でキャプチャできます。"

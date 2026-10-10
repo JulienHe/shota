@@ -2,7 +2,7 @@
   "tray": {
     "captureFullScreen": "捕获全屏",
     "captureArea": "捕获区域 / 窗口",
-    "shortcuts": "键盘快捷键…",
+    "settings": "设置…",
     "checkUpdates": "检查更新…",
     "quit": "退出 Shota"
   },
@@ -68,7 +68,7 @@
     "snapHint": "点击窗口即可捕获 · 空格返回"
   },
   "main": {
-    "shortcutsButton": "键盘快捷键",
+    "settingsButton": "设置",
     "fullScreen": "全屏",
     "areaWindow": "区域 / 窗口",
     "snapHint": "选择区域时按住空格可直接捕获整个窗口。"

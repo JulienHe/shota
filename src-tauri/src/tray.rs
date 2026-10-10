@@ -40,7 +40,7 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     let capture_area = MenuItem::with_id(app, "capture_area", i18n::t(&locale, "tray.captureArea"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
-    let settings = MenuItem::with_id(app, "settings", i18n::t(&locale, "tray.shortcuts"), true, None::<&str>)
+    let settings = MenuItem::with_id(app, "settings", i18n::t(&locale, "tray.settings"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
     // Absent entirely in a Store build: the Store owns updates there, so an
     // item that checks GitHub would be both wrong and against policy.
