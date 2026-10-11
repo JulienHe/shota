@@ -1,0 +1,79 @@
+.settings-window {
+  display: flex;
+  height: 100vh;
+  background: #fafafa;
+}
+
+.settings-window__sidebar {
+  flex: none;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 10px;
+  background: #f4f4f5;
+  border-right: 1px solid #e4e4e7;
+}
+
+.settings-window__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #18181b;
+}
+
+.settings-window__logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+}
+
+.settings-window__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-window__group + .settings-window__group {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e4e4e7;
+}
+
+.settings-window__nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 34px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 13px;
+  color: #52525b;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-window__nav:hover {
+  background: #e9e9ec;
+  color: #18181b;
+}
+
+.settings-window__nav--active,
+.settings-window__nav--active:hover {
+  background: #ffffff;
+  color: #18181b;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.08);
+}
+
+.settings-window__content {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 28px 36px 36px;
+}

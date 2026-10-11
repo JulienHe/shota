@@ -14,8 +14,10 @@
       {
         "label": "main",
         "title": "Shota",
-        "width": 360,
-        "height": 480,
+        "width": 780,
+        "height": 540,
+        "minWidth": 640,
+        "minHeight": 440,
         "resizable": true,
         "visible": false,
         "skipTaskbar": true

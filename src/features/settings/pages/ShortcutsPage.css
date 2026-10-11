@@ -1,0 +1,63 @@
+/* The whole binding is the click target, not just the text, and it keeps
+   its size while recording so the row doesn't jump. */
+.shortcuts-page__binding {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 132px;
+  min-height: 32px;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 12px;
+  color: #71717a;
+  cursor: pointer;
+}
+
+.shortcuts-page__binding:hover {
+  border-color: #e4e4e7;
+  background: #fafafa;
+}
+
+.shortcuts-page__binding--recording,
+.shortcuts-page__binding--recording:hover {
+  justify-content: center;
+  border-color: #3d7bfd;
+  background: rgba(61, 123, 253, 0.06);
+  color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(61, 123, 253, 0.15);
+}
+
+/* Not clickable, so it gets no hover and sits a touch quieter. */
+.shortcuts-page__fixed {
+  display: inline-flex;
+  padding: 4px;
+  opacity: 0.7;
+}
+
+.shortcuts-page__error {
+  margin: -16px 0 0;
+  font-size: 12px;
+  color: #dc2626;
+}
+
+/* Only appears when Windows has taken Print Screen, so it is allowed to be
+   louder than anything else on the page. */
+.shortcuts-page__notice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 149, 0, 0.1);
+  border: 1px solid rgba(255, 149, 0, 0.35);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #18181b;
+}
+
+.shortcuts-page__notice button {
+  flex: none;
+  white-space: nowrap;
+}

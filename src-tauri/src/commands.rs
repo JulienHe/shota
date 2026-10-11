@@ -231,3 +231,28 @@ pub fn history_ready(app: AppHandle) -> Result<(), String> {
 pub fn close_history_window_command(app: AppHandle) -> Result<(), String> {
     close_history_window(&app)
 }
+
+/// The history shortcut isn't rebindable yet, but Settings should still show
+/// it ~ a shortcut you can't discover may as well not exist.
+#[tauri::command]
+pub fn get_history_shortcut() -> String {
+    crate::hotkeys::HISTORY_SHORTCUT.to_string()
+}
+
+/// False in the Store build, where the Store delivers updates and Shota's own
+/// updater is compiled out. Settings uses it to say so instead of offering a
+/// button that can't work.
+#[tauri::command]
+pub fn updates_supported() -> bool {
+    cfg!(feature = "updater")
+}
+
+/// Same as the tray's "Check for Updates…": the result is reported in a
+/// native dialog, so there is nothing to return.
+#[tauri::command]
+pub fn check_for_updates(app: AppHandle) {
+    #[cfg(feature = "updater")]
+    crate::updater::check_for_updates(&app, true);
+    #[cfg(not(feature = "updater"))]
+    let _ = app;
+}

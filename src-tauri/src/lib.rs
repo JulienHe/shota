@@ -61,6 +61,9 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::print_screen_owned_by_snipping_tool,
+            commands::get_history_shortcut,
+            commands::updates_supported,
+            commands::check_for_updates,
             commands::release_print_screen,
             commands::get_locale,
             commands::get_language,

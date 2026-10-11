@@ -67,12 +67,6 @@
     "dragHint": "Ziehen, um einen Bereich zu wählen · Leertaste für Fenstermodus · Esc zum Abbrechen",
     "snapHint": "Fenster anklicken, um es aufzunehmen · Leertaste für zurück"
   },
-  "main": {
-    "settingsButton": "Einstellungen",
-    "fullScreen": "Gesamter Bildschirm",
-    "areaWindow": "Bereich / Fenster",
-    "snapHint": "Leertaste während der Auswahl halten, um ein ganzes Fenster aufzunehmen."
-  },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",
     "areaWindow": "Bereich / Fenster",
@@ -81,7 +75,26 @@
     "language": "Sprache",
     "languageSystem": "System folgen",
     "printScreenOwned": "Windows verwendet die Druck-Taste für das Snipping Tool, Shota bekommt sie deshalb nie.",
-    "printScreenFix": "Shota zuweisen"
+    "printScreenFix": "Shota zuweisen",
+    "general": "Allgemein",
+    "shortcuts": "Tastenkürzel",
+    "about": "Über",
+    "languageHint": "Shota folgt der Windows-Sprache, solange du hier keine auswählst.",
+    "captureSection": "Aufnahme",
+    "shortcutsHint": "Klicke auf ein Tastenkürzel und drücke dann die gewünschten Tasten. Esc bricht ab.",
+    "areaHint": "Halte beim Auswählen die Leertaste gedrückt, um an einem Fenster einzurasten.",
+    "history": "Verlauf öffnen",
+    "historyHint": "Deine letzten Aufnahmen, bereit zum erneuten Öffnen oder Kopieren.",
+    "fixed": "Derzeit fest",
+    "version": "Version {version}",
+    "tagline": "Ein kostenloses, natives Screenshot- und Anmerkungstool für Windows.",
+    "checkUpdates": "Nach Updates suchen",
+    "storeUpdates": "Updates kommen über den Microsoft Store.",
+    "github": "Quellcode",
+    "reportIssue": "Problem melden",
+    "privacy": "Datenschutzerklärung",
+    "support": "Spendier mir ein paar Tokens",
+    "license": "Kostenlos und Open Source unter der MIT-Lizenz."
   },
   "error": {
     "title": "Shota hat ein Problem festgestellt",

@@ -114,6 +114,10 @@ pub fn t(locale: &str, key: &str) -> String {
 }
 
 /// Translates and substitutes `{name}` placeholders.
+///
+/// Only the updater dialogs need placeholders on the native side, so the
+/// Store build, which has no updater, never calls this.
+#[cfg_attr(not(feature = "updater"), allow(dead_code))]
 pub fn tf(locale: &str, key: &str, vars: &[(&str, &str)]) -> String {
     let mut out = t(locale, key);
     for (name, value) in vars {

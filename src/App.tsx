@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { MainWindow } from "./windows/MainWindow";
+import { SettingsWindow } from "./windows/SettingsWindow";
 import { CaptureOverlay } from "./windows/CaptureOverlay";
 import { EditorWindow } from "./windows/EditorWindow";
 import { HistoryBar } from "./windows/HistoryBar";
@@ -32,7 +32,7 @@ function App() {
   if (label === "overlay") content = <CaptureOverlay />;
   else if (label === "editor") content = <EditorWindow />;
   else if (label === "history") content = <HistoryBar />;
-  else content = <MainWindow />;
+  else content = <SettingsWindow />;
 
   return <ErrorBoundary>{content}</ErrorBoundary>;
 }

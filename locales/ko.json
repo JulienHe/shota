@@ -67,12 +67,6 @@
     "dragHint": "드래그하여 영역 선택 · Space로 창 모드 · Esc로 취소",
     "snapHint": "창을 클릭하면 캡처됩니다 · Space로 돌아가기"
   },
-  "main": {
-    "settingsButton": "설정",
-    "fullScreen": "전체 화면",
-    "areaWindow": "영역 / 창",
-    "snapHint": "영역을 선택하는 동안 Space를 누르면 창 전체를 캡처합니다."
-  },
   "settings": {
     "fullScreen": "전체 화면",
     "areaWindow": "영역 / 창",
@@ -81,7 +75,26 @@
     "language": "언어",
     "languageSystem": "시스템 설정 따르기",
     "printScreenOwned": "Windows가 Print Screen 키를 캡처 도구에 사용하고 있어 Shota가 받지 못합니다.",
-    "printScreenFix": "Shota에 할당"
+    "printScreenFix": "Shota에 할당",
+    "general": "일반",
+    "shortcuts": "단축키",
+    "about": "정보",
+    "languageHint": "여기서 언어를 고르지 않으면 Shota는 Windows 언어를 따릅니다.",
+    "captureSection": "캡처",
+    "shortcutsHint": "단축키를 클릭한 뒤 원하는 키를 누르세요. Esc를 누르면 취소됩니다.",
+    "areaHint": "영역을 선택할 때 Space를 누르고 있으면 창에 맞춰집니다.",
+    "history": "기록 열기",
+    "historyHint": "최근 캡처를 다시 열거나 복사할 수 있습니다.",
+    "fixed": "현재 변경 불가",
+    "version": "버전 {version}",
+    "tagline": "무료 네이티브 Windows 스크린샷 및 주석 도구.",
+    "checkUpdates": "업데이트 확인",
+    "storeUpdates": "업데이트는 Microsoft Store를 통해 제공됩니다.",
+    "github": "소스 코드",
+    "reportIssue": "문제 신고",
+    "privacy": "개인정보 처리방침",
+    "support": "토큰 좀 사 주세요",
+    "license": "MIT 라이선스의 무료 오픈 소스 소프트웨어입니다."
   },
   "error": {
     "title": "Shota에 문제가 발생했습니다",

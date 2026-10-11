@@ -67,12 +67,6 @@
     "dragHint": "Przeciągnij, aby zaznaczyć obszar · Spacja przełącza na tryb okna · Esc anuluje",
     "snapHint": "Kliknij okno, aby je przechwycić · Spacja, aby wrócić"
   },
-  "main": {
-    "settingsButton": "Ustawienia",
-    "fullScreen": "Cały ekran",
-    "areaWindow": "Obszar / okno",
-    "snapHint": "Przytrzymaj Spację podczas zaznaczania, aby przyciągnąć do okna."
-  },
   "settings": {
     "fullScreen": "Cały ekran",
     "areaWindow": "Obszar / okno",
@@ -81,7 +75,26 @@
     "language": "Język",
     "languageSystem": "Jak w systemie",
     "printScreenOwned": "Windows używa klawisza Print Screen dla Narzędzia Wycinanie, więc Shota nigdy go nie otrzymuje.",
-    "printScreenFix": "Przypisz do Shota"
+    "printScreenFix": "Przypisz do Shota",
+    "general": "Ogólne",
+    "shortcuts": "Skróty",
+    "about": "O programie",
+    "languageHint": "Shota używa języka Windows, chyba że wybierzesz inny tutaj.",
+    "captureSection": "Przechwytywanie",
+    "shortcutsHint": "Kliknij skrót, a potem naciśnij wybrane klawisze. Esc anuluje.",
+    "areaHint": "Przytrzymaj Spację podczas zaznaczania, aby przyciągnąć do okna.",
+    "history": "Otwórz historię",
+    "historyHint": "Ostatnie zrzuty, gotowe do ponownego otwarcia lub skopiowania.",
+    "fixed": "Na razie stały",
+    "version": "Wersja {version}",
+    "tagline": "Darmowe, natywne narzędzie do zrzutów ekranu i adnotacji dla Windows.",
+    "checkUpdates": "Sprawdź aktualizacje",
+    "storeUpdates": "Aktualizacje przychodzą przez Microsoft Store.",
+    "github": "Kod źródłowy",
+    "reportIssue": "Zgłoś problem",
+    "privacy": "Polityka prywatności",
+    "support": "Postaw mi trochę tokenów",
+    "license": "Darmowa i otwartoźródłowa, na licencji MIT."
   },
   "error": {
     "title": "Shota napotkała problem",

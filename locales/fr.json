@@ -67,12 +67,6 @@
     "dragHint": "Faites glisser pour sélectionner une zone · Espace pour le mode fenêtre · Échap pour annuler",
     "snapHint": "Cliquez sur une fenêtre pour la capturer · Espace pour revenir"
   },
-  "main": {
-    "settingsButton": "Paramètres",
-    "fullScreen": "Plein écran",
-    "areaWindow": "Zone / fenêtre",
-    "snapHint": "Maintenez Espace pendant la sélection pour capturer une fenêtre entière."
-  },
   "settings": {
     "fullScreen": "Plein écran",
     "areaWindow": "Zone / fenêtre",
@@ -81,7 +75,26 @@
     "language": "Langue",
     "languageSystem": "Suivre le système",
     "printScreenOwned": "Windows réserve la touche Impr. écran à l'outil Capture d'écran, Shota ne la reçoit donc jamais.",
-    "printScreenFix": "L'attribuer à Shota"
+    "printScreenFix": "L'attribuer à Shota",
+    "general": "Général",
+    "shortcuts": "Raccourcis",
+    "about": "À propos",
+    "languageHint": "Shota suit la langue de Windows, sauf si vous en choisissez une ici.",
+    "captureSection": "Capture",
+    "shortcutsHint": "Cliquez sur un raccourci, puis appuyez sur les touches voulues. Échap pour annuler.",
+    "areaHint": "Maintenez Espace pendant la sélection pour cibler une fenêtre.",
+    "history": "Ouvrir l'historique",
+    "historyHint": "Vos captures récentes, prêtes à être rouvertes ou copiées.",
+    "fixed": "Non modifiable pour l'instant",
+    "version": "Version {version}",
+    "tagline": "Un outil de capture et d'annotation pour Windows, gratuit et natif.",
+    "checkUpdates": "Rechercher des mises à jour",
+    "storeUpdates": "Les mises à jour arrivent via le Microsoft Store.",
+    "github": "Code source",
+    "reportIssue": "Signaler un problème",
+    "privacy": "Politique de confidentialité",
+    "support": "Offrez-moi des tokens",
+    "license": "Libre et open source, sous licence MIT."
   },
   "error": {
     "title": "Shota a rencontré un problème",

@@ -67,12 +67,6 @@
     "dragHint": "Drag to select an area · Space to switch to window mode · Esc to cancel",
     "snapHint": "Click a window to capture it · Space to go back"
   },
-  "main": {
-    "settingsButton": "Settings",
-    "fullScreen": "Full screen",
-    "areaWindow": "Area / window",
-    "snapHint": "Hold Space while selecting an area to snap to a window."
-  },
   "settings": {
     "fullScreen": "Full screen",
     "areaWindow": "Area / window",
@@ -81,7 +75,26 @@
     "language": "Language",
     "languageSystem": "Match system",
     "printScreenOwned": "Windows is using Print Screen for the Snipping Tool, so Shota never sees it.",
-    "printScreenFix": "Give it to Shota"
+    "printScreenFix": "Give it to Shota",
+    "general": "General",
+    "shortcuts": "Shortcuts",
+    "about": "About",
+    "languageHint": "Shota follows your Windows language unless you pick one here.",
+    "captureSection": "Capture",
+    "shortcutsHint": "Click a shortcut, then press the keys you want. Esc cancels.",
+    "areaHint": "Hold Space while selecting to snap to a window.",
+    "history": "Open history",
+    "historyHint": "Your recent captures, ready to reopen or copy.",
+    "fixed": "Fixed for now",
+    "version": "Version {version}",
+    "tagline": "A free, native Windows screenshot and annotation tool.",
+    "checkUpdates": "Check for updates",
+    "storeUpdates": "Updates arrive through the Microsoft Store.",
+    "github": "Source code",
+    "reportIssue": "Report a problem",
+    "privacy": "Privacy policy",
+    "support": "Buy me some tokens",
+    "license": "Free and open source under the MIT licence."
   },
   "error": {
     "title": "Shota hit a problem",

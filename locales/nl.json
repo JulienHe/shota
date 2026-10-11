@@ -67,12 +67,6 @@
     "dragHint": "Sleep om een gebied te selecteren · Spatie voor venstermodus · Esc om te annuleren",
     "snapHint": "Klik op een venster om het vast te leggen · Spatie om terug te gaan"
   },
-  "main": {
-    "settingsButton": "Instellingen",
-    "fullScreen": "Volledig scherm",
-    "areaWindow": "Gebied / venster",
-    "snapHint": "Houd Spatie ingedrukt tijdens het selecteren om op een venster vast te klikken."
-  },
   "settings": {
     "fullScreen": "Volledig scherm",
     "areaWindow": "Gebied / venster",
@@ -81,7 +75,26 @@
     "language": "Taal",
     "languageSystem": "Systeem volgen",
     "printScreenOwned": "Windows gebruikt de Print Screen-toets voor het Knipprogramma, dus Shota krijgt hem nooit.",
-    "printScreenFix": "Aan Shota toewijzen"
+    "printScreenFix": "Aan Shota toewijzen",
+    "general": "Algemeen",
+    "shortcuts": "Sneltoetsen",
+    "about": "Over",
+    "languageHint": "Shota volgt de taal van Windows, tenzij je hier een andere kiest.",
+    "captureSection": "Vastleggen",
+    "shortcutsHint": "Klik op een sneltoets en druk dan op de gewenste toetsen. Esc annuleert.",
+    "areaHint": "Houd Spatie ingedrukt tijdens het selecteren om op een venster vast te klikken.",
+    "history": "Geschiedenis openen",
+    "historyHint": "Je recente schermafbeeldingen, klaar om te heropenen of te kopiëren.",
+    "fixed": "Voorlopig vast",
+    "version": "Versie {version}",
+    "tagline": "Een gratis, native tool voor schermafbeeldingen en annotaties op Windows.",
+    "checkUpdates": "Controleren op updates",
+    "storeUpdates": "Updates komen via de Microsoft Store.",
+    "github": "Broncode",
+    "reportIssue": "Een probleem melden",
+    "privacy": "Privacybeleid",
+    "support": "Trakteer me op wat tokens",
+    "license": "Gratis en open source onder de MIT-licentie."
   },
   "error": {
     "title": "Shota liep tegen een probleem aan",

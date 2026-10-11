@@ -67,12 +67,6 @@
     "dragHint": "ドラッグで範囲を選択 · Space でウィンドウモード · Esc でキャンセル",
     "snapHint": "ウィンドウをクリックしてキャプチャ · Space で戻る"
   },
-  "main": {
-    "settingsButton": "設定",
-    "fullScreen": "画面全体",
-    "areaWindow": "範囲 / ウィンドウ",
-    "snapHint": "範囲選択中に Space を押すとウィンドウ単位でキャプチャできます。"
-  },
   "settings": {
     "fullScreen": "画面全体",
     "areaWindow": "範囲 / ウィンドウ",
@@ -81,7 +75,26 @@
     "language": "言語",
     "languageSystem": "システムに合わせる",
     "printScreenOwned": "Windows が Print Screen キーを Snipping Tool に割り当てているため、Shota には届きません。",
-    "printScreenFix": "Shota に割り当てる"
+    "printScreenFix": "Shota に割り当てる",
+    "general": "一般",
+    "shortcuts": "ショートカット",
+    "about": "バージョン情報",
+    "languageHint": "ここで選ばない限り、Shota は Windows の表示言語に従います。",
+    "captureSection": "キャプチャ",
+    "shortcutsHint": "ショートカットをクリックして、使いたいキーを押してください。Esc でキャンセル。",
+    "areaHint": "範囲選択中に Space キーを押し続けると、ウィンドウにスナップします。",
+    "history": "履歴を開く",
+    "historyHint": "最近のキャプチャを開き直したり、コピーしたりできます。",
+    "fixed": "現在は変更不可",
+    "version": "バージョン {version}",
+    "tagline": "無料でネイティブな Windows 用スクリーンショット＆注釈ツール。",
+    "checkUpdates": "アップデートを確認",
+    "storeUpdates": "アップデートは Microsoft Store から配信されます。",
+    "github": "ソースコード",
+    "reportIssue": "問題を報告",
+    "privacy": "プライバシーポリシー",
+    "support": "トークンをおごってください",
+    "license": "MIT ライセンスの無料オープンソースソフトウェアです。"
   },
   "error": {
     "title": "Shota で問題が発生しました",

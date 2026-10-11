@@ -67,12 +67,6 @@
     "dragHint": "拖曳以選取區域 · 按空白鍵切換至視窗模式 · 按 Esc 取消",
     "snapHint": "按一下視窗即可擷取 · 按空白鍵返回"
   },
-  "main": {
-    "settingsButton": "設定",
-    "fullScreen": "全螢幕",
-    "areaWindow": "區域 / 視窗",
-    "snapHint": "選取區域時按住空白鍵，即可貼齊視窗。"
-  },
   "settings": {
     "fullScreen": "全螢幕",
     "areaWindow": "區域 / 視窗",
@@ -81,7 +75,26 @@
     "language": "語言",
     "languageSystem": "跟隨系統",
     "printScreenOwned": "Windows 將 Print Screen 鍵指派給剪取工具，因此 Shota 收不到。",
-    "printScreenFix": "指派給 Shota"
+    "printScreenFix": "指派給 Shota",
+    "general": "一般",
+    "shortcuts": "快速鍵",
+    "about": "關於",
+    "languageHint": "除非您在此選擇，否則 Shota 會跟隨 Windows 語言。",
+    "captureSection": "擷取",
+    "shortcutsHint": "按一下快速鍵，然後按下想要的按鍵。按 Esc 取消。",
+    "areaHint": "選取區域時按住空白鍵，即可貼齊視窗。",
+    "history": "開啟歷程記錄",
+    "historyHint": "最近的擷取畫面，可以重新開啟或複製。",
+    "fixed": "目前無法變更",
+    "version": "版本 {version}",
+    "tagline": "一款免費的原生 Windows 截圖與標註工具。",
+    "checkUpdates": "檢查更新",
+    "storeUpdates": "更新會透過 Microsoft Store 提供。",
+    "github": "原始碼",
+    "reportIssue": "回報問題",
+    "privacy": "隱私權政策",
+    "support": "請我吃點 token",
+    "license": "以 MIT 授權釋出的免費開源軟體。"
   },
   "error": {
     "title": "Shota 發生問題",

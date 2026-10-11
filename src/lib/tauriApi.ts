@@ -70,6 +70,15 @@ export const tauriApi = {
   /** Hands Print Screen back to applications. Per-user, no elevation. */
   releasePrintScreen: () => invoke<void>("release_print_screen"),
 
+  /** Fixed for now; shown in Settings so it can be found. */
+  getHistoryShortcut: () => invoke<string>("get_history_shortcut"),
+
+  /** False in the Store build, which gets its updates from the Store. */
+  updatesSupported: () => invoke<boolean>("updates_supported"),
+
+  /** Reports its result in a native dialog. */
+  checkForUpdates: () => invoke<void>("check_for_updates"),
+
   /** The UI locale, resolved on the Rust side from the user's choice or the
    * OS language, so the native menus and the webview always agree. */
   getLocale: () => invoke<string>("get_locale"),

@@ -67,12 +67,6 @@
     "dragHint": "Alan seçmek için sürükleyin · Pencere moduna geçmek için Boşluk · İptal için Esc",
     "snapHint": "Yakalamak için bir pencereye tıklayın · Geri dönmek için Boşluk"
   },
-  "main": {
-    "settingsButton": "Ayarlar",
-    "fullScreen": "Tam ekran",
-    "areaWindow": "Alan / pencere",
-    "snapHint": "Bir pencereye yapışmak için seçim yaparken Boşluk tuşunu basılı tutun."
-  },
   "settings": {
     "fullScreen": "Tam ekran",
     "areaWindow": "Alan / pencere",
@@ -81,7 +75,26 @@
     "language": "Dil",
     "languageSystem": "Sistemi izle",
     "printScreenOwned": "Windows, Print Screen tuşunu Ekran Alıntısı Aracı için kullanıyor, bu yüzden Shota onu hiç almıyor.",
-    "printScreenFix": "Shota'ya ata"
+    "printScreenFix": "Shota'ya ata",
+    "general": "Genel",
+    "shortcuts": "Kısayollar",
+    "about": "Hakkında",
+    "languageHint": "Shota, burada bir dil seçmediğiniz sürece Windows dilini kullanır.",
+    "captureSection": "Yakalama",
+    "shortcutsHint": "Bir kısayola tıklayın, ardından istediğiniz tuşlara basın. Esc iptal eder.",
+    "areaHint": "Bir pencereye yapışmak için seçim yaparken Boşluk tuşunu basılı tutun.",
+    "history": "Geçmişi aç",
+    "historyHint": "Son yakalamalarınız, yeniden açılmaya veya kopyalanmaya hazır.",
+    "fixed": "Şimdilik sabit",
+    "version": "Sürüm {version}",
+    "tagline": "Windows için ücretsiz, yerel bir ekran görüntüsü ve not alma aracı.",
+    "checkUpdates": "Güncellemeleri denetle",
+    "storeUpdates": "Güncellemeler Microsoft Store üzerinden gelir.",
+    "github": "Kaynak kodu",
+    "reportIssue": "Sorun bildir",
+    "privacy": "Gizlilik politikası",
+    "support": "Bana biraz token ısmarla",
+    "license": "MIT lisansı altında ücretsiz ve açık kaynak."
   },
   "error": {
     "title": "Shota bir sorunla karşılaştı",
