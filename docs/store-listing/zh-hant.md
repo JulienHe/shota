@@ -87,3 +87,13 @@ One per box.
 註解
 馬賽克
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+分享前先遮蔽：模糊 API 金鑰、為步驟編號、用箭頭指示，然後複製或儲存。
+像真正的螢光筆一樣標示擷取畫面中的文字，下方內容依然清晰可讀。
+用聚光燈凸顯一個區域並調暗其餘部分，把注意力帶到你想要的地方。
+```

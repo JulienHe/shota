@@ -87,3 +87,13 @@ knipprogramma
 markeren
 vervagen
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Verberg voordat je deelt: vervaag een API-sleutel, nummer de stappen en wijs met een pijl, en kopieer of sla dan op.
+Markeer tekst in een schermafbeelding zoals met een echte markeerstift, terwijl alles eronder leesbaar blijft.
+Zet één gebied in de spotlight en maak de rest donkerder, zodat de aandacht gaat waar jij wilt.
+```

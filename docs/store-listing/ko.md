@@ -87,3 +87,13 @@ One per box.
 마크업
 모자이크
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+공유하기 전에 가리기: API 키를 흐리게 하고, 단계에 번호를 매기고, 화살표로 가리킨 뒤 복사하거나 저장하세요.
+진짜 마커처럼 스크린샷의 텍스트를 강조하고, 아래 글자는 그대로 읽을 수 있습니다.
+한 영역을 스포트라이트로 비추고 나머지는 어둡게 해서 원하는 곳에 시선을 모으세요.
+```

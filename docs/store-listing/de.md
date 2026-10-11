@@ -87,3 +87,13 @@ Bildschirmaufnahme
 markieren
 schwärzen
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Vor dem Teilen schwärzen: einen API-Schlüssel weichzeichnen, Schritte nummerieren, mit einem Pfeil zeigen, dann kopieren oder speichern.
+Text im Screenshot wie mit einem echten Textmarker hervorheben, darunter bleibt alles lesbar.
+Einen Bereich ins Spotlight rücken und den Rest abdunkeln, um den Blick genau dorthin zu lenken.
+```

@@ -87,3 +87,13 @@ wycinanie
 oznaczanie
 rozmycie
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Ukryj przed udostępnieniem: rozmyj klucz API, ponumeruj kroki i wskaż strzałką, a potem skopiuj lub zapisz.
+Zakreślaj tekst na zrzucie jak prawdziwym flamastrem, a to, co pod spodem, wciąż da się przeczytać.
+Wyróżnij jeden obszar i przyciemnij resztę, by skupić uwagę tam, gdzie chcesz.
+```

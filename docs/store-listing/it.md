@@ -87,3 +87,13 @@ schermata
 annotare
 sfocare
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Oscura prima di condividere: sfoca una chiave API, numera i passaggi e indica con una freccia, poi copia o salva.
+Evidenzia il testo di una cattura come con un vero pennarello, lasciando leggibile ciò che sta sotto.
+Metti in risalto un'area e scurisci il resto per portare l'attenzione dove vuoi.
+```

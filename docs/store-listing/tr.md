@@ -87,3 +87,13 @@ işaretleme
 bulanıklaştırma
 screenshot
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Paylaşmadan önce gizleyin: bir API anahtarını bulanıklaştırın, adımları numaralandırın, okla gösterin, sonra kopyalayın ya da kaydedin.
+Ekran görüntüsündeki metni gerçek bir fosforlu kalem gibi vurgulayın; alttaki yazı okunur kalır.
+Bir alanı öne çıkarıp gerisini karartın, dikkati tam istediğiniz yere çekin.
+```

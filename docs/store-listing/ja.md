@@ -87,3 +87,13 @@ One per box.
 マークアップ
 モザイク
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+共有する前に隠す：API キーをぼかし、手順に番号を振り、矢印で指し示して、コピーまたは保存。
+本物のマーカーのように、スクリーンショットの文字を下が読めるまま強調できます。
+一部をスポットライトで照らし、残りを暗くして、見てほしい場所に視線を集めます。
+```

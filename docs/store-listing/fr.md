@@ -87,3 +87,13 @@ capture
 annoter
 flouter
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Masquez avant de partager : floutez une clé d'API, numérotez les étapes et pointez avec une flèche, puis copiez ou enregistrez.
+Surlignez du texte dans une capture comme avec un vrai feutre, en gardant le texte lisible dessous.
+Mettez une zone en lumière et assombrissez le reste pour attirer l'attention là où vous voulez.
+```

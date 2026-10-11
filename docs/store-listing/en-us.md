@@ -87,3 +87,13 @@ snipping
 markup
 redaction
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Redact before you share: blur an API key, number the steps and point with an arrow, then copy or save.
+Highlight text in a screenshot like a real marker, with what's underneath still readable.
+Spotlight one region and dim everything else to focus attention where you want it.
+```

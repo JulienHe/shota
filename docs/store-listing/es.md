@@ -87,3 +87,13 @@ recortes
 anotar
 desenfocar
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+Oculta antes de compartir: desenfoca una clave de API, numera los pasos y señala con una flecha, y luego copia o guarda.
+Resalta texto en una captura como con un rotulador de verdad, sin dejar de leer lo que hay debajo.
+Destaca una zona y oscurece el resto para llevar la atención justo donde quieres.
+```

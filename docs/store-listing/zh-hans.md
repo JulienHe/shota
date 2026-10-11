@@ -87,3 +87,13 @@ One per box.
 批注
 马赛克
 ```
+
+## Screenshot captions
+
+In screenshot order: annotated, highlighter, spotlight.
+
+```
+分享前先遮挡：模糊 API 密钥、为步骤编号、用箭头指示，然后复制或保存。
+像真正的记号笔一样高亮截图中的文字，下面的内容依然清晰可读。
+用聚光灯突出一个区域并调暗其余部分，把注意力引到你想要的地方。
+```
