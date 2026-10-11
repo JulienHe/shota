@@ -54,7 +54,19 @@
     "gray": "中灰色",
     "darkGray": "深灰色",
     "black": "黑色",
-    "system": "跟隨系統"
+    "system": "跟隨系統",
+    "title": "背景",
+    "none": "無",
+    "gradients": "漸層",
+    "images": "圖片",
+    "wallpaper": "你的桌面背景",
+    "blurred": "模糊的擷取畫面",
+    "chooseImage": "選擇圖片…",
+    "colors": "色彩",
+    "transparent": "透明",
+    "padding": "邊距",
+    "corners": "圓角",
+    "shadow": "陰影"
   },
   "history": {
     "restore": "還原",

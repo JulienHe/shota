@@ -1,5 +1,6 @@
 import { useDocumentStore } from "../stores/documentStore";
 import { tauriApi } from "./tauriApi";
+import { serializeDocument } from "../features/background/frame";
 
 /**
  * The editor window is cloaked (not destroyed, and not `.hide()`-d either)
@@ -19,10 +20,10 @@ import { tauriApi } from "./tauriApi";
  * shipping them back was tens of megabytes of base64 per close for nothing.
  */
 export function closeEditor() {
-  const { historyId, image, shapes, imageWidth, imageHeight } = useDocumentStore.getState();
+  const { historyId, image, shapes, frame, imageWidth, imageHeight } = useDocumentStore.getState();
   if (historyId && image) {
     tauriApi
-      .updateHistoryEntry(historyId, JSON.stringify(shapes), imageWidth, imageHeight)
+      .updateHistoryEntry(historyId, serializeDocument(shapes, frame), imageWidth, imageHeight)
       .catch((err) => {
         console.error("failed to save history annotations", err);
       });

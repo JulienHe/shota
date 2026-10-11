@@ -54,7 +54,19 @@
     "gray": "Orta gri",
     "darkGray": "Koyu gri",
     "black": "Siyah",
-    "system": "Sistemi izle"
+    "system": "Sistemi izle",
+    "title": "Arka plan",
+    "none": "Yok",
+    "gradients": "Renk geçişleri",
+    "images": "Görseller",
+    "wallpaper": "Duvar kağıdınız",
+    "blurred": "Bulanık ekran görüntüsü",
+    "chooseImage": "Görsel seç…",
+    "colors": "Renkler",
+    "transparent": "Saydam",
+    "padding": "Kenar boşluğu",
+    "corners": "Köşeler",
+    "shadow": "Gölge"
   },
   "history": {
     "restore": "Geri yükle",

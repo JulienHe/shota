@@ -54,7 +54,19 @@
     "gray": "Szary",
     "darkGray": "Ciemnoszary",
     "black": "Czarny",
-    "system": "Jak w systemie"
+    "system": "Jak w systemie",
+    "title": "Tło",
+    "none": "Brak",
+    "gradients": "Gradienty",
+    "images": "Obrazy",
+    "wallpaper": "Twoja tapeta",
+    "blurred": "Rozmyty zrzut",
+    "chooseImage": "Wybierz obraz…",
+    "colors": "Kolory",
+    "transparent": "Przezroczyste",
+    "padding": "Margines",
+    "corners": "Narożniki",
+    "shadow": "Cień"
   },
   "history": {
     "restore": "Przywróć",

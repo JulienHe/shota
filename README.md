@@ -71,6 +71,11 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Follows your Windows language automatically, with an override in the Settings window
 - Translations live in `locales/` as plain JSON ~ corrections and new languages are a small pull request
 
+**Frame it**
+- Put the screenshot on a background, ready to post: gradients, a colour, a blurred copy of the screenshot, your Windows wallpaper, or any image you choose
+- Adjust padding, rounded corners and shadow; Copy and Save export the framed image at full resolution
+- The frame is saved with the capture, so it's still there when you reopen it from history
+
 **Finish up**
 - Copy to clipboard, or save as PNG, JPG or WebP with adjustable quality ~ both close the editor immediately rather than lingering
 - Save to a folder of your choice (or wherever you saved last), with file names from a pattern like `Shota {date} {time}`

@@ -54,7 +54,19 @@
     "gray": "Сірий",
     "darkGray": "Темно-сірий",
     "black": "Чорний",
-    "system": "Як у системі"
+    "system": "Як у системі",
+    "title": "Тло",
+    "none": "Немає",
+    "gradients": "Градієнти",
+    "images": "Зображення",
+    "wallpaper": "Ваші шпалери",
+    "blurred": "Розмитий знімок",
+    "chooseImage": "Вибрати зображення…",
+    "colors": "Кольори",
+    "transparent": "Прозоре",
+    "padding": "Відступ",
+    "corners": "Кути",
+    "shadow": "Тінь"
   },
   "history": {
     "restore": "Відкрити",

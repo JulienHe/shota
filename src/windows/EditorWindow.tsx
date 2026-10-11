@@ -15,7 +15,9 @@ import { tauriApi, toBase64Payload, PendingCapture } from "../lib/tauriApi";
 import { primeImageCache } from "../lib/useImage";
 import { afterNextPaint } from "../lib/windowChrome";
 import { closeEditor } from "../lib/editorClose";
-import { Shape } from "../features/annotate/types";
+import { parseDocument, serializeDocument } from "../features/background/frame";
+import { BackgroundPanel } from "../features/background/BackgroundPanel";
+import { useUiStore } from "../stores/uiStore";
 import "./EditorWindow.css";
 
 export function EditorWindow() {
@@ -33,6 +35,7 @@ export function EditorWindow() {
   const showToast = useToastStore((s) => s.show);
   const clearToast = useToastStore((s) => s.clear);
   const [zoom, setZoom] = useState(1);
+  const backgroundPanelOpen = useUiStore((s) => s.backgroundPanelOpen);
 
   useEffect(() => {
     const applyCapture = async (capture: PendingCapture) => {
@@ -52,18 +55,10 @@ export function EditorWindow() {
         // toolbar/footer instead of them appearing together.
         primeImageCache(url, img);
 
-        const shapes: Shape[] | null = capture.shapes_json
-          ? (() => {
-              try {
-                return JSON.parse(capture.shapes_json as string) as Shape[];
-              } catch {
-                return null;
-              }
-            })()
-          : null;
+        const saved = parseDocument(capture.shapes_json);
 
-        if (shapes) {
-          replaceImage(url, img.width, img.height, shapes);
+        if (saved) {
+          replaceImage(url, img.width, img.height, saved.shapes, saved.frame);
         } else {
           loadImage(url, img.width, img.height);
         }
@@ -112,10 +107,10 @@ export function EditorWindow() {
   useEffect(() => {
     const win = getCurrentWindow();
     const unlisten = win.onCloseRequested(() => {
-      const { historyId, image, shapes, imageWidth, imageHeight } = useDocumentStore.getState();
+      const { historyId, image, shapes, frame, imageWidth, imageHeight } = useDocumentStore.getState();
       if (historyId && image) {
         tauriApi
-          .updateHistoryEntry(historyId, JSON.stringify(shapes), imageWidth, imageHeight)
+          .updateHistoryEntry(historyId, serializeDocument(shapes, frame), imageWidth, imageHeight)
           .catch((err) => {
             console.error("failed to save history annotations", err);
           });
@@ -196,9 +191,12 @@ export function EditorWindow() {
   return (
     <div className="editor-window">
       <TitleBar />
-      <div className="editor-window__canvas-area">
-        <Canvas ref={canvasRef} onZoomChange={setZoom} />
-        {toast && <div className="editor-window__toast">{toast}</div>}
+      <div className="editor-window__body">
+        {backgroundPanelOpen && <BackgroundPanel />}
+        <div className="editor-window__canvas-area">
+          <Canvas ref={canvasRef} onZoomChange={setZoom} />
+          {toast && <div className="editor-window__toast">{toast}</div>}
+        </div>
       </div>
       <BottomBar
         zoom={zoom}

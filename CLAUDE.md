@@ -263,3 +263,23 @@ recorder listens for both for that reason.
 
 `register_all` logs and skips a shortcut that fails to register instead of failing the rest.
 It used to `expect()`, so a shortcut another app had since claimed crashed Shota on every launch.
+
+## Frames change what "the document" is
+
+A frame (background, padding, corners, shadow; `src/features/background/`) extends the
+exported image past the screenshot on every side, so its bounds start at *negative* image
+coordinates. Three things follow, and each was a real bug to avoid:
+
+- **Export renders the frame's bounds, not the image's.** `performExport` sets the stage to
+  1:1 and offsets it to the content box for the duration of one synchronous `toDataURL`,
+  then restores the view. The older "ask for the on-screen region and scale it back up"
+  approach derived one pixelRatio from the rounded width, so the height drifted by a pixel
+  or two. Unframed exports must stay exactly the capture's size.
+- **Fitting and centring use the content box** (`centeredBoxView`), not the image, or a
+  framed capture is fitted as if the padding weren't there.
+- **History stores `{ version: 2, shapes, frame }`.** Older entries are a bare shapes array;
+  `parseDocument` reads both. Never write the bare array again, or reopening drops the frame.
+
+Wallpaper and picked-image backgrounds are stored by reference (`wallpaper`, or a path) and
+re-read when shown, never embedded in history.
+

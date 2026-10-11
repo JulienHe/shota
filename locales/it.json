@@ -54,7 +54,19 @@
     "gray": "Grigio medio",
     "darkGray": "Grigio scuro",
     "black": "Nero",
-    "system": "Come il sistema"
+    "system": "Come il sistema",
+    "title": "Sfondo",
+    "none": "Nessuno",
+    "gradients": "Sfumature",
+    "images": "Immagini",
+    "wallpaper": "Il tuo sfondo",
+    "blurred": "Cattura sfocata",
+    "chooseImage": "Scegli un'immagine…",
+    "colors": "Colori",
+    "transparent": "Trasparente",
+    "padding": "Margine",
+    "corners": "Angoli",
+    "shadow": "Ombra"
   },
   "history": {
     "restore": "Ripristina",

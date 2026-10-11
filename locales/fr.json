@@ -54,7 +54,19 @@
     "gray": "Gris moyen",
     "darkGray": "Gris foncé",
     "black": "Noir",
-    "system": "Suivre le système"
+    "system": "Suivre le système",
+    "title": "Arrière-plan",
+    "none": "Aucun",
+    "gradients": "Dégradés",
+    "images": "Images",
+    "wallpaper": "Votre fond d'écran",
+    "blurred": "Capture floutée",
+    "chooseImage": "Choisir une image…",
+    "colors": "Couleurs",
+    "transparent": "Transparent",
+    "padding": "Marge",
+    "corners": "Coins",
+    "shadow": "Ombre"
   },
   "history": {
     "restore": "Restaurer",

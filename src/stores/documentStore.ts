@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Shape, ShapeStyle } from "../features/annotate/types";
+import { Frame } from "../features/background/frame";
 
 const MAX_HISTORY = 50;
 
@@ -13,9 +14,14 @@ interface DocumentState {
   future: Shape[][];
   /** Which history entry (if any) this document was captured/reopened from ~ used to persist annotations back on close. */
   historyId: string | null;
+  /** Background, padding, corners and shadow around the screenshot, or
+   * null for the bare capture. Not part of undo: it's a presentation
+   * choice, adjusted with live sliders, not an edit to the content. */
+  frame: Frame | null;
 
   loadImage: (dataUrl: string, width: number, height: number) => void;
-  replaceImage: (dataUrl: string, width: number, height: number, shapes: Shape[]) => void;
+  replaceImage: (dataUrl: string, width: number, height: number, shapes: Shape[], frame?: Frame | null) => void;
+  setFrame: (frame: Frame | null) => void;
   setHistoryId: (id: string | null) => void;
 
   addShape: (shape: Shape) => void;
@@ -38,6 +44,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
   past: [],
   future: [],
   historyId: null,
+  frame: null,
 
   loadImage: (dataUrl, width, height) =>
     set({
@@ -48,10 +55,22 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       selectedShapeId: null,
       past: [],
       future: [],
+      frame: null,
     }),
 
-  replaceImage: (dataUrl, width, height, shapes) =>
-    set({ image: dataUrl, imageWidth: width, imageHeight: height, shapes, selectedShapeId: null }),
+  // `frame` is only passed when reopening a saved document; crop also calls
+  // this, and must keep whatever frame is already on.
+  replaceImage: (dataUrl, width, height, shapes, frame) =>
+    set((s) => ({
+      image: dataUrl,
+      imageWidth: width,
+      imageHeight: height,
+      shapes,
+      selectedShapeId: null,
+      frame: frame === undefined ? s.frame : frame,
+    })),
+
+  setFrame: (frame) => set({ frame }),
 
   setHistoryId: (id) => set({ historyId: id }),
 

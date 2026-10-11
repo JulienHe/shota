@@ -62,9 +62,22 @@ export function fitScale(image: Size, viewport: Size): number {
  * thing that drifts between two copies.
  */
 export function centeredView(image: Size, viewport: Size, scale = fitScale(image, viewport)): ZoomState {
+  return centeredBoxView({ x: 0, y: 0, width: image.width, height: image.height }, viewport, scale);
+}
+
+/**
+ * The same, for content that doesn't start at the image's origin ~ a frame
+ * extends past the screenshot on every side, so what has to be centred is
+ * the frame, which begins at negative image coordinates.
+ */
+export function centeredBoxView(
+  box: Size & Point,
+  viewport: Size,
+  scale = fitScale(box, viewport),
+): ZoomState {
   return {
     scale,
-    x: (viewport.width - image.width * scale) / 2,
-    y: (viewport.height - image.height * scale) / 2,
+    x: (viewport.width - box.width * scale) / 2 - box.x * scale,
+    y: (viewport.height - box.height * scale) / 2 - box.y * scale,
   };
 }

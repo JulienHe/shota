@@ -1,0 +1,150 @@
+.background-panel {
+  --bp-bg: #ffffff;
+  --bp-border: #e4e4e7;
+  --bp-text: #18181b;
+  --bp-muted: #71717a;
+  --bp-tile-border: rgba(0, 0, 0, 0.08);
+  --bp-control: #f4f4f5;
+  --bp-accent: #3d7bfd;
+
+  flex: none;
+  width: 248px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 14px 14px 18px;
+  overflow-y: auto;
+  background: var(--bp-bg);
+  border-right: 1px solid var(--bp-border);
+  color: var(--bp-text);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .background-panel {
+    --bp-bg: #1c1d22;
+    --bp-border: #303136;
+    --bp-text: #f4f4f5;
+    --bp-muted: #9a9aa3;
+    --bp-tile-border: rgba(255, 255, 255, 0.1);
+    --bp-control: #2a2b30;
+  }
+}
+
+.background-panel__none {
+  height: 36px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--bp-control);
+  color: var(--bp-text);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.background-panel__none--active {
+  border-color: var(--bp-accent);
+}
+
+.background-panel__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.background-panel__section h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bp-muted);
+}
+
+.background-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+}
+
+.background-panel__tile {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--bp-tile-border);
+  border-radius: 10px;
+  background: var(--bp-control);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 100ms ease;
+}
+
+.background-panel__tile:hover {
+  transform: scale(1.06);
+}
+
+.background-panel__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* The selection ring sits outside the tile, so it reads on every swatch
+   from white to black. */
+.background-panel__tile--active {
+  box-shadow: 0 0 0 2px var(--bp-bg), 0 0 0 4px var(--bp-accent);
+}
+
+.background-panel__tile--add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+  background: transparent;
+  color: var(--bp-muted);
+}
+
+.background-panel__colors {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 7px;
+}
+
+.background-panel__color {
+  border-radius: 50%;
+}
+
+.background-panel__color span {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* A checkerboard, the universal sign for "nothing here". */
+.background-panel__color--transparent span {
+  background: repeating-conic-gradient(#d4d4d8 0% 25%, #ffffff 0% 50%) 50% / 10px 10px;
+}
+
+.background-panel__sliders {
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bp-border);
+}
+
+.background-panel__slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--bp-muted);
+}
+
+.background-panel__slider input {
+  width: 100%;
+  accent-color: var(--bp-accent);
+}
+
+.background-panel__slider input:disabled {
+  opacity: 0.4;
+}

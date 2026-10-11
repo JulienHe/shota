@@ -143,6 +143,13 @@ export const tauriApi = {
 
   historyUsage: () => invoke<HistoryUsage>("history_usage"),
 
+  /** Raw bytes of the current desktop wallpaper. Rejects for a solid-colour
+   * desktop, which has no image. */
+  desktopWallpaper: () => invoke<ArrayBuffer>("desktop_wallpaper"),
+
+  /** Raw bytes of an image the user picked as a frame background. */
+  readBackgroundImage: (path: string) => invoke<ArrayBuffer>("read_background_image", { path }),
+
   listSystemFonts: () => invoke<string[]>("list_system_fonts"),
 
   listHistory: () => invoke<HistoryListItem[]>("list_history"),

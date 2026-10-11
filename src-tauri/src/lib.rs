@@ -1,3 +1,4 @@
+mod backgrounds;
 mod capture;
 mod clipboard;
 mod commands;
@@ -69,6 +70,8 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::print_screen_owned_by_snipping_tool,
+            commands::desktop_wallpaper,
+            commands::read_background_image,
             commands::default_shortcuts,
             commands::pause_global_shortcuts,
             commands::get_preferences,

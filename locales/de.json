@@ -54,7 +54,19 @@
     "gray": "Mittelgrau",
     "darkGray": "Dunkelgrau",
     "black": "Schwarz",
-    "system": "System folgen"
+    "system": "System folgen",
+    "title": "Hintergrund",
+    "none": "Keiner",
+    "gradients": "Verläufe",
+    "images": "Bilder",
+    "wallpaper": "Dein Hintergrundbild",
+    "blurred": "Weichgezeichneter Screenshot",
+    "chooseImage": "Bild auswählen…",
+    "colors": "Farben",
+    "transparent": "Transparent",
+    "padding": "Abstand",
+    "corners": "Ecken",
+    "shadow": "Schatten"
   },
   "history": {
     "restore": "Wiederherstellen",

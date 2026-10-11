@@ -54,7 +54,19 @@
     "gray": "中灰",
     "darkGray": "深灰",
     "black": "黑色",
-    "system": "跟随系统"
+    "system": "跟随系统",
+    "title": "背景",
+    "none": "无",
+    "gradients": "渐变",
+    "images": "图片",
+    "wallpaper": "你的桌面壁纸",
+    "blurred": "模糊截图",
+    "chooseImage": "选择图片…",
+    "colors": "颜色",
+    "transparent": "透明",
+    "padding": "边距",
+    "corners": "圆角",
+    "shadow": "阴影"
   },
   "history": {
     "restore": "恢复",

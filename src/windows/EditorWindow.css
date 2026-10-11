@@ -7,9 +7,16 @@
   background: #e9e9ec;
 }
 
+.editor-window__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
 .editor-window__canvas-area {
   position: relative;
   flex: 1;
+  min-width: 0;
   min-height: 0;
 }
 

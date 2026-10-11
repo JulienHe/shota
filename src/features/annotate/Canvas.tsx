@@ -1,5 +1,5 @@
-import { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
-import { Stage, Layer, Image as KonvaImage, Transformer } from "react-konva";
+import { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Stage, Layer, Image as KonvaImage, Rect, Transformer } from "react-konva";
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
@@ -10,7 +10,9 @@ import { CanvasBackground, useUiStore } from "../../stores/uiStore";
 import { useToastStore } from "../../stores/toastStore";
 import { useImage } from "../../lib/useImage";
 import { useZoom } from "../zoom/useZoom";
-import { absoluteToImage, centeredView } from "../zoom/viewTransform";
+import { absoluteToImage, centeredBoxView, fitScale } from "../zoom/viewTransform";
+import { frameMetrics } from "../background/frame";
+import { useFrameBackground } from "../background/useFrameBackground";
 import { useCrop } from "../crop/useCrop";
 import { CropOverlay } from "../crop/CropOverlay";
 import { sampleColorFromImage } from "../color-picker/sampleColor";
@@ -59,6 +61,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const updateShape = useDocumentStore((s) => s.updateShape);
   const removeShape = useDocumentStore((s) => s.removeShape);
   const commit = useDocumentStore((s) => s.commit);
+  const frame = useDocumentStore((s) => s.frame);
 
   const activeTool = useToolStore((s) => s.activeTool);
   const setActiveTool = useToolStore((s) => s.setActiveTool);
@@ -70,6 +73,21 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const [bgMenuPos, setBgMenuPos] = useState<{ x: number; y: number } | null>(null);
 
   const imageElement = useImage(image);
+
+  // The frame's geometry in image coordinates. `contentBox` is everything
+  // that gets exported and fitted to the window: the frame when there is
+  // one, otherwise just the screenshot.
+  const metrics = useMemo(
+    () => (frame && imageElement ? frameMetrics(frame, imageElement.width, imageElement.height) : null),
+    [frame, imageElement],
+  );
+  const contentBox = useMemo(
+    () =>
+      metrics?.bounds ??
+      (imageElement ? { x: 0, y: 0, width: imageElement.width, height: imageElement.height } : null),
+    [metrics, imageElement],
+  );
+  const frameBackground = useFrameBackground(frame, imageElement, metrics?.bounds ?? null);
   const { view, onWheel, setView } = useZoom();
   const { cropRect, setCropRect, commitCrop, cancelCrop } = useCrop(imageElement, activeTool === "crop");
 
@@ -114,7 +132,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   // also runs from a background effect (below) rather than only on click.
   const performExport = useCallback((mimeType = "image/png", quality?: number): string | null => {
     const stage = stageRef.current;
-    if (!stage || !imageElement) return null;
+    if (!stage || !imageElement || !contentBox) return null;
     const priorNodes = transformerRef.current?.nodes() ?? [];
     transformerRef.current?.nodes([]);
     // The drop shadow is purely editor chrome (it falls outside the crop
@@ -122,37 +140,46 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     // drawing the layer for export ~ a 24px gaussian-style blur redrawn at
     // full native resolution (often a multi-x upscale from the on-screen
     // preview) is real, avoidable CPU cost on every copy/save.
+    // With a frame, though, the shadow is the point, so it stays.
     const imageNode = imageNodeRef.current;
-    imageNode?.shadowEnabled(false);
-    // width/height here are in on-screen (zoomed) pixels, then pixelRatio
-    // upsamples back to native resolution ~ `1 / view.scale` as the ratio
-    // doesn't exactly cancel out imageElement.width * view.scale once Konva
-    // rounds that screen-space width to a whole pixel internally, so the
-    // export came out a pixel short. Deriving pixelRatio from the
-    // already-rounded width guarantees the math actually cancels back to
-    // the image's exact native size.
-    const scaledWidth = Math.round(imageElement.width * view.scale);
-    const scaledHeight = Math.round(imageElement.height * view.scale);
+    if (!metrics) imageNode?.shadowEnabled(false);
+    // Rendered with the stage temporarily at 1:1, positioned so the content
+    // box starts at 0,0, rather than by asking for the on-screen region and
+    // scaling it back up. That approach derived one pixelRatio from the
+    // rounded width, which made the width exact but let the height drift a
+    // pixel or two; at 1:1 both are exact by construction. Everything here
+    // is synchronous, so the zoomed view is restored before anything paints.
+    const prior = { scaleX: stage.scaleX(), scaleY: stage.scaleY(), x: stage.x(), y: stage.y() };
+    stage.scale({ x: 1, y: 1 });
+    stage.position({ x: -contentBox.x, y: -contentBox.y });
     const dataUrl = stage.toDataURL({
-      x: view.x,
-      y: view.y,
-      width: scaledWidth,
-      height: scaledHeight,
-      pixelRatio: imageElement.width / scaledWidth,
+      x: 0,
+      y: 0,
+      width: Math.round(contentBox.width),
+      height: Math.round(contentBox.height),
+      pixelRatio: 1,
       mimeType,
       quality,
     });
+    stage.scale({ x: prior.scaleX, y: prior.scaleY });
+    stage.position({ x: prior.x, y: prior.y });
     imageNode?.shadowEnabled(true);
     transformerRef.current?.nodes(priorNodes);
     return dataUrl;
-  }, [imageElement, view]);
+  }, [imageElement, contentBox, metrics]);
 
   // Caches the last export, keyed on the exact shapes/image references that
   // produced it ~ both only ever change at discrete commit points (shape
   // added, drag/transform finished, style edited), never mid-gesture, so
   // reference equality is a cheap and correct "has anything actually
   // changed" check.
-  const exportCacheRef = useRef<{ shapes: Shape[]; image: string | null; dataUrl: string } | null>(null);
+  const exportCacheRef = useRef<{
+    shapes: Shape[];
+    image: string | null;
+    frame: unknown;
+    background: unknown;
+    dataUrl: string;
+  } | null>(null);
   // `performExport`'s identity changes on every pan/zoom (it reads `view`),
   // which would otherwise cancel/reschedule the debounce below on every
   // wheel tick even though panning/zooming never changes what gets
@@ -163,13 +190,19 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
   const getExportDataUrl = useCallback((): string | null => {
     const cache = exportCacheRef.current;
-    if (cache && cache.shapes === shapes && cache.image === image) {
+    if (
+      cache &&
+      cache.shapes === shapes &&
+      cache.image === image &&
+      cache.frame === frame &&
+      cache.background === frameBackground
+    ) {
       return cache.dataUrl;
     }
     const dataUrl = performExportRef.current();
-    if (dataUrl) exportCacheRef.current = { shapes, image, dataUrl };
+    if (dataUrl) exportCacheRef.current = { shapes, image, frame, background: frameBackground, dataUrl };
     return dataUrl;
-  }, [shapes, image]);
+  }, [shapes, image, frame, frameBackground]);
 
   // Primes the cache in the background, debounced, whenever the document
   // actually changes ~ by the time the user clicks Copy/Save, the expensive
@@ -179,7 +212,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     if (!image) return;
     const timer = setTimeout(() => getExportDataUrl(), 600);
     return () => clearTimeout(timer);
-  }, [shapes, image, getExportDataUrl]);
+  }, [shapes, image, frame, frameBackground, getExportDataUrl]);
 
   // Keeps the on-screen zoom level centered on the viewport's own center
   // point (rather than the last wheel/cursor position, which is meaningless
@@ -199,9 +232,9 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   );
 
   const zoomToFit = useCallback(() => {
-    if (!imageElement || !stageSize) return;
-    setView(centeredView(imageElement, stageSize));
-  }, [imageElement, stageSize, setView]);
+    if (!contentBox || !stageSize) return;
+    setView(centeredBoxView(contentBox, stageSize));
+  }, [contentBox, stageSize, setView]);
 
   useEffect(() => {
     onZoomChange?.(view.scale);
@@ -244,20 +277,32 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   // browser paints, so the very first frame of a new image already has the
   // correct fitted scale instead of briefly painting at the previous (or
   // default 100%) zoom and then visibly snapping to fit a moment later.
+  const previousBoxRef = useRef<string | null>(null);
   useLayoutEffect(() => {
-    if (!imageElement || !stageSize) return;
+    if (!imageElement || !stageSize || !contentBox) return;
     const isNewImage = previousImageRef.current !== imageElement;
     previousImageRef.current = imageElement;
+    const boxKey = `${contentBox.x},${contentBox.y},${contentBox.width},${contentBox.height}`;
+    const boxChanged = previousBoxRef.current !== null && previousBoxRef.current !== boxKey;
+    previousBoxRef.current = boxKey;
 
     if (isNewImage) {
-      setView(centeredView(imageElement, stageSize));
+      setView(centeredBoxView(contentBox, stageSize));
+    } else if (boxChanged) {
+      // The frame grew or shrank (padding slider, frame on or off): keep the
+      // screenshot the size it is while the whole frame still fits, so
+      // dragging the slider grows the background around a still image, and
+      // only zoom out once it would spill past the window.
+      setView((prev) =>
+        centeredBoxView(contentBox, stageSize, Math.min(prev.scale, fitScale(contentBox, stageSize))),
+      );
     } else {
       // Same image, just a window resize (or ResizeObserver re-fire): keep the
       // current zoom level, but re-center it in the new viewport.
-      setView((prev) => centeredView(imageElement, stageSize, prev.scale));
+      setView((prev) => centeredBoxView(contentBox, stageSize, prev.scale));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageElement, stageSize]);
+  }, [imageElement, stageSize, contentBox?.x, contentBox?.y, contentBox?.width, contentBox?.height]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -616,15 +661,34 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
         }}
       >
         <Layer>
+          {/* The frame's background. Not listening, so clicks on it reach
+              the stage exactly as clicks on empty canvas always have. */}
+          {metrics && frameBackground?.kind === "color" && frameBackground.color !== "transparent" && (
+            <Rect {...metrics.bounds} fill={frameBackground.color} listening={false} />
+          )}
+          {metrics && frameBackground?.kind === "image" && (
+            <KonvaImage
+              image={frameBackground.source}
+              crop={frameBackground.crop}
+              {...metrics.bounds}
+              listening={false}
+            />
+          )}
+
           {imageElement && (
             <KonvaImage
               ref={imageNodeRef}
               image={imageElement}
               listening={false}
+              cornerRadius={metrics?.radius ?? 0}
+              // Without a frame this is editor chrome, lifting the capture
+              // off the canvas, and is left out of exports. With one, it is
+              // the frame's own shadow, set by its slider and exported.
               shadowColor="black"
-              shadowBlur={24}
-              shadowOpacity={0.25}
-              shadowOffsetY={6}
+              shadowEnabled={metrics ? metrics.shadowBlur > 0 : true}
+              shadowBlur={metrics ? metrics.shadowBlur : 24}
+              shadowOpacity={metrics ? 0.4 : 0.25}
+              shadowOffsetY={metrics ? metrics.shadowOffsetY : 6}
             />
           )}
 

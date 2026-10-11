@@ -305,3 +305,16 @@ pub fn check_for_updates(app: AppHandle) {
     #[cfg(not(feature = "updater"))]
     let _ = app;
 }
+
+/// The desktop wallpaper's bytes, for the editor's background panel. Async
+/// so reading a multi-megabyte file never blocks the main thread.
+#[tauri::command]
+pub async fn desktop_wallpaper() -> Result<tauri::ipc::Response, String> {
+    crate::backgrounds::desktop_wallpaper().map(tauri::ipc::Response::new)
+}
+
+/// An image the user picked as a background.
+#[tauri::command]
+pub async fn read_background_image(path: String) -> Result<tauri::ipc::Response, String> {
+    crate::backgrounds::read_image(&path).map(tauri::ipc::Response::new)
+}

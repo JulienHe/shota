@@ -1,8 +1,10 @@
-import { ArrowUpRight, Circle, Crop, Droplet, Highlighter, Minus, MousePointer2, Pencil, Pipette, Square, Type } from "lucide-react";
+import { ArrowUpRight, Circle, Crop, Droplet, Highlighter, Minus, MousePointer2, Pencil, Pipette, Square, Type, Wallpaper } from "lucide-react";
 import { IconButton } from "../../../components/IconButton";
 import { CircleOne } from "./StepToolIcon";
 import { SpotlightRect } from "./SpotlightToolIcon";
 import { useToolStore } from "../../../stores/toolStore";
+import { useUiStore } from "../../../stores/uiStore";
+import { useDocumentStore } from "../../../stores/documentStore";
 import { ShapeOptionsPanel } from "./ShapeOptionsPanel";
 import { ToolId } from "../types";
 import { EditorActionId, useEditorBindings, useEditorShortcuts } from "../../../lib/editorShortcuts";
@@ -37,6 +39,9 @@ export function Toolbar() {
   const setActiveTool = useToolStore((s) => s.setActiveTool);
 
   const bindings = useEditorBindings();
+  const backgroundPanelOpen = useUiStore((s) => s.backgroundPanelOpen);
+  const toggleBackgroundPanel = useUiStore((s) => s.toggleBackgroundPanel);
+  const hasFrame = useDocumentStore((s) => s.frame !== null);
 
   useEditorShortcuts(
     Object.fromEntries(TOOLS.map((tool) => [actionFor(tool.id), () => setActiveTool(tool.id)])),
@@ -45,6 +50,16 @@ export function Toolbar() {
   return (
     <div className="toolbar">
       <div className="toolbar__row">
+        {/* Not a drawing tool, so it sits apart from them: it opens the
+            frame panel, and stays highlighted while a frame is on even with
+            the panel closed, so a framed export is never a surprise. */}
+        <IconButton
+          icon={Wallpaper}
+          label={t("background.title")}
+          active={backgroundPanelOpen || hasFrame}
+          onClick={toggleBackgroundPanel}
+        />
+        <div className="toolbar__divider" />
         {TOOLS.map((tool) => (
           <IconButton
             key={tool.id}

@@ -54,7 +54,19 @@
     "gray": "グレー",
     "darkGray": "ダークグレー",
     "black": "黒",
-    "system": "システムに合わせる"
+    "system": "システムに合わせる",
+    "title": "背景",
+    "none": "なし",
+    "gradients": "グラデーション",
+    "images": "画像",
+    "wallpaper": "デスクトップの壁紙",
+    "blurred": "ぼかしたスクリーンショット",
+    "chooseImage": "画像を選択…",
+    "colors": "カラー",
+    "transparent": "透明",
+    "padding": "余白",
+    "corners": "角の丸み",
+    "shadow": "影"
   },
   "history": {
     "restore": "復元",

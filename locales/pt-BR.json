@@ -54,7 +54,19 @@
     "gray": "Cinza-médio",
     "darkGray": "Cinza-escuro",
     "black": "Preto",
-    "system": "Seguir o sistema"
+    "system": "Seguir o sistema",
+    "title": "Fundo",
+    "none": "Nenhum",
+    "gradients": "Gradientes",
+    "images": "Imagens",
+    "wallpaper": "Seu papel de parede",
+    "blurred": "Captura desfocada",
+    "chooseImage": "Escolher uma imagem…",
+    "colors": "Cores",
+    "transparent": "Transparente",
+    "padding": "Margem",
+    "corners": "Cantos",
+    "shadow": "Sombra"
   },
   "history": {
     "restore": "Restaurar",

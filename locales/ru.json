@@ -54,7 +54,19 @@
     "gray": "Серый",
     "darkGray": "Тёмно-серый",
     "black": "Чёрный",
-    "system": "Как в системе"
+    "system": "Как в системе",
+    "title": "Фон",
+    "none": "Нет",
+    "gradients": "Градиенты",
+    "images": "Изображения",
+    "wallpaper": "Ваши обои",
+    "blurred": "Размытый снимок",
+    "chooseImage": "Выбрать изображение…",
+    "colors": "Цвета",
+    "transparent": "Прозрачный",
+    "padding": "Отступ",
+    "corners": "Углы",
+    "shadow": "Тень"
   },
   "history": {
     "restore": "Открыть",

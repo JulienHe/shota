@@ -54,7 +54,19 @@
     "gray": "Medium Gray",
     "darkGray": "Dark Gray",
     "black": "Black",
-    "system": "Match System"
+    "system": "Match System",
+    "title": "Background",
+    "none": "None",
+    "gradients": "Gradients",
+    "images": "Images",
+    "wallpaper": "Your wallpaper",
+    "blurred": "Blurred screenshot",
+    "chooseImage": "Choose an image…",
+    "colors": "Colors",
+    "transparent": "Transparent",
+    "padding": "Padding",
+    "corners": "Corners",
+    "shadow": "Shadow"
   },
   "history": {
     "restore": "Restore",

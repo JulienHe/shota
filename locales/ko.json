@@ -54,7 +54,19 @@
     "gray": "중간 회색",
     "darkGray": "어두운 회색",
     "black": "검정",
-    "system": "시스템 설정 따르기"
+    "system": "시스템 설정 따르기",
+    "title": "배경",
+    "none": "없음",
+    "gradients": "그라데이션",
+    "images": "이미지",
+    "wallpaper": "내 바탕 화면",
+    "blurred": "흐린 스크린샷",
+    "chooseImage": "이미지 선택…",
+    "colors": "색상",
+    "transparent": "투명",
+    "padding": "여백",
+    "corners": "모서리",
+    "shadow": "그림자"
   },
   "history": {
     "restore": "복원",

@@ -54,7 +54,19 @@
     "gray": "Middengrijs",
     "darkGray": "Donkergrijs",
     "black": "Zwart",
-    "system": "Systeem volgen"
+    "system": "Systeem volgen",
+    "title": "Achtergrond",
+    "none": "Geen",
+    "gradients": "Kleurverlopen",
+    "images": "Afbeeldingen",
+    "wallpaper": "Je bureaubladachtergrond",
+    "blurred": "Vervaagde schermafbeelding",
+    "chooseImage": "Afbeelding kiezen…",
+    "colors": "Kleuren",
+    "transparent": "Transparant",
+    "padding": "Marge",
+    "corners": "Hoeken",
+    "shadow": "Schaduw"
   },
   "history": {
     "restore": "Herstellen",

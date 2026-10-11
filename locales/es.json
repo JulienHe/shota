@@ -54,7 +54,19 @@
     "gray": "Gris medio",
     "darkGray": "Gris oscuro",
     "black": "Negro",
-    "system": "Seguir el sistema"
+    "system": "Seguir el sistema",
+    "title": "Fondo",
+    "none": "Ninguno",
+    "gradients": "Degradados",
+    "images": "Imágenes",
+    "wallpaper": "Tu fondo de escritorio",
+    "blurred": "Captura desenfocada",
+    "chooseImage": "Elegir una imagen…",
+    "colors": "Colores",
+    "transparent": "Transparente",
+    "padding": "Margen",
+    "corners": "Esquinas",
+    "shadow": "Sombra"
   },
   "history": {
     "restore": "Restaurar",
