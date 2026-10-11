@@ -140,7 +140,11 @@
     "storageUsed": "Belegter Speicher",
     "storageValue": "Aufnahmen: {count} · {size}",
     "clearHistory": "Verlauf löschen",
-    "clearHistoryConfirm": "Alle Aufnahmen im Verlauf löschen? Das lässt sich nicht rückgängig machen."
+    "clearHistoryConfirm": "Alle Aufnahmen im Verlauf löschen? Das lässt sich nicht rückgängig machen.",
+    "madeBy": "Entwickelt von {name}",
+    "tokensBody": "Shota ist kostenlos, und zwar dauerhaft. Es entstand mit viel KI-Hilfe, und die wird in Tokens abgerechnet. Tokens sind also das, worum man ehrlicherweise bitten kann.",
+    "tokensButton": "Ein paar Tokens spendieren",
+    "tokensFree": "Oder gib einen Stern auf GitHub, das ist kostenlos und hilft sehr"
   },
   "error": {
     "title": "Shota hat ein Problem festgestellt",

@@ -140,7 +140,11 @@
     "storageUsed": "已用空间",
     "storageValue": "截图：{count} 张 · {size}",
     "clearHistory": "清除历史记录",
-    "clearHistoryConfirm": "要删除历史记录中的所有截图吗？此操作无法撤销。"
+    "clearHistoryConfirm": "要删除历史记录中的所有截图吗？此操作无法撤销。",
+    "madeBy": "作者：{name}",
+    "tokensBody": "Shota 永久免费。它在 AI 的大量帮助下完成，而 AI 按 token 计费，所以请我吃点 token 是最实在的支持。",
+    "tokensButton": "赞助一些 token",
+    "tokensFree": "或者在 GitHub 上点个星，免费又很有帮助"
   },
   "error": {
     "title": "Shota 遇到问题",

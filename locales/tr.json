@@ -140,7 +140,11 @@
     "storageUsed": "Kullanılan alan",
     "storageValue": "Yakalamalar: {count} · {size}",
     "clearHistory": "Geçmişi temizle",
-    "clearHistoryConfirm": "Geçmişteki tüm yakalamalar silinsin mi? Bu işlem geri alınamaz."
+    "clearHistoryConfirm": "Geçmişteki tüm yakalamalar silinsin mi? Bu işlem geri alınamaz.",
+    "madeBy": "Geliştiren: {name}",
+    "tokensBody": "Shota ücretsizdir ve öyle kalacak. Bolca yapay zekâ yardımıyla yapıldı ve bu yardım token ile ücretlendiriliyor; o yüzden dürüst olan token istemek.",
+    "tokensButton": "Biraz token ısmarla",
+    "tokensFree": "Ya da GitHub'da yıldız ver; ücretsiz ve çok işe yarıyor"
   },
   "error": {
     "title": "Shota bir sorunla karşılaştı",

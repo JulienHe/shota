@@ -140,7 +140,11 @@
     "storageUsed": "Gebruikte ruimte",
     "storageValue": "Schermafbeeldingen: {count} · {size}",
     "clearHistory": "Geschiedenis wissen",
-    "clearHistoryConfirm": "Alle schermafbeeldingen in de geschiedenis verwijderen? Dit kan niet ongedaan worden gemaakt."
+    "clearHistoryConfirm": "Alle schermafbeeldingen in de geschiedenis verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "madeBy": "Gemaakt door {name}",
+    "tokensBody": "Shota is gratis, voorgoed. Het is gebouwd met veel hulp van AI, en die hulp wordt in tokens afgerekend. Tokens zijn dus het eerlijke om om te vragen.",
+    "tokensButton": "Doneer wat tokens",
+    "tokensFree": "Of geef een ster op GitHub, dat is gratis en helpt echt"
   },
   "error": {
     "title": "Shota liep tegen een probleem aan",

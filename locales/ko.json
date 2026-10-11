@@ -140,7 +140,11 @@
     "storageUsed": "사용 중인 공간",
     "storageValue": "캡처: {count}개 · {size}",
     "clearHistory": "기록 지우기",
-    "clearHistoryConfirm": "기록의 모든 캡처를 삭제할까요? 되돌릴 수 없습니다."
+    "clearHistoryConfirm": "기록의 모든 캡처를 삭제할까요? 되돌릴 수 없습니다.",
+    "madeBy": "만든 사람: {name}",
+    "tokensBody": "Shota는 앞으로도 계속 무료입니다. AI의 도움을 많이 받아 만들었고, 그 도움은 토큰 단위로 비용이 청구됩니다. 그래서 솔직하게 토큰을 부탁드립니다.",
+    "tokensButton": "토큰 보태기",
+    "tokensFree": "GitHub에서 별을 눌러 주셔도 무료이면서 큰 도움이 됩니다"
   },
   "error": {
     "title": "Shota에 문제가 발생했습니다",

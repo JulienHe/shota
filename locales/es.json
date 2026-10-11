@@ -140,7 +140,11 @@
     "storageUsed": "Espacio usado",
     "storageValue": "Capturas: {count} · {size}",
     "clearHistory": "Borrar historial",
-    "clearHistoryConfirm": "¿Eliminar todas las capturas del historial? No se puede deshacer."
+    "clearHistoryConfirm": "¿Eliminar todas las capturas del historial? No se puede deshacer.",
+    "madeBy": "Creado por {name}",
+    "tokensBody": "Shota es gratis, para siempre. Se hizo con mucha ayuda de IA, y esa ayuda se paga en tokens, así que lo honesto es pedir tokens.",
+    "tokensButton": "Aportar unos tokens",
+    "tokensFree": "O dale una estrella en GitHub, que es gratis y ayuda mucho"
   },
   "error": {
     "title": "Shota ha encontrado un problema",

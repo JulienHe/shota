@@ -140,7 +140,11 @@
     "storageUsed": "Space used",
     "storageValue": "Captures: {count} · {size}",
     "clearHistory": "Clear history",
-    "clearHistoryConfirm": "Delete every capture in history? This can't be undone."
+    "clearHistoryConfirm": "Delete every capture in history? This can't be undone.",
+    "madeBy": "Made by {name}",
+    "tokensBody": "Shota is free, for good. It was built with a lot of AI help, and AI help is billed in tokens, so tokens are the honest thing to ask for.",
+    "tokensButton": "Chip in some tokens",
+    "tokensFree": "Or star it on GitHub, which is free and helps a lot"
   },
   "error": {
     "title": "Shota hit a problem",

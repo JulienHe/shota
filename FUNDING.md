@@ -11,7 +11,7 @@ So this page is the optional bit.
 The traditional ask is a coffee. But Shota was built with a great deal of AI assistance,
 and that assistance is metered in tokens, so the honest unit of support is tokens.
 
-Every arrow you drag, every API key you blur, every one of the seven languages in the
+Every arrow you drag, every API key you blur, every one of the fifteen languages in the
 settings dropdown ~ all of it got argued over with a language model that bills per
 million tokens. Some of those arguments were long. A few of them were me being wrong
 about how `box-shadow` interacts with element screenshots for an embarrassing number of
@@ -42,9 +42,9 @@ That's the whole list. If it ever gets longer, it'll say so here.
 
 No money required, and some of these are worth more than the money:
 
-**Tell me the translations are wrong.** Shota speaks seven languages. I speak rather
-fewer than seven. The French has been checked by a human; the German, Spanish, Japanese,
-Korean and Simplified Chinese have not. If a tool name reads strangely in your language,
+**Tell me the translations are wrong.** Shota speaks fifteen languages. I speak rather
+fewer than fifteen. The French has been checked by a human; the other thirteen
+translations have not. If a tool name reads strangely in your language,
 [say so](https://github.com/JulienHe/shota/issues) ~ the strings are plain JSON in
 [`locales/`](locales/), so a fix is a three-line pull request.
 

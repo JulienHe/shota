@@ -140,7 +140,11 @@
     "storageUsed": "已使用空間",
     "storageValue": "擷取畫面：{count} 張 · {size}",
     "clearHistory": "清除歷程記錄",
-    "clearHistoryConfirm": "要刪除歷程記錄中的所有擷取畫面嗎？此動作無法復原。"
+    "clearHistoryConfirm": "要刪除歷程記錄中的所有擷取畫面嗎？此動作無法復原。",
+    "madeBy": "作者：{name}",
+    "tokensBody": "Shota 永久免費。它在 AI 的大量協助下完成，而 AI 依 token 計費，所以請我吃點 token 是最實在的支持。",
+    "tokensButton": "贊助一些 token",
+    "tokensFree": "或是在 GitHub 上按個星，免費又很有幫助"
   },
   "error": {
     "title": "Shota 發生問題",

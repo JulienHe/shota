@@ -140,7 +140,11 @@
     "storageUsed": "Spazio usato",
     "storageValue": "Catture: {count} · {size}",
     "clearHistory": "Cancella cronologia",
-    "clearHistoryConfirm": "Eliminare tutte le catture della cronologia? L'operazione non si può annullare."
+    "clearHistoryConfirm": "Eliminare tutte le catture della cronologia? L'operazione non si può annullare.",
+    "madeBy": "Creato da {name}",
+    "tokensBody": "Shota è gratuito, per sempre. È stato costruito con molto aiuto dall'IA, che si paga in token: chiedere token è la cosa più onesta.",
+    "tokensButton": "Offri qualche token",
+    "tokensFree": "Oppure lascia una stella su GitHub: è gratis e aiuta molto"
   },
   "error": {
     "title": "Shota ha riscontrato un problema",

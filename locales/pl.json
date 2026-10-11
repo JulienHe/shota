@@ -140,7 +140,11 @@
     "storageUsed": "Zajęte miejsce",
     "storageValue": "Zrzuty: {count} · {size}",
     "clearHistory": "Wyczyść historię",
-    "clearHistoryConfirm": "Usunąć wszystkie zrzuty z historii? Tej operacji nie można cofnąć."
+    "clearHistoryConfirm": "Usunąć wszystkie zrzuty z historii? Tej operacji nie można cofnąć.",
+    "madeBy": "Autor: {name}",
+    "tokensBody": "Shota jest darmowa i taka zostanie. Powstała przy dużej pomocy AI, a za tę pomoc płaci się tokenami, więc uczciwie jest prosić właśnie o tokeny.",
+    "tokensButton": "Dorzuć trochę tokenów",
+    "tokensFree": "Albo daj gwiazdkę na GitHubie, to nic nie kosztuje i bardzo pomaga"
   },
   "error": {
     "title": "Shota napotkała problem",

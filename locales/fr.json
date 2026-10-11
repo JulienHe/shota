@@ -140,7 +140,11 @@
     "storageUsed": "Espace utilisé",
     "storageValue": "Captures : {count} · {size}",
     "clearHistory": "Effacer l'historique",
-    "clearHistoryConfirm": "Supprimer toutes les captures de l'historique ? Cette action est irréversible."
+    "clearHistoryConfirm": "Supprimer toutes les captures de l'historique ? Cette action est irréversible.",
+    "madeBy": "Créé par {name}",
+    "tokensBody": "Shota est gratuit, pour de bon. Il a été conçu avec beaucoup d'aide de l'IA, et cette aide se paie en tokens : c'est donc ce qu'il est honnête de demander.",
+    "tokensButton": "Offrir quelques tokens",
+    "tokensFree": "Ou mettez une étoile sur GitHub, c'est gratuit et ça aide beaucoup"
   },
   "error": {
     "title": "Shota a rencontré un problème",

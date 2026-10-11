@@ -140,7 +140,11 @@
     "storageUsed": "使用容量",
     "storageValue": "キャプチャ: {count} 件 · {size}",
     "clearHistory": "履歴を消去",
-    "clearHistoryConfirm": "履歴のキャプチャをすべて削除しますか？元に戻せません。"
+    "clearHistoryConfirm": "履歴のキャプチャをすべて削除しますか？元に戻せません。",
+    "madeBy": "制作: {name}",
+    "tokensBody": "Shota はこれからもずっと無料です。開発には AI の力を大いに借りていて、その費用はトークン単位で請求されます。だから、お願いするならトークンが正直なところです。",
+    "tokensButton": "トークンを差し入れる",
+    "tokensFree": "GitHub でスターを付けるだけでも、無料で大きな助けになります"
   },
   "error": {
     "title": "Shota で問題が発生しました",
