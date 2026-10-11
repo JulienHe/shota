@@ -1,7 +1,63 @@
+/* Every colour the settings pages use, defined once here so the theme
+   setting (which drives `prefers-color-scheme` in the webview) only has to
+   swap this list. */
 .settings-window {
+  --s-bg: #fafafa;
+  --s-sidebar: #f4f4f5;
+  --s-card: #ffffff;
+  --s-border: #e4e4e7;
+  --s-divider: #f0f0f2;
+  --s-text: #18181b;
+  --s-text-2: #3f3f46;
+  --s-muted: #71717a;
+  --s-faint: #a1a1aa;
+  --s-hover: #ececef;
+  --s-nav-active: #ffffff;
+  --s-control-bg: #fafafa;
+  --s-control-border: #d4d4d8;
+  --s-key-bg: #fafafa;
+  --s-key-border: #d4d4d8;
+  --s-primary-bg: #18181b;
+  --s-primary-hover: #3f3f46;
+  --s-primary-text: #ffffff;
+  --s-accent: #3d7bfd;
+  --s-danger: #dc2626;
+  --s-warning-bg: rgba(255, 149, 0, 0.1);
+  --s-warning-border: rgba(255, 149, 0, 0.35);
+
+  color-scheme: light;
   display: flex;
   height: 100vh;
-  background: #fafafa;
+  background: var(--s-bg);
+  color: var(--s-text);
+}
+
+@media (prefers-color-scheme: dark) {
+  .settings-window {
+    --s-bg: #17181c;
+    --s-sidebar: #1c1d22;
+    --s-card: #212227;
+    --s-border: #303136;
+    --s-divider: #2a2b30;
+    --s-text: #f4f4f5;
+    --s-text-2: #d4d4d8;
+    --s-muted: #9a9aa3;
+    --s-faint: #6b6b74;
+    --s-hover: #2a2b30;
+    --s-nav-active: #2c2d33;
+    --s-control-bg: #26272c;
+    --s-control-border: #3a3b41;
+    --s-key-bg: #2a2b30;
+    --s-key-border: #44454b;
+    --s-primary-bg: #f4f4f5;
+    --s-primary-hover: #d4d4d8;
+    --s-primary-text: #18181b;
+    --s-danger: #f87171;
+    --s-warning-bg: rgba(255, 149, 0, 0.12);
+    --s-warning-border: rgba(255, 149, 0, 0.3);
+
+    color-scheme: dark;
+  }
 }
 
 .settings-window__sidebar {
@@ -10,8 +66,8 @@
   display: flex;
   flex-direction: column;
   padding: 16px 10px;
-  background: #f4f4f5;
-  border-right: 1px solid #e4e4e7;
+  background: var(--s-sidebar);
+  border-right: 1px solid var(--s-border);
 }
 
 .settings-window__brand {
@@ -22,7 +78,7 @@
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: #18181b;
+  color: var(--s-text);
 }
 
 .settings-window__logo {
@@ -40,7 +96,7 @@
 .settings-window__group + .settings-window__group {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid #e4e4e7;
+  border-top: 1px solid var(--s-border);
 }
 
 .settings-window__nav {
@@ -53,22 +109,22 @@
   border-radius: 8px;
   background: transparent;
   font-size: 13px;
-  color: #52525b;
+  color: var(--s-muted);
   text-align: left;
   cursor: pointer;
 }
 
 .settings-window__nav:hover {
-  background: #e9e9ec;
-  color: #18181b;
+  background: var(--s-hover);
+  color: var(--s-text);
 }
 
 .settings-window__nav--active,
 .settings-window__nav--active:hover {
-  background: #ffffff;
-  color: #18181b;
+  background: var(--s-nav-active);
+  color: var(--s-text);
   font-weight: 500;
-  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .settings-window__content {

@@ -1,11 +1,15 @@
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Manager};
 
-use crate::hotkeys::{ShortcutKind, DEFAULT_AREA_SHORTCUT, DEFAULT_FULLSCREEN_SHORTCUT};
+use crate::hotkeys::{
+    ShortcutKind, Shortcuts, DEFAULT_AREA_SHORTCUT, DEFAULT_FULLSCREEN_SHORTCUT,
+    DEFAULT_HISTORY_SHORTCUT,
+};
 
 /// A capture handed off to the editor window: a key for fetching the raw
 /// (never annotation-baked) image, which history entry it belongs to (if
@@ -31,12 +35,117 @@ struct PersistedSettings {
     fullscreen_shortcut: String,
     #[serde(default = "default_area_shortcut")]
     area_shortcut: String,
+    #[serde(default = "default_history_shortcut")]
+    history_shortcut: String,
     /// None means "follow Windows", which is the default and what most
     /// people should stay on. Only set when the user picks a language
     /// explicitly, so changing the OS language keeps working for everyone
     /// who never opened the setting.
     #[serde(default)]
     language: Option<String>,
+    #[serde(default)]
+    preferences: Preferences,
+}
+
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Default, Debug)]
+#[serde(rename_all = "lowercase")]
+pub enum ImageFormat {
+    #[default]
+    Png,
+    Jpeg,
+    Webp,
+}
+
+impl ImageFormat {
+    pub fn extension(self) -> &'static str {
+        match self {
+            ImageFormat::Png => "png",
+            ImageFormat::Jpeg => "jpg",
+            ImageFormat::Webp => "webp",
+        }
+    }
+
+    pub fn filter_name(self) -> &'static str {
+        match self {
+            ImageFormat::Png => "PNG Image",
+            ImageFormat::Jpeg => "JPEG Image",
+            ImageFormat::Webp => "WebP Image",
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Default, Debug)]
+#[serde(rename_all = "lowercase")]
+pub enum ThemePreference {
+    #[default]
+    System,
+    Light,
+    Dark,
+}
+
+/// Everything the settings window edits as plain values, sent and saved as
+/// one object.
+///
+/// Shortcuts for the global hotkeys and launch-at-startup live elsewhere on
+/// purpose: both have to be *applied* to the OS, can fail while doing so,
+/// and need their own error path. These can't fail beyond writing the file.
+///
+/// `serde(default)` on the struct, not just the field, so a settings file
+/// from an older version that has some of these fields fills in the rest
+/// rather than being discarded wholesale.
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+#[serde(default, rename_all = "camelCase")]
+pub struct Preferences {
+    pub theme: ThemePreference,
+    /// None means "wherever you saved last", which was the only behaviour
+    /// before this setting existed.
+    pub save_dir: Option<String>,
+    pub file_name_pattern: String,
+    pub image_format: ImageFormat,
+    /// 1 to 100. Only JPEG and WebP use it; PNG is lossless.
+    pub image_quality: u8,
+    /// None means unlimited.
+    pub history_limit: Option<u32>,
+    /// None means captures never expire.
+    pub history_max_age_days: Option<u32>,
+    /// Editor shortcut overrides only, keyed by action id. The defaults live
+    /// in the frontend next to the actions themselves, so an action added
+    /// later gets its default without a settings migration.
+    pub editor_shortcuts: BTreeMap<String, String>,
+}
+
+impl Default for Preferences {
+    fn default() -> Self {
+        Self {
+            theme: ThemePreference::System,
+            save_dir: None,
+            file_name_pattern: "Shota {date} {time}".to_string(),
+            image_format: ImageFormat::Png,
+            image_quality: 90,
+            // The fixed limit history had before it became a setting.
+            history_limit: Some(20),
+            history_max_age_days: None,
+            editor_shortcuts: BTreeMap::new(),
+        }
+    }
+}
+
+impl Preferences {
+    /// Clamps anything a hand-edited settings file (or a frontend bug) could
+    /// get out of range, so the rest of the app never has to.
+    fn sanitized(mut self) -> Self {
+        self.image_quality = self.image_quality.clamp(1, 100);
+        if self.file_name_pattern.trim().is_empty() {
+            self.file_name_pattern = Preferences::default().file_name_pattern;
+        }
+        if self.history_limit == Some(0) {
+            self.history_limit = Some(1);
+        }
+        if self.history_max_age_days == Some(0) {
+            self.history_max_age_days = None;
+        }
+        self
+    }
 }
 
 fn default_fullscreen_shortcut() -> String {
@@ -47,13 +156,19 @@ fn default_area_shortcut() -> String {
     DEFAULT_AREA_SHORTCUT.to_string()
 }
 
+fn default_history_shortcut() -> String {
+    DEFAULT_HISTORY_SHORTCUT.to_string()
+}
+
 impl Default for PersistedSettings {
     fn default() -> Self {
         Self {
             last_save_dir: None,
             fullscreen_shortcut: default_fullscreen_shortcut(),
             area_shortcut: default_area_shortcut(),
+            history_shortcut: default_history_shortcut(),
             language: None,
+            preferences: Preferences::default(),
         }
     }
 }
@@ -156,9 +271,13 @@ impl AppState {
         self.settings.lock().unwrap().language.clone()
     }
 
-    pub fn shortcuts(&self) -> (String, String) {
+    pub fn shortcuts(&self) -> Shortcuts {
         let settings = self.settings.lock().unwrap();
-        (settings.fullscreen_shortcut.clone(), settings.area_shortcut.clone())
+        Shortcuts {
+            fullscreen: settings.fullscreen_shortcut.clone(),
+            area: settings.area_shortcut.clone(),
+            history: settings.history_shortcut.clone(),
+        }
     }
 
     pub fn set_shortcut(&self, app: &AppHandle, kind: ShortcutKind, accelerator: String) {
@@ -166,8 +285,23 @@ impl AppState {
         match kind {
             ShortcutKind::Fullscreen => settings.fullscreen_shortcut = accelerator,
             ShortcutKind::Area => settings.area_shortcut = accelerator,
+            ShortcutKind::History => settings.history_shortcut = accelerator,
         }
         let _ = write_settings(app, &settings);
+    }
+
+    pub fn preferences(&self) -> Preferences {
+        self.settings.lock().unwrap().preferences.clone()
+    }
+
+    /// Saves new preferences and returns the previous ones, so the caller
+    /// can apply only what actually changed.
+    pub fn set_preferences(&self, app: &AppHandle, preferences: Preferences) -> Result<(Preferences, Preferences), String> {
+        let mut settings = self.settings.lock().unwrap();
+        let next = preferences.sanitized();
+        let previous = std::mem::replace(&mut settings.preferences, next.clone());
+        write_settings(app, &settings)?;
+        Ok((previous, next))
     }
 }
 

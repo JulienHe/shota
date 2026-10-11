@@ -1,8 +1,10 @@
 import { ComponentType, useState } from "react";
-import { Info, Keyboard, LucideIcon, SlidersHorizontal } from "lucide-react";
+import { FolderDown, History, Info, Keyboard, LucideIcon, SlidersHorizontal } from "lucide-react";
 import { t } from "../lib/i18n";
 import { GeneralPage } from "../features/settings/pages/GeneralPage";
 import { ShortcutsPage } from "../features/settings/pages/ShortcutsPage";
+import { SavingPage } from "../features/settings/pages/SavingPage";
+import { HistoryPage } from "../features/settings/pages/HistoryPage";
 import { AboutPage } from "../features/settings/pages/AboutPage";
 import "./SettingsWindow.css";
 
@@ -24,6 +26,8 @@ const PAGES: Page[][] = [
   [
     { id: "general", label: "settings.general", icon: SlidersHorizontal, component: GeneralPage },
     { id: "shortcuts", label: "settings.shortcuts", icon: Keyboard, component: ShortcutsPage },
+    { id: "saving", label: "settings.saving", icon: FolderDown, component: SavingPage },
+    { id: "history", label: "settings.historyPage", icon: History, component: HistoryPage },
   ],
   [{ id: "about", label: "settings.about", icon: Info, component: AboutPage }],
 ];

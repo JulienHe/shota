@@ -8,7 +8,7 @@
   width: 64px;
   height: 64px;
   border-radius: 15px;
-  box-shadow: 0 6px 18px rgba(24, 24, 27, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
 }
 
 .about-page__identity {
@@ -20,32 +20,36 @@
 .about-page__name {
   font-size: 17px;
   font-weight: 600;
-  color: #18181b;
+  color: var(--s-text);
 }
 
 .about-page__tagline {
   font-size: 12.5px;
-  color: #52525b;
+  color: var(--s-text-2);
 }
 
 /* A whole row as a link: same look as a settings row, but the entire
    surface is the target. */
 .about-page__link {
   width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   border: none;
   background: transparent;
+  font-family: inherit;
   text-align: left;
-  color: #a1a1aa;
+  color: var(--s-faint);
   cursor: pointer;
 }
 
 .about-page__link:hover {
-  background: #fafafa;
-  color: #18181b;
+  background: var(--s-hover);
+  color: var(--s-text);
 }
 
 .about-page__license {
   margin: -12px 0 0;
   font-size: 12px;
-  color: #a1a1aa;
+  color: var(--s-faint);
 }

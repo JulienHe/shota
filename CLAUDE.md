@@ -126,7 +126,7 @@ Testing the updater needs a real install talking to a real release, which means
 and only one of them is obvious:
 
 - **Global shortcuts** are held by one process at a time ~ whichever registers first
-  wins and the other silently gets nothing. Debug builds use `Ctrl+Alt+Shift+3/4/6`
+  wins and the other silently gets nothing. Debug builds default to `Ctrl+Alt+3/4/5`
   (see `hotkeys.rs`, switched on `debug_assertions`).
 - **Settings and history** live under the bundle identifier, so a dev build sharing
   it reads and writes the installed app's real capture history. `npm run tauri:dev`
@@ -223,3 +223,43 @@ it only ever happens behind a button in settings, never automatically.
 
 Changing these defaults is safe for existing users: shortcuts persist in settings.json
 and the defaults only apply to a fresh install.
+
+## Launch at startup has two mechanisms, picked at runtime
+
+`startup.rs` checks whether *this copy* is running from an MSIX package
+(`GetCurrentPackageFullName`), not which build feature it was compiled with:
+
+- **Unpackaged (GitHub installer):** a value under `HKCU\...\CurrentVersion\Run`.
+- **Packaged (Store):** the `windows.startupTask` in `AppxManifest.xml`, toggled with the
+  WinRT `StartupTask` API. A packaged app's writes to the `Run` key are virtualized into
+  the package and never read at sign-in, so the registry route silently does nothing there.
+
+The manifest's `TaskId` and `STORE_TASK_ID` in `startup.rs` must match exactly; a mismatch
+fails at runtime, not at build or review. Task Manager's Startup apps switch overrides both:
+the registry path clears it when the user turns startup on in Shota (they asked), but the
+Store API refuses to override `DisabledByUser`, so settings says where to turn it back on.
+
+## Settings reach long-lived windows by event, never by reading once
+
+Preferences (theme, save format, editor shortcuts, history retention) are one object,
+`Preferences` in `state.rs`, saved with `set_preferences`, which applies whatever changed and
+emits `shota://preferences-changed`. `preferencesStore.ts` loads it once per window and then
+follows that event. The editor is created once and reused for every capture (see "Window
+reuse" above), so anything it read only on mount would stay stale until a restart.
+
+Editor shortcut *defaults* live in `src/lib/editorShortcuts.ts`; settings stores overrides
+only. An action added later gets its default with no migration, and "reset" deletes the
+override rather than writing the default down.
+
+## Recording a shortcut pauses the global ones
+
+While the settings window records a shortcut, every global hotkey is unregistered
+(`pause_global_shortcuts`) and re-registered afterwards. Otherwise pressing a combination Shota
+already owns fires it (rebinding Print Screen would start a capture), and Windows delivers a
+registered hotkey to its owner rather than the focused window, so the recorder never sees it.
+
+Print Screen reaches the webview as `keyup` only; Windows never delivers its `keydown`. The
+recorder listens for both for that reason.
+
+`register_all` logs and skips a shortcut that fails to register instead of failing the rest.
+It used to `expect()`, so a shortcut another app had since claimed crashed Shota on every launch.

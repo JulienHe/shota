@@ -7,7 +7,10 @@ import { BottomBar } from "./BottomBar";
 import { Canvas, CanvasHandle } from "../features/annotate/Canvas";
 import { useDocumentStore } from "../stores/documentStore";
 import { useToastStore } from "../stores/toastStore";
-import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
+import { useEditorShortcuts } from "../lib/editorShortcuts";
+import { usePreferencesStore } from "../stores/preferencesStore";
+import { formatFileName } from "../lib/fileName";
+import { t } from "../lib/i18n";
 import { tauriApi, toBase64Payload, PendingCapture } from "../lib/tauriApi";
 import { primeImageCache } from "../lib/useImage";
 import { afterNextPaint } from "../lib/windowChrome";
@@ -146,16 +149,28 @@ export function EditorWindow() {
   };
 
   const handleSave = async () => {
-    showToast("Preparing…", 10000);
+    // Read at click time, not render time, so a format changed in settings a
+    // moment ago applies to this very save.
+    const preferences = usePreferencesStore.getState().preferences;
+    const format = preferences?.imageFormat ?? "png";
+    showToast(t("editor.preparing"), 10000);
     await afterNextPaint();
-    const dataUrl = canvasRef.current?.exportDataUrl();
+    const canvas = canvasRef.current;
+    const dataUrl =
+      format === "png"
+        ? canvas?.exportDataUrl()
+        : canvas?.exportDataUrlAs(`image/${format}`, (preferences?.imageQuality ?? 90) / 100);
     if (!dataUrl) {
       clearToast();
       return;
     }
-    const name = `shota-${new Date().toISOString().replace(/[:.]/g, "-")}.png`;
+    const { imageWidth, imageHeight } = useDocumentStore.getState();
+    const name = formatFileName(preferences?.fileNamePattern ?? "Shota {date} {time}", new Date(), {
+      width: imageWidth,
+      height: imageHeight,
+    });
     try {
-      const path = await tauriApi.saveImageAs(toBase64Payload(dataUrl), name);
+      const path = await tauriApi.saveImageAs(toBase64Payload(dataUrl), name, format);
       // `path` is null if the user cancelled the native save dialog ~ stay
       // open in that case since nothing actually happened. On an actual
       // save, close right away rather than clearing the toast and lingering.
@@ -166,14 +181,11 @@ export function EditorWindow() {
       }
     } catch (err) {
       console.error("save failed", err);
-      showToast("Save failed ~ try again");
+      showToast(t("editor.saveFailed"));
     }
   };
 
-  useKeyboardShortcut({ ctrl: true, key: "c" }, handleCopy, []);
-  useKeyboardShortcut({ ctrl: true, key: "s" }, handleSave, []);
-  useKeyboardShortcut({ ctrl: true, key: "z" }, undo, [undo]);
-  useKeyboardShortcut({ ctrl: true, shift: true, key: "z" }, redo, [redo]);
+  useEditorShortcuts({ copy: handleCopy, save: handleSave, undo, redo });
 
   // Rendering the title bar/footer chrome before the image has decoded was
   // exactly the "window appears, then toolbar, then image" staggered

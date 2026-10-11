@@ -7,6 +7,7 @@ import { HistoryBar } from "./windows/HistoryBar";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { tauriApi } from "./lib/tauriApi";
 import { setLocale } from "./lib/i18n";
+import { startPreferencesSync } from "./stores/preferencesStore";
 
 /** Every shota window loads the same bundle; this routes on the Tauri window label. */
 function App() {
@@ -19,6 +20,7 @@ function App() {
 
   useEffect(() => {
     setLabel(getCurrentWindow().label);
+    startPreferencesSync();
     tauriApi
       .getLocale()
       .then(setLocale)

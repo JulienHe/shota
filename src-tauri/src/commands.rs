@@ -1,33 +1,88 @@
-use serde::Serialize;
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Manager};
 
 use crate::capture::{self, WindowInfo};
 use crate::clipboard;
 use crate::file_save;
 use crate::history::{self, HistoryListItem};
-use crate::hotkeys::{self, ShortcutKind};
-use crate::state::{AppState, PendingCapture};
+use crate::hotkeys::{self, ShortcutKind, Shortcuts};
+use crate::state::{AppState, ImageFormat, PendingCapture, Preferences};
+use crate::startup::{self, StartupStatus};
 use crate::windows::{
     close_history_window, hide_capture_overlay, hide_editor_window, open_capture_overlay,
     open_editor_from_history, open_editor_with_history, show_capture_overlay, show_editor_window,
     show_history_window,
 };
 
-#[derive(Serialize)]
-pub struct ShortcutsPayload {
-    pub fullscreen: String,
-    pub area: String,
+#[tauri::command]
+pub fn get_shortcuts(app: AppHandle) -> Shortcuts {
+    app.state::<AppState>().shortcuts()
 }
 
 #[tauri::command]
-pub fn get_shortcuts(app: AppHandle) -> ShortcutsPayload {
-    let (fullscreen, area) = app.state::<AppState>().shortcuts();
-    ShortcutsPayload { fullscreen, area }
+pub fn default_shortcuts() -> Shortcuts {
+    hotkeys::defaults()
 }
 
 #[tauri::command]
 pub fn set_shortcut(app: AppHandle, kind: ShortcutKind, accelerator: String) -> Result<(), String> {
     hotkeys::update_shortcut(&app, kind, accelerator)
+}
+
+/// Releases every global shortcut while settings records a new one, or
+/// takes them back afterwards. See `hotkeys::pause`.
+#[tauri::command]
+pub fn pause_global_shortcuts(app: AppHandle, paused: bool) {
+    if paused {
+        hotkeys::pause(&app);
+    } else {
+        hotkeys::register_all(&app);
+    }
+}
+
+#[tauri::command]
+pub fn get_preferences(app: AppHandle) -> Preferences {
+    app.state::<AppState>().preferences()
+}
+
+/// Saves the whole preferences object, applies whatever changed, and tells
+/// every window. The editor in particular is long-lived and reused, so it
+/// can't just read these once on mount and keep them.
+#[tauri::command]
+pub fn set_preferences(app: AppHandle, preferences: Preferences) -> Result<Preferences, String> {
+    let (previous, next) = app.state::<AppState>().set_preferences(&app, preferences)?;
+
+    if previous.theme != next.theme {
+        crate::theme::apply(&app, next.theme);
+    }
+    if previous.history_limit != next.history_limit || previous.history_max_age_days != next.history_max_age_days {
+        // Deleting files is real I/O, and the settings window is waiting.
+        let handle = app.clone();
+        std::thread::spawn(move || {
+            if let Err(err) = history::apply_retention(&handle) {
+                eprintln!("applying history retention failed: {err}");
+            }
+        });
+    }
+
+    let _ = app.emit("shota://preferences-changed", &next);
+    Ok(next)
+}
+
+/// Async so reading the registry or WinRT never runs on the main thread.
+#[tauri::command]
+pub async fn get_launch_at_startup(app: AppHandle) -> StartupStatus {
+    startup::status(&app)
+}
+
+#[tauri::command]
+pub async fn set_launch_at_startup(app: AppHandle, enabled: bool) -> Result<StartupStatus, String> {
+    startup::set(&app, enabled)
+}
+
+/// Async because it walks the history folder on disk.
+#[tauri::command]
+pub async fn history_usage(app: AppHandle) -> Result<history::HistoryUsage, String> {
+    history::usage(&app)
 }
 
 /// Whether Windows is holding Print Screen for the Snipping Tool, which
@@ -172,10 +227,11 @@ pub fn list_system_fonts() -> Vec<String> {
 #[tauri::command]
 pub fn save_image_as(
     app: AppHandle,
-    png_base64: String,
+    image_base64: String,
     suggested_name: String,
+    format: ImageFormat,
 ) -> Result<Option<String>, String> {
-    file_save::save_image(&app, &png_base64, &suggested_name)
+    file_save::save_image(&app, &image_base64, &suggested_name, format)
 }
 
 #[tauri::command]
@@ -230,13 +286,6 @@ pub fn history_ready(app: AppHandle) -> Result<(), String> {
 #[tauri::command]
 pub fn close_history_window_command(app: AppHandle) -> Result<(), String> {
     close_history_window(&app)
-}
-
-/// The history shortcut isn't rebindable yet, but Settings should still show
-/// it ~ a shortcut you can't discover may as well not exist.
-#[tauri::command]
-pub fn get_history_shortcut() -> String {
-    crate::hotkeys::HISTORY_SHORTCUT.to_string()
 }
 
 /// False in the Store build, where the Store delivers updates and Shota's own

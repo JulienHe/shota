@@ -22,32 +22,80 @@ use crate::windows::{open_capture_overlay, open_editor_with_history, toggle_hist
 pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+PrintScreen";
 #[cfg(not(debug_assertions))]
 pub const DEFAULT_AREA_SHORTCUT: &str = "PrintScreen";
-/// Not user-rebindable (yet) ~ no entry in ShortcutKind/PersistedSettings,
-/// unlike Fullscreen/Area which have a settings UI.
 #[cfg(not(debug_assertions))]
-pub const HISTORY_SHORTCUT: &str = "Shift+PrintScreen";
+pub const DEFAULT_HISTORY_SHORTCUT: &str = "Shift+PrintScreen";
 
 #[cfg(debug_assertions)]
 pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Alt+3";
 #[cfg(debug_assertions)]
 pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Alt+4";
 #[cfg(debug_assertions)]
-pub const HISTORY_SHORTCUT: &str = "Ctrl+Alt+5";
+pub const DEFAULT_HISTORY_SHORTCUT: &str = "Ctrl+Alt+5";
 
-#[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum ShortcutKind {
     Fullscreen,
     Area,
+    History,
 }
 
-/// Registers both global shortcuts using whatever accelerators are currently
-/// stored in AppState (defaults, or whatever the user last rebound them to).
-pub fn register_all(app: &AppHandle) -> Result<(), String> {
-    let (fullscreen, area) = app.state::<AppState>().shortcuts();
-    register_one(app, ShortcutKind::Fullscreen, &fullscreen)?;
-    register_one(app, ShortcutKind::Area, &area)?;
-    Ok(())
+const ALL_KINDS: [ShortcutKind; 3] = [ShortcutKind::Area, ShortcutKind::Fullscreen, ShortcutKind::History];
+
+#[derive(Serialize, Clone, Debug)]
+pub struct Shortcuts {
+    pub fullscreen: String,
+    pub area: String,
+    pub history: String,
+}
+
+impl Shortcuts {
+    pub fn get(&self, kind: ShortcutKind) -> &str {
+        match kind {
+            ShortcutKind::Fullscreen => &self.fullscreen,
+            ShortcutKind::Area => &self.area,
+            ShortcutKind::History => &self.history,
+        }
+    }
+}
+
+pub fn defaults() -> Shortcuts {
+    Shortcuts {
+        fullscreen: DEFAULT_FULLSCREEN_SHORTCUT.to_string(),
+        area: DEFAULT_AREA_SHORTCUT.to_string(),
+        history: DEFAULT_HISTORY_SHORTCUT.to_string(),
+    }
+}
+
+/// Registers every global shortcut from what's stored in AppState.
+///
+/// One that fails is logged and skipped rather than failing the rest. This
+/// runs at startup, and it used to `expect()`: a shortcut someone chose that
+/// another app has since claimed would crash Shota on launch, every launch,
+/// with no window open to explain why. Settings shows what's actually bound.
+///
+/// Skips anything already registered, so it doubles as "resume" after
+/// recording, when `update_shortcut` may already have bound the new one.
+pub fn register_all(app: &AppHandle) {
+    let shortcuts = app.state::<AppState>().shortcuts();
+    for kind in ALL_KINDS {
+        let accelerator = shortcuts.get(kind);
+        if app.global_shortcut().is_registered(accelerator) {
+            continue;
+        }
+        if let Err(err) = register_one(app, kind, accelerator) {
+            eprintln!("could not register {kind:?} shortcut {accelerator}: {err}");
+        }
+    }
+}
+
+/// Releases every global shortcut while the settings window records a new
+/// one. Without this, pressing a combination Shota already owns fires it ~
+/// trying to rebind Print Screen would start a capture instead ~ and
+/// Windows delivers a registered hotkey to its owner, not to the focused
+/// window, so the recorder would never see the keys at all.
+pub fn pause(app: &AppHandle) {
+    let _ = app.global_shortcut().unregister_all();
 }
 
 fn register_one(app: &AppHandle, kind: ShortcutKind, accelerator: &str) -> Result<(), String> {
@@ -69,24 +117,36 @@ fn register_one(app: &AppHandle, kind: ShortcutKind, accelerator: &str) -> Resul
                         eprintln!("failed to open capture overlay: {err}");
                     }
                 }
+                ShortcutKind::History => {
+                    if let Err(err) = toggle_history_window(&handler_app) {
+                        eprintln!("failed to toggle history window: {err}");
+                    }
+                }
             }
         })
         .map_err(|e| e.to_string())
 }
 
-/// Rebinds a shortcut at runtime: unregisters the current accelerator for
-/// `kind`, registers the new one, and persists it so it survives a restart.
+/// Rebinds a shortcut at runtime: releases the old accelerator for `kind`,
+/// binds the new one, and persists it so it survives a restart.
+///
+/// Refuses an accelerator another of Shota's own shortcuts already uses.
+/// The OS would only report that later, when re-registering the other one
+/// failed, and by then one of the two would simply be gone.
 pub fn update_shortcut(app: &AppHandle, kind: ShortcutKind, accelerator: String) -> Result<(), String> {
     let state = app.state::<AppState>();
-    let (fullscreen, area) = state.shortcuts();
-    let previous = match kind {
-        ShortcutKind::Fullscreen => fullscreen,
-        ShortcutKind::Area => area,
-    };
+    let shortcuts = state.shortcuts();
+    let previous = shortcuts.get(kind).to_string();
 
-    app.global_shortcut()
-        .unregister(previous.as_str())
-        .map_err(|e| e.to_string())?;
+    let taken = ALL_KINDS
+        .iter()
+        .any(|&other| other != kind && shortcuts.get(other).eq_ignore_ascii_case(&accelerator));
+    if taken {
+        return Err("conflict".to_string());
+    }
+
+    // May legitimately fail: while recording, everything is already paused.
+    let _ = app.global_shortcut().unregister(previous.as_str());
 
     if let Err(err) = register_one(app, kind, &accelerator) {
         // Roll back so we don't leave the user with no shortcut registered at all.
@@ -96,21 +156,4 @@ pub fn update_shortcut(app: &AppHandle, kind: ShortcutKind, accelerator: String)
 
     state.set_shortcut(app, kind, accelerator);
     Ok(())
-}
-
-/// Registers the fixed Ctrl+Shift+6 shortcut that toggles the history
-/// carousel ~ separate from `register_all` since it isn't part of the
-/// rebindable Fullscreen/Area shortcut set.
-pub fn register_history_shortcut(app: &AppHandle) -> Result<(), String> {
-    let handler_app = app.clone();
-    app.global_shortcut()
-        .on_shortcut(HISTORY_SHORTCUT, move |_app, _shortcut, event| {
-            if event.state() != ShortcutState::Pressed {
-                return;
-            }
-            if let Err(err) = toggle_history_window(&handler_app) {
-                eprintln!("failed to toggle history window: {err}");
-            }
-        })
-        .map_err(|e| e.to_string())
 }

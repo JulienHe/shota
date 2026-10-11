@@ -7,7 +7,9 @@ mod history;
 mod hotkeys;
 mod i18n;
 mod printscreen;
+mod startup;
 mod state;
+mod theme;
 mod tray;
 #[cfg(feature = "updater")]
 mod updater;
@@ -32,8 +34,14 @@ pub fn run() {
             let handle = app.handle().clone();
             app.manage(state::AppState::load(&handle));
             app.manage(history::HistoryState::load(&handle));
-            hotkeys::register_all(&handle).expect("failed to register global shortcuts");
-            hotkeys::register_history_shortcut(&handle).expect("failed to register history shortcut");
+            hotkeys::register_all(&handle);
+            theme::apply(&handle, handle.state::<state::AppState>().preferences().theme);
+            // Captures past the age limit expire even on a day with no new
+            // capture to trigger a prune. Off the main thread: it deletes files.
+            let retention = handle.clone();
+            std::thread::spawn(move || {
+                let _ = history::apply_retention(&retention);
+            });
             tray::build_tray(&handle).expect("failed to build tray icon");
             // Loads the capture overlay and editor windows right away so
             // the very first real capture of the session doesn't have to
@@ -61,7 +69,13 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::print_screen_owned_by_snipping_tool,
-            commands::get_history_shortcut,
+            commands::default_shortcuts,
+            commands::pause_global_shortcuts,
+            commands::get_preferences,
+            commands::set_preferences,
+            commands::get_launch_at_startup,
+            commands::set_launch_at_startup,
+            commands::history_usage,
             commands::updates_supported,
             commands::check_for_updates,
             commands::release_print_screen,

@@ -18,6 +18,38 @@ export interface PendingCapture {
   shapes_json: string | null;
 }
 
+export type ShortcutKind = "fullscreen" | "area" | "history";
+export type GlobalShortcuts = Record<ShortcutKind, string>;
+
+export type ImageFormat = "png" | "jpeg" | "webp";
+export type ThemePreference = "system" | "light" | "dark";
+
+/** Mirrors `Preferences` in state.rs. Sent and saved as one object. */
+export interface Preferences {
+  theme: ThemePreference;
+  /** null: start where the last save went. */
+  saveDir: string | null;
+  fileNamePattern: string;
+  imageFormat: ImageFormat;
+  imageQuality: number;
+  /** null: unlimited. */
+  historyLimit: number | null;
+  /** null: never expire. */
+  historyMaxAgeDays: number | null;
+  /** Overrides only, keyed by editor action id. */
+  editorShortcuts: Record<string, string>;
+}
+
+export interface StartupStatus {
+  enabled: boolean;
+  blocked: "byUser" | "byPolicy" | null;
+}
+
+export interface HistoryUsage {
+  count: number;
+  bytes: number;
+}
+
 export interface HistoryListItem {
   id: string;
   created_at: number;
@@ -60,8 +92,9 @@ export const tauriApi = {
   copyImageToClipboard: (pngBase64: string) =>
     invoke<void>("copy_image_to_clipboard", { pngBase64 }),
 
-  saveImageAs: (pngBase64: string, suggestedName: string) =>
-    invoke<string | null>("save_image_as", { pngBase64, suggestedName }),
+  /** `suggestedName` has no extension; Rust adds the one `format` needs. */
+  saveImageAs: (imageBase64: string, suggestedName: string, format: ImageFormat) =>
+    invoke<string | null>("save_image_as", { imageBase64, suggestedName, format }),
 
   /** Whether Windows is holding Print Screen for the Snipping Tool, which
    * silently swallows Shota's default capture shortcut. */
@@ -69,9 +102,6 @@ export const tauriApi = {
 
   /** Hands Print Screen back to applications. Per-user, no elevation. */
   releasePrintScreen: () => invoke<void>("release_print_screen"),
-
-  /** Fixed for now; shown in Settings so it can be found. */
-  getHistoryShortcut: () => invoke<string>("get_history_shortcut"),
 
   /** False in the Store build, which gets its updates from the Store. */
   updatesSupported: () => invoke<boolean>("updates_supported"),
@@ -90,10 +120,28 @@ export const tauriApi = {
 
   supportedLocales: () => invoke<string[]>("supported_locales"),
 
-  getShortcuts: () => invoke<{ fullscreen: string; area: string }>("get_shortcuts"),
+  getShortcuts: () => invoke<GlobalShortcuts>("get_shortcuts"),
 
-  setShortcut: (kind: "fullscreen" | "area", accelerator: string) =>
+  defaultShortcuts: () => invoke<GlobalShortcuts>("default_shortcuts"),
+
+  /** Rejects with "conflict" when another global shortcut already uses it. */
+  setShortcut: (kind: ShortcutKind, accelerator: string) =>
     invoke<void>("set_shortcut", { kind, accelerator }),
+
+  /** Releases the global shortcuts while one is being recorded, so pressing
+   * it reaches the recorder instead of triggering a capture. */
+  pauseGlobalShortcuts: (paused: boolean) => invoke<void>("pause_global_shortcuts", { paused }),
+
+  getPreferences: () => invoke<Preferences>("get_preferences"),
+
+  /** Resolves with what was actually saved, after Rust clamps bad values. */
+  setPreferences: (preferences: Preferences) => invoke<Preferences>("set_preferences", { preferences }),
+
+  getLaunchAtStartup: () => invoke<StartupStatus>("get_launch_at_startup"),
+
+  setLaunchAtStartup: (enabled: boolean) => invoke<StartupStatus>("set_launch_at_startup", { enabled }),
+
+  historyUsage: () => invoke<HistoryUsage>("history_usage"),
 
   listSystemFonts: () => invoke<string[]>("list_system_fonts"),
 
@@ -120,7 +168,7 @@ export const tauriApi = {
   closeHistoryWindow: () => invoke<void>("close_history_window_command"),
 };
 
-/** Strips the `data:image/png;base64,` prefix so raw base64 can cross the IPC boundary. */
+/** Strips the `data:image/…;base64,` prefix so raw base64 can cross the IPC boundary. */
 export function toBase64Payload(dataUrl: string): string {
   const comma = dataUrl.indexOf(",");
   return comma === -1 ? dataUrl : dataUrl.slice(comma + 1);

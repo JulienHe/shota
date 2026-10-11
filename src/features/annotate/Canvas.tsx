@@ -38,6 +38,8 @@ const DRAWABLE_TOOLS = new Set(["rectangle", "ellipse", "line", "arrow", "pen", 
 
 export interface CanvasHandle {
   exportDataUrl: () => string | null;
+  /** For JPEG and WebP. `quality` is 0 to 1. */
+  exportDataUrlAs: (mimeType: string, quality: number) => string | null;
   setZoom: (scale: number) => void;
   zoomToFit: () => void;
 }
@@ -110,7 +112,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   // with the selection handles removed; going through `selectShape` instead
   // would trigger a React re-render, which matters once this same function
   // also runs from a background effect (below) rather than only on click.
-  const performExport = useCallback((): string | null => {
+  const performExport = useCallback((mimeType = "image/png", quality?: number): string | null => {
     const stage = stageRef.current;
     if (!stage || !imageElement) return null;
     const priorNodes = transformerRef.current?.nodes() ?? [];
@@ -137,6 +139,8 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       width: scaledWidth,
       height: scaledHeight,
       pixelRatio: imageElement.width / scaledWidth,
+      mimeType,
+      quality,
     });
     imageNode?.shadowEnabled(true);
     transformerRef.current?.nodes(priorNodes);
@@ -205,6 +209,9 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
   useImperativeHandle(ref, () => ({
     exportDataUrl: getExportDataUrl,
+    // Uncached: only Save uses other formats, and it already shows a
+    // "Preparing…" toast while it waits. The PNG cache exists for Copy.
+    exportDataUrlAs: (mimeType: string, quality: number) => performExportRef.current(mimeType, quality),
     setZoom: applyZoom,
     zoomToFit,
   }));

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { tauriApi } from "../../../lib/tauriApi";
+import { StartupStatus, ThemePreference, tauriApi } from "../../../lib/tauriApi";
 import { t } from "../../../lib/i18n";
-import { SettingsPage, SettingsRow, SettingsSection } from "../SettingsLayout";
+import { usePreferencesStore } from "../../../stores/preferencesStore";
+import { SettingsPage, SettingsRow, SettingsSection, Toggle } from "../SettingsLayout";
+import "./GeneralPage.css";
 
 /** Each language named in itself, which is what people scan for ~ a French
  * speaker looks for "Français", not for "French". */
@@ -23,14 +25,31 @@ const LANGUAGE_NAMES: Record<string, string> = {
   "zh-Hant": "繁體中文",
 };
 
+const THEMES: { value: ThemePreference; label: string }[] = [
+  { value: "system", label: "settings.themeSystem" },
+  { value: "light", label: "settings.themeLight" },
+  { value: "dark", label: "settings.themeDark" },
+];
+
 export function GeneralPage() {
   const [language, setLanguage] = useState<string | null>(null);
   const [locales, setLocales] = useState<string[]>([]);
+  const [startup, setStartup] = useState<StartupStatus | null>(null);
+  const [startupError, setStartupError] = useState(false);
+  const preferences = usePreferencesStore((s) => s.preferences);
+  const update = usePreferencesStore((s) => s.update);
 
   useEffect(() => {
     tauriApi.supportedLocales().then(setLocales).catch(() => setLocales([]));
     tauriApi.getLanguage().then(setLanguage).catch(() => setLanguage(null));
+    tauriApi.getLaunchAtStartup().then(setStartup).catch(() => setStartup(null));
   }, []);
+
+  const startupHint = startup?.blocked === "byUser"
+    ? t("settings.startupBlockedByUser")
+    : startup?.blocked === "byPolicy"
+      ? t("settings.startupBlockedByPolicy")
+      : t("settings.startupHint");
 
   return (
     <SettingsPage title={t("settings.general")}>
@@ -57,7 +76,52 @@ export function GeneralPage() {
             ))}
           </select>
         </SettingsRow>
+
+        <SettingsRow
+          label={t("settings.startup")}
+          hint={startupHint}
+          error={startupError ? t("settings.startupFailed") : null}
+        >
+          <Toggle
+            label={t("settings.startup")}
+            checked={startup?.enabled ?? false}
+            disabled={!startup || startup.blocked === "byPolicy"}
+            onChange={(enabled) => {
+              setStartupError(false);
+              tauriApi
+                .setLaunchAtStartup(enabled)
+                .then(setStartup)
+                .catch((err) => {
+                  console.error("launch at startup failed", err);
+                  setStartupError(true);
+                });
+            }}
+          />
+        </SettingsRow>
       </SettingsSection>
+
+      {preferences && (
+        <SettingsSection title={t("settings.theme")} description={t("settings.themeHint")}>
+          <div className="general-page__themes" role="radiogroup">
+            {THEMES.map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={preferences.theme === value}
+                className={`general-page__theme${preferences.theme === value ? " general-page__theme--active" : ""}`}
+                onClick={() => update({ theme: value })}
+              >
+                <span className={`general-page__preview general-page__preview--${value}`} aria-hidden>
+                  <span className="general-page__preview-bar" />
+                  <span className="general-page__preview-canvas" />
+                </span>
+                <span className="general-page__theme-label">{t(label)}</span>
+              </button>
+            ))}
+          </div>
+        </SettingsSection>
+      )}
     </SettingsPage>
   );
 }

@@ -27,7 +27,7 @@
   <img alt="Platform: Windows" src="https://img.shields.io/badge/platform-Windows-0078d4">
 </p>
 
-Shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Settings…" entry that opens the small settings window. Capture something and it opens in a lightweight annotation editor with its own title bar (toolbar merged into the same row as the window controls) and a bottom status bar for zoom/copy/save.
+Shota runs as a background/tray app: no taskbar window, just a tray icon with quick capture actions and a "Settings…" entry that opens the settings window. Capture something and it opens in a lightweight annotation editor with its own title bar (toolbar merged into the same row as the window controls) and a bottom status bar for zoom/copy/save.
 
 Nothing is uploaded anywhere. Captures, annotations and history all stay on your machine.
 
@@ -72,8 +72,15 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Translations live in `locales/` as plain JSON ~ corrections and new languages are a small pull request
 
 **Finish up**
-- Copy to clipboard or save as PNG (remembers the last folder you saved to, falls back to Desktop) ~ both close the editor immediately rather than lingering
+- Copy to clipboard, or save as PNG, JPG or WebP with adjustable quality ~ both close the editor immediately rather than lingering
+- Save to a folder of your choice (or wherever you saved last), with file names from a pattern like `Shota {date} {time}`
 - Zoom control and Copy/Save live in a bottom status bar, mirroring the toolbar up top
+
+**Make it yours**
+- Every shortcut can be changed, the global ones and every tool and action in the editor
+- Light, dark, or match Windows
+- Launch at startup
+- Choose how many captures history keeps and for how long, see how much space it uses, and clear it
 
 ## Keyboard shortcuts
 
@@ -81,11 +88,11 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 
 | Shortcut | Action |
 | --- | --- |
-| `Ctrl+Shift+3` | Capture full screen |
-| `Ctrl+Shift+4` | Capture area / window (press `Space` to snap to a window) |
-| `Ctrl+Shift+6` | Open the capture history carousel |
+| `Print Screen` | Capture area / window (press `Space` to snap to a window) |
+| `Ctrl+Print Screen` | Capture full screen |
+| `Shift+Print Screen` | Open the capture history carousel |
 
-Global shortcuts are rebindable from the tray icon's "Settings…" window, which is also where the interface language lives.
+These are the defaults. Every shortcut on this page can be changed under **Settings… → Shortcuts**, except the ones marked as fixed below. If Windows 11 is holding Print Screen for the Snipping Tool, that page offers to hand it to Shota.
 
 ### In the editor
 
@@ -94,9 +101,9 @@ Global shortcuts are rebindable from the tray icon's "Settings…" window, which
 | `Ctrl+C` | Copy the current edit to the clipboard |
 | `Ctrl+S` | Save as… |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / redo |
-| `Delete` / `Backspace` | Delete the selected shape |
-| `Space` (hold) | Pan the canvas |
-| `Esc` | Cancel a capture in progress |
+| `Delete` / `Backspace` | Delete the selected shape (fixed) |
+| `Space` (hold) | Pan the canvas (fixed) |
+| `Esc` | Cancel a capture in progress (fixed) |
 
 ### Tools
 
@@ -184,13 +191,14 @@ makes none at all, since the Store handles updates itself. See the full
 
 - `src-tauri/src/capture` ~ screen, region, and window capture (xcap)
 - `src-tauri/src/windows` ~ overlay, editor and history window lifecycle
-- `src-tauri/src/tray.rs` ~ the tray icon and its menu (capture actions, shortcuts, quit)
-- `src-tauri/src/hotkeys.rs`, `clipboard.rs`, `file_save.rs`, `state.rs`, `history.rs` ~ global shortcuts, clipboard, save-dialog/last-folder persistence, capture history
+- `src-tauri/src/tray.rs` ~ the tray icon and its menu (capture actions, settings, quit)
+- `src-tauri/src/hotkeys.rs`, `clipboard.rs`, `file_save.rs`, `state.rs`, `history.rs` ~ global shortcuts, clipboard, saving, persisted settings, capture history and its retention
+- `src-tauri/src/startup.rs` ~ launch at startup (registry for the GitHub build, StartupTask for the Store build)
 - `src-tauri/src/fonts.rs` ~ system font enumeration (DirectWrite)
-- `src/windows` ~ one component per Tauri window (`MainWindow` is the hidden-by-default shortcuts/settings window, `CaptureOverlay`, `EditorWindow`, `HistoryBar`, plus the shared `TitleBar`/`BottomBar`), routed by window label in `App.tsx`
+- `src/windows` ~ one component per Tauri window (`SettingsWindow` is the hidden-by-default settings window, whose pages live in `src/features/settings`, `CaptureOverlay`, `EditorWindow`, `HistoryBar`, plus the shared `TitleBar`/`BottomBar`), routed by window label in `App.tsx`
 - `src/features/annotate` ~ the canvas, shape components, toolbar, and per-tool style dropdowns
 - `src/features/crop`, `src/features/zoom`, `src/features/color-picker` ~ image manipulation tools
-- `src/stores` ~ Zustand stores (`toolStore` for the active tool/style, `documentStore` for shapes/undo-redo, `uiStore` for canvas background, `toastStore` for the shared confirmation toast)
+- `src/stores` ~ Zustand stores (`toolStore` for the active tool/style, `documentStore` for shapes/undo-redo, `uiStore` for canvas background, `toastStore` for the shared confirmation toast, `preferencesStore` for settings kept live in every window)
 
 ## Build
 

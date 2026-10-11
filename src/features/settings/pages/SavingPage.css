@@ -1,0 +1,46 @@
+.saving-page__pattern {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.saving-page__input {
+  width: 100%;
+  padding: 7px 10px;
+}
+
+.saving-page__tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.saving-page__token {
+  padding: 3px 8px 4px;
+  border: 1px dashed var(--s-control-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--s-text-2);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.saving-page__token:hover {
+  border-style: solid;
+  border-color: var(--s-accent);
+  color: var(--s-accent);
+}
+
+.saving-page__quality {
+  width: 160px;
+  accent-color: var(--s-accent);
+}
+
+.saving-page__quality-value {
+  min-width: 28px;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--s-text-2);
+  text-align: right;
+}

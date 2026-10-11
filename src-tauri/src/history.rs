@@ -6,10 +6,8 @@ use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tauri::{AppHandle, Manager};
 
-/// Ctrl+Shift+6's carousel shows at most this many recent captures ~ older
-/// ones are evicted (files deleted) as new ones come in.
-const MAX_HISTORY: usize = 20;
 const THUMB_MAX_SIDE: u32 = 320;
+const DAY_MS: i64 = 24 * 60 * 60 * 1000;
 
 #[derive(Serialize, Deserialize, Clone)]
 struct HistoryMeta {
@@ -116,14 +114,66 @@ fn write_thumbnail(app: &AppHandle, id: &str, img: &image::DynamicImage) -> Resu
     fs::write(thumb_path(app, id)?, bytes).map_err(|e| e.to_string())
 }
 
-/// Deletes every file on disk for entries beyond MAX_HISTORY (newest first).
+/// Deletes every file on disk for entries past the user's retention
+/// settings: beyond the count limit (newest kept), or older than the age
+/// limit. Both are read fresh each time, so a change in settings applies on
+/// the very next prune.
 fn prune(app: &AppHandle, entries: &mut Vec<HistoryMeta>) {
+    let preferences = app.state::<crate::state::AppState>().preferences();
     entries.sort_by(|a, b| b.created_at.cmp(&a.created_at));
-    while entries.len() > MAX_HISTORY {
-        if let Some(old) = entries.pop() {
-            remove_entry_files(app, &old.id);
+
+    if let Some(days) = preferences.history_max_age_days {
+        let cutoff = now_ms() - i64::from(days) * DAY_MS;
+        entries.retain(|entry| {
+            let keep = entry.created_at >= cutoff;
+            if !keep {
+                remove_entry_files(app, &entry.id);
+            }
+            keep
+        });
+    }
+
+    if let Some(limit) = preferences.history_limit {
+        while entries.len() > limit as usize {
+            if let Some(old) = entries.pop() {
+                remove_entry_files(app, &old.id);
+            }
         }
     }
+}
+
+/// Applies the retention settings to what's already stored. Called when
+/// they change, and at startup so captures past the age limit expire even
+/// if no new capture comes along to trigger a prune.
+pub fn apply_retention(app: &AppHandle) -> Result<(), String> {
+    let state = app.state::<HistoryState>();
+    let mut entries = state.entries.lock().unwrap();
+    let before = entries.len();
+    prune(app, &mut entries);
+    if entries.len() != before {
+        write_index(app, &entries)?;
+    }
+    Ok(())
+}
+
+#[derive(Serialize, Clone)]
+pub struct HistoryUsage {
+    count: usize,
+    bytes: u64,
+}
+
+/// How many captures history holds and how much disk they take, counting
+/// every file in the folder (images, thumbnails, annotations) because that
+/// is what clearing it would actually free.
+pub fn usage(app: &AppHandle) -> Result<HistoryUsage, String> {
+    let count = app.state::<HistoryState>().entries.lock().unwrap().len();
+    let bytes = fs::read_dir(history_dir(app)?)
+        .map_err(|e| e.to_string())?
+        .filter_map(|entry| entry.ok()?.metadata().ok())
+        .filter(|meta| meta.is_file())
+        .map(|meta| meta.len())
+        .sum();
+    Ok(HistoryUsage { count, bytes })
 }
 
 fn remove_entry_files(app: &AppHandle, id: &str) {
@@ -139,7 +189,7 @@ fn remove_entry_files(app: &AppHandle, id: &str) {
 }
 
 /// Saves a freshly captured image as a new history entry (no annotations
-/// yet), evicting the oldest entry past MAX_HISTORY. Takes an id the
+/// yet), evicting whatever the retention settings no longer allow. Takes an id the
 /// caller already generated via `new_id` (e.g. to hand to the editor
 /// window immediately) ~ decoding, thumbnailing and writing 2+ files to
 /// disk is real work, meant to run in the background rather than block
