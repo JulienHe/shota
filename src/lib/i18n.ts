@@ -5,6 +5,14 @@ import es from "../../locales/es.json";
 import ja from "../../locales/ja.json";
 import ko from "../../locales/ko.json";
 import zhHans from "../../locales/zh-Hans.json";
+import zhHant from "../../locales/zh-Hant.json";
+import ptBR from "../../locales/pt-BR.json";
+import it from "../../locales/it.json";
+import nl from "../../locales/nl.json";
+import pl from "../../locales/pl.json";
+import ru from "../../locales/ru.json";
+import uk from "../../locales/uk.json";
+import tr from "../../locales/tr.json";
 
 /**
  * Translation lookup for the frontend.
@@ -26,6 +34,14 @@ const CATALOGUES: Record<string, unknown> = {
   ja,
   ko,
   "zh-Hans": zhHans,
+  "zh-Hant": zhHant,
+  "pt-BR": ptBR,
+  it,
+  nl,
+  pl,
+  ru,
+  uk,
+  tr,
 };
 
 export type Locale = keyof typeof CATALOGUES & string;

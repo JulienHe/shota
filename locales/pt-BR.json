@@ -1,0 +1,91 @@
+{
+  "tray": {
+    "captureFullScreen": "Capturar tela inteira",
+    "captureArea": "Capturar área / janela",
+    "settings": "Configurações…",
+    "checkUpdates": "Procurar atualizações…",
+    "quit": "Sair do Shota"
+  },
+  "updater": {
+    "upToDateTitle": "O Shota está atualizado",
+    "upToDateBody": "Você está na versão {version}.",
+    "availableTitle": "Atualização disponível",
+    "availableBody": "O Shota {version} está disponível ~ você tem a versão {current}.\n\nO Shota será reiniciado após a instalação.",
+    "install": "Instalar e reiniciar",
+    "notNow": "Agora não",
+    "failedTitle": "Falha na atualização",
+    "failedBody": "O Shota não conseguiu instalar a atualização: {error}\n\nVocê pode baixá-la manualmente na página de versões.",
+    "checkFailedTitle": "Falha ao procurar atualizações",
+    "checkFailedBody": "Não foi possível procurar atualizações: {error}"
+  },
+  "tools": {
+    "select": "Selecionar",
+    "rectangle": "Retângulo",
+    "ellipse": "Elipse",
+    "line": "Linha",
+    "arrow": "Seta",
+    "text": "Texto",
+    "pen": "Caneta livre",
+    "step": "Etapa numerada",
+    "highlight": "Marca-texto",
+    "spotlight": "Destaque",
+    "blur": "Desfocar / pixelizar",
+    "crop": "Recortar",
+    "eyedropper": "Seletor de cor"
+  },
+  "editor": {
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "restoreWindow": "Restaurar",
+    "close": "Fechar",
+    "copy": "Copiar",
+    "save": "Salvar como…",
+    "preparing": "Preparando…",
+    "saveFailed": "Falha ao salvar ~ tente novamente",
+    "copiedHex": "{hex} copiado",
+    "copyFailed": "Falha ao copiar ~ tente novamente",
+    "cropConfirm": "Recortar",
+    "cropCancel": "Cancelar",
+    "zoomToFit": "Ajustar à janela"
+  },
+  "background": {
+    "white": "Branco",
+    "lightGray": "Cinza-claro",
+    "gray": "Cinza-médio",
+    "darkGray": "Cinza-escuro",
+    "black": "Preto",
+    "system": "Seguir o sistema"
+  },
+  "history": {
+    "restore": "Restaurar",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "delete": "Excluir",
+    "close": "Fechar"
+  },
+  "overlay": {
+    "dragHint": "Arraste para selecionar uma área · Espaço para alternar para o modo janela · Esc para cancelar",
+    "snapHint": "Clique em uma janela para capturá-la · Espaço para voltar"
+  },
+  "main": {
+    "settingsButton": "Configurações",
+    "fullScreen": "Tela inteira",
+    "areaWindow": "Área / janela",
+    "snapHint": "Mantenha Espaço pressionado ao selecionar uma área para encaixar em uma janela."
+  },
+  "settings": {
+    "fullScreen": "Tela inteira",
+    "areaWindow": "Área / janela",
+    "recording": "Pressione uma combinação de teclas…",
+    "registerFailed": "Não foi possível registrar essa combinação ~ tente outra.",
+    "language": "Idioma",
+    "languageSystem": "Seguir o sistema",
+    "printScreenOwned": "O Windows está usando a tecla Print Screen para a Ferramenta de Captura, então o Shota nunca a recebe.",
+    "printScreenFix": "Atribuir ao Shota"
+  },
+  "error": {
+    "title": "O Shota encontrou um problema",
+    "body": "Algo nesta janela travou. Fechar e capturar novamente geralmente resolve.",
+    "close": "Fechar janela"
+  }
+}

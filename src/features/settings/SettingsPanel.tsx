@@ -27,6 +27,14 @@ const LANGUAGE_NAMES: Record<string, string> = {
   ja: "日本語",
   ko: "한국어",
   "zh-Hans": "简体中文",
+  "zh-Hant": "繁體中文",
+  "pt-BR": "Português (Brasil)",
+  it: "Italiano",
+  nl: "Nederlands",
+  pl: "Polski",
+  ru: "Русский",
+  uk: "Українська",
+  tr: "Türkçe",
 };
 
 export function SettingsPanel({ shortcuts, onChange }: SettingsPanelProps) {

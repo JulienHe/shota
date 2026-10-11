@@ -23,6 +23,14 @@ fn catalogues() -> &'static HashMap<&'static str, serde_json::Value> {
             ("ja", include_str!("../../locales/ja.json")),
             ("ko", include_str!("../../locales/ko.json")),
             ("zh-Hans", include_str!("../../locales/zh-Hans.json")),
+            ("zh-Hant", include_str!("../../locales/zh-Hant.json")),
+            ("pt-BR", include_str!("../../locales/pt-BR.json")),
+            ("it", include_str!("../../locales/it.json")),
+            ("nl", include_str!("../../locales/nl.json")),
+            ("pl", include_str!("../../locales/pl.json")),
+            ("ru", include_str!("../../locales/ru.json")),
+            ("uk", include_str!("../../locales/uk.json")),
+            ("tr", include_str!("../../locales/tr.json")),
         ] {
             match serde_json::from_str(raw) {
                 Ok(value) => {
@@ -38,7 +46,24 @@ fn catalogues() -> &'static HashMap<&'static str, serde_json::Value> {
 }
 
 /// The locales Shota ships, in the order they're offered in settings.
-pub const SUPPORTED: &[&str] = &["en", "fr", "de", "es", "ja", "ko", "zh-Hans"];
+pub const SUPPORTED: &[&str] = &[
+    "en", "fr", "de", "es", "it", "pt-BR", "nl", "pl", "tr", "ru", "uk", "ja", "ko", "zh-Hans",
+    "zh-Hant",
+];
+
+/// Tags Windows actually reports that the prefix walk in `resolve` can't
+/// map on its own. Chinese is the important one: Windows says `zh-CN` and
+/// `zh-TW`, not `zh-Hans-CN`, so without this every Chinese user got
+/// English. Checked as prefixes, after an exact match fails.
+const ALIASES: &[(&str, &str)] = &[
+    ("zh-cn", "zh-Hans"),
+    ("zh-sg", "zh-Hans"),
+    ("zh-tw", "zh-Hant"),
+    ("zh-hk", "zh-Hant"),
+    ("zh-mo", "zh-Hant"),
+    // Brazilian Portuguese reads fine in Portugal; English does not.
+    ("pt", "pt-BR"),
+];
 
 /// Picks the best catalogue for an OS locale tag.
 ///
@@ -50,6 +75,11 @@ pub fn resolve(tag: &str) -> &'static str {
     for candidate in SUPPORTED {
         if candidate.to_ascii_lowercase() == lower {
             return candidate;
+        }
+    }
+    for (alias, target) in ALIASES {
+        if lower == *alias || lower.starts_with(&format!("{alias}-")) {
+            return target;
         }
     }
     // `zh-Hans-CN` should find `zh-Hans` before falling back to `zh`.
@@ -109,4 +139,33 @@ pub fn system_locale() -> Option<String> {
 #[cfg(not(windows))]
 pub fn system_locale() -> Option<String> {
     std::env::var("LANG").ok()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn resolves_what_windows_actually_reports() {
+        assert_eq!(resolve("en-US"), "en");
+        assert_eq!(resolve("fr-CA"), "fr");
+        assert_eq!(resolve("zh-CN"), "zh-Hans");
+        assert_eq!(resolve("zh-SG"), "zh-Hans");
+        assert_eq!(resolve("zh-TW"), "zh-Hant");
+        assert_eq!(resolve("zh-HK"), "zh-Hant");
+        assert_eq!(resolve("zh-Hans-CN"), "zh-Hans");
+        assert_eq!(resolve("zh-Hant-TW"), "zh-Hant");
+        assert_eq!(resolve("pt-BR"), "pt-BR");
+        assert_eq!(resolve("pt-PT"), "pt-BR");
+        assert_eq!(resolve("uk-UA"), "uk");
+        assert_eq!(resolve("sv-SE"), "en");
+    }
+
+    #[test]
+    fn every_supported_locale_has_a_catalogue() {
+        for tag in SUPPORTED {
+            assert!(catalogues().contains_key(tag), "{tag} has no catalogue");
+            assert_ne!(t(tag, "tray.quit"), "tray.quit");
+        }
+    }
 }

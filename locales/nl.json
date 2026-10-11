@@ -1,0 +1,91 @@
+{
+  "tray": {
+    "captureFullScreen": "Volledig scherm vastleggen",
+    "captureArea": "Gebied / venster vastleggen",
+    "settings": "Instellingen…",
+    "checkUpdates": "Controleren op updates…",
+    "quit": "Shota afsluiten"
+  },
+  "updater": {
+    "upToDateTitle": "Shota is up-to-date",
+    "upToDateBody": "Je gebruikt versie {version}.",
+    "availableTitle": "Update beschikbaar",
+    "availableBody": "Shota {version} is beschikbaar ~ je hebt {current}.\n\nShota start opnieuw zodra de update is geïnstalleerd.",
+    "install": "Installeren en opnieuw starten",
+    "notNow": "Niet nu",
+    "failedTitle": "Update mislukt",
+    "failedBody": "Shota kon de update niet installeren: {error}\n\nJe kunt hem handmatig downloaden via de releasepagina.",
+    "checkFailedTitle": "Controleren op updates mislukt",
+    "checkFailedBody": "Kon niet controleren op updates: {error}"
+  },
+  "tools": {
+    "select": "Selecteren",
+    "rectangle": "Rechthoek",
+    "ellipse": "Ellips",
+    "line": "Lijn",
+    "arrow": "Pijl",
+    "text": "Tekst",
+    "pen": "Vrije pen",
+    "step": "Genummerde stap",
+    "highlight": "Markeerstift",
+    "spotlight": "Spotlight",
+    "blur": "Vervagen / pixelen",
+    "crop": "Bijsnijden",
+    "eyedropper": "Kleurkiezer"
+  },
+  "editor": {
+    "minimize": "Minimaliseren",
+    "maximize": "Maximaliseren",
+    "restoreWindow": "Herstellen",
+    "close": "Sluiten",
+    "copy": "Kopiëren",
+    "save": "Opslaan als…",
+    "preparing": "Voorbereiden…",
+    "saveFailed": "Opslaan mislukt ~ probeer het opnieuw",
+    "copiedHex": "{hex} gekopieerd",
+    "copyFailed": "Kopiëren mislukt ~ probeer het opnieuw",
+    "cropConfirm": "Bijsnijden",
+    "cropCancel": "Annuleren",
+    "zoomToFit": "Passend in venster"
+  },
+  "background": {
+    "white": "Wit",
+    "lightGray": "Lichtgrijs",
+    "gray": "Middengrijs",
+    "darkGray": "Donkergrijs",
+    "black": "Zwart",
+    "system": "Systeem volgen"
+  },
+  "history": {
+    "restore": "Herstellen",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "delete": "Verwijderen",
+    "close": "Sluiten"
+  },
+  "overlay": {
+    "dragHint": "Sleep om een gebied te selecteren · Spatie voor venstermodus · Esc om te annuleren",
+    "snapHint": "Klik op een venster om het vast te leggen · Spatie om terug te gaan"
+  },
+  "main": {
+    "settingsButton": "Instellingen",
+    "fullScreen": "Volledig scherm",
+    "areaWindow": "Gebied / venster",
+    "snapHint": "Houd Spatie ingedrukt tijdens het selecteren om op een venster vast te klikken."
+  },
+  "settings": {
+    "fullScreen": "Volledig scherm",
+    "areaWindow": "Gebied / venster",
+    "recording": "Druk op een toetscombinatie…",
+    "registerFailed": "Die combinatie kon niet worden geregistreerd ~ probeer een andere.",
+    "language": "Taal",
+    "languageSystem": "Systeem volgen",
+    "printScreenOwned": "Windows gebruikt de Print Screen-toets voor het Knipprogramma, dus Shota krijgt hem nooit.",
+    "printScreenFix": "Aan Shota toewijzen"
+  },
+  "error": {
+    "title": "Shota liep tegen een probleem aan",
+    "body": "Er is iets vastgelopen in dit venster. Sluiten en opnieuw vastleggen lost het meestal op.",
+    "close": "Venster sluiten"
+  }
+}

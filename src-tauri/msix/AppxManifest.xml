@@ -46,6 +46,14 @@
     <Resource Language="ja" />
     <Resource Language="ko" />
     <Resource Language="zh-Hans" />
+    <Resource Language="zh-Hant" />
+    <Resource Language="pt-BR" />
+    <Resource Language="it" />
+    <Resource Language="nl" />
+    <Resource Language="pl" />
+    <Resource Language="ru" />
+    <Resource Language="uk" />
+    <Resource Language="tr" />
   </Resources>
 
   <Applications>

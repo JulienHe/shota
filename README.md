@@ -67,8 +67,8 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Right-click the canvas background to switch it between white, a few grays, black, or "match system"
 
 **Speak your language**
-- English, French, German, Spanish, Japanese, Korean and Simplified Chinese
-- Follows your Windows language automatically, with an override in the shortcuts window
+- 15 languages: English, French, German, Spanish, Italian, Portuguese (Brazil), Dutch, Polish, Turkish, Russian, Ukrainian, Japanese, Korean, and Simplified and Traditional Chinese
+- Follows your Windows language automatically, with an override in the Settings window
 - Translations live in `locales/` as plain JSON ~ corrections and new languages are a small pull request
 
 **Finish up**

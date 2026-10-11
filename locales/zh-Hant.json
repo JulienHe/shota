@@ -1,0 +1,91 @@
+{
+  "tray": {
+    "captureFullScreen": "擷取全螢幕",
+    "captureArea": "擷取區域 / 視窗",
+    "settings": "設定…",
+    "checkUpdates": "檢查更新…",
+    "quit": "結束 Shota"
+  },
+  "updater": {
+    "upToDateTitle": "Shota 已是最新版本",
+    "upToDateBody": "您目前使用的是 {version} 版。",
+    "availableTitle": "有可用的更新",
+    "availableBody": "Shota {version} 已推出 ~ 您目前是 {current} 版。\n\n安裝完成後 Shota 會重新啟動。",
+    "install": "安裝並重新啟動",
+    "notNow": "稍後再說",
+    "failedTitle": "更新失敗",
+    "failedBody": "Shota 無法安裝更新：{error}\n\n您可以從發行頁面手動下載。",
+    "checkFailedTitle": "檢查更新失敗",
+    "checkFailedBody": "無法檢查更新：{error}"
+  },
+  "tools": {
+    "select": "選取",
+    "rectangle": "矩形",
+    "ellipse": "橢圓",
+    "line": "直線",
+    "arrow": "箭頭",
+    "text": "文字",
+    "pen": "手繪筆",
+    "step": "編號步驟",
+    "highlight": "螢光筆",
+    "spotlight": "聚光燈",
+    "blur": "模糊 / 馬賽克",
+    "crop": "裁切",
+    "eyedropper": "取色器"
+  },
+  "editor": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restoreWindow": "還原",
+    "close": "關閉",
+    "copy": "複製",
+    "save": "另存新檔…",
+    "preparing": "準備中…",
+    "saveFailed": "儲存失敗 ~ 請再試一次",
+    "copiedHex": "已複製 {hex}",
+    "copyFailed": "複製失敗 ~ 請再試一次",
+    "cropConfirm": "裁切",
+    "cropCancel": "取消",
+    "zoomToFit": "符合視窗大小"
+  },
+  "background": {
+    "white": "白色",
+    "lightGray": "淺灰色",
+    "gray": "中灰色",
+    "darkGray": "深灰色",
+    "black": "黑色",
+    "system": "跟隨系統"
+  },
+  "history": {
+    "restore": "還原",
+    "copy": "複製",
+    "copied": "已複製",
+    "delete": "刪除",
+    "close": "關閉"
+  },
+  "overlay": {
+    "dragHint": "拖曳以選取區域 · 按空白鍵切換至視窗模式 · 按 Esc 取消",
+    "snapHint": "按一下視窗即可擷取 · 按空白鍵返回"
+  },
+  "main": {
+    "settingsButton": "設定",
+    "fullScreen": "全螢幕",
+    "areaWindow": "區域 / 視窗",
+    "snapHint": "選取區域時按住空白鍵，即可貼齊視窗。"
+  },
+  "settings": {
+    "fullScreen": "全螢幕",
+    "areaWindow": "區域 / 視窗",
+    "recording": "請按下組合鍵…",
+    "registerFailed": "無法註冊這組按鍵 ~ 請換一組試試。",
+    "language": "語言",
+    "languageSystem": "跟隨系統",
+    "printScreenOwned": "Windows 將 Print Screen 鍵指派給剪取工具，因此 Shota 收不到。",
+    "printScreenFix": "指派給 Shota"
+  },
+  "error": {
+    "title": "Shota 發生問題",
+    "body": "這個視窗發生錯誤。關閉後重新擷取通常就能解決。",
+    "close": "關閉視窗"
+  }
+}

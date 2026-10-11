@@ -1,0 +1,91 @@
+{
+  "tray": {
+    "captureFullScreen": "Tam ekranı yakala",
+    "captureArea": "Alanı / pencereyi yakala",
+    "settings": "Ayarlar…",
+    "checkUpdates": "Güncellemeleri denetle…",
+    "quit": "Shota'dan çık"
+  },
+  "updater": {
+    "upToDateTitle": "Shota güncel",
+    "upToDateBody": "{version} sürümünü kullanıyorsunuz.",
+    "availableTitle": "Güncelleme mevcut",
+    "availableBody": "Shota {version} mevcut ~ sizdeki sürüm {current}.\n\nShota, yükleme tamamlanınca yeniden başlayacak.",
+    "install": "Yükle ve yeniden başlat",
+    "notNow": "Şimdi değil",
+    "failedTitle": "Güncelleme başarısız",
+    "failedBody": "Shota güncellemeyi yükleyemedi: {error}\n\nSürümler sayfasından elle indirebilirsiniz.",
+    "checkFailedTitle": "Güncelleme denetimi başarısız",
+    "checkFailedBody": "Güncellemeler denetlenemedi: {error}"
+  },
+  "tools": {
+    "select": "Seç",
+    "rectangle": "Dikdörtgen",
+    "ellipse": "Elips",
+    "line": "Çizgi",
+    "arrow": "Ok",
+    "text": "Metin",
+    "pen": "Serbest kalem",
+    "step": "Numaralı adım",
+    "highlight": "Fosforlu kalem",
+    "spotlight": "Spot ışığı",
+    "blur": "Bulanıklaştır / pikselleştir",
+    "crop": "Kırp",
+    "eyedropper": "Renk seçici"
+  },
+  "editor": {
+    "minimize": "Simge durumuna küçült",
+    "maximize": "Ekranı kapla",
+    "restoreWindow": "Geri yükle",
+    "close": "Kapat",
+    "copy": "Kopyala",
+    "save": "Farklı kaydet…",
+    "preparing": "Hazırlanıyor…",
+    "saveFailed": "Kaydedilemedi ~ tekrar deneyin",
+    "copiedHex": "{hex} kopyalandı",
+    "copyFailed": "Kopyalanamadı ~ tekrar deneyin",
+    "cropConfirm": "Kırp",
+    "cropCancel": "İptal",
+    "zoomToFit": "Pencereye sığdır"
+  },
+  "background": {
+    "white": "Beyaz",
+    "lightGray": "Açık gri",
+    "gray": "Orta gri",
+    "darkGray": "Koyu gri",
+    "black": "Siyah",
+    "system": "Sistemi izle"
+  },
+  "history": {
+    "restore": "Geri yükle",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "delete": "Sil",
+    "close": "Kapat"
+  },
+  "overlay": {
+    "dragHint": "Alan seçmek için sürükleyin · Pencere moduna geçmek için Boşluk · İptal için Esc",
+    "snapHint": "Yakalamak için bir pencereye tıklayın · Geri dönmek için Boşluk"
+  },
+  "main": {
+    "settingsButton": "Ayarlar",
+    "fullScreen": "Tam ekran",
+    "areaWindow": "Alan / pencere",
+    "snapHint": "Bir pencereye yapışmak için seçim yaparken Boşluk tuşunu basılı tutun."
+  },
+  "settings": {
+    "fullScreen": "Tam ekran",
+    "areaWindow": "Alan / pencere",
+    "recording": "Bir tuş bileşimine basın…",
+    "registerFailed": "Bu bileşim kaydedilemedi ~ başka birini deneyin.",
+    "language": "Dil",
+    "languageSystem": "Sistemi izle",
+    "printScreenOwned": "Windows, Print Screen tuşunu Ekran Alıntısı Aracı için kullanıyor, bu yüzden Shota onu hiç almıyor.",
+    "printScreenFix": "Shota'ya ata"
+  },
+  "error": {
+    "title": "Shota bir sorunla karşılaştı",
+    "body": "Bu pencerede bir şey çöktü. Kapatıp yeniden yakalamak genellikle sorunu giderir.",
+    "close": "Pencereyi kapat"
+  }
+}
