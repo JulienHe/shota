@@ -16,9 +16,12 @@
  * language, so the Store's text lives in the repo next to the app it
  * describes and changes go through review like any other change.
  *
- * Uses Microsoft's Store CLI (`msstore`), connected once with
- * `msstore reconfigure`. The credentials stay in the CLI's own store on
- * this machine; nothing here reads or needs them.
+ * The CLI route needs API access, which Partner Center only gives company
+ * accounts; Shota's is an individual one. So in practice releases use
+ * `--csv`: export the listing from Partner Center, fill it here, import it
+ * back. The CLI route (Microsoft's `msstore`, connected once with
+ * `msstore reconfigure`) is kept for if that ever changes; its credentials
+ * would stay in the CLI's own store, never read here.
  */
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
@@ -259,7 +262,13 @@ if (flag("--dry-run")) {
   }
   if (!listingsOnly) console.log(existsSync(msix) ? `Package: ${msix}` : `Package not built yet: ${msix} (npm run msix)`);
   const cli = cliConfigured();
-  console.log(!cli.installed ? "msstore: not installed" : cli.configured ? "msstore: connected" : "msstore: installed, not connected (run msstore reconfigure)");
+  console.log(
+    !cli.installed
+      ? "msstore: not installed"
+      : cli.configured
+        ? "msstore: connected"
+        : "msstore: not connected. Individual Partner Center accounts can't get API access; use --csv instead (see docs/store-listing/README.md)",
+  );
   console.log("Dry run: nothing was sent.");
   process.exit(0);
 }
@@ -267,7 +276,17 @@ if (flag("--dry-run")) {
 if (!PRODUCT_ID) fail("storeProductId is missing from src-tauri/msix/msix.config.json.");
 const cli = cliConfigured();
 if (!cli.installed) fail('The Store CLI is not installed: winget install "Microsoft Store Developer CLI"');
-if (!cli.configured) fail("The Store CLI is not connected to Partner Center yet. Run: msstore reconfigure");
+if (!cli.configured) {
+  fail(
+    "The Store CLI is not connected to Partner Center. Individual developer accounts can't get API
+" +
+      "access, so use the CSV route: export the listing in Partner Center, then
+" +
+      '  npm run store -- --csv "<export.csv>"
+' +
+      "See docs/store-listing/README.md.",
+  );
+}
 
 if (!listingsOnly) {
   if (!existsSync(msix)) fail(`No package for ${version} at ${msix}\nBuild it first: npm run msix`);

@@ -303,6 +303,14 @@ and `src-tauri/Cargo.toml`. Bump them together, then let npm and cargo update th
 
 ## Store releases go through `npm run store`
 
+The Partner Center account is an **individual** developer account, which can't get API access
+(no "Microsoft Entra applications" tab; confirmed by Microsoft's own docs on user management and
+an unanswered report from another individual developer, October 2026). So the working route is
+`npm run store -- --csv <export.csv>`: fill Partner Center's listing export from
+`docs/store-listing/listings.json` and import it by hand. Don't spend time trying to make the CLI
+authenticate on this account.
+
+The CLI route below exists for a company account and has never run against the live API.
 `scripts/store.mjs` drives Microsoft's `msstore` CLI: upload the MSIX as a draft, read the
 submission back, write every language's text from `docs/store-listing/listings.json` into it,
 send it back, submit. Things that will bite if changed:
