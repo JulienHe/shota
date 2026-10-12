@@ -66,7 +66,9 @@
     "transparent": "Transparent",
     "padding": "Marge",
     "corners": "Coins",
-    "shadow": "Ombre"
+    "shadow": "Ombre",
+    "showAll": "Tout afficher",
+    "showLess": "Afficher moins"
   },
   "history": {
     "restore": "Restaurer",

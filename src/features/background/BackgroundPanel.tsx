@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePreferencesStore } from "../../stores/preferencesStore";
 import { open } from "@tauri-apps/plugin-dialog";
-import { Plus } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useDocumentStore } from "../../stores/documentStore";
 import { useImage } from "../../lib/useImage";
 import { t } from "../../lib/i18n";
 import { Frame, FrameBackground, lastSliders, rememberSliders } from "./frame";
-import { GRADIENTS, gradientSwatch } from "./gradients";
+import { ALL_GRADIENTS, FEATURED_GRADIENTS, gradientCss } from "./gradients";
 import { blurredCopy, loadBackgroundImage } from "./useFrameBackground";
 import "./BackgroundPanel.css";
 
@@ -51,6 +51,12 @@ export function BackgroundPanel() {
     frame?.background.kind === "image" ? frame.background.path : null,
   );
   const [customUrl, setCustomUrl] = useState<string | null>(null);
+  // Opens expanded when the frame already uses a gradient from beyond the
+  // featured set, so the selected swatch is never hidden.
+  const [showAllGradients, setShowAllGradients] = useState(
+    frame?.background.kind === "gradient" &&
+      !FEATURED_GRADIENTS.some((g) => g.id === (frame.background as { id: string }).id),
+  );
 
   useEffect(() => {
     loadBackgroundImage({ kind: "wallpaper" })
@@ -107,6 +113,7 @@ export function BackgroundPanel() {
 
   const tile = (background: FrameBackground, content: React.ReactNode, label: string, extraClass = "") => (
     <button
+      key={JSON.stringify(background)}
       type="button"
       title={label}
       aria-label={label}
@@ -137,13 +144,24 @@ export function BackgroundPanel() {
   return (
     <aside className="background-panel">
       <section className="background-panel__section">
-        <h3>{t("background.gradients")}</h3>
+        <div className="background-panel__heading">
+          <h3>{t("background.gradients")}</h3>
+          <button
+            type="button"
+            className="background-panel__more"
+            aria-expanded={showAllGradients}
+            onClick={() => setShowAllGradients((v) => !v)}
+          >
+            {showAllGradients ? t("background.showLess") : t("background.showAll")}
+            {showAllGradients ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          </button>
+        </div>
         <div className="background-panel__grid">
-          {GRADIENTS.map((gradient) =>
+          {(showAllGradients ? ALL_GRADIENTS : FEATURED_GRADIENTS).map((gradient) =>
             tile(
               { kind: "gradient", id: gradient.id },
-              <img src={gradientSwatch(gradient.id)} alt="" />,
-              gradient.id,
+              <span className="background-panel__swatch" style={{ background: gradientCss(gradient) }} />,
+              gradient.name,
             ),
           )}
         </div>
