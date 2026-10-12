@@ -11,7 +11,10 @@ export type ToolId =
   | "highlight"
   | "blur"
   | "crop"
-  | "eyedropper";
+  | "eyedropper"
+  /** Opens the frame panel. A tool like the others, so choosing it is the
+   * one selection in the toolbar, and choosing any other tool closes it. */
+  | "background";
 
 export type FillMode = "none" | "solid" | "translucent";
 export type BlurEffect = "blur" | "pixelate";

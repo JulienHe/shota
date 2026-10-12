@@ -5,19 +5,15 @@ interface IconButtonProps {
   icon: LucideIcon;
   label: string;
   active?: boolean;
-  /** On/off state for buttons that open something rather than pick a tool:
-   * a tint, so it never reads as a second selected tool. */
-  toggled?: boolean;
   disabled?: boolean;
   onClick: () => void;
 }
 
-export function IconButton({ icon: Icon, label, active, toggled, disabled, onClick }: IconButtonProps) {
+export function IconButton({ icon: Icon, label, active, disabled, onClick }: IconButtonProps) {
   return (
     <button
       type="button"
-      className={`icon-button${active ? " icon-button--active" : ""}${toggled ? " icon-button--toggled" : ""}`}
-      aria-pressed={toggled}
+      className={`icon-button${active ? " icon-button--active" : ""}`}
       title={label}
       aria-label={label}
       disabled={disabled}

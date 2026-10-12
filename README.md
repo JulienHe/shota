@@ -120,6 +120,7 @@ These are the defaults. Every shortcut on this page can be changed under **Setti
 | `L` | Line | | `B` | Blur / pixelate |
 | `A` | Arrow | | `C` | Crop |
 | `T` | Text | | `I` | Color picker |
+| | | | `F` | Background (frame) |
 | `P` | Freehand pen | | | |
 
 ## Feedback, bugs and feature requests

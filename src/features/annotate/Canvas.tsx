@@ -277,7 +277,26 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   // browser paints, so the very first frame of a new image already has the
   // correct fitted scale instead of briefly painting at the previous (or
   // default 100%) zoom and then visibly snapping to fit a moment later.
+  // Opening or closing the frame panel takes width from the canvas, or
+  // gives it back. A plain resize keeps the zoom level, which here would
+  // leave the capture half hidden behind the panel, or small in a now much
+  // wider space, so the next size change after a toggle refits instead.
+  const panelOpen = activeTool === "background";
+  const refitOnResizeRef = useRef(false);
+  const previousPanelOpenRef = useRef(panelOpen);
+  if (previousPanelOpenRef.current !== panelOpen) {
+    previousPanelOpenRef.current = panelOpen;
+    refitOnResizeRef.current = true;
+  }
+
+  // The frame panel replaces the style options, so a selected shape would
+  // only sit there with its handles hidden; let go of it.
+  useEffect(() => {
+    if (panelOpen) selectShape(null);
+  }, [panelOpen, selectShape]);
+
   const previousBoxRef = useRef<string | null>(null);
+  const previousStageSizeRef = useRef(stageSize);
   useLayoutEffect(() => {
     if (!imageElement || !stageSize || !contentBox) return;
     const isNewImage = previousImageRef.current !== imageElement;
@@ -285,8 +304,11 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     const boxKey = `${contentBox.x},${contentBox.y},${contentBox.width},${contentBox.height}`;
     const boxChanged = previousBoxRef.current !== null && previousBoxRef.current !== boxKey;
     previousBoxRef.current = boxKey;
+    const resized = previousStageSizeRef.current !== stageSize;
+    previousStageSizeRef.current = stageSize;
 
-    if (isNewImage) {
+    if (isNewImage || (resized && refitOnResizeRef.current)) {
+      refitOnResizeRef.current = false;
       setView(centeredBoxView(contentBox, stageSize));
     } else if (boxChanged) {
       // The frame grew or shrank (padding slider, frame on or off): keep the
@@ -657,7 +679,9 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
               ? hoveredShapeId
                 ? MOVE_CURSOR
                 : "default"
-              : "crosshair",
+              : activeTool === "background"
+                ? "default"
+                : "crosshair",
         }}
       >
         <Layer>

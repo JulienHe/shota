@@ -3,8 +3,6 @@ import { IconButton } from "../../../components/IconButton";
 import { CircleOne } from "./StepToolIcon";
 import { SpotlightRect } from "./SpotlightToolIcon";
 import { useToolStore } from "../../../stores/toolStore";
-import { useUiStore } from "../../../stores/uiStore";
-import { useDocumentStore } from "../../../stores/documentStore";
 import { ShapeOptionsPanel } from "./ShapeOptionsPanel";
 import { ToolId } from "../types";
 import { EditorActionId, useEditorBindings, useEditorShortcuts } from "../../../lib/editorShortcuts";
@@ -30,6 +28,7 @@ const TOOLS: { id: ToolId; icon: typeof MousePointer2; name: string }[] = [
   { id: "blur", icon: Droplet, name: "tools.blur" },
   { id: "crop", icon: Crop, name: "tools.crop" },
   { id: "eyedropper", icon: Pipette, name: "tools.eyedropper" },
+  { id: "background", icon: Wallpaper, name: "background.title" },
 ];
 
 const actionFor = (tool: ToolId) => `tool.${tool}` as EditorActionId;
@@ -39,9 +38,6 @@ export function Toolbar() {
   const setActiveTool = useToolStore((s) => s.setActiveTool);
 
   const bindings = useEditorBindings();
-  const backgroundPanelOpen = useUiStore((s) => s.backgroundPanelOpen);
-  const toggleBackgroundPanel = useUiStore((s) => s.toggleBackgroundPanel);
-  const hasFrame = useDocumentStore((s) => s.frame !== null);
 
   useEditorShortcuts(
     Object.fromEntries(TOOLS.map((tool) => [actionFor(tool.id), () => setActiveTool(tool.id)])),
@@ -59,19 +55,6 @@ export function Toolbar() {
             onClick={() => setActiveTool(tool.id)}
           />
         ))}
-
-        {/* Not a drawing tool, so it sits after them and lights up as a
-            toggle rather than as the active tool: the tool you're drawing
-            with stays the one that's highlighted blue. It stays lit while a
-            frame is on, even with the panel closed, so a framed export is
-            never a surprise. */}
-        <div className="toolbar__divider" />
-        <IconButton
-          icon={Wallpaper}
-          label={t("background.title")}
-          toggled={backgroundPanelOpen || hasFrame}
-          onClick={toggleBackgroundPanel}
-        />
 
         <ShapeOptionsPanel />
       </div>

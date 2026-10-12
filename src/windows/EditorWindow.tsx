@@ -17,7 +17,7 @@ import { afterNextPaint } from "../lib/windowChrome";
 import { closeEditor } from "../lib/editorClose";
 import { parseDocument, serializeDocument } from "../features/background/frame";
 import { BackgroundPanel } from "../features/background/BackgroundPanel";
-import { useUiStore } from "../stores/uiStore";
+import { useToolStore } from "../stores/toolStore";
 import "./EditorWindow.css";
 
 export function EditorWindow() {
@@ -35,7 +35,7 @@ export function EditorWindow() {
   const showToast = useToastStore((s) => s.show);
   const clearToast = useToastStore((s) => s.clear);
   const [zoom, setZoom] = useState(1);
-  const backgroundPanelOpen = useUiStore((s) => s.backgroundPanelOpen);
+  const backgroundPanelOpen = useToolStore((s) => s.activeTool === "background");
 
   useEffect(() => {
     const applyCapture = async (capture: PendingCapture) => {

@@ -15,10 +15,6 @@ interface UiState {
    */
   styleMenuOpen: boolean;
   setStyleMenuOpen: (open: boolean) => void;
-  /** The frame/background side panel. Stays open across captures, like the
-   * rest of the editor's chrome. */
-  backgroundPanelOpen: boolean;
-  toggleBackgroundPanel: () => void;
 }
 
 /** Editor-wide UI preferences that aren't part of the document itself. */
@@ -27,6 +23,4 @@ export const useUiStore = create<UiState>((set) => ({
   setCanvasBackground: (canvasBackground) => set({ canvasBackground }),
   styleMenuOpen: false,
   setStyleMenuOpen: (styleMenuOpen) => set({ styleMenuOpen }),
-  backgroundPanelOpen: false,
-  toggleBackgroundPanel: () => set((s) => ({ backgroundPanelOpen: !s.backgroundPanelOpen })),
 }));

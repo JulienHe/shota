@@ -28,6 +28,7 @@ export const EDITOR_ACTIONS = [
   { id: "tool.blur", label: "tools.blur", default: "B" },
   { id: "tool.crop", label: "tools.crop", default: "C" },
   { id: "tool.eyedropper", label: "tools.eyedropper", default: "I" },
+  { id: "tool.background", label: "background.title", default: "F" },
   { id: "copy", label: "editor.copy", default: "Ctrl+C" },
   { id: "save", label: "settings.actionSave", default: "Ctrl+S" },
   { id: "undo", label: "settings.actionUndo", default: "Ctrl+Z" },
