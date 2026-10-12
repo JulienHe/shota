@@ -64,7 +64,7 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Per-tool style controls live inline in the title bar as small dropdowns: colour (with a custom-colour picker), stroke width, line style (solid/dashed/dotted), fill (none/solid/translucent), corner radius, font size, and the full list of fonts actually installed on your system
 - Text tool is IME-aware (composing Japanese/Chinese/Korean input doesn't prematurely submit the text box)
 - Undo/redo, and Delete/Backspace to remove the selected shape
-- Right-click the canvas background to switch it between white, a few grays, black, or "match system"
+- Right-click the canvas background to switch it between white, a few grays, black, or "match system"; Shota remembers your choice
 
 **Speak your language**
 - 15 languages: English, French, German, Spanish, Italian, Portuguese (Brazil), Dutch, Polish, Turkish, Russian, Ukrainian, Japanese, Korean, and Simplified and Traditional Chinese
@@ -75,6 +75,7 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Put the screenshot on a background, ready to post: gradients, a colour, a blurred copy of the screenshot, your Windows wallpaper, or any image you choose
 - Adjust padding, rounded corners and shadow; Copy and Save export the framed image at full resolution
 - The frame is saved with the capture, so it's still there when you reopen it from history
+- The last frame you chose carries over to every new capture until you reset it
 
 **Finish up**
 - Copy to clipboard, or save as PNG, JPG or WebP with adjustable quality ~ both close the editor immediately rather than lingering

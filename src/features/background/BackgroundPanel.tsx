@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePreferencesStore } from "../../stores/preferencesStore";
 import { open } from "@tauri-apps/plugin-dialog";
 import { Plus } from "lucide-react";
 import { useDocumentStore } from "../../stores/documentStore";
@@ -69,13 +70,32 @@ export function BackgroundPanel() {
     [imageElement],
   );
 
+  // Remembered for new captures, but only on what the user does here ~
+  // reopening an old capture with a different frame must not change what
+  // the next capture gets. Debounced, because a slider drag is dozens of
+  // changes and each save is written to disk and broadcast to every window.
+  const updatePreferences = usePreferencesStore((s) => s.update);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const remember = (next: Frame | null) => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => updatePreferences({ frame: next }), 300);
+  };
+  useEffect(() => () => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+  }, []);
+
+  const apply = (next: Frame | null) => {
+    setFrame(next);
+    remember(next);
+  };
+
   const choose = (background: FrameBackground) => {
     const sliders = frame ?? lastSliders();
-    setFrame({ background, padding: sliders.padding, corners: sliders.corners, shadow: sliders.shadow });
+    apply({ background, padding: sliders.padding, corners: sliders.corners, shadow: sliders.shadow });
   };
 
   const adjust = (change: Partial<Frame>) => {
-    if (frame) setFrame({ ...frame, ...change });
+    if (frame) apply({ ...frame, ...change });
   };
 
   const chooseImage = async () => {
@@ -167,7 +187,7 @@ export function BackgroundPanel() {
         {slider("shadow", t("background.shadow"))}
       </section>
 
-      <button type="button" className="background-panel__reset" disabled={!frame} onClick={() => setFrame(null)}>
+      <button type="button" className="background-panel__reset" disabled={!frame} onClick={() => apply(null)}>
         {t("background.reset")}
       </button>
     </aside>

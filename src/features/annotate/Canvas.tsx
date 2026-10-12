@@ -6,7 +6,9 @@ import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
 import { useDocumentStore } from "../../stores/documentStore";
 import { useToolStore } from "../../stores/toolStore";
-import { CanvasBackground, useUiStore } from "../../stores/uiStore";
+import { useUiStore } from "../../stores/uiStore";
+import { usePreferencesStore } from "../../stores/preferencesStore";
+import { CanvasBackground } from "../../lib/tauriApi";
 import { useToastStore } from "../../stores/toastStore";
 import { useImage } from "../../lib/useImage";
 import { useZoom } from "../zoom/useZoom";
@@ -68,7 +70,9 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const style = useToolStore((s) => s.style);
   const updateStyle = useToolStore((s) => s.updateStyle);
 
-  const canvasBackground = useUiStore((s) => s.canvasBackground);
+  // Saved, so the colour picked from the right-click menu is still there
+  // next capture and next launch.
+  const canvasBackground = usePreferencesStore((s) => s.preferences?.canvasBackground) ?? "white";
   const styleMenuOpen = useUiStore((s) => s.styleMenuOpen);
   const [bgMenuPos, setBgMenuPos] = useState<{ x: number; y: number } | null>(null);
 

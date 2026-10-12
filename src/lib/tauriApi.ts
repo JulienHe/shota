@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import type { Frame } from "../features/background/frame";
 
 export interface CapturableWindow {
   id: number;
@@ -22,6 +23,7 @@ export type ShortcutKind = "fullscreen" | "area" | "history";
 export type GlobalShortcuts = Record<ShortcutKind, string>;
 
 export type ImageFormat = "png" | "jpeg" | "webp";
+export type CanvasBackground = "white" | "light-gray" | "gray" | "dark-gray" | "black" | "system";
 export type ThemePreference = "system" | "light" | "dark";
 
 /** Mirrors `Preferences` in state.rs. Sent and saved as one object. */
@@ -38,6 +40,9 @@ export interface Preferences {
   historyMaxAgeDays: number | null;
   /** Overrides only, keyed by editor action id. */
   editorShortcuts: Record<string, string>;
+  canvasBackground: CanvasBackground;
+  /** Applied to each new capture; null after Reset. */
+  frame: Frame | null;
 }
 
 export interface StartupStatus {

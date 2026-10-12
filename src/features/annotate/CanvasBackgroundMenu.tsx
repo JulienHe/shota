@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Check, SunMoon } from "lucide-react";
-import { CanvasBackground, useUiStore } from "../../stores/uiStore";
+import { CanvasBackground } from "../../lib/tauriApi";
+import { usePreferencesStore } from "../../stores/preferencesStore";
 import "./CanvasBackgroundMenu.css";
 import { t } from "../../lib/i18n";
 
@@ -29,8 +30,9 @@ interface CanvasBackgroundMenuProps {
 
 /** Photoshop-style right-click menu for the workspace background behind the image. */
 export function CanvasBackgroundMenu({ x, y, onClose }: CanvasBackgroundMenuProps) {
-  const canvasBackground = useUiStore((s) => s.canvasBackground);
-  const setCanvasBackground = useUiStore((s) => s.setCanvasBackground);
+  const canvasBackground = usePreferencesStore((s) => s.preferences?.canvasBackground) ?? "white";
+  const updatePreferences = usePreferencesStore((s) => s.update);
+  const setCanvasBackground = (value: CanvasBackground) => updatePreferences({ canvasBackground: value });
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

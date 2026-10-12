@@ -280,6 +280,10 @@ coordinates. Three things follow, and each was a real bug to avoid:
 - **History stores `{ version: 2, shapes, frame }`.** Older entries are a bare shapes array;
   `parseDocument` reads both. Never write the bare array again, or reopening drops the frame.
 
+The last frame chosen is also saved in `Preferences.frame` and applied by `loadImage` to every
+new capture until Reset. It is saved only from the panel's own controls, never from whatever
+document is open: reopening an old capture must not change what the next capture gets.
+
 Wallpaper and picked-image backgrounds are stored by reference (`wallpaper`, or a path) and
 re-read when shown, never embedded in history.
 

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Shape, ShapeStyle } from "../features/annotate/types";
 import { Frame } from "../features/background/frame";
+import { usePreferencesStore } from "./preferencesStore";
 
 const MAX_HISTORY = 50;
 
@@ -55,7 +56,9 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       selectedShapeId: null,
       past: [],
       future: [],
-      frame: null,
+      // A new capture gets the frame last chosen, so a look you settled on
+      // carries on capture after capture until you Reset it.
+      frame: (usePreferencesStore.getState().preferences?.frame as Frame | null | undefined) ?? null,
     }),
 
   // `frame` is only passed when reopening a saved document; crop also calls
