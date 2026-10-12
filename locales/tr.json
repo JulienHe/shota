@@ -66,9 +66,7 @@
     "transparent": "Saydam",
     "padding": "Kenar boşluğu",
     "corners": "Köşeler",
-    "shadow": "Gölge",
-    "showAll": "Tümünü göster",
-    "showLess": "Daha az göster"
+    "shadow": "Gölge"
   },
   "history": {
     "restore": "Geri yükle",

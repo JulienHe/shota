@@ -66,9 +66,7 @@
     "transparent": "Transparente",
     "padding": "Margem",
     "corners": "Cantos",
-    "shadow": "Sombra",
-    "showAll": "Mostrar todos",
-    "showLess": "Mostrar menos"
+    "shadow": "Sombra"
   },
   "history": {
     "restore": "Restaurar",

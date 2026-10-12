@@ -66,9 +66,7 @@
     "transparent": "Transparant",
     "padding": "Marge",
     "corners": "Hoeken",
-    "shadow": "Schaduw",
-    "showAll": "Alles tonen",
-    "showLess": "Minder tonen"
+    "shadow": "Schaduw"
   },
   "history": {
     "restore": "Herstellen",

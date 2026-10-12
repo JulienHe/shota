@@ -66,9 +66,7 @@
     "transparent": "透明",
     "padding": "余白",
     "corners": "角の丸み",
-    "shadow": "影",
-    "showAll": "すべて表示",
-    "showLess": "折りたたむ"
+    "shadow": "影"
   },
   "history": {
     "restore": "復元",

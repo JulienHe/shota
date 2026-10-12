@@ -4,7 +4,7 @@ Shota is MIT licensed (see `LICENSE`). It also ships the following third-party m
 
 ## WebGradients
 
-The background gradients in `src/features/background/webgradients.json` come from
+The thirty background gradients in `src/features/background/webgradients.json` come from
 [WebGradients](https://webgradients.com/) by itmeo
 ([github.com/itmeo/webgradients](https://github.com/itmeo/webgradients)), used under
 the MIT License:

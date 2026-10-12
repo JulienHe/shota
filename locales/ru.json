@@ -66,9 +66,7 @@
     "transparent": "Прозрачный",
     "padding": "Отступ",
     "corners": "Углы",
-    "shadow": "Тень",
-    "showAll": "Показать все",
-    "showLess": "Свернуть"
+    "shadow": "Тень"
   },
   "history": {
     "restore": "Открыть",

@@ -66,9 +66,7 @@
     "transparent": "Прозоре",
     "padding": "Відступ",
     "corners": "Кути",
-    "shadow": "Тінь",
-    "showAll": "Показати всі",
-    "showLess": "Згорнути"
+    "shadow": "Тінь"
   },
   "history": {
     "restore": "Відкрити",

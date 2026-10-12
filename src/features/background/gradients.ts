@@ -1,9 +1,15 @@
 import WEB_GRADIENTS from "./webgradients.json";
 
 /**
- * Background gradients: the WebGradients collection by itmeo, MIT licensed
- * (see THIRD_PARTY_NOTICES.md), kept as data in webgradients.json exactly
- * as published, so each one looks here the way it does on webgradients.com.
+ * Background gradients: thirty from the WebGradients collection by itmeo,
+ * MIT licensed (see THIRD_PARTY_NOTICES.md), kept as data in
+ * webgradients.json exactly as published, so each looks here the way it
+ * does on webgradients.com.
+ *
+ * Thirty rather than all 174: the full set was a long scroll of near
+ * duplicates. These were picked by eye to each be a clearly different
+ * colour, and the file lists them in the order the panel shows them, a
+ * row per family: warm, pink and purple, blue, green, dark, soft.
  *
  * Drawn into a small canvas and stretched to the frame rather than shipped
  * as images: a gradient has no detail to lose, so rendering one at full 4K
@@ -20,27 +26,6 @@ export interface Gradient {
 }
 
 export const GRADIENTS = WEB_GRADIENTS as Gradient[];
-
-/**
- * The ones shown before "Show all": picked by eye to cover vivid, cool,
- * dark and soft, which is most of what people frame screenshots with.
- */
-const FEATURED_IDS = [
-  "wg-017", "wg-021", "wg-046", "wg-177", "wg-136",
-  "wg-019", "wg-039", "wg-085", "wg-028", "wg-168",
-  "wg-022", "wg-062", "wg-179", "wg-066", "wg-118",
-  "wg-002", "wg-008", "wg-016", "wg-012", "wg-007",
-];
-
-export const FEATURED_GRADIENTS = FEATURED_IDS.map((id) => GRADIENTS.find((g) => g.id === id)).filter(
-  (g): g is Gradient => Boolean(g),
-);
-
-/** Featured first, then the rest of the collection in its own order. */
-export const ALL_GRADIENTS = [
-  ...FEATURED_GRADIENTS,
-  ...GRADIENTS.filter((g) => !FEATURED_IDS.includes(g.id)),
-];
 
 /**
  * Draws a CSS `linear-gradient(deg, …)` onto a canvas, with the same

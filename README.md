@@ -72,7 +72,7 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Translations live in `locales/` as plain JSON ~ corrections and new languages are a small pull request
 
 **Frame it**
-- Put the screenshot on a background, ready to post: any of the 174 [WebGradients](https://webgradients.com/), a colour, a blurred copy of the screenshot, your Windows wallpaper, or any image you choose
+- Put the screenshot on a background, ready to post: 30 gradients from [WebGradients](https://webgradients.com/), a colour, a blurred copy of the screenshot, your Windows wallpaper, or any image you choose
 - Adjust padding, rounded corners and shadow; Copy and Save export the framed image at full resolution
 - The frame is saved with the capture, so it's still there when you reopen it from history
 - The last frame you chose carries over to every new capture until you reset it

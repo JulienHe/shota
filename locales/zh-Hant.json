@@ -66,9 +66,7 @@
     "transparent": "透明",
     "padding": "邊距",
     "corners": "圓角",
-    "shadow": "陰影",
-    "showAll": "顯示全部",
-    "showLess": "收合"
+    "shadow": "陰影"
   },
   "history": {
     "restore": "還原",
