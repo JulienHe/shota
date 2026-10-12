@@ -287,3 +287,17 @@ document is open: reopening an old capture must not change what the next capture
 Wallpaper and picked-image backgrounds are stored by reference (`wallpaper`, or a path) and
 re-read when shown, never embedded in history.
 
+## Version numbers
+
+`0.MINOR.PATCH`, chosen by what a release contains:
+
+- **PATCH** (0.6.0 → 0.6.1): fixes, polish, translations, dependency and security updates.
+  Anything a user wouldn't describe as "a new feature".
+- **MINOR** (0.6.x → 0.7.0): a new feature or a visible change in behaviour.
+- **1.0** is a deliberate decision, never the next number after 0.9: 0.9 is followed by 0.10.
+  Both the updater (semver) and the Store (numeric parts) order 0.10 after 0.9 correctly.
+
+The version lives in three files that must match: `package.json`, `src-tauri/tauri.conf.json`
+and `src-tauri/Cargo.toml`. Bump them together, then let npm and cargo update their lockfiles
+(`npm install --package-lock-only`, any `cargo check`) rather than editing lockfiles by hand.
+
