@@ -22,6 +22,12 @@
   color: #ffffff;
 }
 
+.icon-button--toggled,
+.icon-button--toggled:hover:not(:disabled) {
+  background: rgba(61, 123, 253, 0.14);
+  color: #2f6cf0;
+}
+
 .icon-button:disabled {
   opacity: 0.3;
   cursor: default;
@@ -35,5 +41,11 @@
   .icon-button:hover:not(:disabled) {
     background: #303136;
     color: #ffffff;
+  }
+
+  .icon-button--toggled,
+  .icon-button--toggled:hover:not(:disabled) {
+    background: rgba(61, 123, 253, 0.22);
+    color: #7aa6ff;
   }
 }

@@ -50,16 +50,6 @@ export function Toolbar() {
   return (
     <div className="toolbar">
       <div className="toolbar__row">
-        {/* Not a drawing tool, so it sits apart from them: it opens the
-            frame panel, and stays highlighted while a frame is on even with
-            the panel closed, so a framed export is never a surprise. */}
-        <IconButton
-          icon={Wallpaper}
-          label={t("background.title")}
-          active={backgroundPanelOpen || hasFrame}
-          onClick={toggleBackgroundPanel}
-        />
-        <div className="toolbar__divider" />
         {TOOLS.map((tool) => (
           <IconButton
             key={tool.id}
@@ -69,6 +59,19 @@ export function Toolbar() {
             onClick={() => setActiveTool(tool.id)}
           />
         ))}
+
+        {/* Not a drawing tool, so it sits after them and lights up as a
+            toggle rather than as the active tool: the tool you're drawing
+            with stays the one that's highlighted blue. It stays lit while a
+            frame is on, even with the panel closed, so a framed export is
+            never a surprise. */}
+        <div className="toolbar__divider" />
+        <IconButton
+          icon={Wallpaper}
+          label={t("background.title")}
+          toggled={backgroundPanelOpen || hasFrame}
+          onClick={toggleBackgroundPanel}
+        />
 
         <ShapeOptionsPanel />
       </div>

@@ -6,6 +6,7 @@
   --bp-tile-border: rgba(0, 0, 0, 0.08);
   --bp-control: #f4f4f5;
   --bp-accent: #3d7bfd;
+  --bp-hover-ring: rgba(0, 0, 0, 0.18);
 
   flex: none;
   width: 248px;
@@ -29,13 +30,15 @@
     --bp-muted: #9a9aa3;
     --bp-tile-border: rgba(255, 255, 255, 0.1);
     --bp-control: #2a2b30;
+    --bp-hover-ring: rgba(255, 255, 255, 0.25);
   }
 }
 
-.background-panel__none {
-  height: 36px;
-  border: 2px solid transparent;
-  border-radius: 10px;
+.background-panel__reset {
+  flex: none;
+  height: 34px;
+  border: none;
+  border-radius: 9px;
   background: var(--bp-control);
   color: var(--bp-text);
   font-family: inherit;
@@ -44,8 +47,13 @@
   cursor: pointer;
 }
 
-.background-panel__none--active {
-  border-color: var(--bp-accent);
+.background-panel__reset:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.background-panel__reset:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .background-panel__section {
@@ -76,11 +84,13 @@
   background: var(--bp-control);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 100ms ease;
+  transition: box-shadow 100ms ease;
 }
 
+/* A ring rather than a zoom: scaling the tile resamples the thumbnail,
+   which reads as the picture itself changing. */
 .background-panel__tile:hover {
-  transform: scale(1.06);
+  box-shadow: 0 0 0 2px var(--bp-bg), 0 0 0 4px var(--bp-hover-ring);
 }
 
 .background-panel__tile img {

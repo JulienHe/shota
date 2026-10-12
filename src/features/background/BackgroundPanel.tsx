@@ -36,7 +36,7 @@ function sameBackground(a: FrameBackground | undefined, b: FrameBackground): boo
  * The frame panel: pick what goes behind the screenshot, then adjust the
  * padding, corners and shadow around it.
  *
- * Choosing a background is what turns the frame on; "None" turns it off.
+ * Choosing a background is what turns the frame on; "Reset" turns it off.
  * The sliders start from wherever they were left last time, so a look you
  * settled on carries over to the next capture with one click.
  */
@@ -116,14 +116,6 @@ export function BackgroundPanel() {
 
   return (
     <aside className="background-panel">
-      <button
-        type="button"
-        className={`background-panel__none${frame ? "" : " background-panel__none--active"}`}
-        onClick={() => setFrame(null)}
-      >
-        {t("background.none")}
-      </button>
-
       <section className="background-panel__section">
         <h3>{t("background.gradients")}</h3>
         <div className="background-panel__grid">
@@ -174,6 +166,10 @@ export function BackgroundPanel() {
         {slider("corners", t("background.corners"))}
         {slider("shadow", t("background.shadow"))}
       </section>
+
+      <button type="button" className="background-panel__reset" disabled={!frame} onClick={() => setFrame(null)}>
+        {t("background.reset")}
+      </button>
     </aside>
   );
 }
