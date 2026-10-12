@@ -1,0 +1,617 @@
+{
+  "en-us": {
+    "description": "Shota is a fast, native screenshot and annotation tool for Windows.\n\nPress Print Screen to capture a region or snap to a window, or Ctrl+Print Screen for the whole screen. Whatever you capture opens immediately in a lightweight editor, so you can mark it up and get on with your day.\n\nANNOTATE\nDraw rectangles, ellipses, lines and arrows. Add text in any font installed on your system. Sketch freehand. Drop auto-numbering step badges to walk someone through a sequence. Swipe a highlighter over text like a real marker. Spotlight one region and dim everything else. Blur or pixelate anything you'd rather not share.\n\nFINISH QUICKLY\nCopy to the clipboard or save in one click, and the editor gets out of your way. Save as PNG, JPG or WebP, to the folder you choose, with file names like \"Shota 2026-10-11 14-05-09\".\n\nFRAME IT\nPut your screenshot on a gradient, a colour, your desktop wallpaper or any picture, with padding, rounded corners and a soft shadow. Ready to post in one click, and Shota remembers the look for your next capture.\n\nMAKE IT YOURS\nChange any shortcut, from the capture keys to every tool in the editor. Pick light, dark, or match Windows. Launch Shota when you sign in. Use it in 15 languages.\n\nNOTHING LEAVES YOUR MACHINE\nNo account, no sign-in, no analytics, no telemetry. Your screenshots are processed on your computer and written to your own disk. Nothing is uploaded anywhere.\n\nEVERY CAPTURE IS KEPT\nRecent captures stay in a local history. Reopen one with its annotations intact, copy it again, or delete it. You decide how many to keep, and for how long.\n\nShota is free and open source under the MIT licence.",
+    "shortDescription": "A fast, native screenshot and annotation tool for Windows. Capture your screen, a region or a window, then mark it up with arrows, text, highlighter, step badges, spotlight and blur. No account, no telemetry, nothing uploaded anywhere.",
+    "releaseNotes": "New: frames. Put a screenshot on a background, ready to post.\n\n• 30 gradients, colours, your desktop wallpaper, a blurred copy of the screenshot, or any picture\n• Padding, rounded corners and shadow sliders\n• Copy and Save export the framed image at full resolution\n• Your last frame carries over to the next capture\n\nAlso: the workspace colour you pick by right-clicking the canvas is now remembered.",
+    "features": [
+      "Capture the full screen, a dragged region, or a single window",
+      "Print Screen to capture, like the rest of Windows",
+      "Rectangles, ellipses, lines and arrows",
+      "Text in any font installed on your system",
+      "Freehand pen",
+      "Auto-numbering step badges for walkthroughs",
+      "Highlighter that reads like a real marker",
+      "Spotlight a region and dim the rest",
+      "Blur or pixelate anything sensitive",
+      "Crop, zoom and pan",
+      "Colour picker with a magnified loupe",
+      "Copy or save in one click",
+      "Frame screenshots on gradients, wallpapers or colours",
+      "Save as PNG, JPG or WebP with your own file names",
+      "Change any shortcut, including every editor tool",
+      "Light and dark themes",
+      "Available in 15 languages",
+      "Local history of recent captures, re-editable",
+      "No account, no telemetry, nothing uploaded",
+      "Free and open source under the MIT licence"
+    ],
+    "keywords": [
+      "screenshot",
+      "screen capture",
+      "annotation",
+      "screenshot tool",
+      "snipping",
+      "markup",
+      "redaction"
+    ],
+    "screenshotCaptions": [
+      "Redact before you share: blur an API key, number the steps and point with an arrow, then copy or save.",
+      "Highlight text in a screenshot like a real marker, with what's underneath still readable.",
+      "Spotlight one region and dim everything else to focus attention where you want it."
+    ]
+  },
+  "fr": {
+    "description": "Shota est un outil de capture d'écran et d'annotation rapide et natif pour Windows.\n\nAppuyez sur Impr. écran pour capturer une zone ou cibler une fenêtre, ou sur Ctrl+Impr. écran pour tout l'écran. Chaque capture s'ouvre aussitôt dans un éditeur léger : vous l'annotez, et vous passez à la suite.\n\nANNOTER\nDessinez des rectangles, des ellipses, des lignes et des flèches. Ajoutez du texte dans n'importe quelle police installée sur votre système. Dessinez à main levée. Posez des étapes numérotées automatiquement pour guider quelqu'un pas à pas. Passez un surligneur sur du texte comme avec un vrai feutre. Mettez une zone en lumière et assombrissez le reste. Floutez ou pixelisez tout ce que vous préférez ne pas montrer.\n\nTERMINER VITE\nCopiez dans le presse-papiers ou enregistrez en un clic, et l'éditeur s'efface. Enregistrez en PNG, JPG ou WebP, dans le dossier de votre choix, avec des noms comme « Shota 2026-10-11 14-05-09 ».\n\nMETTEZ EN VALEUR\nPosez votre capture sur un dégradé, une couleur, votre fond d'écran ou n'importe quelle image, avec marge, coins arrondis et ombre douce. Prête à publier en un clic, et Shota retient ce style pour la capture suivante.\n\nÀ VOTRE GOÛT\nModifiez n'importe quel raccourci, des touches de capture à chaque outil de l'éditeur. Choisissez le thème clair, sombre ou celui de Windows. Lancez Shota à l'ouverture de session. Utilisez-le dans 15 langues.\n\nRIEN NE QUITTE VOTRE ORDINATEUR\nPas de compte, pas de connexion, pas de statistiques, pas de télémétrie. Vos captures sont traitées sur votre ordinateur et enregistrées sur votre propre disque. Rien n'est envoyé nulle part.\n\nCHAQUE CAPTURE EST CONSERVÉE\nLes captures récentes restent dans un historique local. Rouvrez-en une avec ses annotations intactes, copiez-la à nouveau ou supprimez-la. Vous décidez combien en garder, et pendant combien de temps.\n\nShota est gratuit et open source, sous licence MIT.",
+    "shortDescription": "Un outil de capture d'écran et d'annotation rapide et natif pour Windows. Capturez l'écran, une zone ou une fenêtre, puis annotez avec flèches, texte, surligneur, étapes numérotées, projecteur et flou. Sans compte, sans télémétrie, rien n'est envoyé.",
+    "releaseNotes": "Nouveau : les cadres. Posez une capture sur un arrière-plan, prête à publier.\n\n• 30 dégradés, des couleurs, votre fond d'écran, une version floutée de la capture ou n'importe quelle image\n• Réglages de marge, de coins arrondis et d'ombre\n• Copier et Enregistrer exportent l'image encadrée en pleine résolution\n• Votre dernier cadre est repris à la capture suivante\n\nAussi : la couleur de l'espace de travail choisie d'un clic droit sur le canevas est désormais mémorisée.",
+    "features": [
+      "Capturez tout l'écran, une zone tracée ou une seule fenêtre",
+      "Impr. écran pour capturer, comme partout dans Windows",
+      "Rectangles, ellipses, lignes et flèches",
+      "Texte dans n'importe quelle police installée",
+      "Dessin à main levée",
+      "Étapes numérotées automatiquement pour vos tutoriels",
+      "Un surligneur qui ressemble à un vrai feutre",
+      "Mettez une zone en lumière et assombrissez le reste",
+      "Floutez ou pixelisez les informations sensibles",
+      "Recadrage, zoom et déplacement",
+      "Pipette avec loupe grossissante",
+      "Copiez ou enregistrez en un clic",
+      "Encadrez vos captures sur un dégradé, un fond d'écran ou une couleur",
+      "PNG, JPG ou WebP avec vos propres noms de fichiers",
+      "Modifiez n'importe quel raccourci, y compris les outils de l'éditeur",
+      "Thèmes clair et sombre",
+      "Disponible en 15 langues",
+      "Historique local des captures récentes, modifiables",
+      "Sans compte, sans télémétrie, rien n'est envoyé",
+      "Gratuit et open source sous licence MIT"
+    ],
+    "keywords": [
+      "capture d'écran",
+      "copie d'écran",
+      "annotation",
+      "outil de capture",
+      "capture",
+      "annoter",
+      "flouter"
+    ],
+    "screenshotCaptions": [
+      "Masquez avant de partager : floutez une clé d'API, numérotez les étapes et pointez avec une flèche, puis copiez ou enregistrez.",
+      "Surlignez du texte dans une capture comme avec un vrai feutre, en gardant le texte lisible dessous.",
+      "Mettez une zone en lumière et assombrissez le reste pour attirer l'attention là où vous voulez."
+    ]
+  },
+  "de": {
+    "description": "Shota ist ein schnelles, natives Screenshot- und Anmerkungstool für Windows.\n\nDrücke die Druck-Taste, um einen Bereich aufzunehmen oder an einem Fenster einzurasten, oder Strg+Druck für den ganzen Bildschirm. Jede Aufnahme öffnet sich sofort in einem schlanken Editor: kurz markieren, weitermachen.\n\nANMERKEN\nZeichne Rechtecke, Ellipsen, Linien und Pfeile. Füge Text in jeder auf deinem System installierten Schriftart hinzu. Zeichne freihand. Setze automatisch nummerierte Schritte, um jemanden durch einen Ablauf zu führen. Fahre mit dem Textmarker über Text wie mit einem echten Stift. Hebe einen Bereich hervor und dunkle den Rest ab. Zeichne weich oder verpixle alles, was du nicht teilen möchtest.\n\nSCHNELL FERTIG\nMit einem Klick in die Zwischenablage kopieren oder speichern, und der Editor ist aus dem Weg. Speichere als PNG, JPG oder WebP, im Ordner deiner Wahl, mit Dateinamen wie „Shota 2026-10-11 14-05-09“.\n\nIN SZENE SETZEN\nLege deinen Screenshot auf einen Verlauf, eine Farbe, dein Hintergrundbild oder ein beliebiges Bild, mit Abstand, abgerundeten Ecken und weichem Schatten. Mit einem Klick bereit zum Teilen, und Shota merkt sich den Look für die nächste Aufnahme.\n\nGANZ NACH DEINEM GESCHMACK\nÄndere jedes Tastenkürzel, von den Aufnahmetasten bis zu jedem Werkzeug im Editor. Wähle hell, dunkel oder wie Windows. Starte Shota bei der Anmeldung. Nutze es in 15 Sprachen.\n\nNICHTS VERLÄSST DEINEN COMPUTER\nKein Konto, keine Anmeldung, keine Analysen, keine Telemetrie. Deine Screenshots werden auf deinem Computer verarbeitet und auf deiner eigenen Festplatte gespeichert. Nichts wird irgendwohin hochgeladen.\n\nJEDE AUFNAHME BLEIBT ERHALTEN\nDie letzten Aufnahmen bleiben in einem lokalen Verlauf. Öffne eine mit allen Anmerkungen wieder, kopiere sie erneut oder lösche sie. Du entscheidest, wie viele bleiben und wie lange.\n\nShota ist kostenlos und Open Source unter der MIT-Lizenz.",
+    "shortDescription": "Ein schnelles, natives Screenshot- und Anmerkungstool für Windows. Nimm den Bildschirm, einen Bereich oder ein Fenster auf und markiere mit Pfeilen, Text, Textmarker, Schritten, Spotlight und Weichzeichner. Kein Konto, keine Telemetrie, kein Upload.",
+    "releaseNotes": "Neu: Rahmen. Lege einen Screenshot auf einen Hintergrund, bereit zum Teilen.\n\n• 30 Verläufe, Farben, dein Hintergrundbild, eine weichgezeichnete Kopie des Screenshots oder ein beliebiges Bild\n• Regler für Abstand, abgerundete Ecken und Schatten\n• Kopieren und Speichern exportieren das gerahmte Bild in voller Auflösung\n• Dein letzter Rahmen wird für die nächste Aufnahme übernommen\n\nAußerdem: Die per Rechtsklick auf die Arbeitsfläche gewählte Farbe bleibt jetzt gespeichert.",
+    "features": [
+      "Ganzen Bildschirm, einen Bereich oder ein einzelnes Fenster aufnehmen",
+      "Aufnahme mit der Druck-Taste, wie im restlichen Windows",
+      "Rechtecke, Ellipsen, Linien und Pfeile",
+      "Text in jeder installierten Schriftart",
+      "Freihand zeichnen",
+      "Automatisch nummerierte Schritte für Anleitungen",
+      "Ein Textmarker, der wie ein echter Stift wirkt",
+      "Einen Bereich hervorheben und den Rest abdunkeln",
+      "Sensible Inhalte weichzeichnen oder verpixeln",
+      "Zuschneiden, Zoomen und Verschieben",
+      "Pipette mit Vergrößerungslupe",
+      "Kopieren oder Speichern mit einem Klick",
+      "Screenshots auf Verläufen, Hintergrundbildern oder Farben einrahmen",
+      "PNG, JPG oder WebP mit eigenen Dateinamen",
+      "Jedes Tastenkürzel änderbar, auch alle Editor-Werkzeuge",
+      "Helles und dunkles Design",
+      "In 15 Sprachen verfügbar",
+      "Lokaler Verlauf der letzten Aufnahmen, weiter bearbeitbar",
+      "Kein Konto, keine Telemetrie, kein Upload",
+      "Kostenlos und Open Source unter der MIT-Lizenz"
+    ],
+    "keywords": [
+      "Screenshot",
+      "Bildschirmfoto",
+      "Anmerkung",
+      "Screenshot Tool",
+      "Bildschirmaufnahme",
+      "markieren",
+      "schwärzen"
+    ],
+    "screenshotCaptions": [
+      "Vor dem Teilen schwärzen: einen API-Schlüssel weichzeichnen, Schritte nummerieren, mit einem Pfeil zeigen, dann kopieren oder speichern.",
+      "Text im Screenshot wie mit einem echten Textmarker hervorheben, darunter bleibt alles lesbar.",
+      "Einen Bereich ins Spotlight rücken und den Rest abdunkeln, um den Blick genau dorthin zu lenken."
+    ]
+  },
+  "es": {
+    "description": "Shota es una herramienta de capturas de pantalla y anotaciones rápida y nativa para Windows.\n\nPulsa Impr Pant para capturar una zona o ajustarte a una ventana, o Ctrl+Impr Pant para toda la pantalla. Cada captura se abre al instante en un editor ligero: la anotas y sigues con lo tuyo.\n\nANOTA\nDibuja rectángulos, elipses, líneas y flechas. Añade texto con cualquier fuente instalada en tu sistema. Dibuja a mano alzada. Coloca pasos numerados automáticamente para guiar a alguien paso a paso. Pasa un resaltador sobre el texto como un rotulador de verdad. Destaca una zona y oscurece el resto. Desenfoca o pixela lo que prefieras no compartir.\n\nTERMINA RÁPIDO\nCopia al portapapeles o guarda con un clic, y el editor se aparta. Guarda en PNG, JPG o WebP, en la carpeta que elijas, con nombres como «Shota 2026-10-11 14-05-09».\n\nDALE MARCO\nColoca tu captura sobre un degradado, un color, tu fondo de escritorio o cualquier imagen, con margen, esquinas redondeadas y una sombra suave. Lista para publicar con un clic, y Shota recuerda el estilo para la siguiente captura.\n\nA TU MANERA\nCambia cualquier atajo, desde las teclas de captura hasta cada herramienta del editor. Elige tema claro, oscuro o el de Windows. Inicia Shota al iniciar sesión. Úsalo en 15 idiomas.\n\nNADA SALE DE TU EQUIPO\nSin cuenta, sin inicio de sesión, sin analíticas, sin telemetría. Tus capturas se procesan en tu equipo y se guardan en tu propio disco. No se sube nada a ninguna parte.\n\nCADA CAPTURA SE CONSERVA\nLas capturas recientes quedan en un historial local. Vuelve a abrir una con sus anotaciones intactas, cópiala otra vez o elimínala. Tú decides cuántas conservar y durante cuánto tiempo.\n\nShota es gratuito y de código abierto con licencia MIT.",
+    "shortDescription": "Una herramienta de capturas y anotaciones rápida y nativa para Windows. Captura la pantalla, una zona o una ventana y anótala con flechas, texto, resaltador, pasos numerados, foco y desenfoque. Sin cuenta, sin telemetría, sin subir nada.",
+    "releaseNotes": "Novedad: marcos. Coloca una captura sobre un fondo, lista para publicar.\n\n• 30 degradados, colores, tu fondo de escritorio, una copia desenfocada de la captura o cualquier imagen\n• Controles de margen, esquinas redondeadas y sombra\n• Copiar y Guardar exportan la imagen enmarcada a resolución completa\n• Tu último marco se aplica a la siguiente captura\n\nAdemás: el color del área de trabajo que eliges con clic derecho en el lienzo ahora se recuerda.",
+    "features": [
+      "Captura toda la pantalla, una zona o una sola ventana",
+      "Impr Pant para capturar, como en el resto de Windows",
+      "Rectángulos, elipses, líneas y flechas",
+      "Texto con cualquier fuente instalada",
+      "Dibujo a mano alzada",
+      "Pasos numerados automáticamente para tutoriales",
+      "Un resaltador que parece un rotulador de verdad",
+      "Destaca una zona y oscurece el resto",
+      "Desenfoca o pixela lo que sea sensible",
+      "Recorte, zoom y desplazamiento",
+      "Cuentagotas con lupa de aumento",
+      "Copia o guarda con un clic",
+      "Enmarca capturas sobre degradados, fondos de escritorio o colores",
+      "PNG, JPG o WebP con tus propios nombres de archivo",
+      "Cambia cualquier atajo, incluidas las herramientas del editor",
+      "Temas claro y oscuro",
+      "Disponible en 15 idiomas",
+      "Historial local de capturas recientes, editables",
+      "Sin cuenta, sin telemetría, sin subir nada",
+      "Gratuito y de código abierto con licencia MIT"
+    ],
+    "keywords": [
+      "captura de pantalla",
+      "pantallazo",
+      "anotación",
+      "herramienta captura",
+      "recortes",
+      "anotar",
+      "desenfocar"
+    ],
+    "screenshotCaptions": [
+      "Oculta antes de compartir: desenfoca una clave de API, numera los pasos y señala con una flecha, y luego copia o guarda.",
+      "Resalta texto en una captura como con un rotulador de verdad, sin dejar de leer lo que hay debajo.",
+      "Destaca una zona y oscurece el resto para llevar la atención justo donde quieres."
+    ]
+  },
+  "it": {
+    "description": "Shota è uno strumento veloce e nativo per catturare e annotare lo schermo su Windows.\n\nPremi Stamp per catturare un'area o agganciarti a una finestra, oppure Ctrl+Stamp per tutto lo schermo. Ogni cattura si apre subito in un editor leggero: la annoti e torni a quello che stavi facendo.\n\nANNOTA\nDisegna rettangoli, ellissi, linee e frecce. Aggiungi testo con qualsiasi carattere installato sul sistema. Disegna a mano libera. Inserisci passaggi numerati automaticamente per guidare qualcuno passo dopo passo. Passa l'evidenziatore sul testo come un vero pennarello. Metti in risalto un'area e scurisci il resto. Sfoca o pixela tutto ciò che preferisci non condividere.\n\nFINISCI IN FRETTA\nCopia negli appunti o salva con un clic, e l'editor si toglie di mezzo. Salva in PNG, JPG o WebP, nella cartella che scegli, con nomi come \"Shota 2026-10-11 14-05-09\".\n\nINCORNICIALA\nMetti la tua cattura su una sfumatura, un colore, lo sfondo del desktop o qualsiasi immagine, con margine, angoli arrotondati e un'ombra morbida. Pronta da pubblicare con un clic, e Shota ricorda lo stile per la cattura successiva.\n\nCOME PIACE A TE\nCambia qualsiasi scorciatoia, dai tasti di cattura a ogni strumento dell'editor. Scegli tema chiaro, scuro o come Windows. Avvia Shota all'accesso. Usalo in 15 lingue.\n\nNIENTE ESCE DAL TUO COMPUTER\nNessun account, nessun accesso, nessuna statistica, nessuna telemetria. Le tue catture vengono elaborate sul tuo computer e salvate sul tuo disco. Non viene caricato nulla da nessuna parte.\n\nOGNI CATTURA VIENE CONSERVATA\nLe catture recenti restano in una cronologia locale. Riaprine una con le annotazioni intatte, copiala di nuovo o eliminala. Decidi tu quante conservarne e per quanto tempo.\n\nShota è gratuito e open source con licenza MIT.",
+    "shortDescription": "Uno strumento veloce e nativo per catturare e annotare lo schermo su Windows. Cattura lo schermo, un'area o una finestra e annota con frecce, testo, evidenziatore, passaggi numerati, riflettore e sfocatura. Nessun account, nessuna telemetria, nessun caricamento.",
+    "releaseNotes": "Novità: le cornici. Metti una cattura su uno sfondo, pronta da pubblicare.\n\n• 30 sfumature, colori, lo sfondo del desktop, una copia sfocata della cattura o qualsiasi immagine\n• Regolazioni di margine, angoli arrotondati e ombra\n• Copia e Salva esportano l'immagine incorniciata a piena risoluzione\n• L'ultima cornice usata viene applicata alla cattura successiva\n\nInoltre: il colore dell'area di lavoro scelto con il clic destro sulla tela ora viene ricordato.",
+    "features": [
+      "Cattura tutto lo schermo, un'area o una singola finestra",
+      "Stamp per catturare, come nel resto di Windows",
+      "Rettangoli, ellissi, linee e frecce",
+      "Testo con qualsiasi carattere installato",
+      "Penna a mano libera",
+      "Passaggi numerati automaticamente per i tutorial",
+      "Un evidenziatore che sembra un vero pennarello",
+      "Metti in risalto un'area e scurisci il resto",
+      "Sfoca o pixela i contenuti sensibili",
+      "Ritaglio, zoom e spostamento",
+      "Selettore colore con lente d'ingrandimento",
+      "Copia o salva con un clic",
+      "Incornicia le catture su sfumature, sfondi o colori",
+      "PNG, JPG o WebP con i tuoi nomi di file",
+      "Cambia qualsiasi scorciatoia, anche gli strumenti dell'editor",
+      "Temi chiaro e scuro",
+      "Disponibile in 15 lingue",
+      "Cronologia locale delle catture recenti, modificabili",
+      "Nessun account, nessuna telemetria, nessun caricamento",
+      "Gratuito e open source con licenza MIT"
+    ],
+    "keywords": [
+      "screenshot",
+      "cattura schermo",
+      "annotazione",
+      "strumento cattura",
+      "schermata",
+      "annotare",
+      "sfocare"
+    ],
+    "screenshotCaptions": [
+      "Oscura prima di condividere: sfoca una chiave API, numera i passaggi e indica con una freccia, poi copia o salva.",
+      "Evidenzia il testo di una cattura come con un vero pennarello, lasciando leggibile ciò che sta sotto.",
+      "Metti in risalto un'area e scurisci il resto per portare l'attenzione dove vuoi."
+    ]
+  },
+  "pt-br": {
+    "description": "O Shota é uma ferramenta de capturas de tela e anotações rápida e nativa para Windows.\n\nPressione Print Screen para capturar uma área ou encaixar em uma janela, ou Ctrl+Print Screen para a tela inteira. Cada captura abre na hora em um editor leve: você anota e segue com o seu dia.\n\nANOTE\nDesenhe retângulos, elipses, linhas e setas. Adicione texto com qualquer fonte instalada no sistema. Desenhe à mão livre. Coloque etapas numeradas automaticamente para guiar alguém passo a passo. Passe o marca-texto sobre o texto como uma caneta de verdade. Destaque uma área e escureça o resto. Desfoque ou pixelize o que você prefere não compartilhar.\n\nTERMINE RÁPIDO\nCopie para a área de transferência ou salve com um clique, e o editor sai do caminho. Salve em PNG, JPG ou WebP, na pasta que você escolher, com nomes como \"Shota 2026-10-11 14-05-09\".\n\nDÊ UM ACABAMENTO\nColoque sua captura sobre um gradiente, uma cor, seu papel de parede ou qualquer imagem, com margem, cantos arredondados e uma sombra suave. Pronta para publicar com um clique, e o Shota lembra o estilo na próxima captura.\n\nDO SEU JEITO\nAltere qualquer atalho, das teclas de captura a cada ferramenta do editor. Escolha tema claro, escuro ou o do Windows. Inicie o Shota ao entrar no Windows. Use em 15 idiomas.\n\nNADA SAI DO SEU COMPUTADOR\nSem conta, sem login, sem análises, sem telemetria. Suas capturas são processadas no seu computador e salvas no seu próprio disco. Nada é enviado para lugar nenhum.\n\nTODA CAPTURA FICA GUARDADA\nAs capturas recentes ficam em um histórico local. Reabra uma com as anotações intactas, copie de novo ou exclua. Você decide quantas manter e por quanto tempo.\n\nO Shota é gratuito e de código aberto, sob a licença MIT.",
+    "shortDescription": "Uma ferramenta de capturas de tela e anotações rápida e nativa para Windows. Capture a tela, uma área ou uma janela e anote com setas, texto, marca-texto, etapas numeradas, destaque e desfoque. Sem conta, sem telemetria, nada enviado.",
+    "releaseNotes": "Novidade: molduras. Coloque uma captura sobre um fundo, pronta para publicar.\n\n• 30 gradientes, cores, seu papel de parede, uma cópia desfocada da captura ou qualquer imagem\n• Ajustes de margem, cantos arredondados e sombra\n• Copiar e Salvar exportam a imagem emoldurada em resolução total\n• Sua última moldura é usada na próxima captura\n\nAlém disso: a cor da área de trabalho escolhida com o botão direito na tela agora é lembrada.",
+    "features": [
+      "Capture a tela inteira, uma área ou uma única janela",
+      "Print Screen para capturar, como no resto do Windows",
+      "Retângulos, elipses, linhas e setas",
+      "Texto com qualquer fonte instalada",
+      "Caneta à mão livre",
+      "Etapas numeradas automaticamente para tutoriais",
+      "Um marca-texto que parece uma caneta de verdade",
+      "Destaque uma área e escureça o resto",
+      "Desfoque ou pixelize o que for sensível",
+      "Recorte, zoom e movimentação",
+      "Seletor de cor com lupa de ampliação",
+      "Copie ou salve com um clique",
+      "Emoldure capturas sobre gradientes, papéis de parede ou cores",
+      "PNG, JPG ou WebP com seus próprios nomes de arquivo",
+      "Altere qualquer atalho, incluindo as ferramentas do editor",
+      "Temas claro e escuro",
+      "Disponível em 15 idiomas",
+      "Histórico local das capturas recentes, editáveis",
+      "Sem conta, sem telemetria, nada enviado",
+      "Gratuito e de código aberto sob a licença MIT"
+    ],
+    "keywords": [
+      "captura de tela",
+      "print de tela",
+      "anotação",
+      "ferramenta de captura",
+      "recorte",
+      "anotar",
+      "desfocar"
+    ],
+    "screenshotCaptions": [
+      "Oculte antes de compartilhar: desfoque uma chave de API, numere as etapas e aponte com uma seta, depois copie ou salve.",
+      "Destaque texto em uma captura como com um marca-texto de verdade, sem perder a leitura do que está embaixo.",
+      "Destaque uma área e escureça o resto para levar a atenção exatamente aonde você quer."
+    ]
+  },
+  "nl": {
+    "description": "Shota is een snelle, native tool voor schermafbeeldingen en annotaties op Windows.\n\nDruk op Print Screen om een gebied vast te leggen of op een venster vast te klikken, of op Ctrl+Print Screen voor het hele scherm. Elke schermafbeelding opent meteen in een lichte editor: even markeren en je gaat verder.\n\nANNOTEREN\nTeken rechthoeken, ellipsen, lijnen en pijlen. Voeg tekst toe in elk lettertype dat op je systeem staat. Teken uit de vrije hand. Plaats automatisch genummerde stappen om iemand door een proces te loodsen. Haal een markeerstift over tekst zoals met een echte stift. Zet een gebied in de spotlight en maak de rest donkerder. Vervaag of pixel alles wat je liever niet deelt.\n\nSNEL KLAAR\nKopieer naar het klembord of sla op met één klik, en de editor gaat uit de weg. Sla op als PNG, JPG of WebP, in de map die je kiest, met bestandsnamen als \"Shota 2026-10-11 14-05-09\".\n\nMAAK HET AF\nZet je schermafbeelding op een kleurverloop, een kleur, je bureaubladachtergrond of een andere afbeelding, met marge, afgeronde hoeken en een zachte schaduw. Met één klik klaar om te delen, en Shota onthoudt de stijl voor je volgende schermafbeelding.\n\nHELEMAAL VAN JOU\nWijzig elke sneltoets, van de vastlegtoetsen tot elk gereedschap in de editor. Kies licht, donker of zoals Windows. Start Shota wanneer je je aanmeldt. Gebruik het in 15 talen.\n\nNIETS VERLAAT JE COMPUTER\nGeen account, geen aanmelding, geen analyses, geen telemetrie. Je schermafbeeldingen worden op je computer verwerkt en op je eigen schijf opgeslagen. Er wordt niets geüpload.\n\nELKE SCHERMAFBEELDING BLIJFT BEWAARD\nRecente schermafbeeldingen blijven in een lokale geschiedenis. Open er een opnieuw met de annotaties intact, kopieer hem nog eens of verwijder hem. Jij bepaalt hoeveel er blijven en hoe lang.\n\nShota is gratis en open source onder de MIT-licentie.",
+    "shortDescription": "Een snelle, native tool voor schermafbeeldingen en annotaties op Windows. Leg je scherm, een gebied of een venster vast en markeer met pijlen, tekst, markeerstift, genummerde stappen, spotlight en vervaging. Geen account, geen telemetrie, niets geüpload.",
+    "releaseNotes": "Nieuw: kaders. Zet een schermafbeelding op een achtergrond, klaar om te delen.\n\n• 30 kleurverlopen, kleuren, je bureaubladachtergrond, een vervaagde kopie van de schermafbeelding of een andere afbeelding\n• Schuifregelaars voor marge, afgeronde hoeken en schaduw\n• Kopiëren en Opslaan exporteren de omkaderde afbeelding op volle resolutie\n• Je laatste kader wordt gebruikt voor de volgende schermafbeelding\n\nOok: de werkruimtekleur die je kiest met rechtsklikken op het canvas wordt nu onthouden.",
+    "features": [
+      "Leg het hele scherm, een gebied of één venster vast",
+      "Print Screen om vast te leggen, zoals in de rest van Windows",
+      "Rechthoeken, ellipsen, lijnen en pijlen",
+      "Tekst in elk geïnstalleerd lettertype",
+      "Tekenen uit de vrije hand",
+      "Automatisch genummerde stappen voor uitleg",
+      "Een markeerstift die eruitziet als een echte stift",
+      "Zet een gebied in de spotlight en maak de rest donker",
+      "Vervaag of pixel gevoelige informatie",
+      "Bijsnijden, zoomen en pannen",
+      "Kleurkiezer met vergrootglas",
+      "Kopiëren of opslaan met één klik",
+      "Plaats schermafbeeldingen op kleurverlopen, achtergronden of kleuren",
+      "PNG, JPG of WebP met je eigen bestandsnamen",
+      "Wijzig elke sneltoets, ook de editorgereedschappen",
+      "Lichte en donkere weergave",
+      "Beschikbaar in 15 talen",
+      "Lokale geschiedenis van recente schermafbeeldingen, bewerkbaar",
+      "Geen account, geen telemetrie, niets geüpload",
+      "Gratis en open source onder de MIT-licentie"
+    ],
+    "keywords": [
+      "schermafbeelding",
+      "screenshot",
+      "annotatie",
+      "screenshot tool",
+      "knipprogramma",
+      "markeren",
+      "vervagen"
+    ],
+    "screenshotCaptions": [
+      "Verberg voordat je deelt: vervaag een API-sleutel, nummer de stappen en wijs met een pijl, en kopieer of sla dan op.",
+      "Markeer tekst in een schermafbeelding zoals met een echte markeerstift, terwijl alles eronder leesbaar blijft.",
+      "Zet één gebied in de spotlight en maak de rest donkerder, zodat de aandacht gaat waar jij wilt."
+    ]
+  },
+  "pl": {
+    "description": "Shota to szybkie, natywne narzędzie do zrzutów ekranu i adnotacji dla Windows.\n\nNaciśnij Print Screen, aby przechwycić obszar lub przyciągnąć do okna, albo Ctrl+Print Screen, aby zrobić zrzut całego ekranu. Każdy zrzut od razu otwiera się w lekkim edytorze: oznaczasz, co trzeba, i wracasz do pracy.\n\nADNOTACJE\nRysuj prostokąty, elipsy, linie i strzałki. Dodawaj tekst dowolną czcionką zainstalowaną w systemie. Rysuj odręcznie. Wstawiaj automatycznie numerowane kroki, by poprowadzić kogoś przez proces. Przeciągnij zakreślacz po tekście jak prawdziwym flamastrem. Wyróżnij jeden obszar i przyciemnij resztę. Rozmyj lub zpikselizuj wszystko, czego nie chcesz pokazywać.\n\nSZYBKO GOTOWE\nSkopiuj do schowka lub zapisz jednym kliknięciem, a edytor znika z drogi. Zapisuj jako PNG, JPG lub WebP, w wybranym folderze, z nazwami takimi jak „Shota 2026-10-11 14-05-09”.\n\nOPRAW TO\nUmieść zrzut na gradiencie, kolorze, tapecie pulpitu lub dowolnym obrazie, z marginesem, zaokrąglonymi narożnikami i miękkim cieniem. Gotowe do publikacji jednym kliknięciem, a Shota zapamięta styl na następny zrzut.\n\nPO TWOJEMU\nZmień dowolny skrót, od klawiszy przechwytywania po każde narzędzie edytora. Wybierz motyw jasny, ciemny lub zgodny z Windows. Uruchamiaj Shota po zalogowaniu. Korzystaj w 15 językach.\n\nNIC NIE OPUSZCZA TWOJEGO KOMPUTERA\nBez konta, bez logowania, bez statystyk, bez telemetrii. Zrzuty są przetwarzane na Twoim komputerze i zapisywane na Twoim dysku. Nic nie jest nigdzie wysyłane.\n\nKAŻDY ZRZUT ZOSTAJE ZACHOWANY\nOstatnie zrzuty zostają w lokalnej historii. Otwórz ponownie dowolny z nienaruszonymi adnotacjami, skopiuj go jeszcze raz lub usuń. Ty decydujesz, ile ich przechowywać i jak długo.\n\nShota jest darmowa i otwartoźródłowa, na licencji MIT.",
+    "shortDescription": "Szybkie, natywne narzędzie do zrzutów ekranu i adnotacji dla Windows. Przechwyć ekran, obszar lub okno i oznacz strzałkami, tekstem, zakreślaczem, numerowanymi krokami, reflektorem i rozmyciem. Bez konta, bez telemetrii, nic nie jest wysyłane.",
+    "releaseNotes": "Nowość: ramki. Umieść zrzut na tle, gotowy do publikacji.\n\n• 30 gradientów, kolory, tapeta pulpitu, rozmyta kopia zrzutu lub dowolny obraz\n• Suwaki marginesu, zaokrąglenia narożników i cienia\n• Kopiowanie i zapisywanie eksportują obraz w ramce w pełnej rozdzielczości\n• Ostatnia ramka zostaje użyta przy następnym zrzucie\n\nPoza tym: kolor obszaru roboczego wybrany prawym przyciskiem na płótnie jest teraz zapamiętywany.",
+    "features": [
+      "Przechwyć cały ekran, wybrany obszar lub jedno okno",
+      "Print Screen do przechwytywania, jak w całym Windows",
+      "Prostokąty, elipsy, linie i strzałki",
+      "Tekst dowolną zainstalowaną czcionką",
+      "Pióro odręczne",
+      "Automatycznie numerowane kroki do instrukcji",
+      "Zakreślacz, który wygląda jak prawdziwy flamaster",
+      "Wyróżnij obszar i przyciemnij resztę",
+      "Rozmyj lub zpikselizuj poufne dane",
+      "Kadrowanie, powiększanie i przesuwanie",
+      "Próbnik koloru z lupą",
+      "Kopiuj lub zapisz jednym kliknięciem",
+      "Oprawiaj zrzuty na gradientach, tapetach lub kolorach",
+      "PNG, JPG lub WebP z własnymi nazwami plików",
+      "Zmień dowolny skrót, także narzędzia edytora",
+      "Motyw jasny i ciemny",
+      "Dostępna w 15 językach",
+      "Lokalna historia ostatnich zrzutów do dalszej edycji",
+      "Bez konta, bez telemetrii, nic nie jest wysyłane",
+      "Darmowa i otwartoźródłowa na licencji MIT"
+    ],
+    "keywords": [
+      "zrzut ekranu",
+      "screenshot",
+      "adnotacje",
+      "narzędzie do zrzutów",
+      "wycinanie",
+      "oznaczanie",
+      "rozmycie"
+    ],
+    "screenshotCaptions": [
+      "Ukryj przed udostępnieniem: rozmyj klucz API, ponumeruj kroki i wskaż strzałką, a potem skopiuj lub zapisz.",
+      "Zakreślaj tekst na zrzucie jak prawdziwym flamastrem, a to, co pod spodem, wciąż da się przeczytać.",
+      "Wyróżnij jeden obszar i przyciemnij resztę, by skupić uwagę tam, gdzie chcesz."
+    ]
+  },
+  "tr": {
+    "description": "Shota, Windows için hızlı ve yerel bir ekran görüntüsü ve not alma aracıdır.\n\nBir alanı yakalamak veya bir pencereye yapışmak için Print Screen'e, tüm ekran için Ctrl+Print Screen'e basın. Yakaladığınız her şey hemen hafif bir düzenleyicide açılır: üzerine işaretlersiniz ve işinize devam edersiniz.\n\nNOT EKLEYİN\nDikdörtgen, elips, çizgi ve ok çizin. Sisteminizde yüklü herhangi bir yazı tipiyle metin ekleyin. Serbest çizim yapın. Birine adım adım yol göstermek için otomatik numaralanan adımlar ekleyin. Metnin üzerinden gerçek bir fosforlu kalem gibi geçin. Bir alanı öne çıkarın, gerisini karartın. Paylaşmak istemediğiniz her şeyi bulanıklaştırın veya pikselleştirin.\n\nHIZLICA BİTİRİN\nTek tıkla panoya kopyalayın ya da kaydedin; düzenleyici hemen çekilir. PNG, JPG veya WebP olarak, seçtiğiniz klasöre, \"Shota 2026-10-11 14-05-09\" gibi adlarla kaydedin.\n\nÇERÇEVELEYİN\nEkran görüntünüzü bir renk geçişine, renge, masaüstü duvar kağıdınıza veya herhangi bir görsele; kenar boşluğu, yuvarlatılmış köşeler ve yumuşak bir gölgeyle yerleştirin. Tek tıkla paylaşmaya hazır, ve Shota bu görünümü bir sonraki yakalama için hatırlar.\n\nTAM İSTEDİĞİNİZ GİBİ\nYakalama tuşlarından düzenleyicideki her araca kadar istediğiniz kısayolu değiştirin. Açık, koyu veya Windows'a uygun temayı seçin. Oturum açtığınızda Shota'yı başlatın. 15 dilde kullanın.\n\nHİÇBİR ŞEY BİLGİSAYARINIZDAN ÇIKMAZ\nHesap yok, oturum açma yok, analiz yok, telemetri yok. Ekran görüntüleriniz bilgisayarınızda işlenir ve kendi diskinize kaydedilir. Hiçbir şey hiçbir yere yüklenmez.\n\nHER YAKALAMA SAKLANIR\nSon yakalamalar yerel bir geçmişte kalır. Birini notlarıyla birlikte yeniden açın, tekrar kopyalayın veya silin. Kaç tane ve ne kadar süre tutulacağına siz karar verirsiniz.\n\nShota, MIT lisansıyla ücretsiz ve açık kaynaktır.",
+    "shortDescription": "Windows için hızlı ve yerel bir ekran görüntüsü ve not alma aracı. Ekranı, bir alanı veya bir pencereyi yakalayın; ok, metin, fosforlu kalem, numaralı adımlar, spot ışığı ve bulanıklaştırma ile işaretleyin. Hesap yok, telemetri yok, yükleme yok.",
+    "releaseNotes": "Yeni: çerçeveler. Bir ekran görüntüsünü arka plana yerleştirin, paylaşmaya hazır.\n\n• 30 renk geçişi, renkler, masaüstü duvar kağıdınız, ekran görüntüsünün bulanık bir kopyası veya herhangi bir görsel\n• Kenar boşluğu, yuvarlatılmış köşe ve gölge ayarları\n• Kopyala ve Kaydet, çerçeveli görüntüyü tam çözünürlükte dışa aktarır\n• Son çerçeveniz bir sonraki yakalamaya taşınır\n\nAyrıca: tuvale sağ tıklayarak seçtiğiniz çalışma alanı rengi artık hatırlanıyor.",
+    "features": [
+      "Tüm ekranı, bir alanı veya tek bir pencereyi yakalayın",
+      "Windows'un geri kalanı gibi Print Screen ile yakalama",
+      "Dikdörtgen, elips, çizgi ve oklar",
+      "Yüklü her yazı tipiyle metin",
+      "Serbest kalem",
+      "Anlatımlar için otomatik numaralanan adımlar",
+      "Gerçek bir fosforlu kalem gibi görünen vurgulayıcı",
+      "Bir alanı öne çıkarıp gerisini karartın",
+      "Hassas içeriği bulanıklaştırın veya pikselleştirin",
+      "Kırpma, yakınlaştırma ve kaydırma",
+      "Büyüteçli renk seçici",
+      "Tek tıkla kopyalama veya kaydetme",
+      "Ekran görüntülerini renk geçişleri, duvar kağıtları veya renklerle çerçeveleyin",
+      "Kendi dosya adlarınızla PNG, JPG veya WebP",
+      "Düzenleyici araçları dahil her kısayolu değiştirin",
+      "Açık ve koyu tema",
+      "15 dilde kullanılabilir",
+      "Son yakalamaların düzenlenebilir yerel geçmişi",
+      "Hesap yok, telemetri yok, yükleme yok",
+      "MIT lisansıyla ücretsiz ve açık kaynak"
+    ],
+    "keywords": [
+      "ekran görüntüsü",
+      "ekran yakalama",
+      "not alma",
+      "ekran alıntısı",
+      "işaretleme",
+      "bulanıklaştırma",
+      "screenshot"
+    ],
+    "screenshotCaptions": [
+      "Paylaşmadan önce gizleyin: bir API anahtarını bulanıklaştırın, adımları numaralandırın, okla gösterin, sonra kopyalayın ya da kaydedin.",
+      "Ekran görüntüsündeki metni gerçek bir fosforlu kalem gibi vurgulayın; alttaki yazı okunur kalır.",
+      "Bir alanı öne çıkarıp gerisini karartın, dikkati tam istediğiniz yere çekin."
+    ]
+  },
+  "ru": {
+    "description": "Shota ~ быстрый нативный инструмент для снимков экрана и пометок в Windows.\n\nНажмите Print Screen, чтобы снять область или привязаться к окну, или Ctrl+Print Screen, чтобы снять весь экран. Каждый снимок сразу открывается в лёгком редакторе: отметили нужное и вернулись к делам.\n\nПОМЕТКИ\nРисуйте прямоугольники, эллипсы, линии и стрелки. Добавляйте текст любым шрифтом, установленным в системе. Рисуйте от руки. Расставляйте автоматически пронумерованные шаги, чтобы провести человека по инструкции. Проведите маркером по тексту, как настоящим фломастером. Выделите область прожектором и затемните остальное. Размойте или скройте пикселями всё, чем не хотите делиться.\n\nБЫСТРО ГОТОВО\nСкопируйте в буфер обмена или сохраните одним щелчком, и редактор уйдёт с дороги. Сохраняйте в PNG, JPG или WebP, в выбранную папку, с именами вроде «Shota 2026-10-11 14-05-09».\n\nОФОРМЛЕНИЕ\nПоложите снимок на градиент, цвет, обои рабочего стола или любое изображение, с отступом, скруглёнными углами и мягкой тенью. Готово к публикации в один щелчок, а Shota запомнит оформление для следующего снимка.\n\nПОД СЕБЯ\nМеняйте любое сочетание клавиш, от клавиш снимка до каждого инструмента редактора. Выберите светлую, тёмную тему или как в Windows. Запускайте Shota при входе в систему. Пользуйтесь на 15 языках.\n\nНИЧЕГО НЕ ПОКИДАЕТ ВАШ КОМПЬЮТЕР\nБез учётной записи, без входа, без аналитики, без телеметрии. Снимки обрабатываются на вашем компьютере и сохраняются на вашем диске. Ничего никуда не загружается.\n\nКАЖДЫЙ СНИМОК СОХРАНЯЕТСЯ\nНедавние снимки хранятся в локальной истории. Откройте любой из них снова вместе с пометками, скопируйте ещё раз или удалите. Сколько хранить и как долго, решаете вы.\n\nShota бесплатна и с открытым исходным кодом по лицензии MIT.",
+    "shortDescription": "Быстрый нативный инструмент для снимков экрана и пометок в Windows. Снимайте экран, область или окно и отмечайте стрелками, текстом, маркером, нумерованными шагами, прожектором и размытием. Без учётной записи, без телеметрии, без загрузок.",
+    "releaseNotes": "Новое: рамки. Положите снимок на фон ~ и он готов к публикации.\n\n• 30 градиентов, цвета, обои рабочего стола, размытая копия снимка или любое изображение\n• Ползунки отступа, скругления углов и тени\n• Копирование и сохранение выдают оформленное изображение в полном разрешении\n• Последняя рамка применяется к следующему снимку\n\nТакже: цвет рабочей области, выбранный правым щелчком по холсту, теперь запоминается.",
+    "features": [
+      "Снимок всего экрана, области или одного окна",
+      "Print Screen для снимка, как во всей Windows",
+      "Прямоугольники, эллипсы, линии и стрелки",
+      "Текст любым установленным шрифтом",
+      "Рисование от руки",
+      "Автоматически нумерованные шаги для инструкций",
+      "Маркер, похожий на настоящий фломастер",
+      "Выделите область прожектором и затемните остальное",
+      "Размытие или пикселизация конфиденциального",
+      "Обрезка, масштаб и перемещение",
+      "Пипетка с увеличительной лупой",
+      "Копирование или сохранение одним щелчком",
+      "Оформление снимков на градиентах, обоях или цветном фоне",
+      "PNG, JPG или WebP с вашими именами файлов",
+      "Любое сочетание клавиш меняется, включая инструменты редактора",
+      "Светлая и тёмная темы",
+      "Доступно на 15 языках",
+      "Локальная история недавних снимков с возможностью правки",
+      "Без учётной записи, без телеметрии, без загрузок",
+      "Бесплатно и с открытым кодом по лицензии MIT"
+    ],
+    "keywords": [
+      "снимок экрана",
+      "скриншот",
+      "пометки",
+      "захват экрана",
+      "ножницы",
+      "аннотации",
+      "размытие"
+    ],
+    "screenshotCaptions": [
+      "Скройте лишнее перед отправкой: размойте API-ключ, пронумеруйте шаги, укажите стрелкой, затем скопируйте или сохраните.",
+      "Выделяйте текст на снимке, как настоящим маркером, и он остаётся читаемым.",
+      "Выделите одну область прожектором и затемните остальное, чтобы внимание было там, где нужно."
+    ]
+  },
+  "uk": {
+    "description": "Shota ~ швидкий нативний інструмент для знімків екрана та позначок у Windows.\n\nНатисніть Print Screen, щоб зняти область або прив'язатися до вікна, або Ctrl+Print Screen, щоб зняти весь екран. Кожен знімок одразу відкривається в легкому редакторі: позначили потрібне й повернулися до справ.\n\nПОЗНАЧКИ\nМалюйте прямокутники, еліпси, лінії та стрілки. Додавайте текст будь-яким шрифтом, установленим у системі. Малюйте від руки. Розставляйте автоматично пронумеровані кроки, щоб провести людину інструкцією. Проведіть маркером по тексту, як справжнім фломастером. Виділіть область прожектором і затемніть решту. Розмийте або сховайте пікселями все, чим не хочете ділитися.\n\nШВИДКО ГОТОВО\nСкопіюйте в буфер обміну або збережіть одним клацанням, і редактор зникне з дороги. Зберігайте в PNG, JPG або WebP, у вибрану папку, з іменами на кшталт «Shota 2026-10-11 14-05-09».\n\nОФОРМЛЕННЯ\nПокладіть знімок на градієнт, колір, шпалери робочого столу чи будь-яке зображення, з відступом, заокругленими кутами й м'якою тінню. Готово до публікації одним клацанням, а Shota запам'ятає оформлення для наступного знімка.\n\nПІД СЕБЕ\nЗмінюйте будь-яке сполучення клавіш, від клавіш знімка до кожного інструмента редактора. Виберіть світлу, темну тему або як у Windows. Запускайте Shota під час входу в систему. Користуйтеся 15 мовами.\n\nНІЩО НЕ ЗАЛИШАЄ ВАШ КОМП'ЮТЕР\nБез облікового запису, без входу, без аналітики, без телеметрії. Знімки обробляються на вашому комп'ютері й зберігаються на вашому диску. Нічого нікуди не завантажується.\n\nКОЖЕН ЗНІМОК ЗБЕРІГАЄТЬСЯ\nНещодавні знімки зберігаються в локальній історії. Відкрийте будь-який знову разом із позначками, скопіюйте ще раз або видаліть. Скільки зберігати й як довго, вирішуєте ви.\n\nShota безкоштовна й з відкритим кодом за ліцензією MIT.",
+    "shortDescription": "Швидкий нативний інструмент для знімків екрана та позначок у Windows. Знімайте екран, область або вікно й позначайте стрілками, текстом, маркером, нумерованими кроками, прожектором і розмиттям. Без облікового запису, без телеметрії, без завантажень.",
+    "releaseNotes": "Нове: рамки. Покладіть знімок на тло ~ і він готовий до публікації.\n\n• 30 градієнтів, кольори, шпалери робочого столу, розмита копія знімка або будь-яке зображення\n• Повзунки відступу, заокруглення кутів і тіні\n• Копіювання й збереження дають оформлене зображення в повній роздільній здатності\n• Остання рамка застосовується до наступного знімка\n\nТакож: колір робочої області, обраний правим клацанням на полотні, тепер запам'ятовується.",
+    "features": [
+      "Знімок усього екрана, області або одного вікна",
+      "Print Screen для знімка, як у всій Windows",
+      "Прямокутники, еліпси, лінії та стрілки",
+      "Текст будь-яким установленим шрифтом",
+      "Малювання від руки",
+      "Автоматично нумеровані кроки для інструкцій",
+      "Маркер, схожий на справжній фломастер",
+      "Виділіть область прожектором і затемніть решту",
+      "Розмиття або пікселізація конфіденційного",
+      "Обрізання, масштаб і переміщення",
+      "Піпетка зі збільшувальною лупою",
+      "Копіювання або збереження одним клацанням",
+      "Оформлення знімків на градієнтах, шпалерах або кольоровому тлі",
+      "PNG, JPG або WebP з вашими іменами файлів",
+      "Будь-яке сполучення клавіш змінюється, зокрема інструменти редактора",
+      "Світла й темна теми",
+      "Доступно 15 мовами",
+      "Локальна історія нещодавніх знімків із можливістю редагування",
+      "Без облікового запису, без телеметрії, без завантажень",
+      "Безкоштовно й з відкритим кодом за ліцензією MIT"
+    ],
+    "keywords": [
+      "знімок екрана",
+      "скриншот",
+      "позначки",
+      "захоплення екрана",
+      "ножиці",
+      "анотації",
+      "розмиття"
+    ],
+    "screenshotCaptions": [
+      "Приховайте зайве перед надсиланням: розмийте API-ключ, пронумеруйте кроки, вкажіть стрілкою, потім скопіюйте або збережіть.",
+      "Виділяйте текст на знімку, як справжнім маркером, і він залишається читабельним.",
+      "Виділіть одну область прожектором і затемніть решту, щоб увага була там, де потрібно."
+    ]
+  },
+  "ja": {
+    "description": "Shota は、Windows 向けの高速でネイティブなスクリーンショット＆注釈ツールです。\n\nPrint Screen キーで範囲をキャプチャしたりウィンドウにスナップしたり、Ctrl+Print Screen で画面全体をキャプチャしたりできます。キャプチャはすぐに軽快なエディターで開くので、さっと書き込んで作業に戻れます。\n\n注釈\n四角形、楕円、直線、矢印を描けます。システムにインストールされている任意のフォントでテキストを追加できます。フリーハンドで描くことも。自動で番号が振られるステップで、手順を順番に案内できます。本物のマーカーのように蛍光ペンで文字をなぞれます。一部をスポットライトで目立たせ、残りを暗くできます。見せたくない部分はぼかしやモザイクで隠せます。\n\nすばやく仕上げる\nワンクリックでクリップボードにコピーまたは保存すると、エディターはすぐに閉じます。PNG、JPG、WebP で、好きなフォルダーに「Shota 2026-10-11 14-05-09」のような名前で保存できます。\n\nフレームで仕上げる\nスクリーンショットをグラデーション、単色、デスクトップの壁紙、好きな画像の上に置き、余白、角の丸み、やわらかな影を付けられます。ワンクリックで投稿の準備が整い、次のキャプチャでも同じ見た目を引き継ぎます。\n\n自分好みに\nキャプチャのキーからエディターの各ツールまで、どのショートカットも変更できます。ライト、ダーク、Windows に合わせる、から選べます。サインイン時に Shota を起動できます。15 か国語に対応しています。\n\nデータは PC の外に出ません\nアカウントもサインインも、分析もテレメトリもありません。スクリーンショットはお使いの PC で処理され、ご自身のディスクに保存されます。どこにもアップロードされません。\n\nすべてのキャプチャを保存\n最近のキャプチャはローカルの履歴に残ります。注釈をそのままに開き直したり、もう一度コピーしたり、削除したりできます。何件、どのくらいの期間残すかは自分で決められます。\n\nShota は MIT ライセンスの無料オープンソースソフトウェアです。",
+    "shortDescription": "Windows 向けの高速でネイティブなスクリーンショット＆注釈ツール。画面全体、範囲、ウィンドウをキャプチャして、矢印、テキスト、蛍光ペン、番号付きステップ、スポットライト、ぼかしで書き込めます。アカウント不要、テレメトリなし、アップロードなし。",
+    "releaseNotes": "新機能：フレーム。スクリーンショットを背景の上に置いて、そのまま投稿できます。\n\n• 30 種類のグラデーション、単色、デスクトップの壁紙、ぼかしたスクリーンショット、好きな画像\n• 余白、角の丸み、影のスライダー\n• コピーと保存でフレーム付きの画像をフル解像度で書き出し\n• 最後に使ったフレームを次のキャプチャに引き継ぎ\n\nそのほか：キャンバスの右クリックで選んだ作業領域の色が保存されるようになりました。",
+    "features": [
+      "画面全体、範囲、単一ウィンドウをキャプチャ",
+      "Windows と同じく Print Screen でキャプチャ",
+      "四角形、楕円、直線、矢印",
+      "インストール済みの任意のフォントでテキスト",
+      "フリーハンドのペン",
+      "手順説明に便利な自動番号付きステップ",
+      "本物のマーカーのような蛍光ペン",
+      "一部をスポットライトで強調し、残りを暗く",
+      "機密情報をぼかしやモザイクで隠す",
+      "トリミング、ズーム、パン",
+      "拡大ルーペ付きのカラーピッカー",
+      "ワンクリックでコピーまたは保存",
+      "グラデーション、壁紙、単色の背景でスクリーンショットをフレーム化",
+      "自分で決めたファイル名で PNG、JPG、WebP",
+      "エディターのツールも含め、どのショートカットも変更可能",
+      "ライトテーマとダークテーマ",
+      "15 か国語に対応",
+      "再編集できる最近のキャプチャのローカル履歴",
+      "アカウント不要、テレメトリなし、アップロードなし",
+      "MIT ライセンスの無料オープンソース"
+    ],
+    "keywords": [
+      "スクリーンショット",
+      "画面キャプチャ",
+      "注釈",
+      "スクショ",
+      "キャプチャツール",
+      "マークアップ",
+      "モザイク"
+    ],
+    "screenshotCaptions": [
+      "共有する前に隠す：API キーをぼかし、手順に番号を振り、矢印で指し示して、コピーまたは保存。",
+      "本物のマーカーのように、スクリーンショットの文字を下が読めるまま強調できます。",
+      "一部をスポットライトで照らし、残りを暗くして、見てほしい場所に視線を集めます。"
+    ]
+  },
+  "ko": {
+    "description": "Shota는 Windows용 빠르고 네이티브한 스크린샷 및 주석 도구입니다.\n\nPrint Screen을 눌러 영역을 캡처하거나 창에 맞추고, Ctrl+Print Screen으로 전체 화면을 캡처하세요. 캡처한 화면은 바로 가벼운 편집기에서 열리니, 표시만 하고 하던 일로 돌아가면 됩니다.\n\n주석 달기\n사각형, 타원, 선, 화살표를 그리세요. 시스템에 설치된 모든 글꼴로 텍스트를 추가하세요. 자유롭게 그릴 수도 있습니다. 번호가 자동으로 매겨지는 단계로 순서를 차근차근 안내하세요. 진짜 마커처럼 형광펜으로 텍스트를 칠하세요. 한 영역을 스포트라이트로 강조하고 나머지는 어둡게 하세요. 공유하고 싶지 않은 부분은 흐리게 하거나 모자이크 처리하세요.\n\n빠르게 마무리\n클릭 한 번으로 클립보드에 복사하거나 저장하면 편집기가 바로 비켜 줍니다. PNG, JPG, WebP 형식으로, 원하는 폴더에 \"Shota 2026-10-11 14-05-09\" 같은 이름으로 저장하세요.\n\n프레임으로 마무리\n스크린샷을 그라데이션, 단색, 바탕 화면 배경 또는 원하는 이미지 위에 여백, 둥근 모서리, 부드러운 그림자와 함께 올려 보세요. 클릭 한 번으로 게시할 준비가 끝나고, 다음 캡처에도 같은 스타일이 적용됩니다.\n\n내 마음대로\n캡처 키부터 편집기의 모든 도구까지 어떤 단축키든 바꿀 수 있습니다. 밝게, 어둡게, Windows 설정 따르기 중에서 고르세요. 로그인할 때 Shota를 시작하세요. 15개 언어로 사용할 수 있습니다.\n\n아무것도 PC 밖으로 나가지 않습니다\n계정도, 로그인도, 분석도, 원격 분석(텔레메트리)도 없습니다. 스크린샷은 내 PC에서 처리되고 내 디스크에 저장됩니다. 어디에도 업로드되지 않습니다.\n\n모든 캡처를 보관\n최근 캡처는 로컬 기록에 남습니다. 주석이 그대로인 상태로 다시 열거나, 다시 복사하거나, 삭제하세요. 몇 개를 얼마 동안 보관할지는 직접 정합니다.\n\nShota는 MIT 라이선스의 무료 오픈 소스입니다.",
+    "shortDescription": "Windows용 빠르고 네이티브한 스크린샷 및 주석 도구. 화면, 영역, 창을 캡처하고 화살표, 텍스트, 형광펜, 번호 단계, 스포트라이트, 흐리게로 표시하세요. 계정 없음, 텔레메트리 없음, 업로드 없음.",
+    "releaseNotes": "새 기능: 프레임. 스크린샷을 배경 위에 올려 바로 게시할 수 있습니다.\n\n• 그라데이션 30종, 단색, 바탕 화면 배경, 흐리게 처리한 스크린샷, 원하는 이미지\n• 여백, 둥근 모서리, 그림자 슬라이더\n• 복사와 저장 시 프레임이 적용된 이미지를 원본 해상도로 내보내기\n• 마지막에 사용한 프레임을 다음 캡처에 그대로 적용\n\n또한: 캔버스를 오른쪽 클릭해 고른 작업 영역 색상이 이제 저장됩니다.",
+    "features": [
+      "전체 화면, 드래그한 영역 또는 창 하나 캡처",
+      "Windows처럼 Print Screen으로 캡처",
+      "사각형, 타원, 선, 화살표",
+      "설치된 모든 글꼴로 텍스트 입력",
+      "자유 그리기 펜",
+      "설명용 자동 번호 단계",
+      "진짜 마커 같은 형광펜",
+      "한 영역을 강조하고 나머지는 어둡게",
+      "민감한 정보는 흐리게 또는 모자이크",
+      "자르기, 확대/축소, 이동",
+      "돋보기가 있는 색 선택기",
+      "클릭 한 번으로 복사 또는 저장",
+      "그라데이션, 배경 화면, 단색 배경으로 스크린샷 꾸미기",
+      "원하는 파일 이름으로 PNG, JPG, WebP 저장",
+      "편집기 도구를 포함해 모든 단축키 변경",
+      "밝은 테마와 어두운 테마",
+      "15개 언어 지원",
+      "다시 편집할 수 있는 최근 캡처 로컬 기록",
+      "계정 없음, 텔레메트리 없음, 업로드 없음",
+      "MIT 라이선스의 무료 오픈 소스"
+    ],
+    "keywords": [
+      "스크린샷",
+      "화면 캡처",
+      "주석",
+      "캡처 도구",
+      "화면 캡쳐",
+      "마크업",
+      "모자이크"
+    ],
+    "screenshotCaptions": [
+      "공유하기 전에 가리기: API 키를 흐리게 하고, 단계에 번호를 매기고, 화살표로 가리킨 뒤 복사하거나 저장하세요.",
+      "진짜 마커처럼 스크린샷의 텍스트를 강조하고, 아래 글자는 그대로 읽을 수 있습니다.",
+      "한 영역을 스포트라이트로 비추고 나머지는 어둡게 해서 원하는 곳에 시선을 모으세요."
+    ]
+  },
+  "zh-hans": {
+    "description": "Shota 是一款快速的原生 Windows 截图与标注工具。\n\n按 Print Screen 截取区域或吸附到窗口，按 Ctrl+Print Screen 截取整个屏幕。截图会立刻在轻量的编辑器中打开，标注完就能继续做事。\n\n标注\n绘制矩形、椭圆、直线和箭头。使用系统中已安装的任意字体添加文字。自由手绘。添加自动编号的步骤，一步步引导他人。像真正的记号笔一样用荧光笔划过文字。用聚光灯突出一个区域，其余部分变暗。把不想分享的内容模糊或打上马赛克。\n\n快速完成\n一键复制到剪贴板或保存，编辑器随即让路。以 PNG、JPG 或 WebP 格式，保存到你选择的文件夹，文件名形如“Shota 2026-10-11 14-05-09”。\n\n加上画框\n把截图放在渐变、纯色、桌面壁纸或任意图片上，配上边距、圆角和柔和阴影。一键即可发布，Shota 还会为下一次截图记住这个样式。\n\n随你所需\n从截图按键到编辑器里的每个工具，任何快捷键都能修改。可选浅色、深色或跟随 Windows。登录时自动启动 Shota。支持 15 种语言。\n\n数据不离开你的电脑\n无需账户，无需登录，没有数据分析，没有遥测。截图在你的电脑上处理，并保存到你自己的磁盘。不会上传到任何地方。\n\n每张截图都会保留\n最近的截图保存在本地历史记录中。可以带着原有标注重新打开、再次复制或删除。保留多少张、保留多久，由你决定。\n\nShota 基于 MIT 许可证免费开源。",
+    "shortDescription": "快速的原生 Windows 截图与标注工具。截取屏幕、区域或窗口，再用箭头、文字、荧光笔、编号步骤、聚光灯和模糊进行标注。无需账户，没有遥测，不上传任何内容。",
+    "releaseNotes": "新功能：画框。把截图放在背景上，即可直接发布。\n\n• 30 种渐变、纯色、桌面壁纸、截图的模糊副本或任意图片\n• 边距、圆角和阴影滑块\n• 复制和保存会以完整分辨率导出带画框的图片\n• 上次使用的画框会沿用到下一次截图\n\n此外：右键单击画布选择的工作区颜色现在会被记住。",
+    "features": [
+      "截取整个屏幕、拖选区域或单个窗口",
+      "与 Windows 一致，按 Print Screen 截图",
+      "矩形、椭圆、直线和箭头",
+      "可使用任意已安装字体的文字",
+      "自由手绘笔",
+      "适合教程的自动编号步骤",
+      "像真正记号笔一样的荧光笔",
+      "用聚光灯突出区域，其余变暗",
+      "模糊或马赛克隐藏敏感信息",
+      "裁剪、缩放和平移",
+      "带放大镜的取色器",
+      "一键复制或保存",
+      "为截图加上渐变、壁纸或纯色背景",
+      "使用自定义文件名保存为 PNG、JPG 或 WebP",
+      "任何快捷键都可修改，包括编辑器工具",
+      "浅色和深色主题",
+      "支持 15 种语言",
+      "可再次编辑的最近截图本地历史",
+      "无需账户，没有遥测，不上传任何内容",
+      "基于 MIT 许可证免费开源"
+    ],
+    "keywords": [
+      "截图",
+      "屏幕截图",
+      "标注",
+      "截图工具",
+      "截屏",
+      "批注",
+      "马赛克"
+    ],
+    "screenshotCaptions": [
+      "分享前先遮挡：模糊 API 密钥、为步骤编号、用箭头指示，然后复制或保存。",
+      "像真正的记号笔一样高亮截图中的文字，下面的内容依然清晰可读。",
+      "用聚光灯突出一个区域并调暗其余部分，把注意力引到你想要的地方。"
+    ]
+  },
+  "zh-hant": {
+    "description": "Shota 是一款快速的原生 Windows 擷取畫面與標註工具。\n\n按 Print Screen 擷取區域或貼齊視窗，按 Ctrl+Print Screen 擷取整個螢幕。擷取的畫面會立刻在輕量的編輯器中開啟，標註完就能繼續工作。\n\n標註\n繪製矩形、橢圓、直線和箭頭。使用系統中已安裝的任何字型加入文字。自由手繪。加入自動編號的步驟，一步步引導他人。像真正的螢光筆一樣劃過文字。用聚光燈凸顯一個區域，其餘部分變暗。把不想分享的內容模糊或打上馬賽克。\n\n快速完成\n一鍵複製到剪貼簿或儲存，編輯器隨即讓路。以 PNG、JPG 或 WebP 格式，儲存到你選擇的資料夾，檔名如「Shota 2026-10-11 14-05-09」。\n\n加上外框\n把擷取畫面放在漸層、純色、桌面背景或任何圖片上，搭配邊距、圓角和柔和陰影。一鍵即可發布，Shota 也會為下一次擷取記住這個樣式。\n\n隨你所好\n從擷取按鍵到編輯器裡的每個工具，任何快速鍵都能修改。可選淺色、深色或跟隨 Windows。登入時自動啟動 Shota。支援 15 種語言。\n\n資料不離開你的電腦\n不需帳號，不需登入，沒有數據分析，沒有遙測。擷取畫面在你的電腦上處理，並儲存在你自己的磁碟。不會上傳到任何地方。\n\n每張擷取畫面都會保留\n最近的擷取畫面保存在本機歷程記錄中。可以帶著原有標註重新開啟、再次複製或刪除。保留多少張、保留多久，由你決定。\n\nShota 以 MIT 授權免費開源。",
+    "shortDescription": "快速的原生 Windows 擷取畫面與標註工具。擷取螢幕、區域或視窗，再用箭頭、文字、螢光筆、編號步驟、聚光燈和模糊進行標註。不需帳號，沒有遙測，不上傳任何內容。",
+    "releaseNotes": "新功能：外框。把擷取畫面放在背景上，即可直接發布。\n\n• 30 種漸層、純色、桌面背景、擷取畫面的模糊副本或任何圖片\n• 邊距、圓角和陰影滑桿\n• 複製和儲存會以完整解析度匯出帶外框的圖片\n• 上次使用的外框會沿用到下一次擷取\n\n此外：在畫布上按右鍵選擇的工作區色彩現在會被記住。",
+    "features": [
+      "擷取整個螢幕、拖選區域或單一視窗",
+      "與 Windows 一致，按 Print Screen 擷取",
+      "矩形、橢圓、直線和箭頭",
+      "可使用任何已安裝字型的文字",
+      "自由手繪筆",
+      "適合教學的自動編號步驟",
+      "像真正螢光筆一樣的標示工具",
+      "用聚光燈凸顯區域，其餘變暗",
+      "模糊或馬賽克隱藏敏感資訊",
+      "裁切、縮放和平移",
+      "附放大鏡的取色器",
+      "一鍵複製或儲存",
+      "為擷取畫面加上漸層、桌布或純色背景",
+      "使用自訂檔名儲存為 PNG、JPG 或 WebP",
+      "任何快速鍵都能修改，包括編輯器工具",
+      "淺色和深色主題",
+      "支援 15 種語言",
+      "可再次編輯的最近擷取畫面本機歷程記錄",
+      "不需帳號，沒有遙測，不上傳任何內容",
+      "以 MIT 授權免費開源"
+    ],
+    "keywords": [
+      "擷取畫面",
+      "螢幕截圖",
+      "標註",
+      "截圖工具",
+      "截圖",
+      "註解",
+      "馬賽克"
+    ],
+    "screenshotCaptions": [
+      "分享前先遮蔽：模糊 API 金鑰、為步驟編號、用箭頭指示，然後複製或儲存。",
+      "像真正的螢光筆一樣標示擷取畫面中的文字，下方內容依然清晰可讀。",
+      "用聚光燈凸顯一個區域並調暗其餘部分，把注意力帶到你想要的地方。"
+    ]
+  }
+}

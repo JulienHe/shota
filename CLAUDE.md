@@ -301,3 +301,23 @@ The version lives in three files that must match: `package.json`, `src-tauri/tau
 and `src-tauri/Cargo.toml`. Bump them together, then let npm and cargo update their lockfiles
 (`npm install --package-lock-only`, any `cargo check`) rather than editing lockfiles by hand.
 
+## Store releases go through `npm run store`
+
+`scripts/store.mjs` drives Microsoft's `msstore` CLI: upload the MSIX as a draft, read the
+submission back, write every language's text from `docs/store-listing/listings.json` into it,
+send it back, submit. Things that will bite if changed:
+
+- **`msstore publish` before any listing edit.** With a published submission, `publish`
+  discards the draft and starts a new one from the last published submission, so edits made
+  before it are silently lost.
+- **The submission goes back as a file path, not an argument.** Fifteen listings are far past
+  Windows' 32k command line; `submission updateMetadata` accepts a path.
+- **Only text and captions are written.** Image entries refer to files Partner Center already
+  holds; rewriting them risks detaching the files. A listing with no screenshot borrows the
+  English ones, because a listing without one fails submission.
+- **The CLI's JSON is PascalCase**, and `applyListings` keeps whatever casing it is given.
+- **No URLs in descriptions** (Microsoft's rule); the script refuses them.
+
+Credentials live in the CLI's own store on the developer's machine, set with
+`msstore reconfigure`. Never read, log or commit them.
+
