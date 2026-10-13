@@ -115,11 +115,6 @@ pub struct Preferences {
     /// The editor's workspace colour behind the capture, picked from the
     /// canvas's right-click menu.
     pub canvas_background: String,
-    /// The frame applied to every new capture: whatever was last chosen in
-    /// the background panel, or None after Reset. Opaque here ~ only the
-    /// editor reads it, and it defines the shape (`Frame` in frame.ts), so
-    /// Rust doesn't keep a second copy of that type to drift.
-    pub frame: Option<serde_json::Value>,
 }
 
 impl Default for Preferences {
@@ -135,7 +130,6 @@ impl Default for Preferences {
             history_max_age_days: None,
             editor_shortcuts: BTreeMap::new(),
             canvas_background: "white".to_string(),
-            frame: None,
         }
     }
 }

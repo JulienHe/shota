@@ -75,7 +75,7 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Put the screenshot on a background, ready to post: 30 gradients from [WebGradients](https://webgradients.com/), a colour, a blurred copy of the screenshot, your Windows wallpaper, or any image you choose
 - Adjust padding, rounded corners and shadow; Copy and Save export the framed image at full resolution
 - The frame is saved with the capture, so it's still there when you reopen it from history
-- The last frame you chose carries over to every new capture until you reset it
+- New captures start plain; your padding, corners and shadow are remembered for the next time you pick a background
 
 **Finish up**
 - Copy to clipboard, or save as PNG, JPG or WebP with adjustable quality ~ both close the editor immediately rather than lingering

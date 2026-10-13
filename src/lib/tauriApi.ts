@@ -1,5 +1,4 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Frame } from "../features/background/frame";
 
 export interface CapturableWindow {
   id: number;
@@ -41,8 +40,6 @@ export interface Preferences {
   /** Overrides only, keyed by editor action id. */
   editorShortcuts: Record<string, string>;
   canvasBackground: CanvasBackground;
-  /** Applied to each new capture; null after Reset. */
-  frame: Frame | null;
 }
 
 export interface StartupStatus {

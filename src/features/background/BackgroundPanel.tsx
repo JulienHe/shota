@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { usePreferencesStore } from "../../stores/preferencesStore";
+import { useEffect, useMemo, useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { Plus } from "lucide-react";
 import { useDocumentStore } from "../../stores/documentStore";
@@ -38,8 +37,8 @@ function sameBackground(a: FrameBackground | undefined, b: FrameBackground): boo
  * padding, corners and shadow around it.
  *
  * Choosing a background is what turns the frame on; "Reset" turns it off.
- * The sliders start from wherever they were left last time, so a look you
- * settled on carries over to the next capture with one click.
+ * Captures start without one. The sliders start from wherever they were
+ * left last time, so the look you settled on is one click away.
  */
 export function BackgroundPanel() {
   const frame = useDocumentStore((s) => s.frame);
@@ -70,24 +69,7 @@ export function BackgroundPanel() {
     [imageElement],
   );
 
-  // Remembered for new captures, but only on what the user does here ~
-  // reopening an old capture with a different frame must not change what
-  // the next capture gets. Debounced, because a slider drag is dozens of
-  // changes and each save is written to disk and broadcast to every window.
-  const updatePreferences = usePreferencesStore((s) => s.update);
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const remember = (next: Frame | null) => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => updatePreferences({ frame: next }), 300);
-  };
-  useEffect(() => () => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-  }, []);
-
-  const apply = (next: Frame | null) => {
-    setFrame(next);
-    remember(next);
-  };
+  const apply = (next: Frame | null) => setFrame(next);
 
   const choose = (background: FrameBackground) => {
     const sliders = frame ?? lastSliders();
