@@ -278,13 +278,12 @@ const cli = cliConfigured();
 if (!cli.installed) fail('The Store CLI is not installed: winget install "Microsoft Store Developer CLI"');
 if (!cli.configured) {
   fail(
-    "The Store CLI is not connected to Partner Center. Individual developer accounts can't get API
-" +
-      "access, so use the CSV route: export the listing in Partner Center, then
-" +
-      '  npm run store -- --csv "<export.csv>"
-' +
+    [
+      "The Store CLI is not connected to Partner Center. Individual developer accounts can't get API",
+      "access, so use the CSV route: export the listing in Partner Center, then",
+      '  npm run store -- --csv "<export.csv>"',
       "See docs/store-listing/README.md.",
+    ].join("\n"),
   );
 }
 
