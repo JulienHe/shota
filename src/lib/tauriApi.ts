@@ -106,6 +106,13 @@ export const tauriApi = {
   copyImageToClipboard: (pngBase64: string) =>
     invoke<void>("copy_image_to_clipboard", { pngBase64 }),
 
+  /** Starts a native drag of the image into another app. Resolves when the drag ends. */
+  dragImageOut: (pngBase64: string, name: string) =>
+    invoke<void>("drag_image_out", { pngBase64, name }),
+
+  /** Opens the Windows Share sheet for the image. */
+  shareImage: (pngBase64: string, name: string) => invoke<void>("share_image", { pngBase64, name }),
+
   /** `suggestedName` has no extension; Rust adds the one `format` needs. */
   saveImageAs: (imageBase64: string, suggestedName: string, format: ImageFormat) =>
     invoke<string | null>("save_image_as", { imageBase64, suggestedName, format }),

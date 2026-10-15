@@ -48,7 +48,11 @@
     "copyFailed": "Kopyalanamadı ~ tekrar deneyin",
     "cropConfirm": "Kırp",
     "cropCancel": "İptal",
-    "zoomToFit": "Pencereye sığdır"
+    "zoomToFit": "Pencereye sığdır",
+    "share": "Paylaş…",
+    "dragOut": "Görüntüyü başka bir uygulamaya sürükleyin",
+    "dragFailed": "Sürükleme başlatılamadı ~ tekrar deneyin",
+    "shareFailed": "Paylaş açılamadı ~ tekrar deneyin"
   },
   "background": {
     "white": "Beyaz",

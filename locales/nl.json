@@ -48,7 +48,11 @@
     "copyFailed": "Kopiëren mislukt ~ probeer het opnieuw",
     "cropConfirm": "Bijsnijden",
     "cropCancel": "Annuleren",
-    "zoomToFit": "Passend in venster"
+    "zoomToFit": "Passend in venster",
+    "share": "Delen…",
+    "dragOut": "Sleep de afbeelding naar een andere app",
+    "dragFailed": "Slepen starten mislukt ~ probeer opnieuw",
+    "shareFailed": "Delen openen mislukt ~ probeer opnieuw"
   },
   "background": {
     "white": "Wit",

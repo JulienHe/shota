@@ -51,6 +51,8 @@ A note on the direct download: SmartScreen will warn you on first run, because t
 - Full screen, drag-select area, or snap to a window (press `Space` while selecting an area)
 - Trigger from the global shortcuts or the tray icon menu
 - Every capture is kept in a local history you can reopen later, annotations and all
+- Edit any image: drop it on the editor, paste it with `Ctrl+V`, pick it from the tray menu, or right-click it in Explorer and choose **Edit with Shota**
+- Get the result out: drag it from the handle at the bottom of the editor into another app, or use Share
 - The area-selection overlay is excluded from screen capture at the OS compositor level, so its own selection chrome never ends up baked into the screenshot
 
 **Annotate**

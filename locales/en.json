@@ -48,7 +48,11 @@
     "copyFailed": "Copy failed ~ try again",
     "cropConfirm": "Crop",
     "cropCancel": "Cancel",
-    "zoomToFit": "Fit to window"
+    "zoomToFit": "Fit to window",
+    "share": "Share…",
+    "dragOut": "Drag the image into another app",
+    "dragFailed": "Couldn't start the drag ~ try again",
+    "shareFailed": "Couldn't open Share ~ try again"
   },
   "background": {
     "white": "White",

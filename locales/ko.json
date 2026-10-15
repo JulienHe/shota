@@ -48,7 +48,11 @@
     "copyFailed": "복사하지 못했습니다 ~ 다시 시도하세요",
     "cropConfirm": "자르기",
     "cropCancel": "취소",
-    "zoomToFit": "창에 맞추기"
+    "zoomToFit": "창에 맞추기",
+    "share": "공유…",
+    "dragOut": "이미지를 다른 앱으로 끌어다 놓기",
+    "dragFailed": "끌기를 시작할 수 없습니다 ~ 다시 시도하세요",
+    "shareFailed": "공유를 열 수 없습니다 ~ 다시 시도하세요"
   },
   "background": {
     "white": "흰색",

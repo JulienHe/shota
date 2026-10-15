@@ -48,7 +48,11 @@
     "copyFailed": "复制失败 ~ 请重试",
     "cropConfirm": "裁剪",
     "cropCancel": "取消",
-    "zoomToFit": "适应窗口"
+    "zoomToFit": "适应窗口",
+    "share": "分享…",
+    "dragOut": "将图片拖到其他应用",
+    "dragFailed": "无法开始拖动 ~ 请重试",
+    "shareFailed": "无法打开分享 ~ 请重试"
   },
   "background": {
     "white": "白色",

@@ -41,6 +41,7 @@ export function EditorWindow() {
   const [zoom, setZoom] = useState(1);
   const backgroundPanelOpen = useToolStore((s) => s.activeTool === "background");
   const [dropping, setDropping] = useState(false);
+  const draggingOut = useRef(false);
 
   useEffect(() => {
     const applyCapture = async (capture: PendingCapture) => {
@@ -114,6 +115,7 @@ export function EditorWindow() {
   // page's own drag and drop events never fire for files.
   useEffect(() => {
     const unlisten = getCurrentWebview().onDragDropEvent((event) => {
+      if (draggingOut.current) return;
       const { type } = event.payload;
       if (type === "enter" || type === "over") {
         setDropping(true);
@@ -176,6 +178,42 @@ export function EditorWindow() {
       console.error("copy to clipboard failed", err);
     });
     closeEditor();
+  };
+
+  // Both read the same cached PNG export Copy does, so neither waits on a
+  // fresh render. Always PNG: lossless, and every app accepts it.
+  const exportedFileName = () => {
+    const { imageWidth, imageHeight } = useDocumentStore.getState();
+    const pattern = usePreferencesStore.getState().preferences?.fileNamePattern ?? "Shota {date} {time}";
+    return formatFileName(pattern, new Date(), { width: imageWidth, height: imageHeight });
+  };
+
+  const handleDragOut = () => {
+    const dataUrl = canvasRef.current?.exportDataUrl();
+    if (!dataUrl) return;
+    // The drop target can be this very window, which would open the image
+    // again as if it had been dragged in from outside.
+    draggingOut.current = true;
+    tauriApi
+      .dragImageOut(toBase64Payload(dataUrl), exportedFileName())
+      .catch((err) => {
+        console.error("dragging the image out failed", err);
+        showToast(t("editor.dragFailed"));
+      })
+      .finally(() => {
+        setDropping(false);
+        // The drop event can land just after the drag call returns.
+        setTimeout(() => (draggingOut.current = false), 300);
+      });
+  };
+
+  const handleShare = () => {
+    const dataUrl = canvasRef.current?.exportDataUrl();
+    if (!dataUrl) return;
+    tauriApi.shareImage(toBase64Payload(dataUrl), exportedFileName()).catch((err) => {
+      console.error("sharing failed", err);
+      showToast(t("editor.shareFailed"));
+    });
   };
 
   const handleSave = async () => {
@@ -256,6 +294,8 @@ export function EditorWindow() {
         onZoomToFit={() => canvasRef.current?.zoomToFit()}
         onCopy={handleCopy}
         onSave={handleSave}
+        onShare={handleShare}
+        onDragOut={handleDragOut}
       />
     </div>
   );

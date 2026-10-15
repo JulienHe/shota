@@ -1,6 +1,6 @@
 [package]
 name = "shota"
-version = "0.6.1"
+version = "0.7.0"
 description = "A Tauri App"
 authors = ["you"]
 edition = "2021"
@@ -38,6 +38,7 @@ xcap = "0.3"
 image = "0.25"
 base64 = "0.22"
 font-kit = "0.14"
+drag = "2.1.1"
 
 
 # Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration
@@ -67,4 +68,5 @@ tauri-plugin-single-instance = "2"
 tauri-plugin-updater = { version = "2", optional = true }
 
 [target.'cfg(windows)'.dependencies]
-windows = { version = "0.61", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Input_KeyboardAndMouse", "Win32_Graphics_Dwm", "Win32_Globalization", "Win32_System_Registry", "Win32_Storage_Packaging_Appx", "ApplicationModel", "Foundation"] }
+windows = { version = "0.61", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Input_KeyboardAndMouse", "Win32_Graphics_Dwm", "Win32_Globalization", "Win32_System_Registry", "Win32_Storage_Packaging_Appx", "ApplicationModel", "ApplicationModel_DataTransfer", "Foundation", "Foundation_Collections", "Storage", "Storage_Streams", "Win32_System_WinRT", "Win32_UI_Shell"] }
+windows-collections = "0.2"

@@ -48,7 +48,11 @@
     "copyFailed": "Copia non riuscita ~ riprova",
     "cropConfirm": "Ritaglia",
     "cropCancel": "Annulla",
-    "zoomToFit": "Adatta alla finestra"
+    "zoomToFit": "Adatta alla finestra",
+    "share": "Condividi…",
+    "dragOut": "Trascina l'immagine in un'altra app",
+    "dragFailed": "Impossibile avviare il trascinamento ~ riprova",
+    "shareFailed": "Impossibile aprire Condividi ~ riprova"
   },
   "background": {
     "white": "Bianco",

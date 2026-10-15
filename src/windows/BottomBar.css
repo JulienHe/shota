@@ -30,3 +30,7 @@
     border-top-color: #303136;
   }
 }
+
+.bottom-bar__drag {
+  cursor: grab;
+}

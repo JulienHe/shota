@@ -347,3 +347,23 @@ pub async fn open_image_file(app: AppHandle, path: String) -> Result<(), String>
 pub async fn open_clipboard_image(app: AppHandle) -> Result<bool, String> {
     crate::import::open_clipboard(&app)
 }
+
+/// Drags the edited image out of the editor into another app. Synchronous on
+/// purpose: Tauri runs those on the main thread, and the native drag loop has
+/// to run on the thread that owns the window. It returns when the drag ends.
+#[tauri::command]
+pub fn drag_image_out(window: tauri::WebviewWindow, png_base64: String, name: String) -> Result<(), String> {
+    crate::share_out::drag_out(&window, &png_base64, &name)
+}
+
+/// Opens the Windows Share sheet for the edited image. Async, so the main
+/// thread is free to raise the sheet (see `share_out::share`).
+#[tauri::command]
+pub async fn share_image(
+    app: AppHandle,
+    window: tauri::WebviewWindow,
+    png_base64: String,
+    name: String,
+) -> Result<(), String> {
+    crate::share_out::share(&app, &window, &png_base64, &name)
+}

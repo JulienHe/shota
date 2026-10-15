@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, Save } from "lucide-react";
+import { Copy, GripVertical, Save, Share2 } from "lucide-react";
 import { IconButton } from "../components/IconButton";
 import { Dropdown } from "../components/Dropdown";
 import "./BottomBar.css";
@@ -13,10 +13,13 @@ interface BottomBarProps {
   onZoomToFit: () => void;
   onCopy: () => void;
   onSave: () => void;
+  onShare: () => void;
+  /** Called on mouse down on the drag handle; starts a native drag of the image. */
+  onDragOut: () => void;
 }
 
 /** CleanShot-style status bar: zoom control bottom-left, Copy/Save bottom-right. */
-export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave }: BottomBarProps) {
+export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onShare, onDragOut }: BottomBarProps) {
   const [zoomOpen, setZoomOpen] = useState(false);
 
   return (
@@ -57,6 +60,19 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave }: B
       </Dropdown>
 
       <div className="bottom-bar__actions">
+        <button
+          type="button"
+          className="icon-button bottom-bar__drag"
+          title={t("editor.dragOut")}
+          aria-label={t("editor.dragOut")}
+          data-tauri-drag-region="false"
+          onMouseDown={(event) => {
+            if (event.button === 0) onDragOut();
+          }}
+        >
+          <GripVertical size={18} strokeWidth={2} />
+        </button>
+        <IconButton icon={Share2} label={t("editor.share")} onClick={onShare} />
         <IconButton icon={Copy} label={`${t("editor.copy")} (Ctrl+C)`} onClick={onCopy} />
         <IconButton icon={Save} label={`${t("editor.save")} (Ctrl+S)`} onClick={onSave} />
       </div>

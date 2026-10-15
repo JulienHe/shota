@@ -48,7 +48,11 @@
     "copyFailed": "コピーに失敗しました ~ もう一度お試しください",
     "cropConfirm": "切り抜く",
     "cropCancel": "キャンセル",
-    "zoomToFit": "ウィンドウに合わせる"
+    "zoomToFit": "ウィンドウに合わせる",
+    "share": "共有…",
+    "dragOut": "画像を別のアプリにドラッグ",
+    "dragFailed": "ドラッグを開始できませんでした ~ もう一度お試しください",
+    "shareFailed": "共有を開けませんでした ~ もう一度お試しください"
   },
   "background": {
     "white": "白",

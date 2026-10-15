@@ -10,6 +10,7 @@ mod hotkeys;
 mod i18n;
 mod import;
 mod printscreen;
+mod share_out;
 mod snapshot_hook;
 mod startup;
 mod state;
@@ -135,6 +136,8 @@ pub fn run() {
             commands::open_image_file,
             commands::open_clipboard_image,
             commands::is_store_install,
+            commands::drag_image_out,
+            commands::share_image,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
