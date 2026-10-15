@@ -3,6 +3,7 @@ use tauri::{AppHandle, Manager};
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 
 use crate::capture;
+use crate::snapshot_hook;
 use crate::state::AppState;
 use crate::windows::{open_capture_overlay, open_editor_with_history, toggle_history_window};
 
@@ -80,7 +81,7 @@ pub fn register_all(app: &AppHandle) {
     let shortcuts = app.state::<AppState>().shortcuts();
     for kind in ALL_KINDS {
         let accelerator = shortcuts.get(kind);
-        if app.global_shortcut().is_registered(accelerator) {
+        if is_held(app, kind, accelerator) {
             continue;
         }
         if let Err(err) = register_one(app, kind, accelerator) {
@@ -96,32 +97,50 @@ pub fn register_all(app: &AppHandle) {
 /// window, so the recorder would never see the keys at all.
 pub fn pause(app: &AppHandle) {
     let _ = app.global_shortcut().unregister_all();
+    snapshot_hook::clear();
+}
+
+/// Whether `accelerator` is already live for `kind`, by whichever mechanism
+/// serves it (see `snapshot_hook` for why Print Screen has its own).
+fn is_held(app: &AppHandle, kind: ShortcutKind, accelerator: &str) -> bool {
+    if snapshot_hook::modifiers_of(accelerator).is_some() {
+        return snapshot_hook::is_bound(kind);
+    }
+    app.global_shortcut().is_registered(accelerator)
+}
+
+/// What a shortcut does when pressed.
+pub fn fire(app: &AppHandle, kind: ShortcutKind) {
+    match kind {
+        ShortcutKind::Fullscreen => match capture::capture_fullscreen(None) {
+            Ok(image) => {
+                let _ = open_editor_with_history(app, image);
+            }
+            Err(err) => eprintln!("fullscreen capture failed: {err}"),
+        },
+        ShortcutKind::Area => {
+            if let Err(err) = open_capture_overlay(app) {
+                eprintln!("failed to open capture overlay: {err}");
+            }
+        }
+        ShortcutKind::History => {
+            if let Err(err) = toggle_history_window(app) {
+                eprintln!("failed to toggle history window: {err}");
+            }
+        }
+    }
 }
 
 fn register_one(app: &AppHandle, kind: ShortcutKind, accelerator: &str) -> Result<(), String> {
+    if let Some(mods) = snapshot_hook::modifiers_of(accelerator) {
+        snapshot_hook::bind(app, kind, mods);
+        return Ok(());
+    }
     let handler_app = app.clone();
     app.global_shortcut()
         .on_shortcut(accelerator, move |_app, _shortcut, event| {
-            if event.state() != ShortcutState::Pressed {
-                return;
-            }
-            match kind {
-                ShortcutKind::Fullscreen => match capture::capture_fullscreen(None) {
-                    Ok(image) => {
-                        let _ = open_editor_with_history(&handler_app, image);
-                    }
-                    Err(err) => eprintln!("fullscreen capture failed: {err}"),
-                },
-                ShortcutKind::Area => {
-                    if let Err(err) = open_capture_overlay(&handler_app) {
-                        eprintln!("failed to open capture overlay: {err}");
-                    }
-                }
-                ShortcutKind::History => {
-                    if let Err(err) = toggle_history_window(&handler_app) {
-                        eprintln!("failed to toggle history window: {err}");
-                    }
-                }
+            if event.state() == ShortcutState::Pressed {
+                fire(&handler_app, kind);
             }
         })
         .map_err(|e| e.to_string())
@@ -147,6 +166,7 @@ pub fn update_shortcut(app: &AppHandle, kind: ShortcutKind, accelerator: String)
 
     // May legitimately fail: while recording, everything is already paused.
     let _ = app.global_shortcut().unregister(previous.as_str());
+    snapshot_hook::unbind(kind);
 
     if let Err(err) = register_one(app, kind, &accelerator) {
         // Roll back so we don't leave the user with no shortcut registered at all.

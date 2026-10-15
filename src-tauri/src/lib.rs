@@ -10,6 +10,7 @@ mod hotkeys;
 mod i18n;
 mod import;
 mod printscreen;
+mod snapshot_hook;
 mod startup;
 mod state;
 mod theme;

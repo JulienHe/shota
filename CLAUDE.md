@@ -329,3 +329,23 @@ send it back, submit. Things that will bite if changed:
 Credentials live in the CLI's own store on the developer's machine, set with
 `msstore reconfigure`. Never read, log or commit them.
 
+
+## Print Screen goes through a keyboard hook, not RegisterHotKey
+
+Any shortcut whose key is Print Screen is served by `snapshot_hook.rs` (a `WH_KEYBOARD_LL`
+hook on its own thread), never `RegisterHotKey`. On Windows 11 the bare key can be consumed by
+the system after hooks run and before registered hotkeys fire, so `RegisterHotKey(VK_SNAPSHOT)`
+*succeeds*, logs nothing, and then never delivers ~ even with `PrintScreenKeyForSnippingEnabled`
+at 0. Measured with a probe: the hook saw press and release, a registered hotkey for the same key
+received nothing, and F9 / Alt+Print Screen worked normally through `RegisterHotKey`. The symptom
+was "Print Screen does nothing in the installed app" with no error anywhere.
+
+Consequences to keep:
+
+- `hotkeys::register_one` routes by `snapshot_hook::modifiers_of`. Don't also register the same
+  accelerator with the OS, or a press that does get through captures twice.
+- The hook callback only matches and hands off (`run_on_main_thread`); Windows drops a slow hook.
+- Other shortcuts stay on `RegisterHotKey`: a resident hook sees every keystroke on the machine.
+- To test without a physical key: `keybd_event` with VK 0x2C (plus Ctrl via 0x11) against
+  `tauri dev`. A registered-but-silent hotkey looks identical to a working one until you press it,
+  so check for the effect (a new history entry), not for a registration error.
