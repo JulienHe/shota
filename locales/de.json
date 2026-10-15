@@ -4,7 +4,9 @@
     "captureArea": "Bereich / Fenster aufnehmen",
     "settings": "Einstellungen…",
     "checkUpdates": "Nach Updates suchen…",
-    "quit": "Shota beenden"
+    "quit": "Shota beenden",
+    "openImage": "Bild öffnen…",
+    "openClipboard": "Aus Zwischenablage öffnen"
   },
   "updater": {
     "upToDateTitle": "Shota ist aktuell",
@@ -156,11 +158,23 @@
     "madeBy": "Entwickelt von {name}",
     "tokensBody": "Shota ist kostenlos, und zwar dauerhaft. Es entstand mit viel KI-Hilfe, und die wird in Tokens abgerechnet. Tokens sind also das, worum man ehrlicherweise bitten kann.",
     "tokensButton": "Ein paar Tokens spendieren",
-    "tokensFree": "Oder gib einen Stern auf GitHub, das ist kostenlos und hilft sehr"
+    "tokensFree": "Oder gib einen Stern auf GitHub, das ist kostenlos und hilft sehr",
+    "explorerMenu": "Mit Shota bearbeiten im Explorer",
+    "explorerMenuHint": "Fügt „Mit Shota bearbeiten“ zum Rechtsklickmenü von Bildern hinzu. Unter Windows 11 unter Weitere Optionen anzeigen."
   },
   "error": {
     "title": "Shota hat ein Problem festgestellt",
     "body": "In diesem Fenster ist etwas abgestürzt. Schließen und erneut aufnehmen behebt es meistens.",
     "close": "Fenster schließen"
+  },
+  "import": {
+    "dialogTitle": "Bild öffnen",
+    "filterName": "Bilder",
+    "failed": "Shota konnte dieses Bild nicht öffnen.",
+    "noClipboardImage": "Kein Bild in der Zwischenablage",
+    "notAnImage": "Diese Datei ist kein Bild, das Shota öffnen kann",
+    "dropHint": "Zum Öffnen in Shota ablegen",
+    "pasteAction": "Bild aus Zwischenablage öffnen",
+    "explorerVerb": "Mit Shota bearbeiten"
   }
 }

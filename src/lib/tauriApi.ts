@@ -40,6 +40,8 @@ export interface Preferences {
   /** Overrides only, keyed by editor action id. */
   editorShortcuts: Record<string, string>;
   canvasBackground: CanvasBackground;
+  /** "Edit with Shota" in Explorer. GitHub install only; see isStoreInstall. */
+  explorerMenu: boolean;
 }
 
 export interface StartupStatus {
@@ -88,6 +90,16 @@ export const tauriApi = {
   takeCaptureImage: (id: string) => invoke<ArrayBuffer>("take_capture_image", { id }),
 
   editorReady: () => invoke<void>("editor_ready"),
+
+  /** Opens an image file in the editor, like a new capture. */
+  openImageFile: (path: string) => invoke<void>("open_image_file", { path }),
+
+  /** Opens the clipboard's image. Resolves false when there isn't one. */
+  openClipboardImage: () => invoke<boolean>("open_clipboard_image"),
+
+  /** True for the Store build, where the Explorer menu is fixed by its
+   * manifest rather than being a setting. */
+  isStoreInstall: () => invoke<boolean>("is_store_install"),
 
   closeEditorWindow: () => invoke<void>("close_editor_window"),
 

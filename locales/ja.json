@@ -4,7 +4,9 @@
     "captureArea": "範囲 / ウィンドウをキャプチャ",
     "settings": "設定…",
     "checkUpdates": "更新を確認…",
-    "quit": "Shota を終了"
+    "quit": "Shota を終了",
+    "openImage": "画像を開く…",
+    "openClipboard": "クリップボードから開く"
   },
   "updater": {
     "upToDateTitle": "Shota は最新です",
@@ -156,11 +158,23 @@
     "madeBy": "制作: {name}",
     "tokensBody": "Shota はこれからもずっと無料です。開発には AI の力を大いに借りていて、その費用はトークン単位で請求されます。だから、お願いするならトークンが正直なところです。",
     "tokensButton": "トークンを差し入れる",
-    "tokensFree": "GitHub でスターを付けるだけでも、無料で大きな助けになります"
+    "tokensFree": "GitHub でスターを付けるだけでも、無料で大きな助けになります",
+    "explorerMenu": "エクスプローラーに「Shota で編集」を表示",
+    "explorerMenuHint": "画像の右クリックメニューに「Shota で編集」を追加します。Windows 11 では「その他のオプションを確認」の中にあります。"
   },
   "error": {
     "title": "Shota で問題が発生しました",
     "body": "このウィンドウで問題が発生しました。閉じてもう一度キャプチャすると解決することがほとんどです。",
     "close": "ウィンドウを閉じる"
+  },
+  "import": {
+    "dialogTitle": "画像を開く",
+    "filterName": "画像",
+    "failed": "この画像を開けませんでした。",
+    "noClipboardImage": "クリップボードに画像がありません",
+    "notAnImage": "Shota で開ける画像ファイルではありません",
+    "dropHint": "ドロップして Shota で開く",
+    "pasteAction": "クリップボードの画像を開く",
+    "explorerVerb": "Shota で編集"
   }
 }

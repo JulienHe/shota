@@ -36,7 +36,12 @@ pub struct StartupStatus {
 }
 
 #[cfg(windows)]
-pub use imp::{set, status};
+pub use imp::{is_packaged, set, status};
+
+#[cfg(not(windows))]
+pub fn is_packaged() -> bool {
+    false
+}
 
 #[cfg(not(windows))]
 pub fn status(_app: &tauri::AppHandle) -> StartupStatus {
@@ -67,7 +72,8 @@ mod imp {
     /// Where Task Manager records its own on/off switch for `Run` entries.
     const APPROVED_KEY: &str = "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run";
 
-    fn is_packaged() -> bool {
+    /// Whether this copy runs from an MSIX package (the Store build).
+    pub fn is_packaged() -> bool {
         let mut len = 0u32;
         let result = unsafe { GetCurrentPackageFullName(&mut len, None) };
         result != APPMODEL_ERROR_NO_PACKAGE

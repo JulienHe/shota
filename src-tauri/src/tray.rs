@@ -6,6 +6,7 @@ use tauri::{
 
 use crate::capture;
 use crate::i18n;
+use crate::import;
 use crate::state::AppState;
 #[cfg(feature = "updater")]
 use crate::updater;
@@ -40,6 +41,10 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     let capture_area = MenuItem::with_id(app, "capture_area", i18n::t(&locale, "tray.captureArea"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
+    let open_image = MenuItem::with_id(app, "open_image", i18n::t(&locale, "tray.openImage"), true, None::<&str>)
+        .map_err(|e| e.to_string())?;
+    let open_clipboard = MenuItem::with_id(app, "open_clipboard", i18n::t(&locale, "tray.openClipboard"), true, None::<&str>)
+        .map_err(|e| e.to_string())?;
     let settings = MenuItem::with_id(app, "settings", i18n::t(&locale, "tray.settings"), true, None::<&str>)
         .map_err(|e| e.to_string())?;
     // Absent entirely in a Store build: the Store owns updates there, so an
@@ -51,8 +56,9 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     let separator = PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?;
+    let separator_open = PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?;
     let mut items: Vec<&dyn tauri::menu::IsMenuItem<_>> =
-        vec![&capture_fullscreen, &capture_area, &separator, &settings];
+        vec![&capture_fullscreen, &capture_area, &separator, &open_image, &open_clipboard, &separator_open, &settings];
     #[cfg(feature = "updater")]
     items.push(&check_updates);
     let separator2 = PredefinedMenuItem::separator(app).map_err(|e| e.to_string())?;
@@ -86,6 +92,8 @@ pub fn build_tray(app: &AppHandle) -> Result<(), String> {
                     eprintln!("failed to open capture overlay: {err}");
                 }
             }
+            "open_image" => import::pick_and_open(app),
+            "open_clipboard" => import::open_clipboard_or_report(app),
             "settings" => {
                 if let Some(window) = app.get_webview_window("main") {
                     let _ = window.show();

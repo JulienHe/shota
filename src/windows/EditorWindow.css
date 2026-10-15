@@ -35,6 +35,27 @@
   z-index: 30;
 }
 
+.editor-window__drop {
+  position: absolute;
+  inset: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgba(59, 130, 246, 0.8);
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.12);
+  pointer-events: none;
+  z-index: 40;
+}
+
+.editor-window__drop span {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(20, 21, 26, 0.9);
+  color: #fff;
+  font-size: 13px;
+}
+
 @media (prefers-color-scheme: dark) {
   .editor-window {
     background: #1c1d22;

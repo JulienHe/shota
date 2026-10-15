@@ -2,11 +2,13 @@ mod backgrounds;
 mod capture;
 mod clipboard;
 mod commands;
+mod explorer;
 mod file_save;
 mod fonts;
 mod history;
 mod hotkeys;
 mod i18n;
+mod import;
 mod printscreen;
 mod startup;
 mod state;
@@ -21,6 +23,15 @@ use tauri::Manager;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
+        // First, as the plugin requires. A second launch (Explorer's "Edit
+        // with Shota", or just starting Shota again) hands its arguments to
+        // the copy already running and exits, instead of a second tray icon
+        // fighting the first over every global shortcut.
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            if let Some(path) = image_argument(&argv, std::path::Path::new(&cwd)) {
+                import::open_file_or_report(app, path);
+            }
+        }))
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_clipboard_manager::init())
@@ -51,6 +62,16 @@ pub fn run() {
             // trick ~ see prewarm_editor_window for why.
             windows::prewarm_capture_overlay(&handle);
             windows::prewarm_editor_window(&handle);
+            // Started from Explorer with an image: open it. The editor was
+            // just created above and picks the image up once it loads.
+            let argv: Vec<String> = std::env::args().collect();
+            if let Ok(cwd) = std::env::current_dir() {
+                if let Some(path) = image_argument(&argv, &cwd) {
+                    import::open_file_or_report(&handle, path);
+                }
+            }
+            let menu = handle.clone();
+            std::thread::spawn(move || explorer::apply(&menu));
             // Silent: a failed check at launch (no network, GitHub down)
             // should never greet someone with an error they didn't ask for.
             // The tray's "Check for Updates…" is the loud version.
@@ -110,7 +131,19 @@ pub fn run() {
             commands::clear_history,
             commands::history_ready,
             commands::close_history_window_command,
+            commands::open_image_file,
+            commands::open_clipboard_image,
+            commands::is_store_install,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+/// The image path in a command line, if there is one. Skips the program
+/// itself, and resolves a relative path against the launching directory.
+fn image_argument(argv: &[String], cwd: &std::path::Path) -> Option<std::path::PathBuf> {
+    argv.iter()
+        .skip(1)
+        .map(|arg| cwd.join(arg))
+        .find(|path| import::is_image_path(path) && path.is_file())
 }

@@ -4,7 +4,9 @@
     "captureArea": "Capturar área / janela",
     "settings": "Configurações…",
     "checkUpdates": "Procurar atualizações…",
-    "quit": "Sair do Shota"
+    "quit": "Sair do Shota",
+    "openImage": "Abrir imagem…",
+    "openClipboard": "Abrir da área de transferência"
   },
   "updater": {
     "upToDateTitle": "O Shota está atualizado",
@@ -156,11 +158,23 @@
     "madeBy": "Criado por {name}",
     "tokensBody": "O Shota é gratuito, para sempre. Ele foi feito com muita ajuda de IA, e essa ajuda é cobrada em tokens, então o justo é pedir tokens.",
     "tokensButton": "Contribuir com alguns tokens",
-    "tokensFree": "Ou dê uma estrela no GitHub, que é grátis e ajuda muito"
+    "tokensFree": "Ou dê uma estrela no GitHub, que é grátis e ajuda muito",
+    "explorerMenu": "Editar com o Shota no Explorador",
+    "explorerMenuHint": "Adiciona \"Editar com o Shota\" ao menu do botão direito nas imagens. No Windows 11 fica em Mostrar mais opções."
   },
   "error": {
     "title": "O Shota encontrou um problema",
     "body": "Algo nesta janela travou. Fechar e capturar novamente geralmente resolve.",
     "close": "Fechar janela"
+  },
+  "import": {
+    "dialogTitle": "Abrir imagem",
+    "filterName": "Imagens",
+    "failed": "O Shota não conseguiu abrir esta imagem.",
+    "noClipboardImage": "Não há imagem na área de transferência",
+    "notAnImage": "Esse arquivo não é uma imagem que o Shota consiga abrir",
+    "dropHint": "Solte para abrir no Shota",
+    "pasteAction": "Abrir imagem da área de transferência",
+    "explorerVerb": "Editar com o Shota"
   }
 }

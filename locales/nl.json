@@ -4,7 +4,9 @@
     "captureArea": "Gebied / venster vastleggen",
     "settings": "Instellingen…",
     "checkUpdates": "Controleren op updates…",
-    "quit": "Shota afsluiten"
+    "quit": "Shota afsluiten",
+    "openImage": "Afbeelding openen…",
+    "openClipboard": "Openen vanaf klembord"
   },
   "updater": {
     "upToDateTitle": "Shota is up-to-date",
@@ -156,11 +158,23 @@
     "madeBy": "Gemaakt door {name}",
     "tokensBody": "Shota is gratis, voorgoed. Het is gebouwd met veel hulp van AI, en die hulp wordt in tokens afgerekend. Tokens zijn dus het eerlijke om om te vragen.",
     "tokensButton": "Doneer wat tokens",
-    "tokensFree": "Of geef een ster op GitHub, dat is gratis en helpt echt"
+    "tokensFree": "Of geef een ster op GitHub, dat is gratis en helpt echt",
+    "explorerMenu": "Bewerken met Shota in Verkenner",
+    "explorerMenuHint": "Voegt \"Bewerken met Shota\" toe aan het rechtermuisknopmenu van afbeeldingen. In Windows 11 onder Meer opties weergeven."
   },
   "error": {
     "title": "Shota liep tegen een probleem aan",
     "body": "Er is iets vastgelopen in dit venster. Sluiten en opnieuw vastleggen lost het meestal op.",
     "close": "Venster sluiten"
+  },
+  "import": {
+    "dialogTitle": "Afbeelding openen",
+    "filterName": "Afbeeldingen",
+    "failed": "Shota kon deze afbeelding niet openen.",
+    "noClipboardImage": "Er staat geen afbeelding op het klembord",
+    "notAnImage": "Dat bestand is geen afbeelding die Shota kan openen",
+    "dropHint": "Loslaten om in Shota te openen",
+    "pasteAction": "Afbeelding van klembord openen",
+    "explorerVerb": "Bewerken met Shota"
   }
 }

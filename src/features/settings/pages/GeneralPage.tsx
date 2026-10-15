@@ -36,6 +36,7 @@ export function GeneralPage() {
   const [locales, setLocales] = useState<string[]>([]);
   const [startup, setStartup] = useState<StartupStatus | null>(null);
   const [startupError, setStartupError] = useState(false);
+  const [storeInstall, setStoreInstall] = useState<boolean | null>(null);
   const preferences = usePreferencesStore((s) => s.preferences);
   const update = usePreferencesStore((s) => s.update);
 
@@ -43,6 +44,7 @@ export function GeneralPage() {
     tauriApi.supportedLocales().then(setLocales).catch(() => setLocales([]));
     tauriApi.getLanguage().then(setLanguage).catch(() => setLanguage(null));
     tauriApi.getLaunchAtStartup().then(setStartup).catch(() => setStartup(null));
+    tauriApi.isStoreInstall().then(setStoreInstall).catch(() => setStoreInstall(null));
   }, []);
 
   const startupHint = startup?.blocked === "byUser"
@@ -98,6 +100,18 @@ export function GeneralPage() {
             }}
           />
         </SettingsRow>
+
+        {/* The Store build declares the menu in its manifest, where it can't
+            be switched off, so there's nothing to offer there. */}
+        {preferences && storeInstall === false && (
+          <SettingsRow label={t("settings.explorerMenu")} hint={t("settings.explorerMenuHint")}>
+            <Toggle
+              label={t("settings.explorerMenu")}
+              checked={preferences.explorerMenu}
+              onChange={(explorerMenu) => update({ explorerMenu })}
+            />
+          </SettingsRow>
+        )}
       </SettingsSection>
 
       {preferences && (

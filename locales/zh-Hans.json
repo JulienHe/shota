@@ -4,7 +4,9 @@
     "captureArea": "捕获区域 / 窗口",
     "settings": "设置…",
     "checkUpdates": "检查更新…",
-    "quit": "退出 Shota"
+    "quit": "退出 Shota",
+    "openImage": "打开图片…",
+    "openClipboard": "从剪贴板打开"
   },
   "updater": {
     "upToDateTitle": "Shota 已是最新版本",
@@ -156,11 +158,23 @@
     "madeBy": "作者：{name}",
     "tokensBody": "Shota 永久免费。它在 AI 的大量帮助下完成，而 AI 按 token 计费，所以请我吃点 token 是最实在的支持。",
     "tokensButton": "赞助一些 token",
-    "tokensFree": "或者在 GitHub 上点个星，免费又很有帮助"
+    "tokensFree": "或者在 GitHub 上点个星，免费又很有帮助",
+    "explorerMenu": "在资源管理器中显示“用 Shota 编辑”",
+    "explorerMenuHint": "在图片的右键菜单中添加“用 Shota 编辑”。在 Windows 11 中位于“显示更多选项”里。"
   },
   "error": {
     "title": "Shota 遇到问题",
     "body": "此窗口中的某项功能已崩溃。关闭后重新捕获通常可以解决。",
     "close": "关闭窗口"
+  },
+  "import": {
+    "dialogTitle": "打开图片",
+    "filterName": "图片",
+    "failed": "Shota 无法打开此图片。",
+    "noClipboardImage": "剪贴板中没有图片",
+    "notAnImage": "Shota 无法打开此文件",
+    "dropHint": "松开以在 Shota 中打开",
+    "pasteAction": "打开剪贴板中的图片",
+    "explorerVerb": "用 Shota 编辑"
   }
 }

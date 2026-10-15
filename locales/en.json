@@ -4,7 +4,9 @@
     "captureArea": "Capture Area / Window",
     "settings": "Settings…",
     "checkUpdates": "Check for Updates…",
-    "quit": "Quit Shota"
+    "quit": "Quit Shota",
+    "openImage": "Open Image…",
+    "openClipboard": "Open from Clipboard"
   },
   "updater": {
     "upToDateTitle": "Shota is up to date",
@@ -156,11 +158,23 @@
     "madeBy": "Made by {name}",
     "tokensBody": "Shota is free, for good. It was built with a lot of AI help, and AI help is billed in tokens, so tokens are the honest thing to ask for.",
     "tokensButton": "Chip in some tokens",
-    "tokensFree": "Or star it on GitHub, which is free and helps a lot"
+    "tokensFree": "Or star it on GitHub, which is free and helps a lot",
+    "explorerMenu": "Edit with Shota in Explorer",
+    "explorerMenuHint": "Adds \"Edit with Shota\" to the right-click menu on images. On Windows 11 it's under Show more options."
   },
   "error": {
     "title": "Shota hit a problem",
     "body": "Something in this window crashed. Closing and capturing again usually clears it.",
     "close": "Close window"
+  },
+  "import": {
+    "dialogTitle": "Open image",
+    "filterName": "Images",
+    "failed": "Shota couldn't open this image.",
+    "noClipboardImage": "There's no image on the clipboard",
+    "notAnImage": "That file isn't an image Shota can open",
+    "dropHint": "Drop to open in Shota",
+    "pasteAction": "Open image from clipboard",
+    "explorerVerb": "Edit with Shota"
   }
 }

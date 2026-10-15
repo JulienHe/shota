@@ -4,7 +4,9 @@
     "captureArea": "Cattura area / finestra",
     "settings": "Impostazioni…",
     "checkUpdates": "Verifica aggiornamenti…",
-    "quit": "Esci da Shota"
+    "quit": "Esci da Shota",
+    "openImage": "Apri immagine…",
+    "openClipboard": "Apri dagli appunti"
   },
   "updater": {
     "upToDateTitle": "Shota è aggiornato",
@@ -156,11 +158,23 @@
     "madeBy": "Creato da {name}",
     "tokensBody": "Shota è gratuito, per sempre. È stato costruito con molto aiuto dall'IA, che si paga in token: chiedere token è la cosa più onesta.",
     "tokensButton": "Offri qualche token",
-    "tokensFree": "Oppure lascia una stella su GitHub: è gratis e aiuta molto"
+    "tokensFree": "Oppure lascia una stella su GitHub: è gratis e aiuta molto",
+    "explorerMenu": "Modifica con Shota in Esplora file",
+    "explorerMenuHint": "Aggiunge «Modifica con Shota» al menu del tasto destro sulle immagini. In Windows 11 si trova in Mostra altre opzioni."
   },
   "error": {
     "title": "Shota ha riscontrato un problema",
     "body": "Qualcosa in questa finestra si è bloccato. Di solito basta chiudere e catturare di nuovo.",
     "close": "Chiudi finestra"
+  },
+  "import": {
+    "dialogTitle": "Apri immagine",
+    "filterName": "Immagini",
+    "failed": "Shota non è riuscito ad aprire questa immagine.",
+    "noClipboardImage": "Negli appunti non c'è nessuna immagine",
+    "notAnImage": "Questo file non è un'immagine che Shota può aprire",
+    "dropHint": "Rilascia per aprire in Shota",
+    "pasteAction": "Apri immagine dagli appunti",
+    "explorerVerb": "Modifica con Shota"
   }
 }

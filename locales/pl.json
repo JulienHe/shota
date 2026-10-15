@@ -4,7 +4,9 @@
     "captureArea": "Przechwyć obszar / okno",
     "settings": "Ustawienia…",
     "checkUpdates": "Sprawdź aktualizacje…",
-    "quit": "Zamknij Shota"
+    "quit": "Zamknij Shota",
+    "openImage": "Otwórz obraz…",
+    "openClipboard": "Otwórz ze schowka"
   },
   "updater": {
     "upToDateTitle": "Shota jest aktualna",
@@ -156,11 +158,23 @@
     "madeBy": "Autor: {name}",
     "tokensBody": "Shota jest darmowa i taka zostanie. Powstała przy dużej pomocy AI, a za tę pomoc płaci się tokenami, więc uczciwie jest prosić właśnie o tokeny.",
     "tokensButton": "Dorzuć trochę tokenów",
-    "tokensFree": "Albo daj gwiazdkę na GitHubie, to nic nie kosztuje i bardzo pomaga"
+    "tokensFree": "Albo daj gwiazdkę na GitHubie, to nic nie kosztuje i bardzo pomaga",
+    "explorerMenu": "Edytuj w Shota w Eksploratorze",
+    "explorerMenuHint": "Dodaje „Edytuj w Shota” do menu prawego przycisku na obrazach. W Windows 11 jest w Pokaż więcej opcji."
   },
   "error": {
     "title": "Shota napotkała problem",
     "body": "Coś w tym oknie uległo awarii. Zamknięcie i ponowne przechwycenie zwykle pomaga.",
     "close": "Zamknij okno"
+  },
+  "import": {
+    "dialogTitle": "Otwórz obraz",
+    "filterName": "Obrazy",
+    "failed": "Shota nie mogła otworzyć tego obrazu.",
+    "noClipboardImage": "W schowku nie ma obrazu",
+    "notAnImage": "Ten plik nie jest obrazem, który Shota może otworzyć",
+    "dropHint": "Upuść, aby otworzyć w Shota",
+    "pasteAction": "Otwórz obraz ze schowka",
+    "explorerVerb": "Edytuj w Shota"
   }
 }

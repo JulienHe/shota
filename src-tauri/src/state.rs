@@ -115,6 +115,10 @@ pub struct Preferences {
     /// The editor's workspace colour behind the capture, picked from the
     /// canvas's right-click menu.
     pub canvas_background: String,
+    /// "Edit with Shota" on images in Explorer's right-click menu. Only the
+    /// GitHub install writes it (to the registry, see explorer.rs); the
+    /// Store build declares it in its manifest, where it can't be toggled.
+    pub explorer_menu: bool,
 }
 
 impl Default for Preferences {
@@ -130,6 +134,7 @@ impl Default for Preferences {
             history_max_age_days: None,
             editor_shortcuts: BTreeMap::new(),
             canvas_background: "white".to_string(),
+            explorer_menu: true,
         }
     }
 }

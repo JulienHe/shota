@@ -64,6 +64,11 @@ pub fn set_preferences(app: AppHandle, preferences: Preferences) -> Result<Prefe
         });
     }
 
+    if previous.explorer_menu != next.explorer_menu {
+        let handle = app.clone();
+        std::thread::spawn(move || crate::explorer::apply(&handle));
+    }
+
     let _ = app.emit("shota://preferences-changed", &next);
     Ok(next)
 }
@@ -87,6 +92,13 @@ pub async fn history_usage(app: AppHandle) -> Result<history::HistoryUsage, Stri
 
 /// Whether Windows is holding Print Screen for the Snipping Tool, which
 /// would swallow Shota's default capture shortcut before it ever arrives.
+/// Whether this copy runs from the Store package, where some settings (the
+/// Explorer menu) are fixed by the manifest instead of being toggleable.
+#[tauri::command]
+pub fn is_store_install() -> bool {
+    crate::startup::is_packaged()
+}
+
 #[tauri::command]
 pub fn print_screen_owned_by_snipping_tool() -> bool {
     crate::printscreen::owned_by_snipping_tool()
@@ -108,7 +120,11 @@ pub fn get_locale(app: AppHandle) -> String {
 /// `None` means follow Windows.
 #[tauri::command]
 pub fn set_language(app: AppHandle, language: Option<String>) -> Result<(), String> {
-    app.state::<AppState>().set_language(&app, language)
+    app.state::<AppState>().set_language(&app, language)?;
+    // The Explorer menu's label is in the UI language too.
+    let handle = app.clone();
+    std::thread::spawn(move || crate::explorer::apply(&handle));
+    Ok(())
 }
 
 #[tauri::command]
@@ -317,4 +333,17 @@ pub async fn desktop_wallpaper() -> Result<tauri::ipc::Response, String> {
 #[tauri::command]
 pub async fn read_background_image(path: String) -> Result<tauri::ipc::Response, String> {
     crate::backgrounds::read_image(&path).map(tauri::ipc::Response::new)
+}
+
+/// A file dropped on the editor. Async: converting a large JPEG to PNG is
+/// real work, and the main thread is what keeps every window responsive.
+#[tauri::command]
+pub async fn open_image_file(app: AppHandle, path: String) -> Result<(), String> {
+    crate::import::open_file(&app, std::path::Path::new(&path))
+}
+
+/// The editor's paste shortcut. `false` when the clipboard holds no image.
+#[tauri::command]
+pub async fn open_clipboard_image(app: AppHandle) -> Result<bool, String> {
+    crate::import::open_clipboard(&app)
 }

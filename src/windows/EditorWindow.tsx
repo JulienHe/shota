@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getCurrentWebview } from "@tauri-apps/api/webview";
 
 import { TitleBar } from "./TitleBar";
 import { BottomBar } from "./BottomBar";
@@ -14,11 +15,14 @@ import { t } from "../lib/i18n";
 import { tauriApi, toBase64Payload, PendingCapture } from "../lib/tauriApi";
 import { primeImageCache } from "../lib/useImage";
 import { afterNextPaint } from "../lib/windowChrome";
-import { closeEditor } from "../lib/editorClose";
+import { closeEditor, persistDocument } from "../lib/editorClose";
 import { parseDocument, serializeDocument } from "../features/background/frame";
 import { BackgroundPanel } from "../features/background/BackgroundPanel";
 import { useToolStore } from "../stores/toolStore";
 import "./EditorWindow.css";
+
+/** Matches import::IMAGE_EXTENSIONS on the Rust side. */
+const IMAGE_FILE = /\.(png|jpe?g|webp|bmp|gif|tiff?|ico)$/i;
 
 export function EditorWindow() {
   const canvasRef = useRef<CanvasHandle>(null);
@@ -36,6 +40,7 @@ export function EditorWindow() {
   const clearToast = useToastStore((s) => s.clear);
   const [zoom, setZoom] = useState(1);
   const backgroundPanelOpen = useToolStore((s) => s.activeTool === "background");
+  const [dropping, setDropping] = useState(false);
 
   useEffect(() => {
     const applyCapture = async (capture: PendingCapture) => {
@@ -54,6 +59,9 @@ export function EditorWindow() {
         // second time, which is what was delaying the image behind the
         // toolbar/footer instead of them appearing together.
         primeImageCache(url, img);
+
+        // Whatever was open is about to be replaced; keep what was drawn on it.
+        if (useDocumentStore.getState().historyId !== capture.history_id) persistDocument();
 
         const saved = parseDocument(capture.shapes_json);
 
@@ -100,6 +108,33 @@ export function EditorWindow() {
       unlisten.then((fn) => fn());
     };
   }, [loadImage, replaceImage, setHistoryId]);
+
+  // Dropping an image file on the editor opens it, as if it had just been
+  // captured. Tauri delivers the drop natively (with real paths), so the
+  // page's own drag and drop events never fire for files.
+  useEffect(() => {
+    const unlisten = getCurrentWebview().onDragDropEvent((event) => {
+      const { type } = event.payload;
+      if (type === "enter" || type === "over") {
+        setDropping(true);
+        return;
+      }
+      setDropping(false);
+      if (type !== "drop") return;
+      const path = event.payload.paths.find((p) => IMAGE_FILE.test(p));
+      if (!path) {
+        if (event.payload.paths.length > 0) useToastStore.getState().show(t("import.notAnImage"));
+        return;
+      }
+      tauriApi.openImageFile(path).catch((err) => {
+        console.error("opening the dropped image failed", err);
+        useToastStore.getState().show(t("import.failed"));
+      });
+    });
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, []);
 
   // Safety net for a close path that isn't Copy/Save/the title bar's X
   // (all of which already persist annotations via `closeEditor` before
@@ -180,7 +215,19 @@ export function EditorWindow() {
     }
   };
 
-  useEditorShortcuts({ copy: handleCopy, save: handleSave, undo, redo });
+  const handlePaste = () => {
+    tauriApi
+      .openClipboardImage()
+      .then((opened) => {
+        if (!opened) showToast(t("import.noClipboardImage"));
+      })
+      .catch((err) => {
+        console.error("opening the clipboard image failed", err);
+        showToast(t("import.failed"));
+      });
+  };
+
+  useEditorShortcuts({ copy: handleCopy, save: handleSave, paste: handlePaste, undo, redo });
 
   // Rendering the title bar/footer chrome before the image has decoded was
   // exactly the "window appears, then toolbar, then image" staggered
@@ -196,6 +243,11 @@ export function EditorWindow() {
         <div className="editor-window__canvas-area">
           <Canvas ref={canvasRef} onZoomChange={setZoom} />
           {toast && <div className="editor-window__toast">{toast}</div>}
+          {dropping && (
+            <div className="editor-window__drop">
+              <span>{t("import.dropHint")}</span>
+            </div>
+          )}
         </div>
       </div>
       <BottomBar

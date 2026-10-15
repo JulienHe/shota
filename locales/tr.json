@@ -4,7 +4,9 @@
     "captureArea": "Alanı / pencereyi yakala",
     "settings": "Ayarlar…",
     "checkUpdates": "Güncellemeleri denetle…",
-    "quit": "Shota'dan çık"
+    "quit": "Shota'dan çık",
+    "openImage": "Görüntü Aç…",
+    "openClipboard": "Panodan Aç"
   },
   "updater": {
     "upToDateTitle": "Shota güncel",
@@ -156,11 +158,23 @@
     "madeBy": "Geliştiren: {name}",
     "tokensBody": "Shota ücretsizdir ve öyle kalacak. Bolca yapay zekâ yardımıyla yapıldı ve bu yardım token ile ücretlendiriliyor; o yüzden dürüst olan token istemek.",
     "tokensButton": "Biraz token ısmarla",
-    "tokensFree": "Ya da GitHub'da yıldız ver; ücretsiz ve çok işe yarıyor"
+    "tokensFree": "Ya da GitHub'da yıldız ver; ücretsiz ve çok işe yarıyor",
+    "explorerMenu": "Gezgin'de Shota ile düzenle",
+    "explorerMenuHint": "Görüntülerin sağ tık menüsüne \"Shota ile düzenle\" ekler. Windows 11'de Diğer seçenekleri göster altındadır."
   },
   "error": {
     "title": "Shota bir sorunla karşılaştı",
     "body": "Bu pencerede bir şey çöktü. Kapatıp yeniden yakalamak genellikle sorunu giderir.",
     "close": "Pencereyi kapat"
+  },
+  "import": {
+    "dialogTitle": "Görüntü aç",
+    "filterName": "Görüntüler",
+    "failed": "Shota bu görüntüyü açamadı.",
+    "noClipboardImage": "Panoda görüntü yok",
+    "notAnImage": "Bu dosya Shota'nın açabileceği bir görüntü değil",
+    "dropHint": "Shota'da açmak için bırakın",
+    "pasteAction": "Panodaki görüntüyü aç",
+    "explorerVerb": "Shota ile düzenle"
   }
 }

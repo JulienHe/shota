@@ -20,6 +20,17 @@ import { serializeDocument } from "../features/background/frame";
  * shipping them back was tens of megabytes of base64 per close for nothing.
  */
 export function closeEditor() {
+  persistDocument();
+  tauriApi.closeEditorWindow();
+}
+
+/**
+ * Saves the open document's annotations to its history entry, without
+ * waiting. Also run before another image replaces the open one (a paste, a
+ * drop, a capture while the editor is up), which otherwise discarded
+ * whatever had been drawn on it.
+ */
+export function persistDocument() {
   const { historyId, image, shapes, frame, imageWidth, imageHeight } = useDocumentStore.getState();
   if (historyId && image) {
     tauriApi
@@ -28,5 +39,4 @@ export function closeEditor() {
         console.error("failed to save history annotations", err);
       });
   }
-  tauriApi.closeEditorWindow();
 }

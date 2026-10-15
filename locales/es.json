@@ -4,7 +4,9 @@
     "captureArea": "Capturar área / ventana",
     "settings": "Ajustes…",
     "checkUpdates": "Buscar actualizaciones…",
-    "quit": "Salir de Shota"
+    "quit": "Salir de Shota",
+    "openImage": "Abrir imagen…",
+    "openClipboard": "Abrir desde el portapapeles"
   },
   "updater": {
     "upToDateTitle": "Shota está actualizado",
@@ -156,11 +158,23 @@
     "madeBy": "Creado por {name}",
     "tokensBody": "Shota es gratis, para siempre. Se hizo con mucha ayuda de IA, y esa ayuda se paga en tokens, así que lo honesto es pedir tokens.",
     "tokensButton": "Aportar unos tokens",
-    "tokensFree": "O dale una estrella en GitHub, que es gratis y ayuda mucho"
+    "tokensFree": "O dale una estrella en GitHub, que es gratis y ayuda mucho",
+    "explorerMenu": "Editar con Shota en el Explorador",
+    "explorerMenuHint": "Añade «Editar con Shota» al menú contextual de las imágenes. En Windows 11 está en Mostrar más opciones."
   },
   "error": {
     "title": "Shota ha encontrado un problema",
     "body": "Algo en esta ventana ha fallado. Cerrarla y volver a capturar suele solucionarlo.",
     "close": "Cerrar ventana"
+  },
+  "import": {
+    "dialogTitle": "Abrir imagen",
+    "filterName": "Imágenes",
+    "failed": "Shota no pudo abrir esta imagen.",
+    "noClipboardImage": "No hay ninguna imagen en el portapapeles",
+    "notAnImage": "Ese archivo no es una imagen que Shota pueda abrir",
+    "dropHint": "Suelta para abrir en Shota",
+    "pasteAction": "Abrir imagen del portapapeles",
+    "explorerVerb": "Editar con Shota"
   }
 }

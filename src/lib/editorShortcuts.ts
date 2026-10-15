@@ -30,6 +30,7 @@ export const EDITOR_ACTIONS = [
   { id: "tool.eyedropper", label: "tools.eyedropper", default: "I" },
   { id: "tool.background", label: "background.title", default: "F" },
   { id: "copy", label: "editor.copy", default: "Ctrl+C" },
+  { id: "paste", label: "import.pasteAction", default: "Ctrl+V" },
   { id: "save", label: "settings.actionSave", default: "Ctrl+S" },
   { id: "undo", label: "settings.actionUndo", default: "Ctrl+Z" },
   { id: "redo", label: "settings.actionRedo", default: "Ctrl+Shift+Z" },
