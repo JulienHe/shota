@@ -9,7 +9,8 @@ polish, translations and dependencies; minors (0.x.0) are features. 0.9 is follo
 | Version | Theme | What's in it |
 |---|---|---|
 | 0.6.1 | Fixes | New captures start plain; full screen captures the monitor under the cursor |
-| 0.6.2 | Multi-monitor | Selections across monitors, mixed DPI, safer pixelate, first automated tests |
+| 0.7.1 | Fixes | Print Screen opens the capture on the first press |
+| 0.7.2 | Multi-monitor | Selections across monitors, mixed DPI, safer pixelate, first automated tests |
 | 0.7.0 | In and out | Drag the result into other apps, open/paste/drop any image to edit, "Edit with Shota", Windows Share. The "after capture" setting did not make it in; Print Screen is now served by a keyboard hook (Windows 11 was swallowing it) |
 | 0.8.0 | Precise capture | Freeze the screen while selecting, magnifier and crosshair, previous area, self-timer, cursor in capture, crop to aspect ratios |
 | 0.9.0 | Text and pins | Copy text from an area (Windows OCR), QR codes, pin a screenshot above other windows |
