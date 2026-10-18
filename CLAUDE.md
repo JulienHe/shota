@@ -332,20 +332,38 @@ Credentials live in the CLI's own store on the developer's machine, set with
 
 ## Print Screen goes through a keyboard hook, not RegisterHotKey
 
-Any shortcut whose key is Print Screen is served by `snapshot_hook.rs` (a `WH_KEYBOARD_LL`
-hook on its own thread), never `RegisterHotKey`. On Windows 11 the bare key can be consumed by
-the system after hooks run and before registered hotkeys fire, so `RegisterHotKey(VK_SNAPSHOT)`
-*succeeds*, logs nothing, and then never delivers ~ even with `PrintScreenKeyForSnippingEnabled`
-at 0. Measured with a probe: the hook saw press and release, a registered hotkey for the same key
-received nothing, and F9 / Alt+Print Screen worked normally through `RegisterHotKey`. The symptom
-was "Print Screen does nothing in the installed app" with no error anywhere.
+Any shortcut whose key is Print Screen is served by `snapshot_hook.rs` (a `WH_KEYBOARD_LL` hook on its
+own thread), never `RegisterHotKey`. On Windows 11 the bare key can be consumed by the system after hooks
+run and before registered hotkeys fire, so `RegisterHotKey(VK_SNAPSHOT)` *succeeds*, logs nothing, and then
+never delivers ~ even with `PrintScreenKeyForSnippingEnabled` at 0. The symptom was "Print Screen does
+nothing in the installed app" with no error anywhere.
 
-Consequences to keep:
+Getting it to *feel* reliable took four separate fixes, each of which looked like "I have to press it twice":
 
-- `hotkeys::register_one` routes by `snapshot_hook::modifiers_of`. Don't also register the same
-  accelerator with the OS, or a press that does get through captures twice.
+- **Fire on either half of a press.** Print Screen does not reliably deliver both halves: some presses arrive
+  as a key-down with no key-up, some as a key-up with no key-down. Acting only on key-down lost the second
+  kind. `handle_half` fires on whichever half arrives first and treats the other half, within 700 ms, as the
+  same press.
+- **Re-install the hook on a timer.** Other software (anti-cheat, input utilities) installs hooks of its own;
+  the newest is called first and can consume the key before ours hears of it.
+- **Take the foreground when opening the overlay.** The hook swallows the key, so Windows never counts it as
+  input to Shota and refuses to let the overlay take focus; it appeared with the keyboard elsewhere and Esc
+  did nothing. `fire` joins the foreground thread's input queue (`AttachThreadInput`) and sets the
+  foreground explicitly. `set_focus` alone is queued to the event loop, after the attachment is undone.
+- **Give the foreground back when a Shota window is hidden.** The overlay and editor are *cloaked*, not
+  hidden, and Windows doesn't treat a cloaked window as gone: it keeps the foreground. Close the editor with
+  Copy and the next keystroke, including Print Screen, went to an invisible window until something else was
+  clicked. `remember_foreground` / `restore_foreground` in `windows/mod.rs` return focus to the last other-app
+  window, and only when Shota still holds it.
+
+Other things to keep:
+
+- `hotkeys::register_one` routes by `snapshot_hook::modifiers_of`. Don't also register the same accelerator
+  with the OS, or a press that does get through captures twice.
 - The hook callback only matches and hands off (`run_on_main_thread`); Windows drops a slow hook.
 - Other shortcuts stay on `RegisterHotKey`: a resident hook sees every keystroke on the machine.
-- To test without a physical key: `keybd_event` with VK 0x2C (plus Ctrl via 0x11) against
-  `tauri dev`. A registered-but-silent hotkey looks identical to a working one until you press it,
-  so check for the effect (a new history entry), not for a registration error.
+- **Simulated keystrokes (`keybd_event`) are not trustworthy for testing here.** On a machine with
+  anti-cheat (Vanguard) and input utilities they were dropped or altered inconsistently, and led down several
+  wrong paths. The decisive evidence came from a probe hook logging *real* presses beside Shota's own log.
+  A registered-but-silent hotkey looks identical to a working one until you press it, so check for the
+  effect, not for a registration error.

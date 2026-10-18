@@ -14,6 +14,16 @@
 //! capture twice. The hook swallows a matching press so the Snipping Tool
 //! doesn't open over Shota's own overlay.
 //!
+//! Two more things about this key were learned the hard way, both of which
+//! looked like "I have to press it twice":
+//!
+//! - Print Screen doesn't reliably deliver both halves of a press. Some arrive
+//!   as a key-down with no key-up, some as a key-up with no key-down. See
+//!   `handle_half`: a press fires on whichever half arrives first.
+//! - Other software installs and re-installs its own keyboard hooks, newest
+//!   first in line, and can consume the key before this one hears of it. The
+//!   hook is re-installed on a timer to stay at the front.
+//!
 //! Everything else keeps using `RegisterHotKey`: it needs no resident hook
 //! and no thread, and a hook sits in the path of every keystroke on the
 //! machine, so it should do as little as it can get away with.
@@ -51,7 +61,8 @@ pub fn is_bound(_kind: ShortcutKind) -> bool {
 
 #[cfg(windows)]
 mod imp {
-    use std::sync::atomic::{AtomicBool, Ordering};
+    use std::sync::atomic::{AtomicU64, Ordering};
+    use std::time::Instant;
     use std::sync::{Mutex, Once, OnceLock};
 
     use tauri::AppHandle;
@@ -63,20 +74,23 @@ mod imp {
         VK_SNAPSHOT,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
-        BringWindowToTop, CallNextHookEx, DispatchMessageW, GetForegroundWindow, GetMessageW,
+        BringWindowToTop, CallNextHookEx, DispatchMessageW, GetForegroundWindow, GetMessageW, SetTimer, UnhookWindowsHookEx, WM_TIMER,
         GetWindowThreadProcessId, SetForegroundWindow, SetWindowsHookExW, TranslateMessage,
         KBDLLHOOKSTRUCT, MSG, WH_KEYBOARD_LL, WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
     };
 
     use crate::hotkeys::{self, ShortcutKind};
 
+    const REINSTALL_EVERY_MS: u32 = 250;
+
     /// One slot per kind, in `ShortcutKind` declaration order.
     static BINDINGS: Mutex<[Option<Modifiers>; 3]> = Mutex::new([None; 3]);
     static APP: OnceLock<AppHandle> = OnceLock::new();
     static STARTED: Once = Once::new();
-    /// Set from a swallowed press until its release, so the release is
-    /// swallowed too even if the modifiers were let go first.
-    static SWALLOWING: AtomicBool = AtomicBool::new(false);
+    /// When the last handled half of a press arrived, in `now_ms` terms.
+    static PRESS_AT: AtomicU64 = AtomicU64::new(0);
+    /// Halves this close together belong to one press (or key repeat).
+    const SAME_PRESS_MS: u64 = 700;
 
     fn slot(kind: ShortcutKind) -> usize {
         match kind {
@@ -115,14 +129,29 @@ mod imp {
     fn run_hook_thread() {
         // A low-level hook is called on the thread that installed it, through
         // that thread's message loop, so the thread has to pump messages.
-        let hook = unsafe { SetWindowsHookExW(WH_KEYBOARD_LL, Some(hook_proc), None, 0) };
-        if let Err(err) = hook {
-            eprintln!("could not install the Print Screen hook: {err}");
-            return;
-        }
+        let mut hook = match unsafe { SetWindowsHookExW(WH_KEYBOARD_LL, Some(hook_proc), None, 0) } {
+            Ok(hook) => hook,
+            Err(err) => {
+                eprintln!("could not install the Print Screen hook: {err}");
+                return;
+            }
+        };
         let mut msg = MSG::default();
         unsafe {
+            // Hooks are called newest first, and other software on the machine
+            // (anti-cheat, input utilities) installs and re-installs its own
+            // while running. One installed after ours sees the key first and
+            // can consume it, after which this hook never hears of the press.
+            // Re-installing on a timer keeps ours at the front of the line.
+            SetTimer(None, 1, REINSTALL_EVERY_MS, None);
             while GetMessageW(&mut msg, None, 0, 0).as_bool() {
+                if msg.message == WM_TIMER {
+                    if let Ok(fresh) = SetWindowsHookExW(WH_KEYBOARD_LL, Some(hook_proc), None, 0) {
+                        let _ = UnhookWindowsHookEx(hook);
+                        hook = fresh;
+                    }
+                    continue;
+                }
                 let _ = TranslateMessage(&msg);
                 DispatchMessageW(&msg);
             }
@@ -150,28 +179,50 @@ mod imp {
         mods
     }
 
+    fn find_binding(held: Modifiers) -> Option<usize> {
+        BINDINGS.lock().unwrap().iter().position(|bound| *bound == Some(held))
+    }
+
+    fn now_ms() -> u64 {
+        static START: OnceLock<Instant> = OnceLock::new();
+        START.get_or_init(Instant::now).elapsed().as_millis() as u64
+    }
+
+    /// Print Screen does not reliably send both halves of a press. Measured on a
+    /// real keyboard, some presses arrive as a key-down with no key-up, and
+    /// some as a key-up with no key-down (the system eats the other half), so
+    /// acting only on the key-down missed those presses and the user had to
+    /// press again. A press now fires on whichever half arrives first, and the
+    /// other half, if it comes, is recognised as belonging to it.
+    ///
+    /// `PRESS_AT` is when the last handled half arrived (0 for none). A half
+    /// arriving within `SAME_PRESS_MS` of it is the same press, or key repeat;
+    /// anything later is a new press, whichever half it is.
+    fn handle_half(is_down: bool, held: Modifiers) -> bool {
+        let Some(index) = find_binding(held) else {
+            return false;
+        };
+        let now = now_ms() + 1; // never 0, which means "no press yet"
+        let last = PRESS_AT.load(Ordering::SeqCst);
+        let same_press = last != 0 && now.saturating_sub(last) < SAME_PRESS_MS;
+        if !same_press {
+            fire(kind_at(index));
+        }
+        // A key-down that starts a press keeps the window open for its key-up.
+        // A key-up that starts one (its down was eaten) closes it: nothing
+        // more is coming.
+        PRESS_AT.store(if is_down || same_press { now } else { 0 }, Ordering::SeqCst);
+        true
+    }
+
     unsafe extern "system" fn hook_proc(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
         if code >= 0 {
             let key = &*(lparam.0 as *const KBDLLHOOKSTRUCT);
             if key.vkCode == VK_SNAPSHOT.0 as u32 {
                 let message = wparam.0 as u32;
-                if message == WM_KEYDOWN || message == WM_SYSKEYDOWN {
-                    let held = held_modifiers();
-                    let matched = BINDINGS
-                        .lock()
-                        .unwrap()
-                        .iter()
-                        .position(|bound| *bound == Some(held));
-                    if let Some(index) = matched {
-                        // Key repeat sends further presses; only the first fires.
-                        if !SWALLOWING.swap(true, Ordering::SeqCst) {
-                            fire(kind_at(index));
-                        }
-                        return LRESULT(1);
-                    }
-                } else if (message == WM_KEYUP || message == WM_SYSKEYUP)
-                    && SWALLOWING.swap(false, Ordering::SeqCst)
-                {
+                let is_down = message == WM_KEYDOWN || message == WM_SYSKEYDOWN;
+                let is_up = message == WM_KEYUP || message == WM_SYSKEYUP;
+                if (is_down || is_up) && handle_half(is_down, held_modifiers()) {
                     return LRESULT(1);
                 }
             }

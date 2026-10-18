@@ -8,7 +8,7 @@ use crate::hotkeys::{self, ShortcutKind, Shortcuts};
 use crate::state::{AppState, ImageFormat, PendingCapture, Preferences};
 use crate::startup::{self, StartupStatus};
 use crate::windows::{
-    close_history_window, hide_capture_overlay, hide_editor_window, open_capture_overlay,
+    cancel_capture_overlay, close_history_window, hide_capture_overlay, hide_editor_window, open_capture_overlay,
     open_editor_from_history, open_editor_with_history, show_capture_overlay, show_editor_window,
     show_history_window,
 };
@@ -186,7 +186,7 @@ pub async fn finish_window_capture(app: AppHandle, window_id: u32) -> Result<(),
 
 #[tauri::command]
 pub async fn cancel_capture(app: AppHandle) -> Result<(), String> {
-    hide_capture_overlay(&app)
+    cancel_capture_overlay(&app)
 }
 
 #[tauri::command]

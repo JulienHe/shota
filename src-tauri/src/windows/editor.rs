@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use tauri::{AppHandle, Emitter, Manager, WebviewUrl, WebviewWindowBuilder};
 
-use super::cloak_window;
+use super::{cloak_window, remember_foreground, restore_foreground};
 use crate::history;
 use crate::state::{AppState, PendingCapture};
 
@@ -164,6 +164,8 @@ pub fn hide_editor_window(app: &AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_webview_window(EDITOR_LABEL) {
         cloak_window(&window, true);
         window.set_skip_taskbar(true).map_err(|e| e.to_string())?;
+        // The cloaked editor would otherwise keep the foreground.
+        restore_foreground();
     }
     Ok(())
 }
@@ -173,6 +175,7 @@ pub fn hide_editor_window(app: &AppHandle) -> Result<(), String> {
 /// `open_editor_window`'s reuse branch.
 pub fn show_editor_window(app: &AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_webview_window(EDITOR_LABEL) {
+        remember_foreground();
         cloak_window(&window, false);
         // No-op past the very first reveal (already false by then), so
         // it's simplest to just always call it here rather than track

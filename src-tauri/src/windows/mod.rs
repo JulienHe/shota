@@ -7,7 +7,7 @@ pub use editor::{
     show_editor_window,
 };
 pub use history::{close_history_window, show_history_window, toggle_history_window};
-pub use overlay::{hide_capture_overlay, open_capture_overlay, prewarm_capture_overlay, show_capture_overlay};
+pub use overlay::{cancel_capture_overlay, hide_capture_overlay, open_capture_overlay, prewarm_capture_overlay, show_capture_overlay};
 
 use tauri::{AppHandle, LogicalPosition, LogicalSize, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
@@ -178,6 +178,77 @@ pub(super) fn exclude_from_capture(window: &WebviewWindow) {
         let _ = unsafe { SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE) };
     }
 }
+
+/// The last window of another app to hold the foreground before one of
+/// Shota's windows took it, so closing Shota's window can hand it back.
+/// Cloaking hides a window without telling Windows it went away, so a cloaked
+/// overlay or editor *keeps* the foreground: the app the user was in is left
+/// unfocused behind an invisible window, and the next keystroke (including the
+/// capture shortcut) goes nowhere until something else is clicked.
+#[cfg(windows)]
+static PREVIOUS_FOREGROUND: std::sync::atomic::AtomicIsize = std::sync::atomic::AtomicIsize::new(0);
+
+/// Whether `hwnd` belongs to this process.
+#[cfg(windows)]
+fn is_ours(hwnd: windows::Win32::Foundation::HWND) -> bool {
+    use windows::Win32::System::Threading::GetCurrentProcessId;
+    use windows::Win32::UI::WindowsAndMessaging::GetWindowThreadProcessId;
+
+    let mut pid = 0u32;
+    unsafe { GetWindowThreadProcessId(hwnd, Some(&mut pid)) };
+    pid == unsafe { GetCurrentProcessId() }
+}
+
+/// Call just before revealing one of Shota's windows.
+#[cfg(windows)]
+pub(super) fn remember_foreground() {
+    use std::sync::atomic::Ordering;
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+
+    let current = unsafe { GetForegroundWindow() };
+    // Only another app's window is worth going back to. When Shota's own
+    // window already holds the foreground (a close that didn't hand it back,
+    // or the overlay opening over the editor), what was remembered earlier
+    // is still the best answer.
+    if !current.0.is_null() && !is_ours(current) {
+        PREVIOUS_FOREGROUND.store(current.0 as isize, Ordering::SeqCst);
+    }
+}
+
+/// Call right after cloaking one of Shota's windows. Hands the foreground
+/// back to the remembered app, but only if Shota still holds it: when the
+/// user has already clicked elsewhere, taking focus back would be rude.
+#[cfg(windows)]
+pub(super) fn restore_foreground() {
+    use std::sync::atomic::Ordering;
+    use windows::Win32::Foundation::HWND;
+    use windows::Win32::UI::WindowsAndMessaging::{
+        GetForegroundWindow, IsIconic, IsWindow, IsWindowVisible, SetForegroundWindow,
+    };
+
+    let previous = PREVIOUS_FOREGROUND.load(Ordering::SeqCst);
+    if previous == 0 {
+        return;
+    }
+    let hwnd = HWND(previous as *mut core::ffi::c_void);
+    unsafe {
+        let current = GetForegroundWindow();
+        if !current.0.is_null() && !is_ours(current) {
+            return;
+        }
+        if IsWindow(Some(hwnd)).as_bool() && IsWindowVisible(hwnd).as_bool() && !IsIconic(hwnd).as_bool() {
+            // Shota still owns the foreground here, and the owner is allowed
+            // to give it away.
+            let _ = SetForegroundWindow(hwnd);
+        }
+    }
+}
+
+#[cfg(not(windows))]
+pub(super) fn remember_foreground() {}
+
+#[cfg(not(windows))]
+pub(super) fn restore_foreground() {}
 
 #[cfg(not(windows))]
 pub(super) fn round_window_corners(_window: &WebviewWindow) {}

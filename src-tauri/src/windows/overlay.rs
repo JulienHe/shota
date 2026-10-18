@@ -2,7 +2,7 @@ use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewWindow};
 
 use crate::state::AppState;
 
-use super::{chromeless_window_builder, cloak_window, place_chromeless_window};
+use super::{chromeless_window_builder, cloak_window, place_chromeless_window, remember_foreground, restore_foreground};
 
 const OVERLAY_LABEL: &str = "overlay";
 // Far enough off any real monitor that it can never be glimpsed, used only
@@ -71,6 +71,7 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
         // loading, and `overlay_ready` reveals it (at the bounds just set)
         // the moment it mounts.
         if app.state::<AppState>().is_overlay_ready() {
+            remember_foreground();
             cloak_window(&existing, false);
             existing.set_focus().map_err(|e| e.to_string())?;
         } else {
@@ -155,5 +156,14 @@ pub fn hide_capture_overlay(app: &AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
         cloak_window(&window, true);
     }
+    Ok(())
+}
+
+/// Hides the overlay for a cancel (Esc) and gives the foreground back to the
+/// app the user was in. A finished capture does not call this: the editor
+/// opens and takes the foreground itself.
+pub fn cancel_capture_overlay(app: &AppHandle) -> Result<(), String> {
+    hide_capture_overlay(app)?;
+    restore_foreground();
     Ok(())
 }
