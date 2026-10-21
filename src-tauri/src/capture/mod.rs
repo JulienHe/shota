@@ -1,7 +1,9 @@
+mod desktop;
 mod monitors;
 mod region;
 mod windows_enum;
 
+pub use desktop::{capture_desktop, Desktop};
 pub use monitors::capture_fullscreen;
 pub use region::capture_region;
 pub use windows_enum::{capture_window, list_windows, WindowInfo};

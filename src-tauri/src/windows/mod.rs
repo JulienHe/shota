@@ -7,7 +7,7 @@ pub use editor::{
     show_editor_window,
 };
 pub use history::{close_history_window, show_history_window, toggle_history_window};
-pub use overlay::{cancel_capture_overlay, hide_capture_overlay, open_capture_overlay, prewarm_capture_overlay, show_capture_overlay};
+pub use overlay::{cancel_capture_overlay, hide_capture_overlay, open_capture_overlay, overlay_painted, pending_freeze, prewarm_capture_overlay, show_capture_overlay};
 
 use tauri::{AppHandle, LogicalPosition, LogicalSize, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
@@ -242,6 +242,48 @@ pub(super) fn restore_foreground() {
             let _ = SetForegroundWindow(hwnd);
         }
     }
+}
+
+/// Uncloaks `window` and gives it the foreground and the keyboard.
+///
+/// A window revealed by a shortcut that Shota only *observed* (the Print
+/// Screen hook) is not allowed to take the foreground: Windows never counted
+/// that key as input to Shota. Joining the foreground window's input queue
+/// for the duration is the sanctioned way to be allowed, and the foreground
+/// is set explicitly because `set_focus` alone is queued to the event loop,
+/// after the attachment has already been undone.
+#[cfg(windows)]
+pub(super) fn reveal_and_focus(window: &WebviewWindow) {
+    use windows::Win32::Foundation::HWND;
+    use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
+    use windows::Win32::UI::WindowsAndMessaging::{
+        BringWindowToTop, GetForegroundWindow, GetWindowThreadProcessId, SetForegroundWindow,
+    };
+
+    let me = unsafe { GetCurrentThreadId() };
+    let foreground = unsafe { GetForegroundWindow() };
+    let theirs = unsafe { GetWindowThreadProcessId(foreground, None) };
+    let attached = theirs != 0 && theirs != me && unsafe { AttachThreadInput(me, theirs, true) }.as_bool();
+
+    cloak_window(window, false);
+    if let Ok(hwnd) = window.hwnd() {
+        let hwnd = HWND(hwnd.0);
+        unsafe {
+            let _ = BringWindowToTop(hwnd);
+            let _ = SetForegroundWindow(hwnd);
+        }
+    }
+
+    if attached {
+        let _ = unsafe { AttachThreadInput(me, theirs, false) };
+    }
+    let _ = window.set_focus();
+}
+
+#[cfg(not(windows))]
+pub(super) fn reveal_and_focus(window: &WebviewWindow) {
+    cloak_window(window, false);
+    let _ = window.set_focus();
 }
 
 #[cfg(not(windows))]

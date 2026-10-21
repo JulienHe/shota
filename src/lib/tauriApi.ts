@@ -78,6 +78,18 @@ export const tauriApi = {
 
   overlayReady: () => invoke<void>("overlay_ready"),
 
+  /** The frozen screen the overlay should paint, if a capture is waiting for it (0: none, show it live). */
+  pendingFreezeId: () => invoke<number | null>("pending_freeze_id"),
+
+  /**
+   * The frozen screen as raw bytes: a 16-byte header of four little-endian
+   * int32 (width, height, desktop x, desktop y), then width*height RGBA.
+   */
+  takeFreeze: (id: number) => invoke<ArrayBuffer>("take_freeze", { id }),
+
+  /** The overlay has painted frozen screen `id` (or cleared itself, for 0): reveal it. */
+  overlayPainted: (id: number) => invoke<void>("overlay_painted_command", { id }),
+
   captureFullscreenNow: (monitorId?: number) =>
     invoke<void>("capture_fullscreen_now", { monitorId: monitorId ?? null }),
 

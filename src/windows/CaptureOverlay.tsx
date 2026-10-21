@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { tauriApi } from "../lib/tauriApi";
 import { useKeyboardShortcut } from "../lib/useKeyboardShortcut";
@@ -25,6 +26,11 @@ interface DragRect {
 const HORIZONTAL_HIGHLIGHT_CORRECTION_PX = 10;
 
 export function CaptureOverlay() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // The last frozen screen handled, so the event and the on-mount check can't
+  // both paint the same one.
+  const handled = useRef<number | null>(null);
+
   const { cursor: globalCursor, origin, scale } = useGlobalCursor();
   const { snapMode, hoveredWindow } = useWindowSnap(globalCursor);
   const [drag, setDrag] = useState<DragRect | null>(null);
@@ -47,6 +53,54 @@ export function CaptureOverlay() {
   useKeyboardShortcut({ key: "Escape" }, cancel, [cancel]);
 
   useTransparentWindow();
+
+  // The overlay shows a still copy of the screen taken the moment the shortcut
+  // was pressed, instead of the live one: what you select is what you saw, even
+  // if a video, a tooltip or a hover menu has since changed. Rust keeps the
+  // window hidden until this has painted, so the live screen never jumps to it.
+  const showFrozen = useCallback(async (id: number) => {
+    if (handled.current === id && id !== 0) return;
+    handled.current = id;
+    const canvas = canvasRef.current;
+    try {
+      if (canvas) {
+        const context = canvas.getContext("2d");
+        if (id === 0 || !context) {
+          // No frozen screen this time: clear the last one so it can't show.
+          context?.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          const bytes = await tauriApi.takeFreeze(id);
+          const [width, height] = new Int32Array(bytes, 0, 4);
+          canvas.width = width;
+          canvas.height = height;
+          const pixels = new Uint8ClampedArray(bytes, 16, width * height * 4);
+          context.putImageData(new ImageData(pixels, width, height), 0, 0);
+        }
+      }
+      await afterNextPaint();
+    } catch (err) {
+      // Better an overlay over the live screen than none at all.
+      console.error("could not paint the frozen screen", err);
+    }
+    tauriApi.overlayPainted(id).catch((err) => console.error("overlay_painted failed", err));
+  }, []);
+
+  useEffect(() => {
+    const unlisten = listen<number>("shota://freeze", (event) => {
+      handled.current = null;
+      void showFrozen(event.payload);
+    });
+    // A capture asked for before this page had mounted: its event was lost, so ask.
+    tauriApi
+      .pendingFreezeId()
+      .then((id) => {
+        if (id !== null) void showFrozen(id);
+      })
+      .catch(() => {});
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, [showFrozen]);
 
   useEffect(() => {
     // The window is created hidden (see overlay.rs) specifically so it can't
@@ -128,6 +182,8 @@ export function CaptureOverlay() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
+      <canvas ref={canvasRef} className="capture-overlay__frozen" />
+
       <div className="capture-overlay__hint">
         {snapMode ? t("overlay.snapHint") : t("overlay.dragHint")}
       </div>

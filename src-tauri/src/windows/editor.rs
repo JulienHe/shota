@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use tauri::{AppHandle, Emitter, Manager, WebviewUrl, WebviewWindowBuilder};
 
-use super::{cloak_window, remember_foreground, restore_foreground};
+use super::{cloak_window, remember_foreground, restore_foreground, reveal_and_focus};
 use crate::history;
 use crate::state::{AppState, PendingCapture};
 
@@ -176,12 +176,11 @@ pub fn hide_editor_window(app: &AppHandle) -> Result<(), String> {
 pub fn show_editor_window(app: &AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_webview_window(EDITOR_LABEL) {
         remember_foreground();
-        cloak_window(&window, false);
         // No-op past the very first reveal (already false by then), so
         // it's simplest to just always call it here rather than track
         // whether this is the pre-warmed window's first real use.
         window.set_skip_taskbar(false).map_err(|e| e.to_string())?;
-        window.set_focus().map_err(|e| e.to_string())?;
+        reveal_and_focus(&window);
     }
     Ok(())
 }

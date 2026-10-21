@@ -75,3 +75,14 @@
     animation: none;
   }
 }
+
+/* The still copy of the screen. Its pixels are physical, the window scales it
+   to its own size, so it lines up one to one with the desktop underneath. */
+.capture-overlay__frozen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}

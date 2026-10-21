@@ -68,15 +68,14 @@ mod imp {
     use tauri::AppHandle;
     use tauri_plugin_global_shortcut::Modifiers;
     use windows::Win32::Foundation::{LPARAM, LRESULT, WPARAM};
-    use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
     use windows::Win32::UI::Input::KeyboardAndMouse::{
         GetAsyncKeyState, VK_CONTROL, VK_LWIN, VK_MENU, VK_RWIN, VK_SHIFT,
         VK_SNAPSHOT,
     };
     use windows::Win32::UI::WindowsAndMessaging::{
-        BringWindowToTop, CallNextHookEx, DispatchMessageW, GetForegroundWindow, GetMessageW, SetTimer, UnhookWindowsHookEx, WM_TIMER,
-        GetWindowThreadProcessId, SetForegroundWindow, SetWindowsHookExW, TranslateMessage,
-        KBDLLHOOKSTRUCT, MSG, WH_KEYBOARD_LL, WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
+        CallNextHookEx, DispatchMessageW, GetMessageW, SetTimer, SetWindowsHookExW, TranslateMessage,
+        UnhookWindowsHookEx, KBDLLHOOKSTRUCT, MSG, WH_KEYBOARD_LL, WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN,
+        WM_SYSKEYUP, WM_TIMER,
     };
 
     use crate::hotkeys::{self, ShortcutKind};
@@ -231,45 +230,16 @@ mod imp {
     }
 
     /// Hands off to the main thread, as `RegisterHotKey` handlers run there,
-    /// and so the hook returns at once ~ Windows drops a hook that is slow.
+    /// and so the hook returns at once ~ Windows drops a slow hook.
+    ///
+    /// Taking the foreground is not done here. This path never counts as input
+    /// to Shota, so Windows won't let it, and the windows that need the
+    /// keyboard (the capture overlay, the editor) take it themselves when they
+    /// are revealed: see `reveal_and_focus`.
     fn fire(kind: ShortcutKind) {
         let Some(app) = APP.get() else { return };
         let handle = app.clone();
-        let _ = app.run_on_main_thread(move || {
-            // A registered hotkey lets its owner take the foreground; a hook
-            // does not, because Windows never counts the swallowed key as
-            // input to Shota. Without it the overlay appears but isn't
-            // focused, so Esc does nothing and the first click only focuses.
-            // Joining the foreground window's input queue for the duration
-            // is the sanctioned way to be allowed to take it.
-            let me = unsafe { GetCurrentThreadId() };
-            let foreground = unsafe { GetForegroundWindow() };
-            let their = unsafe { GetWindowThreadProcessId(foreground, None) };
-            let attached = their != 0 && their != me && unsafe { AttachThreadInput(me, their, true) }.as_bool();
-
-            hotkeys::fire(&handle, kind);
-            if kind == ShortcutKind::Area {
-                take_foreground(&handle);
-            }
-
-            if attached {
-                let _ = unsafe { AttachThreadInput(me, their, false) };
-            }
-        });
-    }
-
-    /// Brings the capture overlay to the front and gives it the keyboard.
-    /// `set_focus` alone is queued to the event loop, after the attachment
-    /// above has already been undone.
-    fn take_foreground(app: &AppHandle) {
-        use tauri::Manager;
-        let Some(window) = app.get_webview_window("overlay") else { return };
-        let Ok(hwnd) = window.hwnd() else { return };
-        let hwnd = windows::Win32::Foundation::HWND(hwnd.0);
-        unsafe {
-            let _ = BringWindowToTop(hwnd);
-            let _ = SetForegroundWindow(hwnd);
-        }
+        let _ = app.run_on_main_thread(move || hotkeys::fire(&handle, kind));
     }
 }
 

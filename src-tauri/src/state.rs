@@ -2,10 +2,11 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Manager};
 
+use crate::capture::Desktop;
 use crate::hotkeys::{
     ShortcutKind, Shortcuts, DEFAULT_AREA_SHORTCUT, DEFAULT_FULLSCREEN_SHORTCUT,
     DEFAULT_HISTORY_SHORTCUT,
@@ -208,6 +209,17 @@ pub struct AppState {
     /// empty overlay that also couldn't be dismissed, because Escape is
     /// handled by the very JS that hadn't run yet.
     overlay_ready: AtomicBool,
+    /// The desktop as it was the moment the capture shortcut was pressed. The
+    /// overlay shows this still image instead of the live screen, and a
+    /// selection is cropped from it, so what you capture is what you saw.
+    freeze: Mutex<Option<(u64, Arc<Desktop>)>>,
+    freeze_seq: AtomicU64,
+    /// A capture has been asked for and the overlay has not been revealed yet.
+    /// Stops a second press from starting a second capture meanwhile.
+    freeze_pending: AtomicBool,
+    /// The overlay is on screen. A second press then must not freeze the
+    /// screen again, or it would freeze the overlay itself.
+    overlay_open: AtomicBool,
 }
 
 impl AppState {
@@ -218,6 +230,10 @@ impl AppState {
             pending_capture: Mutex::new(None),
             captures: Mutex::new(Vec::new()),
             overlay_ready: AtomicBool::new(false),
+            freeze: Mutex::new(None),
+            freeze_seq: AtomicU64::new(0),
+            freeze_pending: AtomicBool::new(false),
+            overlay_open: AtomicBool::new(false),
         }
     }
 
@@ -316,6 +332,39 @@ impl AppState {
 
 
 impl AppState {
+    /// Keeps `desktop` as the current frozen screen and returns its id.
+    pub fn set_freeze(&self, desktop: Desktop) -> u64 {
+        let id = self.freeze_seq.fetch_add(1, Ordering::SeqCst) + 1;
+        *self.freeze.lock().unwrap() = Some((id, Arc::new(desktop)));
+        id
+    }
+
+    pub fn freeze(&self) -> Option<(u64, Arc<Desktop>)> {
+        self.freeze.lock().unwrap().clone()
+    }
+
+    /// Drops the frozen screen: tens of megabytes at 4K, useless once the
+    /// capture it was for is done.
+    pub fn clear_freeze(&self) {
+        *self.freeze.lock().unwrap() = None;
+    }
+
+    pub fn is_freeze_pending(&self) -> bool {
+        self.freeze_pending.load(Ordering::SeqCst)
+    }
+
+    pub fn set_freeze_pending(&self, pending: bool) {
+        self.freeze_pending.store(pending, Ordering::SeqCst);
+    }
+
+    pub fn is_overlay_open(&self) -> bool {
+        self.overlay_open.load(Ordering::SeqCst)
+    }
+
+    pub fn set_overlay_open(&self, open: bool) {
+        self.overlay_open.store(open, Ordering::SeqCst);
+    }
+
     pub fn mark_overlay_ready(&self) {
         self.overlay_ready.store(true, Ordering::Release);
     }

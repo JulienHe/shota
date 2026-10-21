@@ -8,7 +8,7 @@ use crate::hotkeys::{self, ShortcutKind, Shortcuts};
 use crate::state::{AppState, ImageFormat, PendingCapture, Preferences};
 use crate::startup::{self, StartupStatus};
 use crate::windows::{
-    cancel_capture_overlay, close_history_window, hide_capture_overlay, hide_editor_window, open_capture_overlay,
+    cancel_capture_overlay, close_history_window, overlay_painted, pending_freeze, hide_capture_overlay, hide_editor_window, open_capture_overlay,
     open_editor_from_history, open_editor_with_history, show_capture_overlay, show_editor_window,
     show_history_window,
 };
@@ -152,6 +152,44 @@ pub fn overlay_ready(app: AppHandle) -> Result<(), String> {
     show_capture_overlay(&app)
 }
 
+/// The frozen screen the overlay should paint, if a capture is waiting for it.
+#[tauri::command]
+pub fn pending_freeze_id(app: AppHandle) -> Option<u64> {
+    pending_freeze(&app)
+}
+
+/// The frozen screen as raw pixels, over IPC as bytes (never base64, see the
+/// notes on `take_capture_image`). A 16-byte header of four little-endian
+/// 32-bit integers (width, height, desktop x, desktop y of the top-left),
+/// then width*height RGBA. Not removed: the capture is cropped from it later.
+#[tauri::command]
+pub fn take_freeze(app: AppHandle, id: u64) -> Result<tauri::ipc::Response, String> {
+    let (current, desktop) = app
+        .state::<AppState>()
+        .freeze()
+        .ok_or_else(|| "no frozen screen".to_string())?;
+    if current != id {
+        return Err("that frozen screen has been replaced".to_string());
+    }
+    let (width, height) = desktop.image.dimensions();
+    let raw = desktop.image.as_raw();
+    let mut bytes = Vec::with_capacity(16 + raw.len());
+    bytes.extend_from_slice(&width.to_le_bytes());
+    bytes.extend_from_slice(&height.to_le_bytes());
+    bytes.extend_from_slice(&desktop.origin_x.to_le_bytes());
+    bytes.extend_from_slice(&desktop.origin_y.to_le_bytes());
+    bytes.extend_from_slice(raw);
+    Ok(tauri::ipc::Response::new(bytes))
+}
+
+/// The overlay page has painted the frozen screen `id`: reveal it.
+#[tauri::command]
+pub fn overlay_painted_command(app: AppHandle, id: u64) -> Result<(), String> {
+    let handle = app.clone();
+    app.run_on_main_thread(move || overlay_painted(&handle, id))
+        .map_err(|e| e.to_string())
+}
+
 /// Shared by `finish_region_capture` and `finish_window_capture`: hide the
 /// overlay (its selection rectangle / dimming) and give the compositor a
 /// moment to actually repaint without it before grabbing pixels ~ otherwise
@@ -163,6 +201,7 @@ pub fn overlay_ready(app: AppHandle) -> Result<(), String> {
 /// scratch on every single capture was showing a full white flash each time.
 fn finish_capture(app: &AppHandle, capture_fn: impl FnOnce() -> Result<Vec<u8>, String>) -> Result<(), String> {
     hide_capture_overlay(app)?;
+    app.state::<AppState>().clear_freeze();
     std::thread::sleep(std::time::Duration::from_millis(120));
     let image = capture_fn()?;
     open_editor_with_history(app, image)
@@ -176,6 +215,19 @@ pub async fn finish_region_capture(
     width: u32,
     height: u32,
 ) -> Result<(), String> {
+    // The overlay was showing a frozen copy of the screen, so the selection is
+    // cropped from that copy: it is exactly what the user saw, it needs no
+    // moment for the overlay to disappear first, and it already spans however
+    // many monitors the selection touched.
+    if let Some((_, desktop)) = app.state::<AppState>().freeze() {
+        hide_capture_overlay(&app)?;
+        app.state::<AppState>().clear_freeze();
+        let cropped = desktop
+            .crop(x, y, width, height)
+            .ok_or_else(|| "the selection is outside the screen".to_string())?;
+        let png = capture::encode_png(cropped)?;
+        return open_editor_with_history(&app, png);
+    }
     finish_capture(&app, || capture::capture_region(x, y, width, height))
 }
 
