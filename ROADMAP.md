@@ -16,10 +16,17 @@ polish, translations and dependencies; minors (0.x.0) are features. 0.9 is follo
 | 0.9.0 | Text and pins | Copy text from an area (Windows OCR), QR codes, pin a screenshot above other windows |
 | 0.10.0 | Editor depth | Arrow styles, text presets, favourite colours, frame presets and aspect ratios, resize on export, rotate and flip, `.shota` project files |
 | 0.11.0 | Scrolling capture | Beta, on its own because it's the riskiest piece |
+| 0.12.0 | Interface | Rework how the UI is organised now that there are many features: a secondary menu for less-used options, a calmer toolbar, settings grouped by how often they are needed |
 | 0.12.x | Hardening | Feature freeze, bugs, performance, translation review |
 | 1.0 | Stable | See below |
 
 ## Decisions
+
+- **Interface rework (0.12.0):** the editor toolbar already carries fourteen tools, per-tool style
+  controls and a bottom bar of actions, and every feature above adds more. Rather than keep adding
+  buttons, 0.12.0 reorganises: frequent actions stay one click away, the rest move into a secondary
+  ("more") menu. It comes after the last feature milestone and before the feature freeze, so the new
+  layout is what gets hardened.
 
 - **Cloud and uploads:** not now. Sharing goes through drag-out and Windows Share, which need no
   network. Revisit later; doing it would mean updating PRIVACY.md and the MSIX capabilities.
