@@ -78,6 +78,16 @@ export const tauriApi = {
 
   overlayReady: () => invoke<void>("overlay_ready"),
 
+  /**
+   * Reads the text, or the QR code, in a selected area and copies it. `kind`
+   * is "qr", "text", or "none" when nothing was found (nothing is copied then).
+   */
+  /** Captures the whole monitor under the cursor from the frozen screen. */
+  finishFullscreenCapture: () => invoke<void>("finish_fullscreen_capture"),
+
+  finishTextCapture: (x: number, y: number, width: number, height: number) =>
+    invoke<{ kind: "qr" | "text" | "none"; text: string }>("finish_text_capture", { x, y, width, height }),
+
   /** The frozen screen the overlay should paint, if a capture is waiting for it (0: none, show it live). */
   pendingFreezeId: () => invoke<number | null>("pending_freeze_id"),
 

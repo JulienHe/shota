@@ -82,9 +82,19 @@
     "close": "Close"
   },
   "overlay": {
-    "dragHint": "Drag to select an area · Space to switch to window mode · Esc to cancel",
-    "snapHint": "Click a window to capture it · Space to go back",
-    "loupeHint": "Scroll to zoom the loupe · Right-click to copy the colour"
+    "dragHint": "Drag to select an area · Esc to cancel",
+    "snapHint": "Click a window to capture it · Esc to cancel",
+    "loupeHint": "Scroll to zoom the loupe · Right-click to copy the colour",
+    "textHint": "Drag over text or a QR code to copy it · Esc to cancel",
+    "recognizing": "Reading…",
+    "textCopied": "Copied {count} characters",
+    "qrCopied": "Copied the QR code's content",
+    "noText": "No text or QR code found",
+    "ocrUnavailable": "Text recognition isn't available (check the languages installed in Windows)",
+    "modeArea": "Area",
+    "modeFullscreen": "Fullscreen",
+    "modeWindow": "Window",
+    "modeText": "Text"
   },
   "settings": {
     "fullScreen": "Full screen",

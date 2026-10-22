@@ -82,9 +82,19 @@
     "close": "Kapat"
   },
   "overlay": {
-    "dragHint": "Alan seçmek için sürükleyin · Pencere moduna geçmek için Boşluk · İptal için Esc",
-    "snapHint": "Yakalamak için bir pencereye tıklayın · Geri dönmek için Boşluk",
-    "loupeHint": "Büyüteci yakınlaştırmak için kaydırın · Rengi kopyalamak için sağ tıklayın"
+    "dragHint": "Bir alan seçmek için sürükleyin · İptal için Esc",
+    "snapHint": "Yakalamak için bir pencereye tıklayın · İptal için Esc",
+    "loupeHint": "Büyüteci yakınlaştırmak için kaydırın · Rengi kopyalamak için sağ tıklayın",
+    "textHint": "Kopyalamak için metnin veya QR kodunun üzerinde sürükleyin · İptal için Esc",
+    "recognizing": "Okunuyor…",
+    "textCopied": "{count} karakter kopyalandı",
+    "qrCopied": "QR kodunun içeriği kopyalandı",
+    "noText": "Metin veya QR kodu bulunamadı",
+    "ocrUnavailable": "Metin tanıma kullanılamıyor (Windows'ta yüklü dilleri kontrol edin)",
+    "modeArea": "Alan",
+    "modeFullscreen": "Tam ekran",
+    "modeWindow": "Pencere",
+    "modeText": "Metin"
   },
   "settings": {
     "fullScreen": "Tam ekran",

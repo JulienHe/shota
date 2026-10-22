@@ -61,5 +61,5 @@ export function useWindowSnap(globalCursor: { x: number; y: number } | null) {
         ) ?? null
       : null;
 
-  return { snapMode, hoveredWindow };
+  return { snapMode, setSnapMode, hoveredWindow };
 }

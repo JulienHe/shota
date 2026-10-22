@@ -82,9 +82,19 @@
     "close": "閉じる"
   },
   "overlay": {
-    "dragHint": "ドラッグで範囲を選択 · Space でウィンドウモード · Esc でキャンセル",
-    "snapHint": "ウィンドウをクリックしてキャプチャ · Space で戻る",
-    "loupeHint": "スクロールで拡大鏡をズーム · 右クリックで色をコピー"
+    "dragHint": "ドラッグして範囲を選択 · Esc でキャンセル",
+    "snapHint": "ウィンドウをクリックしてキャプチャ · Esc でキャンセル",
+    "loupeHint": "スクロールで拡大鏡をズーム · 右クリックで色をコピー",
+    "textHint": "テキストや QR コードの上をドラッグしてコピー · Esc でキャンセル",
+    "recognizing": "読み取り中…",
+    "textCopied": "{count} 文字をコピーしました",
+    "qrCopied": "QR コードの内容をコピーしました",
+    "noText": "テキストも QR コードも見つかりませんでした",
+    "ocrUnavailable": "テキスト認識を利用できません（Windows にインストールされている言語を確認してください）",
+    "modeArea": "範囲",
+    "modeFullscreen": "全画面",
+    "modeWindow": "ウィンドウ",
+    "modeText": "テキスト"
   },
   "settings": {
     "fullScreen": "画面全体",

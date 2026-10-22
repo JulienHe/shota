@@ -82,9 +82,19 @@
     "close": "關閉"
   },
   "overlay": {
-    "dragHint": "拖曳以選取區域 · 按空白鍵切換至視窗模式 · 按 Esc 取消",
-    "snapHint": "按一下視窗即可擷取 · 按空白鍵返回",
-    "loupeHint": "滾動縮放放大鏡 · 按右鍵複製顏色"
+    "dragHint": "拖曳以選取區域 · 按 Esc 取消",
+    "snapHint": "按一下視窗進行擷取 · 按 Esc 取消",
+    "loupeHint": "滾動縮放放大鏡 · 按右鍵複製顏色",
+    "textHint": "在文字或 QR 碼上拖曳即可複製 · 按 Esc 取消",
+    "recognizing": "正在辨識…",
+    "textCopied": "已複製 {count} 個字元",
+    "qrCopied": "已複製 QR 碼內容",
+    "noText": "找不到文字或 QR 碼",
+    "ocrUnavailable": "無法使用文字辨識（請檢查 Windows 中已安裝的語言）",
+    "modeArea": "區域",
+    "modeFullscreen": "全螢幕",
+    "modeWindow": "視窗",
+    "modeText": "文字"
   },
   "settings": {
     "fullScreen": "全螢幕",

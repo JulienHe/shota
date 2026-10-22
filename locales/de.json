@@ -82,9 +82,19 @@
     "close": "Schließen"
   },
   "overlay": {
-    "dragHint": "Ziehen, um einen Bereich zu wählen · Leertaste für Fenstermodus · Esc zum Abbrechen",
-    "snapHint": "Fenster anklicken, um es aufzunehmen · Leertaste für zurück",
-    "loupeHint": "Scrollen zoomt die Lupe · Rechtsklick kopiert die Farbe"
+    "dragHint": "Ziehen, um einen Bereich auszuwählen · Esc zum Abbrechen",
+    "snapHint": "Auf ein Fenster klicken, um es aufzunehmen · Esc zum Abbrechen",
+    "loupeHint": "Scrollen zoomt die Lupe · Rechtsklick kopiert die Farbe",
+    "textHint": "Über Text oder einen QR-Code ziehen, um ihn zu kopieren · Esc zum Abbrechen",
+    "recognizing": "Wird gelesen…",
+    "textCopied": "{count} Zeichen kopiert",
+    "qrCopied": "Inhalt des QR-Codes kopiert",
+    "noText": "Kein Text und kein QR-Code gefunden",
+    "ocrUnavailable": "Texterkennung ist nicht verfügbar (Sprachen in Windows prüfen)",
+    "modeArea": "Bereich",
+    "modeFullscreen": "Vollbild",
+    "modeWindow": "Fenster",
+    "modeText": "Text"
   },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",

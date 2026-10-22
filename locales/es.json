@@ -82,9 +82,19 @@
     "close": "Cerrar"
   },
   "overlay": {
-    "dragHint": "Arrastra para seleccionar un área · Espacio para modo ventana · Esc para cancelar",
-    "snapHint": "Haz clic en una ventana para capturarla · Espacio para volver",
-    "loupeHint": "Desplázate para ampliar la lupa · Clic derecho para copiar el color"
+    "dragHint": "Arrastra para seleccionar una zona · Esc para cancelar",
+    "snapHint": "Haz clic en una ventana para capturarla · Esc para cancelar",
+    "loupeHint": "Desplázate para ampliar la lupa · Clic derecho para copiar el color",
+    "textHint": "Arrastra sobre texto o un código QR para copiarlo · Esc para cancelar",
+    "recognizing": "Leyendo…",
+    "textCopied": "Se copiaron {count} caracteres",
+    "qrCopied": "Se copió el contenido del código QR",
+    "noText": "No se encontró texto ni código QR",
+    "ocrUnavailable": "El reconocimiento de texto no está disponible (revisa los idiomas instalados en Windows)",
+    "modeArea": "Área",
+    "modeFullscreen": "Pantalla completa",
+    "modeWindow": "Ventana",
+    "modeText": "Texto"
   },
   "settings": {
     "fullScreen": "Pantalla completa",

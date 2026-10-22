@@ -82,9 +82,19 @@
     "close": "关闭"
   },
   "overlay": {
-    "dragHint": "拖动以选择区域 · 空格切换窗口模式 · Esc 取消",
-    "snapHint": "点击窗口即可捕获 · 空格返回",
-    "loupeHint": "滚动缩放放大镜 · 右键复制颜色"
+    "dragHint": "拖动以选择区域 · 按 Esc 取消",
+    "snapHint": "单击窗口进行截图 · 按 Esc 取消",
+    "loupeHint": "滚动缩放放大镜 · 右键复制颜色",
+    "textHint": "在文字或二维码上拖动即可复制 · 按 Esc 取消",
+    "recognizing": "正在识别…",
+    "textCopied": "已复制 {count} 个字符",
+    "qrCopied": "已复制二维码内容",
+    "noText": "未找到文字或二维码",
+    "ocrUnavailable": "文字识别不可用（请检查 Windows 中已安装的语言）",
+    "modeArea": "区域",
+    "modeFullscreen": "全屏",
+    "modeWindow": "窗口",
+    "modeText": "文字"
   },
   "settings": {
     "fullScreen": "全屏",

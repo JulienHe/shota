@@ -8,6 +8,7 @@ import { useGlobalCursor } from "../features/capture/useGlobalCursor";
 import { useWindowSnap } from "../features/capture/useWindowSnap";
 import { SpotlightMask, HoleRect } from "../features/capture/SpotlightMask";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+import { CaptureModeBar, CaptureChoice, CaptureMode } from "../features/capture/CaptureModeBar";
 import { DEFAULT_SPAN_INDEX, hexAt, Magnifier, SPANS } from "../features/capture/Magnifier";
 import "./CaptureOverlay.css";
 import { t } from "../lib/i18n";
@@ -47,11 +48,18 @@ export function CaptureOverlay() {
   const handled = useRef<number | null>(null);
 
   const { cursor: globalCursor, origin, scale } = useGlobalCursor();
-  const { snapMode, hoveredWindow } = useWindowSnap(globalCursor);
+  const { snapMode, setSnapMode, hoveredWindow } = useWindowSnap(globalCursor);
   const [drag, setDrag] = useState<DragRect | null>(null);
   // Where the pointer is in the window (CSS px), for the loupe.
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
   const [spanIndex, setSpanIndex] = useState(readLoupeZoom);
+  // T switches the selection from "take a picture" to "copy the text (or QR
+  // code) in it". Each capture starts in picture mode.
+  const [textMode, setTextMode] = useState(false);
+  const mode: CaptureMode = snapMode ? "window" : textMode ? "text" : "area";
+  const chooseRef = useRef<(choice: CaptureChoice) => void>(() => {});
+  // The answer to a text selection, shown in the middle of the screen.
+  const [status, setStatus] = useState<{ working: boolean; message: string } | null>(null);
   // What was just copied with a right click, shown in the loupe for a moment.
   const [copied, setCopied] = useState<string | null>(null);
   const copiedTimer = useRef<number | undefined>(undefined);
@@ -73,6 +81,26 @@ export function CaptureOverlay() {
   }, [snapMode]);
 
   useKeyboardShortcut({ key: "Escape" }, cancel, [cancel]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat || e.ctrlKey || e.altKey || e.metaKey) return;
+      if (e.code === "KeyT") {
+        e.preventDefault();
+        chooseRef.current("text");
+      } else if (e.code === "KeyF") {
+        e.preventDefault();
+        chooseRef.current("fullscreen");
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  // Window snapping selects a window, not an area to read: leave text mode.
+  useEffect(() => {
+    if (snapMode) setTextMode(false);
+  }, [snapMode]);
 
   useTransparentWindow();
 
@@ -110,6 +138,8 @@ export function CaptureOverlay() {
   useEffect(() => {
     const unlisten = listen<number>("shota://freeze", (event) => {
       handled.current = null;
+      setTextMode(false);
+      setStatus(null);
       void showFrozen(event.payload);
     });
     // A capture asked for before this page had mounted: its event was lost, so ask.
@@ -131,6 +161,23 @@ export function CaptureOverlay() {
     // before Rust is asked to reveal the window.
     afterNextPaint().then(() => tauriApi.overlayReady());
   }, []);
+
+  // Picks a kind of capture. Fullscreen is not a mode, it captures at once.
+  const choose = (choice: CaptureChoice) => {
+    if (status) return;
+    if (choice === "fullscreen") {
+      setPointer(null);
+      tauriApi.finishFullscreenCapture().catch((err) => {
+        console.error("fullscreen capture failed", err);
+        cancel();
+      });
+      return;
+    }
+    setDrag(null);
+    setTextMode(choice === "text");
+    setSnapMode(choice === "window");
+  };
+  chooseRef.current = choose;
 
   // Scrolling zooms the loupe: up for closer, down for wider.
   const handleWheel = (e: React.WheelEvent) => {
@@ -165,7 +212,7 @@ export function CaptureOverlay() {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // Only the primary button starts a selection; a right click copies a colour.
-    if (e.button !== 0) return;
+    if (e.button !== 0 || status) return;
     if (snapMode) return;
     setDrag({ startX: e.clientX, startY: e.clientY, x: e.clientX, y: e.clientY });
   };
@@ -174,6 +221,24 @@ export function CaptureOverlay() {
     setPointer({ x: e.clientX, y: e.clientY });
     if (!drag) return;
     setDrag({ ...drag, x: e.clientX, y: e.clientY });
+  };
+
+  // Reads the text (or QR code) in the selection, says what happened, and
+  // closes. The result is already on the clipboard by then.
+  const readSelection = async (x: number, y: number, width: number, height: number) => {
+    setStatus({ working: true, message: t("overlay.recognizing") });
+    let message: string;
+    try {
+      const found = await tauriApi.finishTextCapture(x, y, width, height);
+      if (found.kind === "qr") message = t("overlay.qrCopied");
+      else if (found.kind === "text") message = t("overlay.textCopied", { count: found.text.length });
+      else message = t("overlay.noText");
+    } catch (err) {
+      console.error("reading the selection failed", err);
+      message = t("overlay.ocrUnavailable");
+    }
+    setStatus({ working: false, message });
+    window.setTimeout(cancel, 1200);
   };
 
   const handleMouseUp = async () => {
@@ -195,6 +260,16 @@ export function CaptureOverlay() {
 
       if (width < 4 || height < 4) return;
       setPointer(null);
+
+      if (textMode) {
+        await readSelection(
+          Math.round(resolvedOrigin.x + localX * scale),
+          Math.round(resolvedOrigin.y + localY * scale),
+          Math.round(width * scale),
+          Math.round(height * scale),
+        );
+        return;
+      }
 
       await tauriApi.finishRegionCapture(
         Math.round(resolvedOrigin.x + localX * scale),
@@ -254,15 +329,29 @@ export function CaptureOverlay() {
       <canvas ref={canvasRef} className="capture-overlay__frozen" />
 
       <div className="capture-overlay__hint">
-        {snapMode ? t("overlay.snapHint") : t("overlay.dragHint")}
-        {!snapMode && <div className="capture-overlay__hint-sub">{t("overlay.loupeHint")}</div>}
+        {snapMode ? t("overlay.snapHint") : textMode ? t("overlay.textHint") : t("overlay.dragHint")}
+        {mode === "area" && <div className="capture-overlay__hint-sub">{t("overlay.loupeHint")}</div>}
       </div>
 
       {snapMode && <SpotlightMask hole={spotlightRect} />}
 
       {spotlightRect && <div className="capture-overlay__window-highlight" style={spotlightRect} />}
 
-      {selectionStyle && <div className="capture-overlay__selection" style={selectionStyle} />}
+      {selectionStyle && (
+        <div
+          className={`capture-overlay__selection${textMode ? " capture-overlay__selection--text" : ""}`}
+          style={selectionStyle}
+        />
+      )}
+
+      <CaptureModeBar mode={mode} onChoose={choose} />
+
+      {status && (
+        <div className="capture-overlay__status">
+          {status.working && <span className="capture-overlay__spinner" />}
+          {status.message}
+        </div>
+      )}
 
       {!snapMode && pointer && (
         <Magnifier source={canvasRef} x={pointer.x} y={pointer.y} span={SPANS[spanIndex]} caption={loupeCaption} />

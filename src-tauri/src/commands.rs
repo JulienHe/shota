@@ -1,4 +1,6 @@
+use serde::Serialize;
 use tauri::{AppHandle, Emitter, Manager};
+use tauri_plugin_clipboard_manager::ClipboardExt;
 
 use crate::capture::{self, WindowInfo};
 use crate::clipboard;
@@ -418,4 +420,75 @@ pub async fn share_image(
     name: String,
 ) -> Result<(), String> {
     crate::share_out::share(&app, &window, &png_base64, &name)
+}
+
+/// What reading an area turned up.
+#[derive(Serialize)]
+pub struct TextCapture {
+    /// `"qr"` (a QR code's content), `"text"` (recognised words) or `"none"`.
+    pub kind: &'static str,
+    pub text: String,
+}
+
+/// Copies the text, or the QR code's content, found in a selected area.
+///
+/// Reads from the frozen screen, like a picture capture does. A QR code is
+/// tried first: it is exact, where text recognition is a good guess. Whatever
+/// is found goes to the clipboard; nothing is copied when nothing is found.
+/// The overlay stays open for the caller to show the answer in, and closes it.
+#[tauri::command]
+pub async fn finish_text_capture(app: AppHandle, x: i32, y: i32, width: u32, height: u32) -> Result<TextCapture, String> {
+    let (_, desktop) = app
+        .state::<AppState>()
+        .freeze()
+        .ok_or_else(|| "there is no frozen screen to read".to_string())?;
+    let image = desktop
+        .crop(x, y, width, height)
+        .ok_or_else(|| "the selection is outside the screen".to_string())?;
+
+    let found = tauri::async_runtime::spawn_blocking(move || -> Result<TextCapture, String> {
+        if let Some(content) = crate::qr::decode_qr(&image) {
+            return Ok(TextCapture { kind: "qr", text: content });
+        }
+        let text = crate::ocr::recognize_text(image)?;
+        let text = text.trim().to_string();
+        Ok(if text.is_empty() {
+            TextCapture { kind: "none", text }
+        } else {
+            TextCapture { kind: "text", text }
+        })
+    })
+    .await
+    .map_err(|e| e.to_string())??;
+
+    if found.kind != "none" {
+        app.clipboard().write_text(found.text.clone()).map_err(|e| e.to_string())?;
+    }
+    Ok(found)
+}
+
+/// Captures the whole monitor under the cursor, from the frozen screen.
+#[tauri::command]
+pub async fn finish_fullscreen_capture(app: AppHandle) -> Result<(), String> {
+    let (_, desktop) = app
+        .state::<AppState>()
+        .freeze()
+        .ok_or_else(|| "there is no frozen screen to capture".to_string())?;
+
+    let monitor = match app.cursor_position().ok().and_then(|p| app.monitor_from_point(p.x, p.y).ok().flatten()) {
+        Some(monitor) => monitor,
+        None => app
+            .primary_monitor()
+            .map_err(|e| e.to_string())?
+            .ok_or_else(|| "no monitor found".to_string())?,
+    };
+    let position = monitor.position();
+    let size = monitor.size();
+
+    hide_capture_overlay(&app)?;
+    app.state::<AppState>().clear_freeze();
+    let cropped = desktop
+        .crop(position.x, position.y, size.width, size.height)
+        .ok_or_else(|| "the monitor is outside the frozen screen".to_string())?;
+    open_editor_with_history(&app, capture::encode_png(cropped)?)
 }

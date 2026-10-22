@@ -82,9 +82,19 @@
     "close": "닫기"
   },
   "overlay": {
-    "dragHint": "드래그하여 영역 선택 · Space로 창 모드 · Esc로 취소",
-    "snapHint": "창을 클릭하면 캡처됩니다 · Space로 돌아가기",
-    "loupeHint": "스크롤로 돋보기 확대/축소 · 오른쪽 클릭으로 색상 복사"
+    "dragHint": "드래그하여 영역 선택 · Esc로 취소",
+    "snapHint": "창을 클릭하여 캡처 · Esc로 취소",
+    "loupeHint": "스크롤로 돋보기 확대/축소 · 오른쪽 클릭으로 색상 복사",
+    "textHint": "텍스트나 QR 코드 위로 드래그하여 복사 · Esc로 취소",
+    "recognizing": "읽는 중…",
+    "textCopied": "{count}자를 복사했습니다",
+    "qrCopied": "QR 코드 내용을 복사했습니다",
+    "noText": "텍스트나 QR 코드를 찾을 수 없습니다",
+    "ocrUnavailable": "텍스트 인식을 사용할 수 없습니다 (Windows에 설치된 언어를 확인하세요)",
+    "modeArea": "영역",
+    "modeFullscreen": "전체 화면",
+    "modeWindow": "창",
+    "modeText": "텍스트"
   },
   "settings": {
     "fullScreen": "전체 화면",

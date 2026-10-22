@@ -82,9 +82,19 @@
     "close": "Sluiten"
   },
   "overlay": {
-    "dragHint": "Sleep om een gebied te selecteren · Spatie voor venstermodus · Esc om te annuleren",
-    "snapHint": "Klik op een venster om het vast te leggen · Spatie om terug te gaan",
-    "loupeHint": "Scrol om de loep te zoomen · Rechtsklik kopieert de kleur"
+    "dragHint": "Sleep om een gebied te selecteren · Esc om te annuleren",
+    "snapHint": "Klik op een venster om het vast te leggen · Esc om te annuleren",
+    "loupeHint": "Scrol om de loep te zoomen · Rechtsklik kopieert de kleur",
+    "textHint": "Sleep over tekst of een QR-code om te kopiëren · Esc om te annuleren",
+    "recognizing": "Lezen…",
+    "textCopied": "{count} tekens gekopieerd",
+    "qrCopied": "Inhoud van de QR-code gekopieerd",
+    "noText": "Geen tekst of QR-code gevonden",
+    "ocrUnavailable": "Tekstherkenning is niet beschikbaar (controleer de talen die in Windows zijn geïnstalleerd)",
+    "modeArea": "Gebied",
+    "modeFullscreen": "Volledig scherm",
+    "modeWindow": "Venster",
+    "modeText": "Tekst"
   },
   "settings": {
     "fullScreen": "Volledig scherm",

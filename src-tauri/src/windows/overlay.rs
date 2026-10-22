@@ -147,12 +147,25 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
             return;
         }
 
-        // Watchdog: if the page never reports back, open anyway.
+        // Watchdog. A page that is up but slow to paint is revealed anyway,
+        // over the live screen. A page that has not even mounted is *not*: a
+        // full-screen always-on-top window with nothing running in it cannot be
+        // dismissed (Escape is handled by that very page), so it would sit over
+        // the desktop swallowing every click. That happens when the shortcut is
+        // pressed just after launch, while the page is still loading; the
+        // capture is abandoned and the next press works.
         std::thread::sleep(std::time::Duration::from_millis(FREEZE_PAINT_TIMEOUT_MS));
-        if handle.state::<AppState>().is_freeze_pending() {
-            eprintln!("capture overlay did not paint the frozen screen in time; revealing it anyway");
-            let on_main = handle.clone();
-            let _ = handle.run_on_main_thread(move || reveal_overlay(&on_main));
+        let state = handle.state::<AppState>();
+        if state.is_freeze_pending() {
+            if state.is_overlay_ready() {
+                eprintln!("capture overlay did not paint the frozen screen in time; revealing it anyway");
+                let on_main = handle.clone();
+                let _ = handle.run_on_main_thread(move || reveal_overlay(&on_main));
+            } else {
+                eprintln!("capture overlay page has not loaded yet; abandoning this capture");
+                state.set_freeze_pending(false);
+                state.clear_freeze();
+            }
         }
     });
     Ok(())

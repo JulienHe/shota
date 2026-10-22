@@ -8,6 +8,8 @@ mod fonts;
 mod history;
 mod hotkeys;
 mod i18n;
+mod ocr;
+mod qr;
 mod import;
 mod printscreen;
 mod share_out;
@@ -115,6 +117,8 @@ pub fn run() {
             commands::pending_freeze_id,
             commands::take_freeze,
             commands::overlay_painted_command,
+            commands::finish_text_capture,
+            commands::finish_fullscreen_capture,
             commands::get_shortcuts,
             commands::set_shortcut,
             commands::finish_region_capture,
