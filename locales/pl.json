@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "Przeciągnij, aby zaznaczyć obszar · Spacja przełącza na tryb okna · Esc anuluje",
-    "snapHint": "Kliknij okno, aby je przechwycić · Spacja, aby wrócić"
+    "snapHint": "Kliknij okno, aby je przechwycić · Spacja, aby wrócić",
+    "loupeHint": "Przewiń, aby powiększyć lupę · Prawy przycisk kopiuje kolor"
   },
   "settings": {
     "fullScreen": "Cały ekran",

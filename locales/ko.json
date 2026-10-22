@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "드래그하여 영역 선택 · Space로 창 모드 · Esc로 취소",
-    "snapHint": "창을 클릭하면 캡처됩니다 · Space로 돌아가기"
+    "snapHint": "창을 클릭하면 캡처됩니다 · Space로 돌아가기",
+    "loupeHint": "스크롤로 돋보기 확대/축소 · 오른쪽 클릭으로 색상 복사"
   },
   "settings": {
     "fullScreen": "전체 화면",

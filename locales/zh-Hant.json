@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "拖曳以選取區域 · 按空白鍵切換至視窗模式 · 按 Esc 取消",
-    "snapHint": "按一下視窗即可擷取 · 按空白鍵返回"
+    "snapHint": "按一下視窗即可擷取 · 按空白鍵返回",
+    "loupeHint": "滾動縮放放大鏡 · 按右鍵複製顏色"
   },
   "settings": {
     "fullScreen": "全螢幕",

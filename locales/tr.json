@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "Alan seçmek için sürükleyin · Pencere moduna geçmek için Boşluk · İptal için Esc",
-    "snapHint": "Yakalamak için bir pencereye tıklayın · Geri dönmek için Boşluk"
+    "snapHint": "Yakalamak için bir pencereye tıklayın · Geri dönmek için Boşluk",
+    "loupeHint": "Büyüteci yakınlaştırmak için kaydırın · Rengi kopyalamak için sağ tıklayın"
   },
   "settings": {
     "fullScreen": "Tam ekran",

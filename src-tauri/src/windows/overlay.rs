@@ -1,4 +1,4 @@
-use tauri::{AppHandle, Emitter, LogicalPosition, LogicalSize, Manager, WebviewWindow};
+use tauri::{AppHandle, Emitter, Manager, PhysicalPosition, PhysicalSize, WebviewWindow};
 
 use crate::capture;
 
@@ -41,6 +41,54 @@ fn virtual_desktop_bounds(app: &AppHandle) -> Result<(f64, f64, f64, f64), Strin
         (max_x - min_x) as f64 / scale,
         (max_y - min_y) as f64 / scale,
     ))
+}
+
+/// The virtual desktop in physical pixels: where it starts (can be negative)
+/// and how big it is. The frozen screen is exactly this big.
+fn physical_desktop_bounds(app: &AppHandle) -> Result<(i32, i32, u32, u32), String> {
+    let monitors = app.available_monitors().map_err(|e| e.to_string())?;
+    let (min_x, min_y, max_x, max_y) = monitors.iter().fold(
+        (i32::MAX, i32::MAX, i32::MIN, i32::MIN),
+        |(min_x, min_y, max_x, max_y), m| {
+            let pos = m.position();
+            let size = m.size();
+            (
+                min_x.min(pos.x),
+                min_y.min(pos.y),
+                max_x.max(pos.x + size.width as i32),
+                max_y.max(pos.y + size.height as i32),
+            )
+        },
+    );
+    if min_x > max_x {
+        return Err("no monitors".to_string());
+    }
+    Ok((min_x, min_y, (max_x - min_x) as u32, (max_y - min_y) as u32))
+}
+
+/// Puts the window's *drawing area* exactly over the desktop, pixel for pixel.
+///
+/// A window is positioned by its outer edge, but the page is drawn inside it,
+/// and Windows gives even a borderless window an invisible frame (a few pixels
+/// each side, scaled by DPI). Positioning the outer edge at the desktop's
+/// corner left the page offset by that frame, so the frozen screen sat a pixel
+/// or two off from the live one underneath: the whole picture visibly shifted
+/// when the overlay appeared. So the size is set first, the frame measured, and
+/// the window moved back by it.
+fn place_over_desktop(window: &WebviewWindow, x: i32, y: i32, width: u32, height: u32) -> Result<(), String> {
+    window.set_size(PhysicalSize::new(width, height)).map_err(|e| e.to_string())?;
+    window
+        .set_position(PhysicalPosition::new(x, y))
+        .map_err(|e| e.to_string())?;
+    let outer = window.outer_position().map_err(|e| e.to_string())?;
+    let inner = window.inner_position().map_err(|e| e.to_string())?;
+    let (frame_x, frame_y) = (inner.x - outer.x, inner.y - outer.y);
+    if frame_x != 0 || frame_y != 0 {
+        window
+            .set_position(PhysicalPosition::new(x - frame_x, y - frame_y))
+            .map_err(|e| e.to_string())?;
+    }
+    Ok(())
 }
 
 fn build_overlay_window(app: &AppHandle, x: f64, y: f64, width: f64, height: f64) -> Result<WebviewWindow, String> {
@@ -119,12 +167,8 @@ fn present_overlay(app: &AppHandle) -> Result<(), String> {
         // The pre-warmed window (or one left over from a prior capture) may
         // still be positioned/sized for a stale monitor layout ~ put it back
         // over the real bounds every time, not just on first creation.
-        existing
-            .set_position(LogicalPosition::new(x, y))
-            .map_err(|e| e.to_string())?;
-        existing
-            .set_size(LogicalSize::new(width, height))
-            .map_err(|e| e.to_string())?;
+        let (px, py, pw, ph) = physical_desktop_bounds(app)?;
+        place_over_desktop(&existing, px, py, pw, ph)?;
 
         // Only ask a page that has actually mounted. Pressing the capture
         // shortcut in the gap between the pre-warmed window being created and

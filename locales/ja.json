@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "ドラッグで範囲を選択 · Space でウィンドウモード · Esc でキャンセル",
-    "snapHint": "ウィンドウをクリックしてキャプチャ · Space で戻る"
+    "snapHint": "ウィンドウをクリックしてキャプチャ · Space で戻る",
+    "loupeHint": "スクロールで拡大鏡をズーム · 右クリックで色をコピー"
   },
   "settings": {
     "fullScreen": "画面全体",

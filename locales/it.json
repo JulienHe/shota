@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "Trascina per selezionare un'area · Spazio per passare alla modalità finestra · Esc per annullare",
-    "snapHint": "Fai clic su una finestra per catturarla · Spazio per tornare indietro"
+    "snapHint": "Fai clic su una finestra per catturarla · Spazio per tornare indietro",
+    "loupeHint": "Scorri per zoomare la lente · Clic destro per copiare il colore"
   },
   "settings": {
     "fullScreen": "Schermo intero",

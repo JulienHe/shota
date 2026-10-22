@@ -1,0 +1,39 @@
+.magnifier {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(20, 21, 26, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.magnifier__loupe {
+  display: block;
+  /* Hard pixel edges: it magnifies single pixels, not a smoothed picture. */
+  image-rendering: pixelated;
+}
+
+.magnifier__caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 8px;
+  color: #fff;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* The colour under the cursor, next to its code. */
+.magnifier__swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.55);
+}

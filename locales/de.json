@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "Ziehen, um einen Bereich zu wählen · Leertaste für Fenstermodus · Esc zum Abbrechen",
-    "snapHint": "Fenster anklicken, um es aufzunehmen · Leertaste für zurück"
+    "snapHint": "Fenster anklicken, um es aufzunehmen · Leertaste für zurück",
+    "loupeHint": "Scrollen zoomt die Lupe · Rechtsklick kopiert die Farbe"
   },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",

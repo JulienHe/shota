@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "拖动以选择区域 · 空格切换窗口模式 · Esc 取消",
-    "snapHint": "点击窗口即可捕获 · 空格返回"
+    "snapHint": "点击窗口即可捕获 · 空格返回",
+    "loupeHint": "滚动缩放放大镜 · 右键复制颜色"
   },
   "settings": {
     "fullScreen": "全屏",

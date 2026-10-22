@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "Sleep om een gebied te selecteren · Spatie voor venstermodus · Esc om te annuleren",
-    "snapHint": "Klik op een venster om het vast te leggen · Spatie om terug te gaan"
+    "snapHint": "Klik op een venster om het vast te leggen · Spatie om terug te gaan",
+    "loupeHint": "Scrol om de loep te zoomen · Rechtsklik kopieert de kleur"
   },
   "settings": {
     "fullScreen": "Volledig scherm",

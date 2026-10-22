@@ -83,7 +83,8 @@
   },
   "overlay": {
     "dragHint": "Arraste para selecionar uma área · Espaço para alternar para o modo janela · Esc para cancelar",
-    "snapHint": "Clique em uma janela para capturá-la · Espaço para voltar"
+    "snapHint": "Clique em uma janela para capturá-la · Espaço para voltar",
+    "loupeHint": "Role para ampliar a lupa · Clique direito para copiar a cor"
   },
   "settings": {
     "fullScreen": "Tela inteira",
