@@ -164,3 +164,35 @@
 .background-panel__slider input:disabled {
   opacity: 0.4;
 }
+
+/* Small text buttons: whole looks, and the frame's shape. */
+.background-panel__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.background-panel__chip {
+  padding: 5px 10px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.background-panel__chip:hover:not(:disabled) {
+  background: rgba(128, 128, 128, 0.18);
+}
+
+.background-panel__chip:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.background-panel__chip--active {
+  border-color: #3d7bfd;
+  background: rgba(61, 123, 253, 0.2);
+}

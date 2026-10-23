@@ -25,6 +25,12 @@ export interface Frame {
   padding: number;
   corners: number;
   shadow: number;
+  /**
+   * The shape of the exported picture, width over height. Absent or null
+   * follows the screenshot; otherwise the frame is made wider or taller, with
+   * the screenshot centred in it, until it is this shape.
+   */
+  aspect?: number | null;
 }
 
 export const DEFAULT_SLIDERS = { padding: 40, corners: 35, shadow: 45 };
@@ -55,8 +61,18 @@ export function frameMetrics(frame: Frame, width: number, height: number): Frame
   const padding = Math.round((frame.padding / 100) * 0.16 * longSide);
   const radius = Math.min((frame.corners / 100) * 0.035 * longSide, Math.min(width, height) / 2);
   const shadowBlur = (frame.shadow / 100) * 0.05 * longSide;
+  let outWidth = width + padding * 2;
+  let outHeight = height + padding * 2;
+  if (frame.aspect && frame.aspect > 0) {
+    // Grow whichever side is short of the shape; never shrink either.
+    if (outWidth / outHeight < frame.aspect) outWidth = Math.round(outHeight * frame.aspect);
+    else outHeight = Math.round(outWidth / frame.aspect);
+  }
+  const left = Math.floor((outWidth - width) / 2);
+  const top = Math.floor((outHeight - height) / 2);
   return {
-    bounds: { x: -padding, y: -padding, width: width + padding * 2, height: height + padding * 2 },
+    // `0 - n`, not `-n`: a bare minus gives -0 for 0, which is not 0 to a strict comparison.
+    bounds: { x: 0 - left, y: 0 - top, width: outWidth, height: outHeight },
     padding,
     radius,
     shadowBlur,

@@ -75,7 +75,16 @@
     "transparent": "Прозрачный",
     "padding": "Отступ",
     "corners": "Углы",
-    "shadow": "Тень"
+    "shadow": "Тень",
+    "looks": "Стили",
+    "shape": "Форма",
+    "auto": "Авто",
+    "presetClean": "Чистый",
+    "presetSunset": "Закат",
+    "presetSquare": "Квадратный пост",
+    "presetWide": "Широкий",
+    "presetStory": "История",
+    "presetShadow": "Только тень"
   },
   "history": {
     "restore": "Открыть",

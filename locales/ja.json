@@ -75,7 +75,16 @@
     "transparent": "透明",
     "padding": "余白",
     "corners": "角の丸み",
-    "shadow": "影"
+    "shadow": "影",
+    "looks": "スタイル",
+    "shape": "形",
+    "auto": "自動",
+    "presetClean": "クリーン",
+    "presetSunset": "夕焼け",
+    "presetSquare": "正方形の投稿",
+    "presetWide": "ワイド",
+    "presetStory": "ストーリー",
+    "presetShadow": "影のみ"
   },
   "history": {
     "restore": "復元",

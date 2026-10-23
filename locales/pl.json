@@ -75,7 +75,16 @@
     "transparent": "Przezroczyste",
     "padding": "Margines",
     "corners": "Narożniki",
-    "shadow": "Cień"
+    "shadow": "Cień",
+    "looks": "Style",
+    "shape": "Kształt",
+    "auto": "Auto",
+    "presetClean": "Czysty",
+    "presetSunset": "Zachód słońca",
+    "presetSquare": "Kwadratowy post",
+    "presetWide": "Szeroki",
+    "presetStory": "Relacja",
+    "presetShadow": "Tylko cień"
   },
   "history": {
     "restore": "Przywróć",

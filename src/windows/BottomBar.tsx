@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, GripVertical, Pin, Save, Share2 } from "lucide-react";
+import { Copy, GripVertical, Pin, Save, Scaling, Share2 } from "lucide-react";
 import { EXPORT_SCALES, useUiStore } from "../stores/uiStore";
 import { IconButton } from "../components/IconButton";
 import { Dropdown } from "../components/Dropdown";
@@ -83,7 +83,12 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onS
           open={sizeOpen}
           onToggle={() => setSizeOpen((o) => !o)}
           onClose={() => setSizeOpen(false)}
-          trigger={<span title={t("editor.exportSize")}>{`${Math.round(exportScale * 100)}%`}</span>}
+          trigger={
+            <span title={t("editor.exportSize")} className="bottom-bar__size-trigger">
+              <Scaling size={15} strokeWidth={2} />
+              {exportScale !== 1 && `${Math.round(exportScale * 100)}%`}
+            </span>
+          }
         >
           <div className="bottom-bar__zoom-menu">
             <div className="bottom-bar__menu-title">{t("editor.exportSize")}</div>

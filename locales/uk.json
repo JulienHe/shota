@@ -75,7 +75,16 @@
     "transparent": "Прозоре",
     "padding": "Відступ",
     "corners": "Кути",
-    "shadow": "Тінь"
+    "shadow": "Тінь",
+    "looks": "Стилі",
+    "shape": "Форма",
+    "auto": "Авто",
+    "presetClean": "Чистий",
+    "presetSunset": "Захід сонця",
+    "presetSquare": "Квадратний допис",
+    "presetWide": "Широкий",
+    "presetStory": "Історія",
+    "presetShadow": "Лише тінь"
   },
   "history": {
     "restore": "Відкрити",

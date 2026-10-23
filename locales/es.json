@@ -75,7 +75,16 @@
     "transparent": "Transparente",
     "padding": "Margen",
     "corners": "Esquinas",
-    "shadow": "Sombra"
+    "shadow": "Sombra",
+    "looks": "Estilos",
+    "shape": "Formato",
+    "auto": "Auto",
+    "presetClean": "Limpio",
+    "presetSunset": "Atardecer",
+    "presetSquare": "Publicación cuadrada",
+    "presetWide": "Panorámico",
+    "presetStory": "Historia",
+    "presetShadow": "Solo sombra"
   },
   "history": {
     "restore": "Restaurar",

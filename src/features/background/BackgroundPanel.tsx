@@ -7,6 +7,7 @@ import { t } from "../../lib/i18n";
 import { Frame, FrameBackground, lastSliders, rememberSliders } from "./frame";
 import { GRADIENTS, gradientCss } from "./gradients";
 import { blurredCopy, loadBackgroundImage } from "./useFrameBackground";
+import { FRAME_ASPECTS, FRAME_PRESETS } from "./framePresets";
 import "./BackgroundPanel.css";
 
 /** Neutrals first, then a spectrum in two rows: saturated, then soft. */
@@ -120,6 +121,22 @@ export function BackgroundPanel() {
   return (
     <aside className="background-panel">
       <section className="background-panel__section">
+        <h3>{t("background.looks")}</h3>
+        <div className="background-panel__chips">
+          {FRAME_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              className="background-panel__chip"
+              onClick={() => apply({ ...preset.frame })}
+            >
+              {t(preset.label)}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="background-panel__section">
         <h3>{t("background.gradients")}</h3>
         <div className="background-panel__grid">
           {GRADIENTS.map((gradient) =>
@@ -161,6 +178,27 @@ export function BackgroundPanel() {
               `background-panel__color${color === "transparent" ? " background-panel__color--transparent" : ""}`,
             ),
           )}
+        </div>
+      </section>
+
+      <section className="background-panel__section">
+        <h3>{t("background.shape")}</h3>
+        <div className="background-panel__chips">
+          {FRAME_ASPECTS.map((option) => {
+            const active = (frame?.aspect ?? null) === option.ratio;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                disabled={!frame}
+                aria-pressed={active}
+                className={`background-panel__chip${active ? " background-panel__chip--active" : ""}`}
+                onClick={() => adjust({ aspect: option.ratio })}
+              >
+                {option.label ?? t("background.auto")}
+              </button>
+            );
+          })}
         </div>
       </section>
 

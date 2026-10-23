@@ -75,7 +75,16 @@
     "transparent": "Saydam",
     "padding": "Kenar boşluğu",
     "corners": "Köşeler",
-    "shadow": "Gölge"
+    "shadow": "Gölge",
+    "looks": "Stiller",
+    "shape": "Biçim",
+    "auto": "Otomatik",
+    "presetClean": "Temiz",
+    "presetSunset": "Gün batımı",
+    "presetSquare": "Kare gönderi",
+    "presetWide": "Geniş",
+    "presetStory": "Hikâye",
+    "presetShadow": "Yalnız gölge"
   },
   "history": {
     "restore": "Geri yükle",

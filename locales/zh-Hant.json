@@ -75,7 +75,16 @@
     "transparent": "透明",
     "padding": "邊距",
     "corners": "圓角",
-    "shadow": "陰影"
+    "shadow": "陰影",
+    "looks": "樣式",
+    "shape": "比例",
+    "auto": "自動",
+    "presetClean": "簡潔",
+    "presetSunset": "日落",
+    "presetSquare": "方形貼文",
+    "presetWide": "寬螢幕",
+    "presetStory": "限時動態",
+    "presetShadow": "僅陰影"
   },
   "history": {
     "restore": "還原",

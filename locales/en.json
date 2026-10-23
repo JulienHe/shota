@@ -75,7 +75,16 @@
     "transparent": "Transparent",
     "padding": "Padding",
     "corners": "Corners",
-    "shadow": "Shadow"
+    "shadow": "Shadow",
+    "looks": "Looks",
+    "shape": "Shape",
+    "auto": "Auto",
+    "presetClean": "Clean",
+    "presetSunset": "Sunset",
+    "presetSquare": "Square post",
+    "presetWide": "Wide",
+    "presetStory": "Story",
+    "presetShadow": "Shadow only"
   },
   "history": {
     "restore": "Restore",

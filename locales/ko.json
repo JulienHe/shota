@@ -75,7 +75,16 @@
     "transparent": "투명",
     "padding": "여백",
     "corners": "모서리",
-    "shadow": "그림자"
+    "shadow": "그림자",
+    "looks": "스타일",
+    "shape": "비율",
+    "auto": "자동",
+    "presetClean": "깔끔하게",
+    "presetSunset": "노을",
+    "presetSquare": "정사각형 게시물",
+    "presetWide": "와이드",
+    "presetStory": "스토리",
+    "presetShadow": "그림자만"
   },
   "history": {
     "restore": "복원",

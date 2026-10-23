@@ -75,7 +75,16 @@
     "transparent": "Transparent",
     "padding": "Marge",
     "corners": "Coins",
-    "shadow": "Ombre"
+    "shadow": "Ombre",
+    "looks": "Styles",
+    "shape": "Format",
+    "auto": "Auto",
+    "presetClean": "Épuré",
+    "presetSunset": "Coucher de soleil",
+    "presetSquare": "Post carré",
+    "presetWide": "Large",
+    "presetStory": "Story",
+    "presetShadow": "Ombre seule"
   },
   "history": {
     "restore": "Restaurer",

@@ -75,7 +75,16 @@
     "transparent": "Transparent",
     "padding": "Abstand",
     "corners": "Ecken",
-    "shadow": "Schatten"
+    "shadow": "Schatten",
+    "looks": "Looks",
+    "shape": "Format",
+    "auto": "Auto",
+    "presetClean": "Klar",
+    "presetSunset": "Sonnenuntergang",
+    "presetSquare": "Quadratischer Post",
+    "presetWide": "Breit",
+    "presetStory": "Story",
+    "presetShadow": "Nur Schatten"
   },
   "history": {
     "restore": "Wiederherstellen",

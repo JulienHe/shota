@@ -75,7 +75,16 @@
     "transparent": "Transparente",
     "padding": "Margem",
     "corners": "Cantos",
-    "shadow": "Sombra"
+    "shadow": "Sombra",
+    "looks": "Estilos",
+    "shape": "Formato",
+    "auto": "Auto",
+    "presetClean": "Limpo",
+    "presetSunset": "Pôr do sol",
+    "presetSquare": "Post quadrado",
+    "presetWide": "Largo",
+    "presetStory": "Story",
+    "presetShadow": "Só sombra"
   },
   "history": {
     "restore": "Restaurar",

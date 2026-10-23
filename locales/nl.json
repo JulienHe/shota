@@ -75,7 +75,16 @@
     "transparent": "Transparant",
     "padding": "Marge",
     "corners": "Hoeken",
-    "shadow": "Schaduw"
+    "shadow": "Schaduw",
+    "looks": "Stijlen",
+    "shape": "Vorm",
+    "auto": "Auto",
+    "presetClean": "Strak",
+    "presetSunset": "Zonsondergang",
+    "presetSquare": "Vierkante post",
+    "presetWide": "Breed",
+    "presetStory": "Story",
+    "presetShadow": "Alleen schaduw"
   },
   "history": {
     "restore": "Herstellen",
