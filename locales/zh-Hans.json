@@ -110,7 +110,9 @@
     "modeText": "文字",
     "size": "选区大小",
     "modePin": "置顶",
-    "pinHint": "拖动选择区域并将其置顶显示 · 按 Esc 取消"
+    "pinHint": "拖动选择区域并将其置顶显示 · 按 Esc 取消",
+    "modeScroll": "滚动",
+    "scrollHint": "在内容上拖动，自动滚动并截取（测试版） · 按 Esc 取消"
   },
   "settings": {
     "fullScreen": "全屏",
@@ -246,5 +248,13 @@
     "saved": "项目已保存",
     "saveFailed": "无法保存项目 ~ 请重试",
     "openFailed": "无法打开该项目"
+  },
+  "scroll": {
+    "waiting": "请滚动内容…",
+    "captured": "已截取 {height} 像素",
+    "stitching": "正在拼接…",
+    "keys": "按 Enter 完成 · 按 Esc 取消",
+    "done": "完成",
+    "cancel": "取消"
   }
 }

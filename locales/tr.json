@@ -110,7 +110,9 @@
     "modeText": "Metin",
     "size": "Seçim boyutu",
     "modePin": "Sabitle",
-    "pinHint": "Ekrana sabitlemek için bir alanın üzerinde sürükleyin · İptal için Esc"
+    "pinHint": "Ekrana sabitlemek için bir alanın üzerinde sürükleyin · İptal için Esc",
+    "modeScroll": "Kaydırma",
+    "scrollHint": "İçeriği kaydırıp yakalamak için üzerinde sürükleyin (beta) · İptal için Esc"
   },
   "settings": {
     "fullScreen": "Tam ekran",
@@ -246,5 +248,13 @@
     "saved": "Proje kaydedildi",
     "saveFailed": "Proje kaydedilemedi ~ tekrar deneyin",
     "openFailed": "Bu proje açılamadı"
+  },
+  "scroll": {
+    "waiting": "İçeriği kaydırın…",
+    "captured": "{height} px yakalandı",
+    "stitching": "Birleştiriliyor…",
+    "keys": "Bitirmek için Enter · İptal için Esc",
+    "done": "Bitti",
+    "cancel": "İptal"
   }
 }

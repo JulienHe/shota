@@ -110,7 +110,9 @@
     "modeText": "Text",
     "size": "Selection size",
     "modePin": "Pin",
-    "pinHint": "Drag over an area to pin it on screen · Esc to cancel"
+    "pinHint": "Drag over an area to pin it on screen · Esc to cancel",
+    "modeScroll": "Scrolling",
+    "scrollHint": "Drag over the content to scroll and capture it (beta) · Esc to cancel"
   },
   "settings": {
     "fullScreen": "Full screen",
@@ -246,5 +248,13 @@
     "saved": "Project saved",
     "saveFailed": "Couldn't save the project ~ try again",
     "openFailed": "Couldn't open that project"
+  },
+  "scroll": {
+    "waiting": "Scroll the content…",
+    "captured": "{height} px captured",
+    "stitching": "Putting it together…",
+    "keys": "Enter to finish · Esc to cancel",
+    "done": "Done",
+    "cancel": "Cancel"
   }
 }

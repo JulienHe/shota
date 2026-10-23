@@ -1,3 +1,4 @@
+use image::RgbaImage;
 use xcap::Monitor;
 
 use super::encode_png;
@@ -5,6 +6,12 @@ use super::encode_png;
 /// Captures an arbitrary rectangular region in virtual-screen coordinates by
 /// capturing the monitor(s) it overlaps and cropping to the requested bounds.
 pub fn capture_region(x: i32, y: i32, width: u32, height: u32) -> Result<Vec<u8>, String> {
+    encode_png(capture_region_image(x, y, width, height)?)
+}
+
+/// The same, as pixels rather than a PNG: for callers that go on to work on
+/// them, like the scrolling capture, which takes dozens of these.
+pub fn capture_region_image(x: i32, y: i32, width: u32, height: u32) -> Result<RgbaImage, String> {
     if width == 0 || height == 0 {
         return Err("Region must have non-zero width and height".to_string());
     }
@@ -27,14 +34,12 @@ pub fn capture_region(x: i32, y: i32, width: u32, height: u32) -> Result<Vec<u8>
     let local_x = (x - mx).max(0) as u32;
     let local_y = (y - my).max(0) as u32;
 
-    let cropped = image::imageops::crop_imm(
+    Ok(image::imageops::crop_imm(
         &full,
         local_x.min(full.width().saturating_sub(1)),
         local_y.min(full.height().saturating_sub(1)),
         width.min(full.width().saturating_sub(local_x)),
         height.min(full.height().saturating_sub(local_y)),
     )
-    .to_image();
-
-    encode_png(cropped)
+    .to_image())
 }

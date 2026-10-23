@@ -110,7 +110,9 @@
     "modeText": "Testo",
     "size": "Dimensione della selezione",
     "modePin": "Fissa",
-    "pinHint": "Trascina su un'area per fissarla sullo schermo · Esc per annullare"
+    "pinHint": "Trascina su un'area per fissarla sullo schermo · Esc per annullare",
+    "modeScroll": "Scorrimento",
+    "scrollHint": "Trascina sul contenuto per scorrerlo e catturarlo (beta) · Esc per annullare"
   },
   "settings": {
     "fullScreen": "Schermo intero",
@@ -246,5 +248,13 @@
     "saved": "Progetto salvato",
     "saveFailed": "Impossibile salvare il progetto ~ riprova",
     "openFailed": "Impossibile aprire quel progetto"
+  },
+  "scroll": {
+    "waiting": "Scorri il contenuto…",
+    "captured": "{height} px catturati",
+    "stitching": "Composizione…",
+    "keys": "Invio per terminare · Esc per annullare",
+    "done": "Fine",
+    "cancel": "Annulla"
   }
 }

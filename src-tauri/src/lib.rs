@@ -13,6 +13,7 @@ mod qr;
 mod import;
 mod printscreen;
 mod project;
+mod scroll_capture;
 mod share_out;
 mod snapshot_hook;
 mod startup;
@@ -128,6 +129,9 @@ pub fn run() {
             commands::finish_fullscreen_capture,
             commands::finish_pin_capture,
             commands::save_project,
+            commands::finish_scroll_selection,
+            commands::finish_scroll_capture,
+            commands::cancel_scroll_capture,
             commands::pin_image,
             commands::take_pin_image,
             commands::copy_pin_image,

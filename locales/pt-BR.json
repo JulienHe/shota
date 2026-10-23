@@ -110,7 +110,9 @@
     "modeText": "Texto",
     "size": "Tamanho da seleção",
     "modePin": "Fixar",
-    "pinHint": "Arraste sobre uma área para fixá-la na tela · Esc para cancelar"
+    "pinHint": "Arraste sobre uma área para fixá-la na tela · Esc para cancelar",
+    "modeScroll": "Rolagem",
+    "scrollHint": "Arraste sobre o conteúdo para rolar e capturar (beta) · Esc para cancelar"
   },
   "settings": {
     "fullScreen": "Tela inteira",
@@ -246,5 +248,13 @@
     "saved": "Projeto salvo",
     "saveFailed": "Não foi possível salvar o projeto ~ tente novamente",
     "openFailed": "Não foi possível abrir esse projeto"
+  },
+  "scroll": {
+    "waiting": "Role o conteúdo…",
+    "captured": "{height} px capturados",
+    "stitching": "Juntando…",
+    "keys": "Enter para concluir · Esc para cancelar",
+    "done": "Concluir",
+    "cancel": "Cancelar"
   }
 }

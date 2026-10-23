@@ -110,7 +110,9 @@
     "modeText": "文字",
     "size": "選取範圍大小",
     "modePin": "釘選",
-    "pinHint": "拖曳選取區域並將其釘選在螢幕上 · 按 Esc 取消"
+    "pinHint": "拖曳選取區域並將其釘選在螢幕上 · 按 Esc 取消",
+    "modeScroll": "捲動",
+    "scrollHint": "在內容上拖曳，自動捲動並擷取（測試版） · 按 Esc 取消"
   },
   "settings": {
     "fullScreen": "全螢幕",
@@ -246,5 +248,13 @@
     "saved": "專案已儲存",
     "saveFailed": "無法儲存專案 ~ 請重試",
     "openFailed": "無法開啟該專案"
+  },
+  "scroll": {
+    "waiting": "請捲動內容…",
+    "captured": "已擷取 {height} 像素",
+    "stitching": "正在拼接…",
+    "keys": "按 Enter 完成 · 按 Esc 取消",
+    "done": "完成",
+    "cancel": "取消"
   }
 }

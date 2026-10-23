@@ -110,7 +110,9 @@
     "modeText": "텍스트",
     "size": "선택 영역 크기",
     "modePin": "고정",
-    "pinHint": "영역 위로 드래그하여 화면에 고정 · Esc로 취소"
+    "pinHint": "영역 위로 드래그하여 화면에 고정 · Esc로 취소",
+    "modeScroll": "스크롤",
+    "scrollHint": "내용 위로 드래그하여 스크롤하며 캡처 (베타) · Esc로 취소"
   },
   "settings": {
     "fullScreen": "전체 화면",
@@ -246,5 +248,13 @@
     "saved": "프로젝트를 저장했습니다",
     "saveFailed": "프로젝트를 저장할 수 없습니다 ~ 다시 시도하세요",
     "openFailed": "해당 프로젝트를 열 수 없습니다"
+  },
+  "scroll": {
+    "waiting": "내용을 스크롤하세요…",
+    "captured": "{height}px 캡처됨",
+    "stitching": "이어 붙이는 중…",
+    "keys": "Enter로 완료 · Esc로 취소",
+    "done": "완료",
+    "cancel": "취소"
   }
 }

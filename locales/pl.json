@@ -110,7 +110,9 @@
     "modeText": "Tekst",
     "size": "Rozmiar zaznaczenia",
     "modePin": "Przypnij",
-    "pinHint": "Przeciągnij po obszarze, aby przypiąć go na ekranie · Esc anuluje"
+    "pinHint": "Przeciągnij po obszarze, aby przypiąć go na ekranie · Esc anuluje",
+    "modeScroll": "Przewijanie",
+    "scrollHint": "Przeciągnij po treści, aby ją przewinąć i przechwycić (beta) · Esc anuluje"
   },
   "settings": {
     "fullScreen": "Cały ekran",
@@ -246,5 +248,13 @@
     "saved": "Zapisano projekt",
     "saveFailed": "Nie udało się zapisać projektu ~ spróbuj ponownie",
     "openFailed": "Nie udało się otworzyć tego projektu"
+  },
+  "scroll": {
+    "waiting": "Przewiń treść…",
+    "captured": "Przechwycono {height} px",
+    "stitching": "Składanie…",
+    "keys": "Enter kończy · Esc anuluje",
+    "done": "Gotowe",
+    "cancel": "Anuluj"
   }
 }

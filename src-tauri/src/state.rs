@@ -223,6 +223,8 @@ pub struct AppState {
     /// The PNG of every pinned screenshot that is still on screen, by pin id.
     pins: Mutex<HashMap<u64, Arc<Vec<u8>>>>,
     pin_seq: AtomicU64,
+    /// The scrolling capture in progress, if there is one.
+    scroll_session: Mutex<Option<Arc<crate::scroll_capture::Session>>>,
 }
 
 impl AppState {
@@ -239,6 +241,7 @@ impl AppState {
             overlay_open: AtomicBool::new(false),
             pins: Mutex::new(HashMap::new()),
             pin_seq: AtomicU64::new(0),
+            scroll_session: Mutex::new(None),
         }
     }
 
@@ -368,6 +371,25 @@ impl AppState {
 
     pub fn set_overlay_open(&self, open: bool) {
         self.overlay_open.store(open, Ordering::SeqCst);
+    }
+
+    /// Begins a scrolling capture, or None if one is already running.
+    pub fn begin_scroll_session(&self) -> Option<Arc<crate::scroll_capture::Session>> {
+        let mut slot = self.scroll_session.lock().unwrap();
+        if slot.is_some() {
+            return None;
+        }
+        let session = Arc::new(crate::scroll_capture::Session::default());
+        *slot = Some(session.clone());
+        Some(session)
+    }
+
+    pub fn scroll_session(&self) -> Option<Arc<crate::scroll_capture::Session>> {
+        self.scroll_session.lock().unwrap().clone()
+    }
+
+    pub fn end_scroll_session(&self) {
+        *self.scroll_session.lock().unwrap() = None;
     }
 
     /// Keeps a pinned screenshot's PNG and returns the id of the pin.

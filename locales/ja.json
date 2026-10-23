@@ -110,7 +110,9 @@
     "modeText": "テキスト",
     "size": "選択範囲のサイズ",
     "modePin": "ピン留め",
-    "pinHint": "範囲をドラッグして画面にピン留め · Esc でキャンセル"
+    "pinHint": "範囲をドラッグして画面にピン留め · Esc でキャンセル",
+    "modeScroll": "スクロール",
+    "scrollHint": "内容の上をドラッグしてスクロールしながらキャプチャ（ベータ） · Esc でキャンセル"
   },
   "settings": {
     "fullScreen": "画面全体",
@@ -246,5 +248,13 @@
     "saved": "プロジェクトを保存しました",
     "saveFailed": "プロジェクトを保存できませんでした ~ もう一度お試しください",
     "openFailed": "そのプロジェクトを開けませんでした"
+  },
+  "scroll": {
+    "waiting": "内容をスクロールしてください…",
+    "captured": "{height} px をキャプチャしました",
+    "stitching": "つなぎ合わせています…",
+    "keys": "Enter で完了 · Esc でキャンセル",
+    "done": "完了",
+    "cancel": "キャンセル"
   }
 }

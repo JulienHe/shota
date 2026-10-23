@@ -1,0 +1,83 @@
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+.scroll-hud {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  padding: 0 14px 0 18px;
+  border-radius: 16px;
+  background: rgba(24, 25, 30, 0.94);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  user-select: none;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.scroll-hud__message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.scroll-hud__hint {
+  margin-top: 3px;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.scroll-hud__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #34c759;
+  animation: scroll-hud-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes scroll-hud-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.scroll-hud__buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.scroll-hud__buttons button {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scroll-hud__done {
+  background: #3d7bfd;
+  color: #fff;
+}
+
+.scroll-hud__cancel {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.scroll-hud__cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

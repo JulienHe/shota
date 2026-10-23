@@ -594,3 +594,30 @@ pub fn save_project(
     std::fs::write(&path, text).map_err(|e| e.to_string())?;
     Ok(Some(path.to_string_lossy().to_string()))
 }
+
+/// The overlay's selection for a scrolling capture: put the overlay away, hand
+/// the keyboard and the wheel back to the app underneath, and start.
+#[tauri::command]
+pub async fn finish_scroll_selection(app: AppHandle, x: i32, y: i32, width: u32, height: u32) -> Result<(), String> {
+    hide_capture_overlay(&app)?;
+    app.state::<AppState>().clear_freeze();
+    // The content has to receive the scrolling, not the overlay.
+    crate::windows::restore_foreground_after_pin();
+    crate::scroll_capture::start(&app, crate::scroll_capture::Region { x, y, width, height })
+}
+
+/// The panel's "Done": stop scrolling and open what has been captured.
+#[tauri::command]
+pub fn finish_scroll_capture(app: AppHandle) {
+    if let Some(session) = app.state::<AppState>().scroll_session() {
+        session.finish.store(true, std::sync::atomic::Ordering::SeqCst);
+    }
+}
+
+/// The panel's "Cancel": stop and throw it away.
+#[tauri::command]
+pub fn cancel_scroll_capture(app: AppHandle) {
+    if let Some(session) = app.state::<AppState>().scroll_session() {
+        session.cancel.store(true, std::sync::atomic::Ordering::SeqCst);
+    }
+}

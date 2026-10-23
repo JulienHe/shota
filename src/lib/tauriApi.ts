@@ -104,6 +104,16 @@ export const tauriApi = {
   saveProject: (historyId: string, documentJson: string, suggestedName: string) =>
     invoke<string | null>("save_project", { historyId, documentJson, suggestedName }),
 
+  /** The overlay's selection for a scrolling capture: starts it. */
+  finishScrollSelection: (x: number, y: number, width: number, height: number) =>
+    invoke<void>("finish_scroll_selection", { x, y, width, height }),
+
+  /** Ends a scrolling capture and opens what it has. */
+  finishScrollCapture: () => invoke<void>("finish_scroll_capture"),
+
+  /** Ends a scrolling capture and throws it away. */
+  cancelScrollCapture: () => invoke<void>("cancel_scroll_capture"),
+
   finishTextCapture: (x: number, y: number, width: number, height: number) =>
     invoke<{ kind: "qr" | "text" | "none"; text: string }>("finish_text_capture", { x, y, width, height }),
 

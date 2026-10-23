@@ -367,3 +367,15 @@ Other things to keep:
   wrong paths. The decisive evidence came from a probe hook logging *real* presses beside Shota's own log.
   A registered-but-silent hotkey looks identical to a working one until you press it, so check for the
   effect, not for a registration error.
+
+## Scrolling capture: injected input is not trustworthy, so look at the pictures
+
+`scroll_capture.rs` scrolls with `SendInput` wheel events and joins frames in `capture/stitch.rs`,
+which only compares how consecutive pictures differ. That is deliberate: on the development
+machine injected wheel input is sometimes dropped (the loop then waits for the user to scroll by
+hand) and was once measured turning the *opposite way* from what its sign says, so the first
+scroll that moves the content the wrong way flips the wheel (`Stitcher::scrolled_up_by`).
+
+When testing, close the editor first. A finished capture opens the editor at the same screen
+position, so the next run's region sits over Shota's own window and the wheel zooms that instead.
+Posted `WM_MOUSEWHEEL` messages and simulated Ctrl keys both make Notepad zoom rather than scroll.

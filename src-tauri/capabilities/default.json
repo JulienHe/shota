@@ -7,7 +7,8 @@
     "overlay",
     "editor",
     "history",
-    "pin-*"
+    "pin-*",
+    "scroll-hud"
   ],
   "permissions": [
     "core:default",

@@ -110,7 +110,9 @@
     "modeText": "Texte",
     "size": "Taille de la sélection",
     "modePin": "Épingler",
-    "pinHint": "Faites glisser sur une zone pour l'épingler à l'écran · Échap pour annuler"
+    "pinHint": "Faites glisser sur une zone pour l'épingler à l'écran · Échap pour annuler",
+    "modeScroll": "Défilement",
+    "scrollHint": "Faites glisser sur le contenu pour le faire défiler et le capturer (bêta) · Échap pour annuler"
   },
   "settings": {
     "fullScreen": "Plein écran",
@@ -246,5 +248,13 @@
     "saved": "Projet enregistré",
     "saveFailed": "Impossible d'enregistrer le projet ~ réessayez",
     "openFailed": "Impossible d'ouvrir ce projet"
+  },
+  "scroll": {
+    "waiting": "Faites défiler le contenu…",
+    "captured": "{height} px capturés",
+    "stitching": "Assemblage…",
+    "keys": "Entrée pour terminer · Échap pour annuler",
+    "done": "Terminé",
+    "cancel": "Annuler"
   }
 }

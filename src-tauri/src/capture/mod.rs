@@ -1,11 +1,13 @@
 mod desktop;
 mod monitors;
+mod stitch;
 mod region;
 mod windows_enum;
 
 pub use desktop::{capture_desktop, Desktop};
 pub use monitors::capture_fullscreen;
-pub use region::capture_region;
+pub use stitch::{Step, Stitcher};
+pub use region::{capture_region, capture_region_image};
 pub use windows_enum::{capture_window, list_windows, WindowInfo};
 
 use image::codecs::png::{CompressionType, FilterType, PngEncoder};

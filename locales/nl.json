@@ -110,7 +110,9 @@
     "modeText": "Tekst",
     "size": "Grootte van de selectie",
     "modePin": "Vastzetten",
-    "pinHint": "Sleep over een gebied om het op het scherm vast te zetten · Esc om te annuleren"
+    "pinHint": "Sleep over een gebied om het op het scherm vast te zetten · Esc om te annuleren",
+    "modeScroll": "Scrollen",
+    "scrollHint": "Sleep over de inhoud om te scrollen en vast te leggen (bèta) · Esc om te annuleren"
   },
   "settings": {
     "fullScreen": "Volledig scherm",
@@ -246,5 +248,13 @@
     "saved": "Project opgeslagen",
     "saveFailed": "Project opslaan mislukt ~ probeer opnieuw",
     "openFailed": "Dat project kon niet worden geopend"
+  },
+  "scroll": {
+    "waiting": "Scrol door de inhoud…",
+    "captured": "{height} px vastgelegd",
+    "stitching": "Samenvoegen…",
+    "keys": "Enter om te voltooien · Esc om te annuleren",
+    "done": "Klaar",
+    "cancel": "Annuleren"
   }
 }

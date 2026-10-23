@@ -10,7 +10,8 @@
     "overlay",
     "editor",
     "history",
-    "pin-*"
+    "pin-*",
+    "scroll-hud"
   ],
   "permissions": [
     "global-shortcut:default"

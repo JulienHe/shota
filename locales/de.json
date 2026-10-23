@@ -110,7 +110,9 @@
     "modeText": "Text",
     "size": "Größe der Auswahl",
     "modePin": "Anheften",
-    "pinHint": "Über einen Bereich ziehen, um ihn auf dem Bildschirm anzuheften · Esc zum Abbrechen"
+    "pinHint": "Über einen Bereich ziehen, um ihn auf dem Bildschirm anzuheften · Esc zum Abbrechen",
+    "modeScroll": "Scrollen",
+    "scrollHint": "Über den Inhalt ziehen, um ihn scrollend aufzunehmen (Beta) · Esc zum Abbrechen"
   },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",
@@ -246,5 +248,13 @@
     "saved": "Projekt gespeichert",
     "saveFailed": "Projekt konnte nicht gespeichert werden ~ erneut versuchen",
     "openFailed": "Dieses Projekt konnte nicht geöffnet werden"
+  },
+  "scroll": {
+    "waiting": "Inhalt scrollen…",
+    "captured": "{height} px aufgenommen",
+    "stitching": "Wird zusammengesetzt…",
+    "keys": "Eingabe zum Beenden · Esc zum Abbrechen",
+    "done": "Fertig",
+    "cancel": "Abbrechen"
   }
 }
