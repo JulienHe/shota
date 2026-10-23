@@ -256,6 +256,9 @@
     "stitching": "Assemblage…",
     "keys": "Entrée pour terminer · Échap pour annuler",
     "done": "Terminé",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "tooFar": "Trop loin : remontez un peu",
+    "auto": "Défilement auto",
+    "autoHint": "Shota fait défiler à votre place (il prend la souris tant que c'est actif)"
   }
 }

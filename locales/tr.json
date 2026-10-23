@@ -256,6 +256,9 @@
     "stitching": "Birleştiriliyor…",
     "keys": "Bitirmek için Enter · İptal için Esc",
     "done": "Bitti",
-    "cancel": "İptal"
+    "cancel": "İptal",
+    "tooFar": "Çok ileri gittiniz: biraz geri kaydırın",
+    "auto": "Otomatik kaydırma",
+    "autoHint": "Shota sizin yerinize kaydırır (açıkken fareyi kullanır)"
   }
 }

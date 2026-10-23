@@ -81,3 +81,9 @@ body,
 .scroll-hud__cancel:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+.scroll-hud__auto--on,
+.scroll-hud__auto--on:hover {
+  background: #34c759;
+  color: #0b2e16;
+}

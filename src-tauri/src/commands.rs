@@ -621,3 +621,11 @@ pub fn cancel_scroll_capture(app: AppHandle) {
         session.cancel.store(true, std::sync::atomic::Ordering::SeqCst);
     }
 }
+
+/// The panel's "Auto-scroll": let Shota scroll the content (or hand it back).
+#[tauri::command]
+pub fn set_scroll_auto(app: AppHandle, enabled: bool) {
+    if let Some(session) = app.state::<AppState>().scroll_session() {
+        session.auto.store(enabled, std::sync::atomic::Ordering::SeqCst);
+    }
+}

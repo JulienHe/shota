@@ -256,6 +256,9 @@
     "stitching": "Składanie…",
     "keys": "Enter kończy · Esc anuluje",
     "done": "Gotowe",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "tooFar": "Za daleko: przewiń trochę w górę",
+    "auto": "Autoprzewijanie",
+    "autoHint": "Shota przewija za Ciebie (przejmuje mysz, dopóki jest włączone)"
   }
 }

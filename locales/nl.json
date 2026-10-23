@@ -256,6 +256,9 @@
     "stitching": "Samenvoegen…",
     "keys": "Enter om te voltooien · Esc om te annuleren",
     "done": "Klaar",
-    "cancel": "Annuleren"
+    "cancel": "Annuleren",
+    "tooFar": "Te ver: scrol een stukje terug",
+    "auto": "Auto-scrollen",
+    "autoHint": "Shota scrolt voor je (en neemt de muis over zolang het aan staat)"
   }
 }

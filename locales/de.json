@@ -256,6 +256,9 @@
     "stitching": "Wird zusammengesetzt…",
     "keys": "Eingabe zum Beenden · Esc zum Abbrechen",
     "done": "Fertig",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "tooFar": "Zu weit: ein Stück zurückscrollen",
+    "auto": "Auto-Scroll",
+    "autoHint": "Shota scrollt für dich (und übernimmt dabei die Maus)"
   }
 }

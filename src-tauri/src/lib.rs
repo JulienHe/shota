@@ -132,6 +132,7 @@ pub fn run() {
             commands::finish_scroll_selection,
             commands::finish_scroll_capture,
             commands::cancel_scroll_capture,
+            commands::set_scroll_auto,
             commands::pin_image,
             commands::take_pin_image,
             commands::copy_pin_image,

@@ -256,6 +256,9 @@
     "stitching": "Putting it together…",
     "keys": "Enter to finish · Esc to cancel",
     "done": "Done",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "tooFar": "Too far: scroll back up a little",
+    "auto": "Auto-scroll",
+    "autoHint": "Let Shota scroll for you (it takes the mouse while on)"
   }
 }

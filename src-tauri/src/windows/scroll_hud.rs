@@ -12,7 +12,7 @@ use super::{disable_show_animation, exclude_from_capture, place_client_area};
 pub const HUD_LABEL: &str = "scroll-hud";
 
 /// Logical size of the panel.
-const WIDTH: f64 = 400.0;
+const WIDTH: f64 = 540.0;
 const HEIGHT: f64 = 84.0;
 /// Gap between the panel and the edge of the screen.
 const MARGIN: f64 = 28.0;

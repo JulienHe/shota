@@ -35,9 +35,11 @@ const MAX_HEIGHT: u32 = 40_000;
 /// How long to let a scroll animation start before looking at the screen.
 const SETTLE_START: Duration = Duration::from_millis(140);
 /// Pause between looks while waiting for the content to stop moving.
+/// The gap between two looks that tell whether the content is moving on its own.
+const MOTION_PROBE: Duration = Duration::from_millis(60);
 const SETTLE_POLL: Duration = Duration::from_millis(70);
 /// Give up waiting for it to stop and take it as it is.
-const SETTLE_LIMIT: Duration = Duration::from_millis(1000);
+const SETTLE_LIMIT: Duration = Duration::from_millis(1500);
 /// Attempts that moved nothing, in a row, after scrolling had worked: the end.
 const END_AFTER_IDLE: u32 = 4;
 /// Frames that could not be lined up, in a row, before it says so and stops.
@@ -61,13 +63,17 @@ pub struct Region {
 pub struct Session {
     pub finish: AtomicBool,
     pub cancel: AtomicBool,
+    /// Whether Shota scrolls the content itself. Off until the user asks: it
+    /// takes the pointer and turns the wheel, which must never happen unasked.
+    pub auto: AtomicBool,
 }
 
 #[derive(Serialize, Clone)]
 struct Progress {
     height: u32,
     frames: u32,
-    /// "scrolling", "waiting" (for the user to scroll) or "stitching".
+    /// "scrolling", "waiting" (for the user to scroll), "toofar" (the user
+    /// scrolled past what overlaps) or "stitching".
     phase: &'static str,
 }
 
@@ -120,6 +126,8 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
     let mut idle = 0u32;
     let mut mismatches = 0u32;
     let mut moved_once = false;
+    // Whether our own wheel clicks have been seen to move the content.
+    let mut auto_works = false;
     let started = Instant::now();
     // Keys already held when this began (the Enter or Esc that ended the
     // selection) must not count as the user asking to finish.
@@ -142,37 +150,71 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
             break;
         }
 
-        wheel(region, notches * direction);
-        std::thread::sleep(SETTLE_START);
-        let frame = settled(&take)?;
+        // Is the content moving by itself (the user scrolling by hand)? Then
+        // do not add wheel clicks of our own on top, and take it as it comes:
+        // a look mid-scroll is still the same content, just further along.
+        let before = take()?;
+        std::thread::sleep(MOTION_PROBE);
+        let now = take()?;
+        let by_hand = before.as_raw() != now.as_raw();
+        let mut auto = session.auto.load(Ordering::SeqCst);
+        let frame = if by_hand {
+            // The user is scrolling: it is theirs, and ours stops. Wheel clicks
+            // of ours on top would fight them. Wait for the content to come to
+            // rest: a picture taken mid-scroll is drawn between two positions
+            // and never lines up with the others.
+            if auto {
+                session.auto.store(false, Ordering::SeqCst);
+                auto = false;
+            }
+            settled(&take)?
+        } else if auto {
+            wheel(region, notches * direction);
+            std::thread::sleep(SETTLE_START);
+            settled(&take)?
+        } else {
+            // Waiting for the user to scroll: only look.
+            std::thread::sleep(SETTLE_POLL);
+            now
+        };
 
         let last_frame = frame.clone();
         let step = stitcher.push(frame);
         match step {
             Step::Appended(shift) => {
                 moved_once = true;
-                direction_known = true;
                 idle = 0;
                 mismatches = 0;
                 frames += 1;
-                // Aim the next scroll at the share of the area that leaves enough overlap.
-                let wanted = frame_height as f64 * TARGET_FRACTION;
-                notches = ((notches as f64 * wanted / shift as f64).round() as i32).clamp(1, 15);
+                if auto {
+                    direction_known = true;
+                    auto_works = true;
+                    // Aim the next scroll at the share of the area that leaves enough overlap.
+                    let wanted = frame_height as f64 * TARGET_FRACTION;
+                    notches = ((notches as f64 * wanted / shift as f64).round() as i32).clamp(1, 15);
+                }
                 progress(app, stitcher.height(), frames, "scrolling");
             }
             Step::NoChange => {
-                if moved_once {
+                // Only our own scrolling reaching the end means the end. If
+                // the wheel never worked, the user is scrolling (or reading):
+                // wait for them, they end it with Done or Enter.
+                if auto_works && auto {
                     idle += 1;
                     if idle >= END_AFTER_IDLE {
                         break;
                     }
-                } else {
-                    // Not moving, and never has: perhaps the wheel input is not
-                    // getting through. Keep looking: the user may scroll by hand.
+                } else if !moved_once {
                     progress(app, stitcher.height(), frames, "waiting");
                 }
             }
             Step::NoMatch => {
+                if !auto {
+                    // Scrolled further than the pictures overlap. Say so, and
+                    // keep looking: scrolling back a little will line up again.
+                    progress(app, stitcher.height(), frames, "toofar");
+                    continue;
+                }
                 if !direction_known && stitcher.scrolled_up_by(&last_frame).is_some() {
                     // The content went the other way: turn the wheel around and
                     // let it come back past where it started.
@@ -241,7 +283,11 @@ mod input {
             // with no pause the content did not scroll at all.)
             let mut at = windows::Win32::Foundation::POINT::default();
             let _ = windows::Win32::UI::WindowsAndMessaging::GetCursorPos(&mut at);
-            if (at.x - centre_x).abs() > 2 || (at.y - centre_y).abs() > 2 {
+            let inside = at.x >= region.x
+                && at.x < region.x + region.width as i32
+                && at.y >= region.y
+                && at.y < region.y + region.height as i32;
+            if !inside {
                 let _ = SetCursorPos(centre_x, centre_y);
                 std::thread::sleep(std::time::Duration::from_millis(150));
             }

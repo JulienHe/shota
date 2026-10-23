@@ -256,6 +256,9 @@
     "stitching": "Juntando…",
     "keys": "Enter para concluir · Esc para cancelar",
     "done": "Concluir",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "tooFar": "Longe demais: role um pouco para cima",
+    "auto": "Rolagem automática",
+    "autoHint": "O Shota rola por você (usa o mouse enquanto estiver ativo)"
   }
 }

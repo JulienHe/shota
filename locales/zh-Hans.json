@@ -256,6 +256,9 @@
     "stitching": "正在拼接…",
     "keys": "按 Enter 完成 · 按 Esc 取消",
     "done": "完成",
-    "cancel": "取消"
+    "cancel": "取消",
+    "tooFar": "滚动过远：请向回滚动一点",
+    "auto": "自动滚动",
+    "autoHint": "由 Shota 代为滚动（开启期间会占用鼠标）"
   }
 }

@@ -114,6 +114,9 @@ export const tauriApi = {
   /** Ends a scrolling capture and throws it away. */
   cancelScrollCapture: () => invoke<void>("cancel_scroll_capture"),
 
+  /** Lets Shota scroll the content itself during a scrolling capture (or stops it). */
+  setScrollAuto: (enabled: boolean) => invoke<void>("set_scroll_auto", { enabled }),
+
   finishTextCapture: (x: number, y: number, width: number, height: number) =>
     invoke<{ kind: "qr" | "text" | "none"; text: string }>("finish_text_capture", { x, y, width, height }),
 

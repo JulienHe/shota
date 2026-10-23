@@ -256,6 +256,9 @@
     "stitching": "Uniendo…",
     "keys": "Intro para terminar · Esc para cancelar",
     "done": "Listo",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "tooFar": "Demasiado lejos: sube un poco",
+    "auto": "Auto-desplazar",
+    "autoHint": "Shota se desplaza por ti (toma el ratón mientras está activo)"
   }
 }
