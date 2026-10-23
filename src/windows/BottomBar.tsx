@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Copy, GripVertical, Pin, Save, Share2 } from "lucide-react";
+import { EXPORT_SCALES, useUiStore } from "../stores/uiStore";
 import { IconButton } from "../components/IconButton";
 import { Dropdown } from "../components/Dropdown";
 import "./BottomBar.css";
@@ -22,6 +23,9 @@ interface BottomBarProps {
 /** CleanShot-style status bar: zoom control bottom-left, Copy/Save bottom-right. */
 export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onShare, onPin, onDragOut }: BottomBarProps) {
   const [zoomOpen, setZoomOpen] = useState(false);
+  const [sizeOpen, setSizeOpen] = useState(false);
+  const exportScale = useUiStore((s) => s.exportScale);
+  const setExportScale = useUiStore((s) => s.setExportScale);
 
   return (
     <div className="bottom-bar" data-tauri-drag-region="deep">
@@ -73,6 +77,31 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onS
         >
           <GripVertical size={18} strokeWidth={2} />
         </button>
+        <Dropdown
+          placement="top"
+          align="center"
+          open={sizeOpen}
+          onToggle={() => setSizeOpen((o) => !o)}
+          onClose={() => setSizeOpen(false)}
+          trigger={<span title={t("editor.exportSize")}>{`${Math.round(exportScale * 100)}%`}</span>}
+        >
+          <div className="bottom-bar__zoom-menu">
+            <div className="bottom-bar__menu-title">{t("editor.exportSize")}</div>
+            {EXPORT_SCALES.map((scale) => (
+              <button
+                key={scale}
+                type="button"
+                className={`dropdown__menu-item${scale === exportScale ? " dropdown__menu-item--active" : ""}`}
+                onClick={() => {
+                  setExportScale(scale);
+                  setSizeOpen(false);
+                }}
+              >
+                {Math.round(scale * 100)}%
+              </button>
+            ))}
+          </div>
+        </Dropdown>
         <IconButton icon={Share2} label={t("editor.share")} onClick={onShare} />
         <IconButton icon={Pin} label={t("editor.pin")} onClick={onPin} />
         <IconButton icon={Copy} label={`${t("editor.copy")} (Ctrl+C)`} onClick={onCopy} />

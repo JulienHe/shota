@@ -137,6 +137,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   // would trigger a React re-render, which matters once this same function
   // also runs from a background effect (below) rather than only on click.
   const performExport = useCallback((mimeType = "image/png", quality?: number): string | null => {
+    const exportScale = useUiStore.getState().exportScale;
     const stage = stageRef.current;
     if (!stage || !imageElement || !contentBox) return null;
     const priorNodes = transformerRef.current?.nodes() ?? [];
@@ -163,7 +164,10 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       y: 0,
       width: Math.round(contentBox.width),
       height: Math.round(contentBox.height),
-      pixelRatio: 1,
+      // 1 is the picture's own size, and exactly its pixels. Anything else
+      // renders the stage again at that ratio, so shapes stay crisp when
+      // enlarged and are resampled once, not twice, when reduced.
+      pixelRatio: exportScale,
       mimeType,
       quality,
     });
@@ -184,6 +188,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     image: string | null;
     frame: unknown;
     background: unknown;
+    scale: number;
     dataUrl: string;
   } | null>(null);
   // `performExport`'s identity changes on every pan/zoom (it reads `view`),
@@ -194,6 +199,8 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
   const performExportRef = useRef(performExport);
   performExportRef.current = performExport;
 
+  const exportScale = useUiStore((s) => s.exportScale);
+
   const getExportDataUrl = useCallback((): string | null => {
     const cache = exportCacheRef.current;
     if (
@@ -201,14 +208,15 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       cache.shapes === shapes &&
       cache.image === image &&
       cache.frame === frame &&
-      cache.background === frameBackground
+      cache.background === frameBackground &&
+      cache.scale === exportScale
     ) {
       return cache.dataUrl;
     }
     const dataUrl = performExportRef.current();
-    if (dataUrl) exportCacheRef.current = { shapes, image, frame, background: frameBackground, dataUrl };
+    if (dataUrl) exportCacheRef.current = { shapes, image, frame, background: frameBackground, scale: exportScale, dataUrl };
     return dataUrl;
-  }, [shapes, image, frame, frameBackground]);
+  }, [shapes, image, frame, frameBackground, exportScale]);
 
   // Primes the cache in the background, debounced, whenever the document
   // actually changes ~ by the time the user clicks Copy/Save, the expensive
@@ -218,7 +226,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
     if (!image) return;
     const timer = setTimeout(() => getExportDataUrl(), 600);
     return () => clearTimeout(timer);
-  }, [shapes, image, frame, frameBackground, getExportDataUrl]);
+  }, [shapes, image, frame, frameBackground, exportScale, getExportDataUrl]);
 
   // Keeps the on-screen zoom level centered on the viewport's own center
   // point (rather than the last wheel/cursor position, which is meaningless

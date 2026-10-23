@@ -54,7 +54,8 @@
     "dragFailed": "No se pudo iniciar el arrastre ~ inténtalo de nuevo",
     "shareFailed": "No se pudo abrir Compartir ~ inténtalo de nuevo",
     "pin": "Fijar en pantalla",
-    "pinFailed": "No se pudo fijar ~ inténtalo de nuevo"
+    "pinFailed": "No se pudo fijar ~ inténtalo de nuevo",
+    "exportSize": "Tamaño de exportación"
   },
   "background": {
     "white": "Blanco",

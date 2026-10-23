@@ -54,7 +54,8 @@
     "dragFailed": "無法開始拖曳 ~ 請重試",
     "shareFailed": "無法開啟分享 ~ 請重試",
     "pin": "釘選到螢幕",
-    "pinFailed": "無法釘選 ~ 請重試"
+    "pinFailed": "無法釘選 ~ 請重試",
+    "exportSize": "匯出尺寸"
   },
   "background": {
     "white": "白色",

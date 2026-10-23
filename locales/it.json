@@ -54,7 +54,8 @@
     "dragFailed": "Impossibile avviare il trascinamento ~ riprova",
     "shareFailed": "Impossibile aprire Condividi ~ riprova",
     "pin": "Fissa sullo schermo",
-    "pinFailed": "Impossibile fissare ~ riprova"
+    "pinFailed": "Impossibile fissare ~ riprova",
+    "exportSize": "Dimensione di esportazione"
   },
   "background": {
     "white": "Bianco",

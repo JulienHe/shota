@@ -54,7 +54,8 @@
     "dragFailed": "Couldn't start the drag ~ try again",
     "shareFailed": "Couldn't open Share ~ try again",
     "pin": "Pin on screen",
-    "pinFailed": "Couldn't pin ~ try again"
+    "pinFailed": "Couldn't pin ~ try again",
+    "exportSize": "Export size"
   },
   "background": {
     "white": "White",

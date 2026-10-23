@@ -34,3 +34,9 @@
 .bottom-bar__drag {
   cursor: grab;
 }
+
+.bottom-bar__menu-title {
+  padding: 4px 10px 6px;
+  font-size: 11px;
+  opacity: 0.6;
+}

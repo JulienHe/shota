@@ -54,7 +54,8 @@
     "dragFailed": "Sürükleme başlatılamadı ~ tekrar deneyin",
     "shareFailed": "Paylaş açılamadı ~ tekrar deneyin",
     "pin": "Ekrana sabitle",
-    "pinFailed": "Sabitlenemedi ~ tekrar deneyin"
+    "pinFailed": "Sabitlenemedi ~ tekrar deneyin",
+    "exportSize": "Dışa aktarma boyutu"
   },
   "background": {
     "white": "Beyaz",

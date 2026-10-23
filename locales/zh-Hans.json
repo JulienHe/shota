@@ -54,7 +54,8 @@
     "dragFailed": "无法开始拖动 ~ 请重试",
     "shareFailed": "无法打开分享 ~ 请重试",
     "pin": "置顶到屏幕",
-    "pinFailed": "无法置顶 ~ 请重试"
+    "pinFailed": "无法置顶 ~ 请重试",
+    "exportSize": "导出尺寸"
   },
   "background": {
     "white": "白色",

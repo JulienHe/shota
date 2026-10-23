@@ -54,7 +54,8 @@
     "dragFailed": "Slepen starten mislukt ~ probeer opnieuw",
     "shareFailed": "Delen openen mislukt ~ probeer opnieuw",
     "pin": "Op het scherm vastzetten",
-    "pinFailed": "Vastzetten mislukt ~ probeer opnieuw"
+    "pinFailed": "Vastzetten mislukt ~ probeer opnieuw",
+    "exportSize": "Exportgrootte"
   },
   "background": {
     "white": "Wit",

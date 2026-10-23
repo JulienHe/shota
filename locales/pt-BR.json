@@ -54,7 +54,8 @@
     "dragFailed": "Não foi possível iniciar o arrasto ~ tente novamente",
     "shareFailed": "Não foi possível abrir o Compartilhar ~ tente novamente",
     "pin": "Fixar na tela",
-    "pinFailed": "Não foi possível fixar ~ tente novamente"
+    "pinFailed": "Não foi possível fixar ~ tente novamente",
+    "exportSize": "Tamanho da exportação"
   },
   "background": {
     "white": "Branco",

@@ -54,7 +54,8 @@
     "dragFailed": "Ziehen fehlgeschlagen ~ erneut versuchen",
     "shareFailed": "Teilen konnte nicht geöffnet werden ~ erneut versuchen",
     "pin": "Auf dem Bildschirm anheften",
-    "pinFailed": "Anheften fehlgeschlagen ~ erneut versuchen"
+    "pinFailed": "Anheften fehlgeschlagen ~ erneut versuchen",
+    "exportSize": "Exportgröße"
   },
   "background": {
     "white": "Weiß",

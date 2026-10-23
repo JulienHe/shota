@@ -54,7 +54,8 @@
     "dragFailed": "Nie udało się rozpocząć przeciągania ~ spróbuj ponownie",
     "shareFailed": "Nie udało się otworzyć udostępniania ~ spróbuj ponownie",
     "pin": "Przypnij na ekranie",
-    "pinFailed": "Nie udało się przypiąć ~ spróbuj ponownie"
+    "pinFailed": "Nie udało się przypiąć ~ spróbuj ponownie",
+    "exportSize": "Rozmiar eksportu"
   },
   "background": {
     "white": "Biały",

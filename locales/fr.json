@@ -54,7 +54,8 @@
     "dragFailed": "Impossible de lancer le glisser-déposer ~ réessayez",
     "shareFailed": "Impossible d'ouvrir Partager ~ réessayez",
     "pin": "Épingler à l'écran",
-    "pinFailed": "Impossible d'épingler ~ réessayez"
+    "pinFailed": "Impossible d'épingler ~ réessayez",
+    "exportSize": "Taille d'export"
   },
   "background": {
     "white": "Blanc",
