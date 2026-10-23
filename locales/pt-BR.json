@@ -55,7 +55,8 @@
     "shareFailed": "Não foi possível abrir o Compartilhar ~ tente novamente",
     "pin": "Fixar na tela",
     "pinFailed": "Não foi possível fixar ~ tente novamente",
-    "exportSize": "Tamanho da exportação"
+    "exportSize": "Tamanho da exportação",
+    "more": "Mais"
   },
   "background": {
     "white": "Branco",
@@ -238,5 +239,12 @@
     "outlined": "Com contorno",
     "save": "Salvar o estilo atual",
     "remove": "Remover"
+  },
+  "project": {
+    "save": "Salvar projeto…",
+    "open": "Abrir projeto…",
+    "saved": "Projeto salvo",
+    "saveFailed": "Não foi possível salvar o projeto ~ tente novamente",
+    "openFailed": "Não foi possível abrir esse projeto"
   }
 }

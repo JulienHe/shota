@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, GripVertical, Pin, Save, Scaling, Share2 } from "lucide-react";
+import { Copy, FolderOpen, GripVertical, MoreHorizontal, Pin, Save, Scaling, Share2 } from "lucide-react";
 import { EXPORT_SCALES, useUiStore } from "../stores/uiStore";
 import { IconButton } from "../components/IconButton";
 import { Dropdown } from "../components/Dropdown";
@@ -16,14 +16,17 @@ interface BottomBarProps {
   onSave: () => void;
   onShare: () => void;
   onPin: () => void;
+  onSaveProject: () => void;
+  onOpenProject: () => void;
   /** Called on mouse down on the drag handle; starts a native drag of the image. */
   onDragOut: () => void;
 }
 
 /** CleanShot-style status bar: zoom control bottom-left, Copy/Save bottom-right. */
-export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onShare, onPin, onDragOut }: BottomBarProps) {
+export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onShare, onPin, onSaveProject, onOpenProject, onDragOut }: BottomBarProps) {
   const [zoomOpen, setZoomOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const exportScale = useUiStore((s) => s.exportScale);
   const setExportScale = useUiStore((s) => s.setExportScale);
 
@@ -105,6 +108,39 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onS
                 {Math.round(scale * 100)}%
               </button>
             ))}
+          </div>
+        </Dropdown>
+        <Dropdown
+          placement="top"
+          align="center"
+          open={moreOpen}
+          onToggle={() => setMoreOpen((o) => !o)}
+          onClose={() => setMoreOpen(false)}
+          trigger={<MoreHorizontal size={16} strokeWidth={2} aria-label={t("editor.more")} />}
+        >
+          <div className="bottom-bar__zoom-menu">
+            <button
+              type="button"
+              className="dropdown__menu-item"
+              onClick={() => {
+                setMoreOpen(false);
+                onSaveProject();
+              }}
+            >
+              <Save size={15} strokeWidth={2} />
+              {t("project.save")}
+            </button>
+            <button
+              type="button"
+              className="dropdown__menu-item"
+              onClick={() => {
+                setMoreOpen(false);
+                onOpenProject();
+              }}
+            >
+              <FolderOpen size={15} strokeWidth={2} />
+              {t("project.open")}
+            </button>
           </div>
         </Dropdown>
         <IconButton icon={Share2} label={t("editor.share")} onClick={onShare} />

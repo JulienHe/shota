@@ -15,7 +15,7 @@ use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use crate::capture::encode_png;
 use crate::i18n;
 use crate::state::AppState;
-use crate::windows::open_editor_with_history;
+use crate::windows::{open_editor_with_document, open_editor_with_history};
 
 /// What the picker offers and what a drop accepts. Every one of these is
 /// decoded by the `image` crate's default features.
@@ -27,6 +27,19 @@ const MAX_FILE_BYTES: u64 = 256 * 1024 * 1024;
 
 const PNG_SIGNATURE: &[u8] = b"\x89PNG\r\n\x1a\n";
 
+/// A `.shota` project: opened like an image, but it carries its own edits.
+pub fn is_project_path(path: &Path) -> bool {
+    path.extension()
+        .and_then(|ext| ext.to_str())
+        .map(|ext| ext.eq_ignore_ascii_case(crate::project::EXTENSION))
+        .unwrap_or(false)
+}
+
+/// Anything Shota can open: a picture, or a project.
+pub fn is_openable_path(path: &Path) -> bool {
+    is_image_path(path) || is_project_path(path)
+}
+
 pub fn is_image_path(path: &Path) -> bool {
     path.extension()
         .and_then(|ext| ext.to_str())
@@ -37,12 +50,17 @@ pub fn is_image_path(path: &Path) -> bool {
 /// Reads an image file and opens it in the editor. Slow for a large JPEG
 /// (decode, then encode as PNG), so callers run it off the main thread.
 pub fn open_file(app: &AppHandle, path: &Path) -> Result<(), String> {
-    if !is_image_path(path) {
+    if !is_openable_path(path) {
         return Err("not an image".to_string());
     }
     let size = std::fs::metadata(path).map_err(|e| e.to_string())?.len();
     if size > MAX_FILE_BYTES {
         return Err("file too large".to_string());
+    }
+    if is_project_path(path) {
+        let text = std::fs::read_to_string(path).map_err(|e| e.to_string())?;
+        let (png, document) = crate::project::parse(&text)?;
+        return open_editor_with_document(app, png, Some(document));
     }
     let bytes = std::fs::read(path).map_err(|e| e.to_string())?;
     open_editor_with_history(app, to_png(bytes)?)
@@ -77,7 +95,10 @@ pub fn pick_and_open(app: &AppHandle) {
     app.dialog()
         .file()
         .set_title(i18n::t(&locale, "import.dialogTitle"))
-        .add_filter(i18n::t(&locale, "import.filterName"), IMAGE_EXTENSIONS)
+        .add_filter(
+            i18n::t(&locale, "import.filterName"),
+            &IMAGE_EXTENSIONS.iter().copied().chain([crate::project::EXTENSION]).collect::<Vec<_>>(),
+        )
         .pick_file(move |picked| {
             let Some(path) = picked.and_then(|p| p.into_path().ok()) else {
                 return;
@@ -130,6 +151,9 @@ mod tests {
         assert!(is_image_path(Path::new("photo.jpeg")));
         assert!(!is_image_path(Path::new("notes.txt")));
         assert!(!is_image_path(Path::new("png")));
+        assert!(is_project_path(Path::new(r"C:\work\Demo.SHOTA")));
+        assert!(is_openable_path(Path::new("a.shota")));
+        assert!(!is_openable_path(Path::new("a.txt")));
     }
 
     #[test]

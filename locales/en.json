@@ -55,7 +55,8 @@
     "shareFailed": "Couldn't open Share ~ try again",
     "pin": "Pin on screen",
     "pinFailed": "Couldn't pin ~ try again",
-    "exportSize": "Export size"
+    "exportSize": "Export size",
+    "more": "More"
   },
   "background": {
     "white": "White",
@@ -238,5 +239,12 @@
     "outlined": "Outlined",
     "save": "Save current style",
     "remove": "Remove"
+  },
+  "project": {
+    "save": "Save project…",
+    "open": "Open project…",
+    "saved": "Project saved",
+    "saveFailed": "Couldn't save the project ~ try again",
+    "openFailed": "Couldn't open that project"
   }
 }

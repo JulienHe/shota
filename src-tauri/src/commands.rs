@@ -554,3 +554,43 @@ pub fn copy_pin_image(app: AppHandle, id: u64) -> Result<(), String> {
         .ok_or_else(|| format!("pin {id} is gone"))?;
     clipboard::copy_png_bytes(&app, &png)
 }
+
+/// Saves the open capture and everything done to it as a `.shota` project:
+/// asks where, writes it, and says where it went (`None` if cancelled).
+/// `history_id` names the original picture on disk; `document_json` is the
+/// editor's own saved document.
+#[tauri::command]
+pub fn save_project(
+    app: AppHandle,
+    history_id: String,
+    document_json: String,
+    suggested_name: String,
+) -> Result<Option<String>, String> {
+    use tauri_plugin_dialog::DialogExt;
+
+    let original = history::get_entry(&app, &history_id)?.image_bytes;
+    let text = crate::project::build(&original, &document_json, &app.package_info().version.to_string())?;
+
+    let state = app.state::<AppState>();
+    let directory = state
+        .preferences()
+        .save_dir
+        .filter(|dir| std::path::Path::new(dir).is_dir())
+        .or_else(|| state.last_save_dir())
+        .or_else(|| app.path().desktop_dir().ok().map(|p| p.to_string_lossy().to_string()));
+
+    let mut dialog = app
+        .dialog()
+        .file()
+        .set_file_name(format!("{}.{}", suggested_name.trim(), crate::project::EXTENSION))
+        .add_filter("Shota", &[crate::project::EXTENSION]);
+    if let Some(directory) = &directory {
+        dialog = dialog.set_directory(directory);
+    }
+    let Some(path) = dialog.blocking_save_file() else {
+        return Ok(None);
+    };
+    let path = path.into_path().map_err(|e| e.to_string())?;
+    std::fs::write(&path, text).map_err(|e| e.to_string())?;
+    Ok(Some(path.to_string_lossy().to_string()))
+}

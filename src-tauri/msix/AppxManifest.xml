@@ -103,6 +103,19 @@
             </uap2:SupportedVerbs>
           </uap:FileTypeAssociation>
         </uap:Extension>
+        <!-- .shota project files: a capture with its edits. Opening one runs
+             shota.exe with the path, like the images above. -->
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="projects">
+            <uap:DisplayName>{{DISPLAY_NAME}}</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.shota</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="open" Parameters="&quot;%1&quot;">Open</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>

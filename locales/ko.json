@@ -55,7 +55,8 @@
     "shareFailed": "공유를 열 수 없습니다 ~ 다시 시도하세요",
     "pin": "화면에 고정",
     "pinFailed": "고정할 수 없습니다 ~ 다시 시도하세요",
-    "exportSize": "내보내기 크기"
+    "exportSize": "내보내기 크기",
+    "more": "더 보기"
   },
   "background": {
     "white": "흰색",
@@ -238,5 +239,12 @@
     "outlined": "윤곽선",
     "save": "현재 스타일 저장",
     "remove": "제거"
+  },
+  "project": {
+    "save": "프로젝트 저장…",
+    "open": "프로젝트 열기…",
+    "saved": "프로젝트를 저장했습니다",
+    "saveFailed": "프로젝트를 저장할 수 없습니다 ~ 다시 시도하세요",
+    "openFailed": "해당 프로젝트를 열 수 없습니다"
   }
 }

@@ -12,6 +12,7 @@ mod ocr;
 mod qr;
 mod import;
 mod printscreen;
+mod project;
 mod share_out;
 mod snapshot_hook;
 mod startup;
@@ -126,6 +127,7 @@ pub fn run() {
             commands::finish_text_capture,
             commands::finish_fullscreen_capture,
             commands::finish_pin_capture,
+            commands::save_project,
             commands::pin_image,
             commands::take_pin_image,
             commands::copy_pin_image,
@@ -166,5 +168,5 @@ fn image_argument(argv: &[String], cwd: &std::path::Path) -> Option<std::path::P
     argv.iter()
         .skip(1)
         .map(|arg| cwd.join(arg))
-        .find(|path| import::is_image_path(path) && path.is_file())
+        .find(|path| import::is_openable_path(path) && path.is_file())
 }

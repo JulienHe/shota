@@ -55,7 +55,8 @@
     "shareFailed": "无法打开分享 ~ 请重试",
     "pin": "置顶到屏幕",
     "pinFailed": "无法置顶 ~ 请重试",
-    "exportSize": "导出尺寸"
+    "exportSize": "导出尺寸",
+    "more": "更多"
   },
   "background": {
     "white": "白色",
@@ -238,5 +239,12 @@
     "outlined": "描边",
     "save": "保存当前样式",
     "remove": "移除"
+  },
+  "project": {
+    "save": "保存项目…",
+    "open": "打开项目…",
+    "saved": "项目已保存",
+    "saveFailed": "无法保存项目 ~ 请重试",
+    "openFailed": "无法打开该项目"
   }
 }

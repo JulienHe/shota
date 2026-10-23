@@ -55,7 +55,8 @@
     "shareFailed": "Nie udało się otworzyć udostępniania ~ spróbuj ponownie",
     "pin": "Przypnij na ekranie",
     "pinFailed": "Nie udało się przypiąć ~ spróbuj ponownie",
-    "exportSize": "Rozmiar eksportu"
+    "exportSize": "Rozmiar eksportu",
+    "more": "Więcej"
   },
   "background": {
     "white": "Biały",
@@ -238,5 +239,12 @@
     "outlined": "Z konturem",
     "save": "Zapisz bieżący styl",
     "remove": "Usuń"
+  },
+  "project": {
+    "save": "Zapisz projekt…",
+    "open": "Otwórz projekt…",
+    "saved": "Zapisano projekt",
+    "saveFailed": "Nie udało się zapisać projektu ~ spróbuj ponownie",
+    "openFailed": "Nie udało się otworzyć tego projektu"
   }
 }

@@ -16,14 +16,15 @@ import { tauriApi, toBase64Payload, PendingCapture } from "../lib/tauriApi";
 import { primeImageCache } from "../lib/useImage";
 import { afterNextPaint } from "../lib/windowChrome";
 import { closeEditor, persistDocument } from "../lib/editorClose";
-import { parseDocument } from "../features/background/frame";
+import { parseDocument, serializeDocument } from "../features/background/frame";
+import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import { replaySavedOps } from "../features/annotate/documentActions";
 import { BackgroundPanel } from "../features/background/BackgroundPanel";
 import { useToolStore } from "../stores/toolStore";
 import "./EditorWindow.css";
 
 /** Matches import::IMAGE_EXTENSIONS on the Rust side. */
-const IMAGE_FILE = /\.(png|jpe?g|webp|bmp|gif|tiff?|ico)$/i;
+const IMAGE_FILE = /\.(png|jpe?g|webp|bmp|gif|tiff?|ico|shota)$/i;
 
 // Dev builds only: lets a script drive the document without clicking through the UI.
 if (import.meta.env.DEV) (window as unknown as { __shota?: unknown }).__shota = { documentStore: useDocumentStore };
@@ -223,6 +224,30 @@ export function EditorWindow() {
       });
   };
 
+  // A .shota project: the capture and everything done to it in one file.
+  const handleSaveProject = async () => {
+    const { historyId, shapes, frame, imageOps } = useDocumentStore.getState();
+    if (!historyId) return;
+    try {
+      const path = await tauriApi.saveProject(historyId, serializeDocument(shapes, frame, imageOps), exportedFileName());
+      if (path) showToast(t("project.saved"));
+    } catch (err) {
+      console.error("saving the project failed", err);
+      showToast(t("project.saveFailed"));
+    }
+  };
+
+  const handleOpenProject = async () => {
+    const picked = await openDialog({ filters: [{ name: "Shota", extensions: ["shota"] }] });
+    if (typeof picked !== "string") return;
+    // Whatever is open is about to be replaced; keep what was drawn on it.
+    persistDocument();
+    tauriApi.openImageFile(picked).catch((err) => {
+      console.error("opening the project failed", err);
+      showToast(t("project.openFailed"));
+    });
+  };
+
   const handlePin = () => {
     const dataUrl = canvasRef.current?.exportDataUrl();
     if (!dataUrl) return;
@@ -321,6 +346,8 @@ export function EditorWindow() {
         onSave={handleSave}
         onShare={handleShare}
         onPin={handlePin}
+        onSaveProject={handleSaveProject}
+        onOpenProject={handleOpenProject}
         onDragOut={handleDragOut}
       />
     </div>

@@ -114,6 +114,12 @@ pub fn prewarm_editor_window(app: &AppHandle) {
 /// delay to every single capture. It's best-effort besides: a history
 /// write failure shouldn't affect the capture the user actually asked for.
 pub fn open_editor_with_history(app: &AppHandle, image: Vec<u8>) -> Result<(), String> {
+    open_editor_with_document(app, image, None)
+}
+
+/// As `open_editor_with_history`, but opening onto a saved document (a
+/// project file's shapes, frame and edits) instead of a bare picture.
+pub fn open_editor_with_document(app: &AppHandle, image: Vec<u8>, document_json: Option<String>) -> Result<(), String> {
     let history_id = history::new_id();
     let image = Arc::new(image);
     open_editor_window(
@@ -121,7 +127,7 @@ pub fn open_editor_with_history(app: &AppHandle, image: Vec<u8>) -> Result<(), S
         image.clone(),
         history_id.clone(),
         Some(history_id.clone()),
-        None,
+        document_json,
     )?;
 
     let app = app.clone();

@@ -55,7 +55,8 @@
     "shareFailed": "Paylaş açılamadı ~ tekrar deneyin",
     "pin": "Ekrana sabitle",
     "pinFailed": "Sabitlenemedi ~ tekrar deneyin",
-    "exportSize": "Dışa aktarma boyutu"
+    "exportSize": "Dışa aktarma boyutu",
+    "more": "Daha fazla"
   },
   "background": {
     "white": "Beyaz",
@@ -238,5 +239,12 @@
     "outlined": "Çerçeveli",
     "save": "Geçerli stili kaydet",
     "remove": "Kaldır"
+  },
+  "project": {
+    "save": "Projeyi kaydet…",
+    "open": "Proje aç…",
+    "saved": "Proje kaydedildi",
+    "saveFailed": "Proje kaydedilemedi ~ tekrar deneyin",
+    "openFailed": "Bu proje açılamadı"
   }
 }

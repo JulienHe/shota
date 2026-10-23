@@ -55,7 +55,8 @@
     "shareFailed": "Impossibile aprire Condividi ~ riprova",
     "pin": "Fissa sullo schermo",
     "pinFailed": "Impossibile fissare ~ riprova",
-    "exportSize": "Dimensione di esportazione"
+    "exportSize": "Dimensione di esportazione",
+    "more": "Altro"
   },
   "background": {
     "white": "Bianco",
@@ -238,5 +239,12 @@
     "outlined": "Con contorno",
     "save": "Salva lo stile attuale",
     "remove": "Rimuovi"
+  },
+  "project": {
+    "save": "Salva progetto…",
+    "open": "Apri progetto…",
+    "saved": "Progetto salvato",
+    "saveFailed": "Impossibile salvare il progetto ~ riprova",
+    "openFailed": "Impossibile aprire quel progetto"
   }
 }

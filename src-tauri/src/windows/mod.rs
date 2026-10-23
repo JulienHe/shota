@@ -3,7 +3,7 @@ mod history;
 mod overlay;
 mod pin;
 
-pub use editor::{
+pub use editor::{open_editor_with_document, 
     hide_editor_window, open_editor_from_history, open_editor_with_history, prewarm_editor_window,
     show_editor_window,
 };

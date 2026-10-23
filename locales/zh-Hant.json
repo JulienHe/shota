@@ -55,7 +55,8 @@
     "shareFailed": "無法開啟分享 ~ 請重試",
     "pin": "釘選到螢幕",
     "pinFailed": "無法釘選 ~ 請重試",
-    "exportSize": "匯出尺寸"
+    "exportSize": "匯出尺寸",
+    "more": "更多"
   },
   "background": {
     "white": "白色",
@@ -238,5 +239,12 @@
     "outlined": "描邊",
     "save": "儲存目前樣式",
     "remove": "移除"
+  },
+  "project": {
+    "save": "儲存專案…",
+    "open": "開啟專案…",
+    "saved": "專案已儲存",
+    "saveFailed": "無法儲存專案 ~ 請重試",
+    "openFailed": "無法開啟該專案"
   }
 }

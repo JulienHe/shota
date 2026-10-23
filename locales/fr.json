@@ -55,7 +55,8 @@
     "shareFailed": "Impossible d'ouvrir Partager ~ réessayez",
     "pin": "Épingler à l'écran",
     "pinFailed": "Impossible d'épingler ~ réessayez",
-    "exportSize": "Taille d'export"
+    "exportSize": "Taille d'export",
+    "more": "Plus"
   },
   "background": {
     "white": "Blanc",
@@ -238,5 +239,12 @@
     "outlined": "Contour",
     "save": "Enregistrer le style actuel",
     "remove": "Retirer"
+  },
+  "project": {
+    "save": "Enregistrer le projet…",
+    "open": "Ouvrir un projet…",
+    "saved": "Projet enregistré",
+    "saveFailed": "Impossible d'enregistrer le projet ~ réessayez",
+    "openFailed": "Impossible d'ouvrir ce projet"
   }
 }

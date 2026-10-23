@@ -55,7 +55,8 @@
     "shareFailed": "No se pudo abrir Compartir ~ inténtalo de nuevo",
     "pin": "Fijar en pantalla",
     "pinFailed": "No se pudo fijar ~ inténtalo de nuevo",
-    "exportSize": "Tamaño de exportación"
+    "exportSize": "Tamaño de exportación",
+    "more": "Más"
   },
   "background": {
     "white": "Blanco",
@@ -238,5 +239,12 @@
     "outlined": "Con contorno",
     "save": "Guardar el estilo actual",
     "remove": "Quitar"
+  },
+  "project": {
+    "save": "Guardar proyecto…",
+    "open": "Abrir proyecto…",
+    "saved": "Proyecto guardado",
+    "saveFailed": "No se pudo guardar el proyecto ~ inténtalo de nuevo",
+    "openFailed": "No se pudo abrir ese proyecto"
   }
 }

@@ -97,6 +97,13 @@ export const tauriApi = {
 
   copyPinImage: (id: number) => invoke<void>("copy_pin_image", { id }),
 
+  /**
+   * Saves the open capture and everything done to it as a `.shota` project.
+   * Resolves to the path, or null if the dialog was cancelled.
+   */
+  saveProject: (historyId: string, documentJson: string, suggestedName: string) =>
+    invoke<string | null>("save_project", { historyId, documentJson, suggestedName }),
+
   finishTextCapture: (x: number, y: number, width: number, height: number) =>
     invoke<{ kind: "qr" | "text" | "none"; text: string }>("finish_text_capture", { x, y, width, height }),
 

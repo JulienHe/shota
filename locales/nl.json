@@ -55,7 +55,8 @@
     "shareFailed": "Delen openen mislukt ~ probeer opnieuw",
     "pin": "Op het scherm vastzetten",
     "pinFailed": "Vastzetten mislukt ~ probeer opnieuw",
-    "exportSize": "Exportgrootte"
+    "exportSize": "Exportgrootte",
+    "more": "Meer"
   },
   "background": {
     "white": "Wit",
@@ -238,5 +239,12 @@
     "outlined": "Met rand",
     "save": "Huidige stijl opslaan",
     "remove": "Verwijderen"
+  },
+  "project": {
+    "save": "Project opslaan…",
+    "open": "Project openen…",
+    "saved": "Project opgeslagen",
+    "saveFailed": "Project opslaan mislukt ~ probeer opnieuw",
+    "openFailed": "Dat project kon niet worden geopend"
   }
 }

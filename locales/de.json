@@ -55,7 +55,8 @@
     "shareFailed": "Teilen konnte nicht geöffnet werden ~ erneut versuchen",
     "pin": "Auf dem Bildschirm anheften",
     "pinFailed": "Anheften fehlgeschlagen ~ erneut versuchen",
-    "exportSize": "Exportgröße"
+    "exportSize": "Exportgröße",
+    "more": "Mehr"
   },
   "background": {
     "white": "Weiß",
@@ -238,5 +239,12 @@
     "outlined": "Mit Kontur",
     "save": "Aktuellen Stil speichern",
     "remove": "Entfernen"
+  },
+  "project": {
+    "save": "Projekt speichern…",
+    "open": "Projekt öffnen…",
+    "saved": "Projekt gespeichert",
+    "saveFailed": "Projekt konnte nicht gespeichert werden ~ erneut versuchen",
+    "openFailed": "Dieses Projekt konnte nicht geöffnet werden"
   }
 }
