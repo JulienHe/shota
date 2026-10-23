@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Minus, SquareRoundCorner, TypeOutline, Droplet, Grid3x3 } from "lucide-react";
+import { Minus, SquareRoundCorner, TypeOutline, Droplet, Grid3x3, Plus, X } from "lucide-react";
 import { ColorOption, OptionDropdown, Slider, SliderOption } from "./OptionControls";
-import { FillMode, StrokeStyle } from "../types";
+import { ArrowHead, FillMode, ShapeStyle, StrokeStyle } from "../types";
+import { useFavoritesStore, TextPresetStyle } from "../../../stores/favoritesStore";
+import { t } from "../../../lib/i18n";
 import { useSystemFonts } from "../fonts";
 import { useStyleTarget } from "./useStyleTarget";
 import { useUiStore } from "../../../stores/uiStore";
@@ -24,6 +26,19 @@ const HIGHLIGHTER_SWATCHES = [
 ];
 
 const STROKE_STYLES: StrokeStyle[] = ["solid", "dashed", "dotted"];
+const ARROW_HEADS: ArrowHead[] = ["filled", "outline", "double"];
+
+/** Ready-made looks for text. They set size and outline and leave the font alone. */
+const BUILTIN_TEXT_PRESETS: { id: string; label: string; patch: Partial<ShapeStyle> }[] = [
+  { id: "plain", label: "textPreset.plain", patch: { fontSize: 28, textStrokeEnabled: false } },
+  { id: "heading", label: "textPreset.heading", patch: { fontSize: 56, textStrokeEnabled: false } },
+  { id: "caption", label: "textPreset.caption", patch: { fontSize: 18, textStrokeEnabled: false } },
+  {
+    id: "outlined",
+    label: "textPreset.outlined",
+    patch: { fontSize: 36, stroke: "#ffffff", textStrokeEnabled: true, textStrokeColor: "#000000" },
+  },
+];
 
 /**
  * Style controls for the active drawing tool or the currently selected
@@ -50,7 +65,7 @@ export function ShapeOptionsPanel() {
   }, [menuOpen, setStyleMenuOpen]);
 
   if (!target) return null;
-  const { style, updateStyle, showStroke, showFill, showCornerRadius, showFontSize, showBlur, showSpotlight, showHighlight } = target;
+  const { style, updateStyle, showStroke, showFill, showCornerRadius, showFontSize, showBlur, showSpotlight, showHighlight, showArrowHead, showTextPresets } = target;
   const closeMenu = () => setOpenMenu(null);
   const menu = { openMenu, setOpenMenu };
 
@@ -184,6 +199,32 @@ export function ShapeOptionsPanel() {
                 ))}
               </div>
             </OptionDropdown>
+
+            {showArrowHead && (
+              <OptionDropdown
+                id="arrowHead"
+                openMenu={openMenu}
+                setOpenMenu={setOpenMenu}
+                trigger={<ArrowHeadPreview head={style.arrowHead ?? "filled"} />}
+              >
+                <div className="shape-options__menu shape-options__menu--list">
+                  {ARROW_HEADS.map((head) => (
+                    <button
+                      key={head}
+                      type="button"
+                      className={`dropdown__menu-item${(style.arrowHead ?? "filled") === head ? " dropdown__menu-item--active" : ""}`}
+                      onClick={() => {
+                        updateStyle({ arrowHead: head });
+                        closeMenu();
+                      }}
+                    >
+                      <ArrowHeadPreview head={head} />
+                      {t(`arrow.${head}`)}
+                    </button>
+                  ))}
+                </div>
+              </OptionDropdown>
+            )}
           </>
         )}
 
@@ -296,6 +337,16 @@ export function ShapeOptionsPanel() {
                 onPickColor={(c) => updateStyle({ textStrokeColor: c, textStrokeEnabled: true })}
               />
             )}
+
+            {showTextPresets && (
+              <TextPresets
+                style={style}
+                updateStyle={updateStyle}
+                openMenu={openMenu}
+                setOpenMenu={setOpenMenu}
+                closeMenu={closeMenu}
+              />
+            )}
           </>
         )}
       </div>
@@ -358,5 +409,116 @@ function LinePreview({ strokeStyle }: { strokeStyle: StrokeStyle }) {
         strokeLinecap={strokeStyle === "dotted" ? "round" : "butt"}
       />
     </svg>
+  );
+}
+
+/** A little arrow ending in the chosen head. */
+function ArrowHeadPreview({ head }: { head: ArrowHead }) {
+  const fill = head === "outline" ? "none" : "currentColor";
+  return (
+    <svg width="22" height="12" viewBox="0 0 22 12" className="shape-options__line-preview">
+      <line x1={head === "double" ? 6 : 1} y1="6" x2="16" y2="6" stroke="currentColor" strokeWidth="1.8" />
+      <polygon points="21,6 15,2.5 15,9.5" fill={fill} stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      {head === "double" && (
+        <polygon points="1,6 7,2.5 7,9.5" fill={fill} stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      )}
+    </svg>
+  );
+}
+
+/** Text looks to start from: a few built in, and the ones the user saves. */
+function TextPresets({
+  style,
+  updateStyle,
+  openMenu,
+  setOpenMenu,
+  closeMenu,
+}: {
+  style: ShapeStyle;
+  updateStyle: (patch: Partial<ShapeStyle>) => void;
+  openMenu: string | null;
+  setOpenMenu: (id: string | null) => void;
+  closeMenu: () => void;
+}) {
+  const saved = useFavoritesStore((s) => s.textPresets);
+  const addTextPreset = useFavoritesStore((s) => s.addTextPreset);
+  const removeTextPreset = useFavoritesStore((s) => s.removeTextPreset);
+
+  const current: TextPresetStyle = {
+    stroke: style.stroke,
+    fontSize: style.fontSize,
+    fontFamily: style.fontFamily,
+    textStrokeEnabled: style.textStrokeEnabled,
+    textStrokeColor: style.textStrokeColor,
+  };
+
+  return (
+    <OptionDropdown
+      id="textPresets"
+      openMenu={openMenu}
+      setOpenMenu={setOpenMenu}
+      trigger={<span className="shape-options__font-trigger-label">{t("textPreset.title")}</span>}
+    >
+      <div className="shape-options__menu shape-options__menu--list">
+        {BUILTIN_TEXT_PRESETS.map((preset) => (
+          <button
+            key={preset.id}
+            type="button"
+            className="dropdown__menu-item"
+            onClick={() => {
+              updateStyle(preset.patch);
+              closeMenu();
+            }}
+          >
+            <span className="shape-options__text-sample" style={{ fontSize: Math.min(22, Math.max(11, (preset.patch.fontSize ?? 28) / 2.4)) }}>
+              Aa
+            </span>
+            {t(preset.label)}
+          </button>
+        ))}
+
+        {saved.length > 0 && <div className="shape-options__menu-rule" />}
+        {saved.map((preset, index) => (
+          <div key={index} className="shape-options__preset-row">
+            <button
+              type="button"
+              className="dropdown__menu-item shape-options__preset-apply"
+              onClick={() => {
+                updateStyle(preset);
+                closeMenu();
+              }}
+            >
+              <span
+                className="shape-options__text-sample"
+                style={{
+                  color: preset.stroke,
+                  fontFamily: preset.fontFamily,
+                  fontSize: Math.min(22, Math.max(11, preset.fontSize / 2.4)),
+                  WebkitTextStroke: preset.textStrokeEnabled ? `1px ${preset.textStrokeColor}` : undefined,
+                  background: preset.stroke.toLowerCase() === "#ffffff" ? "#808080" : undefined,
+                }}
+              >
+                Aa
+              </span>
+              {preset.fontSize}px
+            </button>
+            <button
+              type="button"
+              className="shape-options__preset-remove"
+              title={t("textPreset.remove")}
+              aria-label={t("textPreset.remove")}
+              onClick={() => removeTextPreset(index)}
+            >
+              <X size={13} strokeWidth={2.2} />
+            </button>
+          </div>
+        ))}
+
+        <button type="button" className="dropdown__menu-item" onClick={() => addTextPreset(current)}>
+          <Plus size={15} strokeWidth={2} />
+          {t("textPreset.save")}
+        </button>
+      </div>
+    </OptionDropdown>
   );
 }

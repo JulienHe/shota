@@ -24,6 +24,8 @@ export interface StyleTarget {
   showBlur: boolean;
   showSpotlight: boolean;
   showHighlight: boolean;
+  showArrowHead: boolean;
+  showTextPresets: boolean;
 }
 
 /**
@@ -80,5 +82,7 @@ export function useStyleTarget(): StyleTarget | null {
     showBlur: BLUR_KINDS.has(kind),
     showSpotlight: SPOTLIGHT_KINDS.has(kind),
     showHighlight: HIGHLIGHT_KINDS.has(kind),
+    showArrowHead: kind === "arrow",
+    showTextPresets: kind === "text",
   };
 }

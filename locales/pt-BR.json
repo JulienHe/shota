@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Livre"
+  },
+  "colors": {
+    "save": "Salvar esta cor",
+    "saved": "Salva",
+    "removeHint": "clique direito para remover"
+  },
+  "arrow": {
+    "filled": "Ponta cheia",
+    "outline": "Ponta vazada",
+    "double": "Nas duas pontas"
+  },
+  "textPreset": {
+    "title": "Estilos",
+    "plain": "Simples",
+    "heading": "Título",
+    "caption": "Legenda",
+    "outlined": "Com contorno",
+    "save": "Salvar o estilo atual",
+    "remove": "Remover"
   }
 }

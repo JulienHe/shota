@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "自由"
+  },
+  "colors": {
+    "save": "保存此颜色",
+    "saved": "已保存",
+    "removeHint": "右键移除"
+  },
+  "arrow": {
+    "filled": "实心箭头",
+    "outline": "空心箭头",
+    "double": "双向箭头"
+  },
+  "textPreset": {
+    "title": "样式",
+    "plain": "常规",
+    "heading": "标题",
+    "caption": "说明",
+    "outlined": "描边",
+    "save": "保存当前样式",
+    "remove": "移除"
   }
 }

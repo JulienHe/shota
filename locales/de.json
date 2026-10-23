@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Frei"
+  },
+  "colors": {
+    "save": "Diese Farbe speichern",
+    "saved": "Gespeichert",
+    "removeHint": "Rechtsklick zum Entfernen"
+  },
+  "arrow": {
+    "filled": "Gefüllte Spitze",
+    "outline": "Offene Spitze",
+    "double": "Beide Enden"
+  },
+  "textPreset": {
+    "title": "Stile",
+    "plain": "Einfach",
+    "heading": "Überschrift",
+    "caption": "Beschriftung",
+    "outlined": "Mit Kontur",
+    "save": "Aktuellen Stil speichern",
+    "remove": "Entfernen"
   }
 }

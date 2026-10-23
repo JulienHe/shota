@@ -1,4 +1,7 @@
 import { ReactNode } from "react";
+import { Star } from "lucide-react";
+import { normaliseColor, useFavoritesStore } from "../../../stores/favoritesStore";
+import { t } from "../../../lib/i18n";
 import { Dropdown } from "../../../components/Dropdown";
 import "./ShapeOptionsPanel.css";
 
@@ -160,6 +163,10 @@ export function ColorPalette({
   onPick: (color: string) => void;
   swatches?: string[];
 }) {
+  const favorites = useFavoritesStore((s) => s.colors);
+  const addColor = useFavoritesStore((s) => s.addColor);
+  const removeColor = useFavoritesStore((s) => s.removeColor);
+  const saved = favorites.includes(normaliseColor(value));
   return (
     <div className="shape-options__palette">
       {swatches.map((c) => (
@@ -174,6 +181,32 @@ export function ColorPalette({
       <label className="shape-options__custom" title="Custom color">
         <input type="color" value={value} onChange={(e) => onPick(e.target.value)} />
       </label>
+      <div className="shape-options__favorites">
+        {favorites.map((c) => (
+          <button
+            key={c}
+            type="button"
+            className="shape-options__swatch shape-options__swatch--favorite"
+            style={{ background: c }}
+            title={`${c} ~ ${t("colors.removeHint")}`}
+            onClick={() => onPick(c)}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              removeColor(c);
+            }}
+          />
+        ))}
+        <button
+          type="button"
+          className={`shape-options__favorite-add${saved ? " shape-options__favorite-add--saved" : ""}`}
+          title={saved ? t("colors.saved") : t("colors.save")}
+          aria-label={t("colors.save")}
+          disabled={saved}
+          onClick={() => addColor(value)}
+        >
+          <Star size={14} strokeWidth={2} fill={saved ? "currentColor" : "none"} />
+        </button>
+      </div>
     </div>
   );
 }

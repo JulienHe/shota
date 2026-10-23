@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Libero"
+  },
+  "colors": {
+    "save": "Salva questo colore",
+    "saved": "Salvato",
+    "removeHint": "clic destro per rimuovere"
+  },
+  "arrow": {
+    "filled": "Punta piena",
+    "outline": "Punta vuota",
+    "double": "Entrambe le estremità"
+  },
+  "textPreset": {
+    "title": "Stili",
+    "plain": "Semplice",
+    "heading": "Titolo",
+    "caption": "Didascalia",
+    "outlined": "Con contorno",
+    "save": "Salva lo stile attuale",
+    "remove": "Rimuovi"
   }
 }

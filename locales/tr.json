@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Serbest"
+  },
+  "colors": {
+    "save": "Bu rengi kaydet",
+    "saved": "Kaydedildi",
+    "removeHint": "kaldırmak için sağ tık"
+  },
+  "arrow": {
+    "filled": "Dolu uç",
+    "outline": "Çerçeveli uç",
+    "double": "İki uç"
+  },
+  "textPreset": {
+    "title": "Stiller",
+    "plain": "Düz",
+    "heading": "Başlık",
+    "caption": "Alt yazı",
+    "outlined": "Çerçeveli",
+    "save": "Geçerli stili kaydet",
+    "remove": "Kaldır"
   }
 }

@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "自由"
+  },
+  "colors": {
+    "save": "この色を保存",
+    "saved": "保存済み",
+    "removeHint": "右クリックで削除"
+  },
+  "arrow": {
+    "filled": "塗りつぶしの矢じり",
+    "outline": "輪郭の矢じり",
+    "double": "両端"
+  },
+  "textPreset": {
+    "title": "スタイル",
+    "plain": "標準",
+    "heading": "見出し",
+    "caption": "キャプション",
+    "outlined": "縁取り",
+    "save": "現在のスタイルを保存",
+    "remove": "削除"
   }
 }

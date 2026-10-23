@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Free"
+  },
+  "colors": {
+    "save": "Save this colour",
+    "saved": "Saved",
+    "removeHint": "right-click to remove"
+  },
+  "arrow": {
+    "filled": "Solid head",
+    "outline": "Outline head",
+    "double": "Both ends"
+  },
+  "textPreset": {
+    "title": "Styles",
+    "plain": "Plain",
+    "heading": "Heading",
+    "caption": "Caption",
+    "outlined": "Outlined",
+    "save": "Save current style",
+    "remove": "Remove"
   }
 }

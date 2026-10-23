@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Dowolny"
+  },
+  "colors": {
+    "save": "Zapisz ten kolor",
+    "saved": "Zapisano",
+    "removeHint": "prawy przycisk usuwa"
+  },
+  "arrow": {
+    "filled": "Pełny grot",
+    "outline": "Pusty grot",
+    "double": "Oba końce"
+  },
+  "textPreset": {
+    "title": "Style",
+    "plain": "Zwykły",
+    "heading": "Nagłówek",
+    "caption": "Podpis",
+    "outlined": "Z konturem",
+    "save": "Zapisz bieżący styl",
+    "remove": "Usuń"
   }
 }

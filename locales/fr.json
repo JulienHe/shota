@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Libre"
+  },
+  "colors": {
+    "save": "Enregistrer cette couleur",
+    "saved": "Enregistrée",
+    "removeHint": "clic droit pour retirer"
+  },
+  "arrow": {
+    "filled": "Pointe pleine",
+    "outline": "Pointe creuse",
+    "double": "Aux deux bouts"
+  },
+  "textPreset": {
+    "title": "Styles",
+    "plain": "Simple",
+    "heading": "Titre",
+    "caption": "Légende",
+    "outlined": "Contour",
+    "save": "Enregistrer le style actuel",
+    "remove": "Retirer"
   }
 }

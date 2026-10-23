@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "자유"
+  },
+  "colors": {
+    "save": "이 색상 저장",
+    "saved": "저장됨",
+    "removeHint": "오른쪽 클릭으로 제거"
+  },
+  "arrow": {
+    "filled": "채운 화살촉",
+    "outline": "윤곽선 화살촉",
+    "double": "양쪽 끝"
+  },
+  "textPreset": {
+    "title": "스타일",
+    "plain": "기본",
+    "heading": "제목",
+    "caption": "캡션",
+    "outlined": "윤곽선",
+    "save": "현재 스타일 저장",
+    "remove": "제거"
   }
 }

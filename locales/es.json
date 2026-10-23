@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Libre"
+  },
+  "colors": {
+    "save": "Guardar este color",
+    "saved": "Guardado",
+    "removeHint": "clic derecho para quitar"
+  },
+  "arrow": {
+    "filled": "Punta llena",
+    "outline": "Punta hueca",
+    "double": "Ambos extremos"
+  },
+  "textPreset": {
+    "title": "Estilos",
+    "plain": "Normal",
+    "heading": "Título",
+    "caption": "Pie",
+    "outlined": "Con contorno",
+    "save": "Guardar el estilo actual",
+    "remove": "Quitar"
   }
 }

@@ -19,11 +19,14 @@ export type ToolId =
 export type FillMode = "none" | "solid" | "translucent";
 export type BlurEffect = "blur" | "pixelate";
 export type StrokeStyle = "solid" | "dashed" | "dotted";
+/** How an arrow ends. Older saved arrows have none of this and are "filled". */
+export type ArrowHead = "filled" | "outline" | "double";
 
 export interface ShapeStyle {
   stroke: string;
   strokeWidth: number;
   strokeStyle: StrokeStyle;
+  arrowHead: ArrowHead;
   fillMode: FillMode;
   fillColor: string;
   fillOpacity: number;
@@ -53,6 +56,7 @@ export const DEFAULT_STYLE: ShapeStyle = {
   stroke: "#ff3b30",
   strokeWidth: 3,
   strokeStyle: "solid",
+  arrowHead: "filled",
   fillMode: "none",
   fillColor: "#ff3b30",
   fillOpacity: 0.35,

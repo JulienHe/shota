@@ -209,5 +209,24 @@
   },
   "crop": {
     "free": "Vrij"
+  },
+  "colors": {
+    "save": "Deze kleur opslaan",
+    "saved": "Opgeslagen",
+    "removeHint": "rechtsklik om te verwijderen"
+  },
+  "arrow": {
+    "filled": "Gevulde punt",
+    "outline": "Open punt",
+    "double": "Beide uiteinden"
+  },
+  "textPreset": {
+    "title": "Stijlen",
+    "plain": "Gewoon",
+    "heading": "Kop",
+    "caption": "Bijschrift",
+    "outlined": "Met rand",
+    "save": "Huidige stijl opslaan",
+    "remove": "Verwijderen"
   }
 }
