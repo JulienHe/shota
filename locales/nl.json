@@ -200,5 +200,14 @@
   "pin": {
     "close": "Sluiten",
     "copied": "Gekopieerd"
+  },
+  "image": {
+    "rotateLeft": "Naar links draaien",
+    "rotateRight": "Naar rechts draaien",
+    "flipHorizontal": "Horizontaal spiegelen",
+    "flipVertical": "Verticaal spiegelen"
+  },
+  "crop": {
+    "free": "Vrij"
   }
 }

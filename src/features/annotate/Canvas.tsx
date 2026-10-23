@@ -1,3 +1,4 @@
+import { t } from "../../lib/i18n";
 import { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Stage, Layer, Image as KonvaImage, Rect, Transformer } from "react-konva";
 import Konva from "konva";
@@ -17,6 +18,7 @@ import { frameMetrics } from "../background/frame";
 import { useFrameBackground } from "../background/useFrameBackground";
 import { useCrop } from "../crop/useCrop";
 import { CropOverlay } from "../crop/CropOverlay";
+import { CROP_RATIOS, largestCentredRect } from "../crop/aspect";
 import { sampleColorFromImage } from "../color-picker/sampleColor";
 import { EyedropperHud } from "../color-picker/EyedropperHud";
 import { ShapeRenderer } from "./shapes/ShapeRenderer";
@@ -795,6 +797,19 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
 
       {cropRect && (
         <div className="canvas__crop-actions">
+          {imageElement &&
+            CROP_RATIOS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className="canvas__crop-ratio"
+                title={option.label ?? t("crop.free")}
+                onClick={() => setCropRect(largestCentredRect(imageElement.width, imageElement.height, option.ratio))}
+              >
+                {option.label ?? t("crop.free")}
+              </button>
+            ))}
+          <span className="canvas__crop-divider" />
           <button
             type="button"
             onClick={() => {
@@ -802,7 +817,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
               setActiveTool("select");
             }}
           >
-            Crop
+            {t("editor.cropConfirm")}
           </button>
           <button
             type="button"
@@ -811,7 +826,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
               setActiveTool("select");
             }}
           >
-            Cancel
+            {t("editor.cropCancel")}
           </button>
         </div>
       )}

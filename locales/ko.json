@@ -200,5 +200,14 @@
   "pin": {
     "close": "닫기",
     "copied": "복사됨"
+  },
+  "image": {
+    "rotateLeft": "왼쪽으로 회전",
+    "rotateRight": "오른쪽으로 회전",
+    "flipHorizontal": "좌우 반전",
+    "flipVertical": "상하 반전"
+  },
+  "crop": {
+    "free": "자유"
   }
 }

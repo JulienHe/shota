@@ -16,13 +16,17 @@ import { tauriApi, toBase64Payload, PendingCapture } from "../lib/tauriApi";
 import { primeImageCache } from "../lib/useImage";
 import { afterNextPaint } from "../lib/windowChrome";
 import { closeEditor, persistDocument } from "../lib/editorClose";
-import { parseDocument, serializeDocument } from "../features/background/frame";
+import { parseDocument } from "../features/background/frame";
+import { replaySavedOps } from "../features/annotate/documentActions";
 import { BackgroundPanel } from "../features/background/BackgroundPanel";
 import { useToolStore } from "../stores/toolStore";
 import "./EditorWindow.css";
 
 /** Matches import::IMAGE_EXTENSIONS on the Rust side. */
 const IMAGE_FILE = /\.(png|jpe?g|webp|bmp|gif|tiff?|ico)$/i;
+
+// Dev builds only: lets a script drive the document without clicking through the UI.
+if (import.meta.env.DEV) (window as unknown as { __shota?: unknown }).__shota = { documentStore: useDocumentStore };
 
 export function EditorWindow() {
   const canvasRef = useRef<CanvasHandle>(null);
@@ -66,26 +70,45 @@ export function EditorWindow() {
 
         const saved = parseDocument(capture.shapes_json);
 
-        if (saved) {
-          replaceImage(url, img.width, img.height, saved.shapes, saved.frame);
-        } else {
-          loadImage(url, img.width, img.height);
+        const finish = (shownUrl: string, shown: HTMLImageElement) => {
+          if (saved) {
+            replaceImage(shownUrl, shown.width, shown.height, saved.shapes, saved.frame, saved.imageOps);
+          } else {
+            loadImage(shownUrl, shown.width, shown.height);
+          }
+          setHistoryId(capture.history_id);
+
+          // Only now that the replacement has decoded ~ revoking earlier can
+          // pull the URL out from under an image still being decoded. Each
+          // capture is tens of MB, so without this a long session would hold
+          // every past screenshot in memory.
+          if (objectUrlRef.current && objectUrlRef.current !== shownUrl) URL.revokeObjectURL(objectUrlRef.current);
+          objectUrlRef.current = shownUrl;
+
+          // The editor window is kept hidden by the Rust side until this
+          // fires (see open_editor_window) ~ reveals it once the new image
+          // has actually had a chance to paint, rather than the instant React
+          // commits the state update, which is what was showing the *previous*
+          // capture for a moment on every capture after the first.
+          afterNextPaint().then(() => tauriApi.editorReady());
+        };
+
+        // A capture that was cropped, rotated or flipped is stored as the
+        // original; replay those edits to get back to what was left on screen.
+        if (saved && saved.imageOps.length > 0) {
+          replaySavedOps(img, url, saved.imageOps)
+            .then(({ url: shownUrl, element }) => {
+              primeImageCache(shownUrl, element);
+              finish(shownUrl, element);
+            })
+            .catch((err) => {
+              console.error("could not replay the saved edits", err);
+              finish(url, img);
+            });
+          return;
         }
-        setHistoryId(capture.history_id);
+        finish(url, img);
 
-        // Only now that the replacement has decoded ~ revoking earlier can
-        // pull the URL out from under an image still being decoded. Each
-        // capture is tens of MB, so without this a long session would hold
-        // every past screenshot in memory.
-        if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
-        objectUrlRef.current = url;
-
-        // The editor window is kept hidden by the Rust side until this
-        // fires (see open_editor_window) ~ reveals it once the new image
-        // has actually had a chance to paint, rather than the instant React
-        // commits the state update, which is what was showing the *previous*
-        // capture for a moment on every capture after the first.
-        afterNextPaint().then(() => tauriApi.editorReady());
       };
       img.onerror = () => {
         console.error("failed to decode captured image");
@@ -144,14 +167,7 @@ export function EditorWindow() {
   useEffect(() => {
     const win = getCurrentWindow();
     const unlisten = win.onCloseRequested(() => {
-      const { historyId, image, shapes, frame, imageWidth, imageHeight } = useDocumentStore.getState();
-      if (historyId && image) {
-        tauriApi
-          .updateHistoryEntry(historyId, serializeDocument(shapes, frame), imageWidth, imageHeight)
-          .catch((err) => {
-            console.error("failed to save history annotations", err);
-          });
-      }
+      persistDocument();
     });
     return () => {
       unlisten.then((fn) => fn());

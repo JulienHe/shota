@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Shape } from "../annotate/types";
-import { useDocumentStore } from "../../stores/documentStore";
+import { applyImageOp } from "../annotate/documentActions";
 
 export interface CropRect {
   x: number;
@@ -17,8 +16,6 @@ export interface CropRect {
  */
 export function useCrop(imageElement: HTMLImageElement | null, active: boolean) {
   const [cropRect, setCropRect] = useState<CropRect | null>(null);
-  const replaceImage = useDocumentStore((s) => s.replaceImage);
-  const shapes = useDocumentStore((s) => s.shapes);
 
   useEffect(() => {
     if (active && imageElement) {
@@ -33,32 +30,16 @@ export function useCrop(imageElement: HTMLImageElement | null, active: boolean) 
       setCropRect(null);
       return;
     }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.round(cropRect.width);
-    canvas.height = Math.round(cropRect.height);
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    ctx.drawImage(
-      imageElement,
-      cropRect.x,
-      cropRect.y,
-      cropRect.width,
-      cropRect.height,
-      0,
-      0,
-      cropRect.width,
-      cropRect.height,
-    );
-
-    const shiftedShapes: Shape[] = shapes
-      .map((shape) => ({ ...shape, x: shape.x - cropRect.x, y: shape.y - cropRect.y }))
-      .filter((shape) => shape.x > -5000 && shape.y > -5000);
-
-    replaceImage(canvas.toDataURL("image/png"), canvas.width, canvas.height, shiftedShapes);
+    const op = {
+      op: "crop" as const,
+      x: Math.round(cropRect.x),
+      y: Math.round(cropRect.y),
+      width: Math.round(cropRect.width),
+      height: Math.round(cropRect.height),
+    };
     setCropRect(null);
-  }, [cropRect, imageElement, shapes, replaceImage]);
+    applyImageOp(op).catch((err) => console.error("crop failed", err));
+  }, [cropRect, imageElement]);
 
   const cancelCrop = useCallback(() => setCropRect(null), []);
 

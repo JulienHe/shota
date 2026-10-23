@@ -200,5 +200,14 @@
   "pin": {
     "close": "Cerrar",
     "copied": "Copiado"
+  },
+  "image": {
+    "rotateLeft": "Girar a la izquierda",
+    "rotateRight": "Girar a la derecha",
+    "flipHorizontal": "Voltear horizontalmente",
+    "flipVertical": "Voltear verticalmente"
+  },
+  "crop": {
+    "free": "Libre"
   }
 }

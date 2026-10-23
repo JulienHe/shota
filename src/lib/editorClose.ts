@@ -31,10 +31,10 @@ export function closeEditor() {
  * whatever had been drawn on it.
  */
 export function persistDocument() {
-  const { historyId, image, shapes, frame, imageWidth, imageHeight } = useDocumentStore.getState();
+  const { historyId, image, shapes, frame, imageWidth, imageHeight, imageOps } = useDocumentStore.getState();
   if (historyId && image) {
     tauriApi
-      .updateHistoryEntry(historyId, serializeDocument(shapes, frame), imageWidth, imageHeight)
+      .updateHistoryEntry(historyId, serializeDocument(shapes, frame, imageOps), imageWidth, imageHeight)
       .catch((err) => {
         console.error("failed to save history annotations", err);
       });

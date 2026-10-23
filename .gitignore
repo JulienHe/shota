@@ -32,3 +32,4 @@ skills-lock.json
 # it can sign an "update" that every installed copy will accept and run.
 *.key
 *.key.pub
+.vitest/

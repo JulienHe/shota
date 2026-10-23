@@ -200,5 +200,14 @@
   "pin": {
     "close": "關閉",
     "copied": "已複製"
+  },
+  "image": {
+    "rotateLeft": "向左旋轉",
+    "rotateRight": "向右旋轉",
+    "flipHorizontal": "水平翻轉",
+    "flipVertical": "垂直翻轉"
+  },
+  "crop": {
+    "free": "自由"
   }
 }

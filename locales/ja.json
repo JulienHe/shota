@@ -200,5 +200,14 @@
   "pin": {
     "close": "閉じる",
     "copied": "コピーしました"
+  },
+  "image": {
+    "rotateLeft": "左に回転",
+    "rotateRight": "右に回転",
+    "flipHorizontal": "左右反転",
+    "flipVertical": "上下反転"
+  },
+  "crop": {
+    "free": "自由"
   }
 }

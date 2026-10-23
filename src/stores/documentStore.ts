@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Shape, ShapeStyle } from "../features/annotate/types";
 import { Frame } from "../features/background/frame";
+import { ImageOp } from "../features/annotate/imageOps";
 
 const MAX_HISTORY = 50;
 
@@ -18,9 +19,18 @@ interface DocumentState {
    * null for the bare capture. Not part of undo: it's a presentation
    * choice, adjusted with live sliders, not an edit to the content. */
   frame: Frame | null;
+  /** Edits made to the picture itself, oldest first; see `ImageOp`. */
+  imageOps: ImageOp[];
 
   loadImage: (dataUrl: string, width: number, height: number) => void;
-  replaceImage: (dataUrl: string, width: number, height: number, shapes: Shape[], frame?: Frame | null) => void;
+  replaceImage: (
+    dataUrl: string,
+    width: number,
+    height: number,
+    shapes: Shape[],
+    frame?: Frame | null,
+    imageOps?: ImageOp[],
+  ) => void;
   setFrame: (frame: Frame | null) => void;
   setHistoryId: (id: string | null) => void;
 
@@ -45,6 +55,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
   future: [],
   historyId: null,
   frame: null,
+  imageOps: [],
 
   loadImage: (dataUrl, width, height) =>
     set({
@@ -59,11 +70,13 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       // capture; applying the last one to every capture after it put a
       // background on screenshots that were never meant to have one.
       frame: null,
+      imageOps: [],
     }),
 
-  // `frame` is only passed when reopening a saved document; crop also calls
-  // this, and must keep whatever frame is already on.
-  replaceImage: (dataUrl, width, height, shapes, frame) =>
+  // `frame` and `imageOps` are only passed when reopening a saved document
+  // (or, for `imageOps`, when an edit to the picture is made); anything else
+  // keeps whatever is already on.
+  replaceImage: (dataUrl, width, height, shapes, frame, imageOps) =>
     set((s) => ({
       image: dataUrl,
       imageWidth: width,
@@ -71,6 +84,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       shapes,
       selectedShapeId: null,
       frame: frame === undefined ? s.frame : frame,
+      imageOps: imageOps === undefined ? s.imageOps : imageOps,
     })),
 
   setFrame: (frame) => set({ frame }),

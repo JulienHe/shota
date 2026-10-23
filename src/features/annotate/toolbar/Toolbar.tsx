@@ -4,6 +4,7 @@ import { CircleOne } from "./StepToolIcon";
 import { SpotlightRect } from "./SpotlightToolIcon";
 import { useToolStore } from "../../../stores/toolStore";
 import { ShapeOptionsPanel } from "./ShapeOptionsPanel";
+import { ImageOptionsPanel } from "./ImageOptionsPanel";
 import { ToolId } from "../types";
 import { EditorActionId, useEditorBindings, useEditorShortcuts } from "../../../lib/editorShortcuts";
 import { formatAcceleratorLabel } from "../../../lib/acceleratorLabel";
@@ -57,6 +58,7 @@ export function Toolbar() {
         ))}
 
         <ShapeOptionsPanel />
+        {activeTool === "crop" && <ImageOptionsPanel />}
       </div>
     </div>
   );

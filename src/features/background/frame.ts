@@ -1,3 +1,4 @@
+import { ImageOp } from "../annotate/imageOps";
 import { Shape } from "../annotate/types";
 
 /**
@@ -67,6 +68,8 @@ export function frameMetrics(frame: Frame, width: number, height: number): Frame
 export interface SavedDocument {
   shapes: Shape[];
   frame: Frame | null;
+  /** Edits to the picture, to be replayed on the original; empty for older entries. */
+  imageOps: ImageOp[];
 }
 
 /**
@@ -74,17 +77,25 @@ export interface SavedDocument {
  * array of shapes, which `parseDocument` still reads, so nothing saved
  * before frames existed is lost.
  */
-export function serializeDocument(shapes: Shape[], frame: Frame | null): string {
-  return JSON.stringify({ version: 2, shapes, frame });
+export function serializeDocument(shapes: Shape[], frame: Frame | null, imageOps: ImageOp[] = []): string {
+  // Version 3 added `imageOps`; a document without any is still written as
+  // version 2, so an older Shota can open what it could always have opened.
+  return imageOps.length > 0
+    ? JSON.stringify({ version: 3, shapes, frame, imageOps })
+    : JSON.stringify({ version: 2, shapes, frame });
 }
 
 export function parseDocument(json: string | null): SavedDocument | null {
   if (!json) return null;
   try {
     const parsed = JSON.parse(json);
-    if (Array.isArray(parsed)) return { shapes: parsed as Shape[], frame: null };
+    if (Array.isArray(parsed)) return { shapes: parsed as Shape[], frame: null, imageOps: [] };
     if (parsed && Array.isArray(parsed.shapes)) {
-      return { shapes: parsed.shapes as Shape[], frame: (parsed.frame as Frame | null) ?? null };
+      return {
+        shapes: parsed.shapes as Shape[],
+        frame: (parsed.frame as Frame | null) ?? null,
+        imageOps: Array.isArray(parsed.imageOps) ? (parsed.imageOps as ImageOp[]) : [],
+      };
     }
   } catch {
     // Fall through: a corrupt entry opens as a plain capture.

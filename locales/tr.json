@@ -200,5 +200,14 @@
   "pin": {
     "close": "Kapat",
     "copied": "Kopyalandı"
+  },
+  "image": {
+    "rotateLeft": "Sola döndür",
+    "rotateRight": "Sağa döndür",
+    "flipHorizontal": "Yatay çevir",
+    "flipVertical": "Dikey çevir"
+  },
+  "crop": {
+    "free": "Serbest"
   }
 }

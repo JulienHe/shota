@@ -50,3 +50,27 @@
     color: #e4e4e7;
   }
 }
+
+.canvas__crop-divider {
+  align-self: stretch;
+  width: 1px;
+  margin: 2px 4px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Ratio presets sit quietly beside the two actions, which stay the loud ones. */
+.canvas__crop-actions .canvas__crop-ratio {
+  background: rgba(0, 0, 0, 0.07);
+  color: inherit;
+}
+
+.canvas__crop-actions .canvas__crop-ratio:hover {
+  background: rgba(61, 123, 253, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .canvas__crop-actions .canvas__crop-ratio {
+    background: rgba(255, 255, 255, 0.12);
+    color: #e8e8ea;
+  }
+}
