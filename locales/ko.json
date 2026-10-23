@@ -33,7 +33,8 @@
     "spotlight": "스포트라이트",
     "blur": "흐리게 / 모자이크",
     "crop": "자르기",
-    "eyedropper": "색 선택기"
+    "eyedropper": "색 선택기",
+    "shapes": "도형"
   },
   "editor": {
     "minimize": "최소화",

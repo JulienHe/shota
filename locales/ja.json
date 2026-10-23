@@ -33,7 +33,8 @@
     "spotlight": "スポットライト",
     "blur": "ぼかし / モザイク",
     "crop": "切り抜き",
-    "eyedropper": "スポイト"
+    "eyedropper": "スポイト",
+    "shapes": "図形"
   },
   "editor": {
     "minimize": "最小化",

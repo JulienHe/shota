@@ -8,7 +8,7 @@ interface DropdownProps {
   open: boolean;
   onToggle: () => void;
   onClose: () => void;
-  align?: "start" | "center";
+  align?: "start" | "center" | "end";
   placement?: "bottom" | "top";
   /** Extra class on the trigger pill for the rare per-usage visual tweak. */
   triggerClassName?: string;

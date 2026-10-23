@@ -33,7 +33,8 @@
     "spotlight": "聚光灯",
     "blur": "模糊 / 马赛克",
     "crop": "裁剪",
-    "eyedropper": "取色器"
+    "eyedropper": "取色器",
+    "shapes": "形状"
   },
   "editor": {
     "minimize": "最小化",

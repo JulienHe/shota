@@ -33,7 +33,8 @@
     "spotlight": "Foco",
     "blur": "Desenfocar / pixelar",
     "crop": "Recortar",
-    "eyedropper": "Selector de color"
+    "eyedropper": "Selector de color",
+    "shapes": "Formas"
   },
   "editor": {
     "minimize": "Minimizar",

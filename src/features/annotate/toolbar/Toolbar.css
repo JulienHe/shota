@@ -11,6 +11,47 @@
   background: #e4e4e7;
 }
 
+.toolbar__group {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar__group-caret {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 28px;
+  margin-left: -3px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.toolbar__group-caret:hover,
+.toolbar__group-caret--open {
+  opacity: 1;
+  background: rgba(127, 127, 127, 0.16);
+}
+
+.toolbar__group-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+}
+
+.toolbar__group-key {
+  margin-left: auto;
+  padding-left: 16px;
+  font-size: 11px;
+  opacity: 0.55;
+}
+
 @media (prefers-color-scheme: dark) {
   .toolbar__divider {
     background: #303136;

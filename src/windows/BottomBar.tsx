@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, FolderOpen, GripVertical, MoreHorizontal, Pin, Save, Scaling, Share2 } from "lucide-react";
+import { Copy, FolderOpen, GripVertical, MoreHorizontal, Pin, Save, Share2 } from "lucide-react";
 import { EXPORT_SCALES, useUiStore } from "../stores/uiStore";
 import { IconButton } from "../components/IconButton";
 import { Dropdown } from "../components/Dropdown";
@@ -22,13 +22,21 @@ interface BottomBarProps {
   onDragOut: () => void;
 }
 
-/** CleanShot-style status bar: zoom control bottom-left, Copy/Save bottom-right. */
+/**
+ * Status bar: zoom bottom-left; bottom-right only what is used every time
+ * (drag out, Copy, Save). Everything else (Share, Pin, export size, projects)
+ * lives behind "More" so the bar stays calm as features are added.
+ */
 export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onShare, onPin, onSaveProject, onOpenProject, onDragOut }: BottomBarProps) {
   const [zoomOpen, setZoomOpen] = useState(false);
-  const [sizeOpen, setSizeOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const exportScale = useUiStore((s) => s.exportScale);
   const setExportScale = useUiStore((s) => s.setExportScale);
+
+  const closeThen = (action: () => void) => {
+    setMoreOpen(false);
+    action();
+  };
 
   return (
     <div className="bottom-bar" data-tauri-drag-region="deep">
@@ -82,69 +90,53 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onS
         </button>
         <Dropdown
           placement="top"
-          align="center"
-          open={sizeOpen}
-          onToggle={() => setSizeOpen((o) => !o)}
-          onClose={() => setSizeOpen(false)}
+          align="end"
+          open={moreOpen}
+          onToggle={() => setMoreOpen((o) => !o)}
+          onClose={() => setMoreOpen(false)}
           trigger={
-            <span title={t("editor.exportSize")} className="bottom-bar__size-trigger">
-              <Scaling size={15} strokeWidth={2} />
+            <span title={t("editor.more")} className="bottom-bar__size-trigger">
+              <MoreHorizontal size={16} strokeWidth={2} aria-label={t("editor.more")} />
               {exportScale !== 1 && `${Math.round(exportScale * 100)}%`}
             </span>
           }
         >
           <div className="bottom-bar__zoom-menu">
+            <button type="button" className="dropdown__menu-item" onClick={() => closeThen(onShare)}>
+              <Share2 size={15} strokeWidth={2} />
+              {t("editor.share")}
+            </button>
+            <button type="button" className="dropdown__menu-item" onClick={() => closeThen(onPin)}>
+              <Pin size={15} strokeWidth={2} />
+              {t("editor.pin")}
+            </button>
+            <div className="bottom-bar__divider" />
             <div className="bottom-bar__menu-title">{t("editor.exportSize")}</div>
-            {EXPORT_SCALES.map((scale) => (
-              <button
-                key={scale}
-                type="button"
-                className={`dropdown__menu-item${scale === exportScale ? " dropdown__menu-item--active" : ""}`}
-                onClick={() => {
-                  setExportScale(scale);
-                  setSizeOpen(false);
-                }}
-              >
-                {Math.round(scale * 100)}%
-              </button>
-            ))}
-          </div>
-        </Dropdown>
-        <Dropdown
-          placement="top"
-          align="center"
-          open={moreOpen}
-          onToggle={() => setMoreOpen((o) => !o)}
-          onClose={() => setMoreOpen(false)}
-          trigger={<MoreHorizontal size={16} strokeWidth={2} aria-label={t("editor.more")} />}
-        >
-          <div className="bottom-bar__zoom-menu">
-            <button
-              type="button"
-              className="dropdown__menu-item"
-              onClick={() => {
-                setMoreOpen(false);
-                onSaveProject();
-              }}
-            >
+            <div className="bottom-bar__chips" role="radiogroup" aria-label={t("editor.exportSize")}>
+              {EXPORT_SCALES.map((scale) => (
+                <button
+                  key={scale}
+                  type="button"
+                  role="radio"
+                  aria-checked={scale === exportScale}
+                  className={`bottom-bar__chip${scale === exportScale ? " bottom-bar__chip--active" : ""}`}
+                  onClick={() => setExportScale(scale)}
+                >
+                  {Math.round(scale * 100)}%
+                </button>
+              ))}
+            </div>
+            <div className="bottom-bar__divider" />
+            <button type="button" className="dropdown__menu-item" onClick={() => closeThen(onSaveProject)}>
               <Save size={15} strokeWidth={2} />
               {t("project.save")}
             </button>
-            <button
-              type="button"
-              className="dropdown__menu-item"
-              onClick={() => {
-                setMoreOpen(false);
-                onOpenProject();
-              }}
-            >
+            <button type="button" className="dropdown__menu-item" onClick={() => closeThen(onOpenProject)}>
               <FolderOpen size={15} strokeWidth={2} />
               {t("project.open")}
             </button>
           </div>
         </Dropdown>
-        <IconButton icon={Share2} label={t("editor.share")} onClick={onShare} />
-        <IconButton icon={Pin} label={t("editor.pin")} onClick={onPin} />
         <IconButton icon={Copy} label={`${t("editor.copy")} (Ctrl+C)`} onClick={onCopy} />
         <IconButton icon={Save} label={`${t("editor.save")} (Ctrl+S)`} onClick={onSave} />
       </div>

@@ -33,7 +33,8 @@
     "spotlight": "Riflettore",
     "blur": "Sfoca / pixela",
     "crop": "Ritaglia",
-    "eyedropper": "Selettore colore"
+    "eyedropper": "Selettore colore",
+    "shapes": "Forme"
   },
   "editor": {
     "minimize": "Riduci a icona",

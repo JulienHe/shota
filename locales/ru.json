@@ -33,7 +33,8 @@
     "spotlight": "Прожектор",
     "blur": "Размытие / пикселизация",
     "crop": "Обрезка",
-    "eyedropper": "Пипетка"
+    "eyedropper": "Пипетка",
+    "shapes": "Фигуры"
   },
   "editor": {
     "minimize": "Свернуть",

@@ -9,8 +9,8 @@ interface PopoverProps {
   anchorRef: RefObject<HTMLElement | null>;
   /** Which side of the anchor the panel opens toward. Defaults to below. */
   placement?: "bottom" | "top";
-  /** Horizontal alignment against the anchor. Defaults to centered. */
-  align?: "center" | "start";
+  /** Horizontal alignment against the anchor ("end" lines the panel up with the anchor's right edge). Defaults to centered. */
+  align?: "center" | "start" | "end";
   children: ReactNode;
 }
 
@@ -58,9 +58,10 @@ export function Popover({ open, onClose, anchorRef, placement = "bottom", align 
 
   const style: CSSProperties = {
     position: "fixed",
-    left: align === "start" ? rect.left : rect.left + rect.width / 2,
     transform: align === "center" ? "translateX(-50%)" : undefined,
   };
+  if (align === "end") style.right = window.innerWidth - rect.right;
+  else style.left = align === "start" ? rect.left : rect.left + rect.width / 2;
   if (placement === "bottom") style.top = rect.bottom + 8;
   else style.bottom = window.innerHeight - rect.top + 8;
 

@@ -33,7 +33,8 @@
     "spotlight": "Прожектор",
     "blur": "Розмиття / пікселізація",
     "crop": "Обрізання",
-    "eyedropper": "Піпетка"
+    "eyedropper": "Піпетка",
+    "shapes": "Фігури"
   },
   "editor": {
     "minimize": "Згорнути",
