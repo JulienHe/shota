@@ -257,7 +257,7 @@
     "keys": "Eingabe zum Beenden · Esc zum Abbrechen",
     "done": "Fertig",
     "cancel": "Abbrechen",
-    "tooFar": "Zu weit: ein Stück zurückscrollen",
+    "tooFar": "Orientierung verloren: ein Stück zurück, dann langsamer",
     "auto": "Auto-Scroll",
     "autoHint": "Shota scrollt für dich (und übernimmt dabei die Maus)"
   }

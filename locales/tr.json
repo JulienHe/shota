@@ -257,7 +257,7 @@
     "keys": "Bitirmek için Enter · İptal için Esc",
     "done": "Bitti",
     "cancel": "İptal",
-    "tooFar": "Çok ileri gittiniz: biraz geri kaydırın",
+    "tooFar": "Yer kayboldu: biraz geri gidin, sonra daha yavaş kaydırın",
     "auto": "Otomatik kaydırma",
     "autoHint": "Shota sizin yerinize kaydırır (açıkken fareyi kullanır)"
   }

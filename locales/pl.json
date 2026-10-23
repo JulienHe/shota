@@ -257,7 +257,7 @@
     "keys": "Enter kończy · Esc anuluje",
     "done": "Gotowe",
     "cancel": "Anuluj",
-    "tooFar": "Za daleko: przewiń trochę w górę",
+    "tooFar": "Zgubiono ślad: cofnij się trochę i przewijaj wolniej",
     "auto": "Autoprzewijanie",
     "autoHint": "Shota przewija za Ciebie (przejmuje mysz, dopóki jest włączone)"
   }

@@ -257,7 +257,7 @@
     "keys": "按 Enter 完成 · 按 Esc 取消",
     "done": "完成",
     "cancel": "取消",
-    "tooFar": "捲動過遠：請向回捲動一點",
+    "tooFar": "跟丟了：請回捲一點，再慢一些",
     "auto": "自動捲動",
     "autoHint": "由 Shota 代為捲動（開啟期間會占用滑鼠）"
   }

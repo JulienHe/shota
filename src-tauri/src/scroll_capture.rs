@@ -178,7 +178,6 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
             now
         };
 
-        let last_frame = frame.clone();
         let step = stitcher.push(frame);
         match step {
             Step::Appended(shift) => {
@@ -208,18 +207,22 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
                     progress(app, stitcher.height(), frames, "waiting");
                 }
             }
+            Step::Back(..) => {
+                moved_once = true;
+                idle = 0;
+                if auto && !direction_known {
+                    // Our wheel moved the content the wrong way (some setups
+                    // turn injected input round): turn it back.
+                    direction = -direction;
+                }
+                direction_known = true;
+                progress(app, stitcher.height(), frames, "scrolling");
+            }
             Step::NoMatch => {
                 if !auto {
                     // Scrolled further than the pictures overlap. Say so, and
                     // keep looking: scrolling back a little will line up again.
                     progress(app, stitcher.height(), frames, "toofar");
-                    continue;
-                }
-                if !direction_known && stitcher.scrolled_up_by(&last_frame).is_some() {
-                    // The content went the other way: turn the wheel around and
-                    // let it come back past where it started.
-                    direction = -direction;
-                    direction_known = true;
                     continue;
                 }
                 mismatches += 1;

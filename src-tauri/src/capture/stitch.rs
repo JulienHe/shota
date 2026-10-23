@@ -29,8 +29,12 @@ const SAMPLE_STRIDE: u32 = 3;
 pub enum Step {
     /// Nothing moved: the content is at its end, or not scrolling.
     NoChange,
-    /// The content moved by this many pixels and that many new rows were added.
+    /// The content moved down by some amount; this many new rows were added at
+    /// the bottom (none, when it went back over rows already seen).
     Appended(u32),
+    /// The content went back up by this many rows, adding that many new rows
+    /// at the top (none, when it stayed within what was seen).
+    Back(u32, u32),
     /// The frames could not be lined up (a jump too big, a video playing, a
     /// different page). Nothing was added.
     NoMatch,
@@ -83,14 +87,16 @@ pub struct Stitcher {
     previous_rows: Rows,
     /// The last frame's bottom rows that did not scroll, added once at the end.
     footer: Option<RgbaImage>,
-    /// Whether anything has been added below the first frame yet.
-    grown: bool,
+    /// Whether the first frame's footer has been cut off yet.
+    trimmed: bool,
+    /// Where the previous frame's top row sits in `image`.
+    offset: usize,
 }
 
 impl Stitcher {
     pub fn new(first: RgbaImage) -> Self {
         let previous_rows = rows_of(&first);
-        Self { image: first.clone(), previous: first, previous_rows, footer: None, grown: false }
+        Self { image: first.clone(), previous: first, previous_rows, footer: None, trimmed: false, offset: 0 }
     }
 
     /// The picture's height so far, footer excluded.
@@ -113,31 +119,68 @@ impl Stitcher {
         };
         let live = top..height - bottom;
 
-        let Some(shift) = best_shift(&self.previous_rows, &rows, live.clone()) else {
+        // Which way did the content go? Down the page is the usual case; up
+        // is the user scrolling back, which is just as good a view of the page.
+        let (shift, up) = if let Some(shift) = best_shift(&self.previous_rows, &rows, live.clone()) {
+            (shift, false)
+        } else if let Some(shift) = best_shift(&rows, &self.previous_rows, live.clone()) {
+            (shift, true)
+        } else {
             return Step::NoMatch;
         };
 
-        // The rows that are new: the last `shift` rows above the footer.
-        let end = live.end;
-        let start = end - shift;
-        let new_rows = image::imageops::crop_imm(&frame, 0, start as u32, frame.width(), shift as u32).to_image();
         // The first frame went in whole, footer and all. Now that a footer is
         // known, take it back off: it goes at the very end, once, and the page
         // rows hidden under it arrive in the frames that follow.
-        if bottom > 0 && !self.grown {
+        if bottom > 0 && !self.trimmed {
             let kept = self.image.height() - bottom as u32;
             self.image = image::imageops::crop_imm(&self.image, 0, 0, self.image.width(), kept).to_image();
+            self.trimmed = true;
         }
-        self.append(&new_rows);
-        self.grown = true;
         if bottom > 0 {
             self.footer = Some(
                 image::imageops::crop_imm(&frame, 0, (height - bottom) as u32, frame.width(), bottom as u32).to_image(),
             );
         }
+
+        let added;
+        if up {
+            // This view starts `shift` rows higher than the previous one.
+            if self.offset >= shift {
+                self.offset -= shift;
+                added = 0;
+            } else {
+                // Above everything seen so far: the rows that are new go in
+                // under any header, which stays at the very top.
+                let new = shift - self.offset;
+                let new_rows = image::imageops::crop_imm(&frame, 0, top as u32, frame.width(), new as u32).to_image();
+                self.insert(top, &new_rows);
+                self.offset = 0;
+                added = new;
+            }
+        } else {
+            self.offset += shift;
+            // Rows below the picture's end exist only if this view reaches
+            // past it; scrolling over rows already seen adds nothing.
+            let needed = self.offset + live.end;
+            let have = self.image.height() as usize;
+            if needed > have {
+                let new = needed - have;
+                let new_rows =
+                    image::imageops::crop_imm(&frame, 0, (live.end - new) as u32, frame.width(), new as u32).to_image();
+                self.append(&new_rows);
+                added = new;
+            } else {
+                added = 0;
+            }
+        }
         self.previous = frame;
         self.previous_rows = rows;
-        Step::Appended(shift as u32)
+        if up {
+            Step::Back(shift as u32, added as u32)
+        } else {
+            Step::Appended(added as u32)
+        }
     }
 
     /// Whether `frame` is the previous view with the content moved *down*
@@ -176,6 +219,15 @@ impl Stitcher {
             return Bands::AllStatic;
         }
         Bands::Live { top, bottom }
+    }
+
+    /// Puts `rows` into the picture at row `at`.
+    fn insert(&mut self, at: usize, rows: &RgbaImage) {
+        let (width, height) = self.image.dimensions();
+        let mut bytes = std::mem::replace(&mut self.image, RgbaImage::new(0, 0)).into_raw();
+        let at_byte = at * width as usize * 4;
+        bytes.splice(at_byte..at_byte, rows.as_raw().iter().copied());
+        self.image = RgbaImage::from_raw(width, height + rows.height(), bytes).expect("rows are as wide as the picture");
     }
 
     /// Pixels are stored row after row, so more rows at the bottom are just
@@ -291,6 +343,22 @@ mod tests {
     fn scrolling_a_page_rebuilds_it_exactly() {
         let page = page(2000);
         assert!(same(&scroll(&page, 400, 150), &page));
+    }
+
+    #[test]
+    fn scrolling_back_up_adds_the_rows_above_and_nothing_twice() {
+        let page = page(1500);
+        let mut stitcher = Stitcher::new(view(&page, 600, 400));
+        // Down 200, then back up over seen rows, then above everything.
+        assert!(matches!(stitcher.push(view(&page, 800, 400)), Step::Appended(200)));
+        assert!(matches!(stitcher.push(view(&page, 700, 400)), Step::Back(100, 0)));
+        assert!(matches!(stitcher.push(view(&page, 500, 400)), Step::Back(200, 100)));
+        assert!(matches!(stitcher.push(view(&page, 300, 400)), Step::Back(200, 200)));
+        // And down again over what is known adds nothing until the end is passed.
+        assert!(matches!(stitcher.push(view(&page, 600, 400)), Step::Appended(0)));
+        assert!(matches!(stitcher.push(view(&page, 900, 400)), Step::Appended(100)));
+        let result = stitcher.finish();
+        assert!(same(&result, &view(&page, 300, 1000)));
     }
 
     #[test]

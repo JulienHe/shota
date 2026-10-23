@@ -257,7 +257,7 @@
     "keys": "Intro para terminar · Esc para cancelar",
     "done": "Listo",
     "cancel": "Cancelar",
-    "tooFar": "Demasiado lejos: sube un poco",
+    "tooFar": "Se perdió el hilo: vuelve un poco atrás y ve más despacio",
     "auto": "Auto-desplazar",
     "autoHint": "Shota se desplaza por ti (toma el ratón mientras está activo)"
   }

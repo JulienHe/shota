@@ -257,7 +257,7 @@
     "keys": "Enter para concluir · Esc para cancelar",
     "done": "Concluir",
     "cancel": "Cancelar",
-    "tooFar": "Longe demais: role um pouco para cima",
+    "tooFar": "Perdi o ponto: volte um pouco e role mais devagar",
     "auto": "Rolagem automática",
     "autoHint": "O Shota rola por você (usa o mouse enquanto estiver ativo)"
   }

@@ -257,7 +257,7 @@
     "keys": "Enter to finish · Esc to cancel",
     "done": "Done",
     "cancel": "Cancel",
-    "tooFar": "Too far: scroll back up a little",
+    "tooFar": "Lost track: scroll back a little, then slower",
     "auto": "Auto-scroll",
     "autoHint": "Let Shota scroll for you (it takes the mouse while on)"
   }

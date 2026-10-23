@@ -257,7 +257,7 @@
     "keys": "Invio per terminare · Esc per annullare",
     "done": "Fine",
     "cancel": "Annulla",
-    "tooFar": "Troppo lontano: risali un po'",
+    "tooFar": "Punto perso: torna un po' indietro, poi più piano",
     "auto": "Scorrimento auto",
     "autoHint": "Shota scorre per te (usa il mouse finché è attivo)"
   }
