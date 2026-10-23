@@ -94,7 +94,8 @@
     "modeArea": "區域",
     "modeFullscreen": "全螢幕",
     "modeWindow": "視窗",
-    "modeText": "文字"
+    "modeText": "文字",
+    "size": "選取範圍大小"
   },
   "settings": {
     "fullScreen": "全螢幕",

@@ -94,7 +94,8 @@
     "modeArea": "Area",
     "modeFullscreen": "Schermo intero",
     "modeWindow": "Finestra",
-    "modeText": "Testo"
+    "modeText": "Testo",
+    "size": "Dimensione della selezione"
   },
   "settings": {
     "fullScreen": "Schermo intero",

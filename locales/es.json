@@ -94,7 +94,8 @@
     "modeArea": "Área",
     "modeFullscreen": "Pantalla completa",
     "modeWindow": "Ventana",
-    "modeText": "Texto"
+    "modeText": "Texto",
+    "size": "Tamaño de la selección"
   },
   "settings": {
     "fullScreen": "Pantalla completa",

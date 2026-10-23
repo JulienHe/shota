@@ -94,7 +94,8 @@
     "modeArea": "Bereich",
     "modeFullscreen": "Vollbild",
     "modeWindow": "Fenster",
-    "modeText": "Text"
+    "modeText": "Text",
+    "size": "Größe der Auswahl"
   },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",

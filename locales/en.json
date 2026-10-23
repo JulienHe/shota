@@ -94,7 +94,8 @@
     "modeArea": "Area",
     "modeFullscreen": "Fullscreen",
     "modeWindow": "Window",
-    "modeText": "Text"
+    "modeText": "Text",
+    "size": "Selection size"
   },
   "settings": {
     "fullScreen": "Full screen",

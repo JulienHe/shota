@@ -94,7 +94,8 @@
     "modeArea": "Gebied",
     "modeFullscreen": "Volledig scherm",
     "modeWindow": "Venster",
-    "modeText": "Tekst"
+    "modeText": "Tekst",
+    "size": "Grootte van de selectie"
   },
   "settings": {
     "fullScreen": "Volledig scherm",

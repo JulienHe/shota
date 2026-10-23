@@ -138,7 +138,10 @@ export function CaptureOverlay() {
   useEffect(() => {
     const unlisten = listen<number>("shota://freeze", (event) => {
       handled.current = null;
+      // Every capture starts in area mode, whatever the last one used. The page
+      // is reused, so nothing resets by itself.
       setTextMode(false);
+      setSnapMode(false);
       setStatus(null);
       void showFrozen(event.payload);
     });
@@ -152,7 +155,7 @@ export function CaptureOverlay() {
     return () => {
       unlisten.then((fn) => fn());
     };
-  }, [showFrozen]);
+  }, [showFrozen, setSnapMode]);
 
   useEffect(() => {
     // The window is created hidden (see overlay.rs) specifically so it can't
@@ -311,11 +314,11 @@ export function CaptureOverlay() {
   // Physical pixels per CSS pixel of the frozen screen: the unit a capture is
   // actually made in, and the one worth showing.
   const frozenRatio = canvasRef.current && canvasRef.current.width > 0 ? canvasRef.current.width / window.innerWidth : scale;
-  const selectionPx = selectionStyle
-    ? `${Math.round(selectionStyle.width * frozenRatio)} × ${Math.round(selectionStyle.height * frozenRatio)}`
+  const selectionSize = selectionStyle
+    ? { width: Math.round(selectionStyle.width * frozenRatio), height: Math.round(selectionStyle.height * frozenRatio) }
     : null;
-  // While dragging, the size of the selection; otherwise the loupe names the colour.
-  const loupeCaption = copied ?? selectionPx;
+  // The loupe names the colour under the cursor; this replaces it briefly ("Copied #…").
+  const loupeCaption = copied;
 
   return (
     <div
@@ -344,7 +347,7 @@ export function CaptureOverlay() {
         />
       )}
 
-      <CaptureModeBar mode={mode} onChoose={choose} />
+      <CaptureModeBar mode={mode} onChoose={choose} size={selectionSize} />
 
       {status && (
         <div className="capture-overlay__status">

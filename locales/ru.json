@@ -94,7 +94,8 @@
     "modeArea": "Область",
     "modeFullscreen": "Весь экран",
     "modeWindow": "Окно",
-    "modeText": "Текст"
+    "modeText": "Текст",
+    "size": "Размер выделения"
   },
   "settings": {
     "fullScreen": "Весь экран",

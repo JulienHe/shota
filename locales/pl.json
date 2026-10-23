@@ -94,7 +94,8 @@
     "modeArea": "Obszar",
     "modeFullscreen": "Cały ekran",
     "modeWindow": "Okno",
-    "modeText": "Tekst"
+    "modeText": "Tekst",
+    "size": "Rozmiar zaznaczenia"
   },
   "settings": {
     "fullScreen": "Cały ekran",

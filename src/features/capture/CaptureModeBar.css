@@ -1,3 +1,6 @@
+/* Two floating pills at the bottom of the overlay: what kind of capture, and
+   how big the selection is. The backdrop blur works on the frozen screen
+   painted underneath, which is in the same page. */
 .mode-bar {
   position: absolute;
   left: 50%;
@@ -5,29 +8,50 @@
   transform: translateX(-50%);
   z-index: 4;
   display: flex;
-  gap: 4px;
-  padding: 6px;
-  border-radius: 14px;
-  background: rgba(28, 29, 34, 0.94);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 10px 34px rgba(0, 0, 0, 0.5);
+  align-items: stretch;
+  gap: 12px;
   cursor: default;
+}
+
+.mode-bar__pill {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(30, 31, 36, 0.72);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 12px 36px rgba(0, 0, 0, 0.45);
+}
+
+.mode-bar__group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.mode-bar__divider {
+  align-self: stretch;
+  width: 1px;
+  margin: 10px 6px;
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .mode-bar__button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  min-width: 84px;
-  padding: 9px 12px 8px;
+  gap: 6px;
+  min-width: 92px;
+  padding: 11px 14px 9px;
   border: 0;
-  border-radius: 9px;
+  border-radius: 11px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.7);
   font: inherit;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -39,4 +63,26 @@
 .mode-bar__button--active {
   background: rgba(255, 255, 255, 0.14);
   color: #fff;
+}
+
+/* The selection's size: two boxes either side of a times sign. */
+.mode-bar__pill--size {
+  gap: 8px;
+  padding: 6px 14px;
+}
+
+.mode-bar__size-box {
+  min-width: 62px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.mode-bar__times {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 15px;
 }

@@ -94,7 +94,8 @@
     "modeArea": "Alan",
     "modeFullscreen": "Tam ekran",
     "modeWindow": "Pencere",
-    "modeText": "Metin"
+    "modeText": "Metin",
+    "size": "Seçim boyutu"
   },
   "settings": {
     "fullScreen": "Tam ekran",

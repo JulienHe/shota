@@ -94,7 +94,8 @@
     "modeArea": "範囲",
     "modeFullscreen": "全画面",
     "modeWindow": "ウィンドウ",
-    "modeText": "テキスト"
+    "modeText": "テキスト",
+    "size": "選択範囲のサイズ"
   },
   "settings": {
     "fullScreen": "画面全体",

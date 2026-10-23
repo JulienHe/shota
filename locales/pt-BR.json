@@ -94,7 +94,8 @@
     "modeArea": "Área",
     "modeFullscreen": "Tela inteira",
     "modeWindow": "Janela",
-    "modeText": "Texto"
+    "modeText": "Texto",
+    "size": "Tamanho da seleção"
   },
   "settings": {
     "fullScreen": "Tela inteira",

@@ -94,7 +94,8 @@
     "modeArea": "영역",
     "modeFullscreen": "전체 화면",
     "modeWindow": "창",
-    "modeText": "텍스트"
+    "modeText": "텍스트",
+    "size": "선택 영역 크기"
   },
   "settings": {
     "fullScreen": "전체 화면",
