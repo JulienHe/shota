@@ -13,7 +13,7 @@ polish, translations and dependencies; minors (0.x.0) are features. 0.9 is follo
 | 0.7.1 | Fixes | Print Screen opens the capture on the first press; focus returns to the previous app after Copy, Save and Esc |
 | 0.7.2 | Multi-monitor | Selections across monitors, mixed DPI, safer pixelate, first automated tests. Waits for a second monitor to test on; the stitching and cropping maths is already covered by tests |
 | 0.8.0 | Precise capture | Freeze the screen while selecting, a pixel loupe that names the colour under the cursor (scroll to zoom, right-click to copy it), the overlay lined up to the pixel |
-| 0.9.0 | Text and pins | Copy text from an area (Windows OCR), QR codes, pin a screenshot above other windows |
+| 0.9.0 | Text and pins | Copy text from an area (Windows OCR), QR codes, pin a screenshot above other windows, a bar of capture kinds on the overlay |
 | 0.10.0 | Editor depth | Arrow styles, text presets, favourite colours, frame presets and aspect ratios, resize on export, rotate and flip, `.shota` project files |
 | 0.11.0 | Scrolling capture | Beta, on its own because it's the riskiest piece |
 | 0.12.0 | Interface | Rework how the UI is organised now that there are many features: a secondary menu for less-used options, a calmer toolbar, settings grouped by how often they are needed |

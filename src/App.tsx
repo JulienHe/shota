@@ -4,6 +4,7 @@ import { SettingsWindow } from "./windows/SettingsWindow";
 import { CaptureOverlay } from "./windows/CaptureOverlay";
 import { EditorWindow } from "./windows/EditorWindow";
 import { HistoryBar } from "./windows/HistoryBar";
+import { PinWindow } from "./windows/PinWindow";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { tauriApi } from "./lib/tauriApi";
 import { setLocale } from "./lib/i18n";
@@ -34,6 +35,7 @@ function App() {
   if (label === "overlay") content = <CaptureOverlay />;
   else if (label === "editor") content = <EditorWindow />;
   else if (label === "history") content = <HistoryBar />;
+  else if (label?.startsWith("pin-")) content = <PinWindow label={label} />;
   else content = <SettingsWindow />;
 
   return <ErrorBoundary>{content}</ErrorBoundary>;

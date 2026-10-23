@@ -52,7 +52,9 @@
     "share": "Partager…",
     "dragOut": "Glisser l'image vers une autre application",
     "dragFailed": "Impossible de lancer le glisser-déposer ~ réessayez",
-    "shareFailed": "Impossible d'ouvrir Partager ~ réessayez"
+    "shareFailed": "Impossible d'ouvrir Partager ~ réessayez",
+    "pin": "Épingler à l'écran",
+    "pinFailed": "Impossible d'épingler ~ réessayez"
   },
   "background": {
     "white": "Blanc",
@@ -95,7 +97,9 @@
     "modeFullscreen": "Plein écran",
     "modeWindow": "Fenêtre",
     "modeText": "Texte",
-    "size": "Taille de la sélection"
+    "size": "Taille de la sélection",
+    "modePin": "Épingler",
+    "pinHint": "Faites glisser sur une zone pour l'épingler à l'écran · Échap pour annuler"
   },
   "settings": {
     "fullScreen": "Plein écran",
@@ -192,5 +196,9 @@
     "dropHint": "Déposez pour ouvrir dans Shota",
     "pasteAction": "Ouvrir l'image du presse-papiers",
     "explorerVerb": "Modifier avec Shota"
+  },
+  "pin": {
+    "close": "Fermer",
+    "copied": "Copié"
   }
 }

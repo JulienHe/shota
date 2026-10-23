@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, GripVertical, Save, Share2 } from "lucide-react";
+import { Copy, GripVertical, Pin, Save, Share2 } from "lucide-react";
 import { IconButton } from "../components/IconButton";
 import { Dropdown } from "../components/Dropdown";
 import "./BottomBar.css";
@@ -14,12 +14,13 @@ interface BottomBarProps {
   onCopy: () => void;
   onSave: () => void;
   onShare: () => void;
+  onPin: () => void;
   /** Called on mouse down on the drag handle; starts a native drag of the image. */
   onDragOut: () => void;
 }
 
 /** CleanShot-style status bar: zoom control bottom-left, Copy/Save bottom-right. */
-export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onShare, onDragOut }: BottomBarProps) {
+export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onShare, onPin, onDragOut }: BottomBarProps) {
   const [zoomOpen, setZoomOpen] = useState(false);
 
   return (
@@ -73,6 +74,7 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onS
           <GripVertical size={18} strokeWidth={2} />
         </button>
         <IconButton icon={Share2} label={t("editor.share")} onClick={onShare} />
+        <IconButton icon={Pin} label={t("editor.pin")} onClick={onPin} />
         <IconButton icon={Copy} label={`${t("editor.copy")} (Ctrl+C)`} onClick={onCopy} />
         <IconButton icon={Save} label={`${t("editor.save")} (Ctrl+S)`} onClick={onSave} />
       </div>

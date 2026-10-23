@@ -52,7 +52,9 @@
     "share": "共有…",
     "dragOut": "画像を別のアプリにドラッグ",
     "dragFailed": "ドラッグを開始できませんでした ~ もう一度お試しください",
-    "shareFailed": "共有を開けませんでした ~ もう一度お試しください"
+    "shareFailed": "共有を開けませんでした ~ もう一度お試しください",
+    "pin": "画面にピン留め",
+    "pinFailed": "ピン留めできませんでした ~ もう一度お試しください"
   },
   "background": {
     "white": "白",
@@ -95,7 +97,9 @@
     "modeFullscreen": "全画面",
     "modeWindow": "ウィンドウ",
     "modeText": "テキスト",
-    "size": "選択範囲のサイズ"
+    "size": "選択範囲のサイズ",
+    "modePin": "ピン留め",
+    "pinHint": "範囲をドラッグして画面にピン留め · Esc でキャンセル"
   },
   "settings": {
     "fullScreen": "画面全体",
@@ -192,5 +196,9 @@
     "dropHint": "ドロップして Shota で開く",
     "pasteAction": "クリップボードの画像を開く",
     "explorerVerb": "Shota で編集"
+  },
+  "pin": {
+    "close": "閉じる",
+    "copied": "コピーしました"
   }
 }

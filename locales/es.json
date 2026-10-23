@@ -52,7 +52,9 @@
     "share": "Compartir…",
     "dragOut": "Arrastra la imagen a otra aplicación",
     "dragFailed": "No se pudo iniciar el arrastre ~ inténtalo de nuevo",
-    "shareFailed": "No se pudo abrir Compartir ~ inténtalo de nuevo"
+    "shareFailed": "No se pudo abrir Compartir ~ inténtalo de nuevo",
+    "pin": "Fijar en pantalla",
+    "pinFailed": "No se pudo fijar ~ inténtalo de nuevo"
   },
   "background": {
     "white": "Blanco",
@@ -95,7 +97,9 @@
     "modeFullscreen": "Pantalla completa",
     "modeWindow": "Ventana",
     "modeText": "Texto",
-    "size": "Tamaño de la selección"
+    "size": "Tamaño de la selección",
+    "modePin": "Fijar",
+    "pinHint": "Arrastra sobre una zona para fijarla en pantalla · Esc para cancelar"
   },
   "settings": {
     "fullScreen": "Pantalla completa",
@@ -192,5 +196,9 @@
     "dropHint": "Suelta para abrir en Shota",
     "pasteAction": "Abrir imagen del portapapeles",
     "explorerVerb": "Editar con Shota"
+  },
+  "pin": {
+    "close": "Cerrar",
+    "copied": "Copiado"
   }
 }

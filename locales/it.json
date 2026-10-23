@@ -52,7 +52,9 @@
     "share": "Condividi…",
     "dragOut": "Trascina l'immagine in un'altra app",
     "dragFailed": "Impossibile avviare il trascinamento ~ riprova",
-    "shareFailed": "Impossibile aprire Condividi ~ riprova"
+    "shareFailed": "Impossibile aprire Condividi ~ riprova",
+    "pin": "Fissa sullo schermo",
+    "pinFailed": "Impossibile fissare ~ riprova"
   },
   "background": {
     "white": "Bianco",
@@ -95,7 +97,9 @@
     "modeFullscreen": "Schermo intero",
     "modeWindow": "Finestra",
     "modeText": "Testo",
-    "size": "Dimensione della selezione"
+    "size": "Dimensione della selezione",
+    "modePin": "Fissa",
+    "pinHint": "Trascina su un'area per fissarla sullo schermo · Esc per annullare"
   },
   "settings": {
     "fullScreen": "Schermo intero",
@@ -192,5 +196,9 @@
     "dropHint": "Rilascia per aprire in Shota",
     "pasteAction": "Apri immagine dagli appunti",
     "explorerVerb": "Modifica con Shota"
+  },
+  "pin": {
+    "close": "Chiudi",
+    "copied": "Copiato"
   }
 }

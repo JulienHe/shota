@@ -9,7 +9,7 @@ use crate::history::{self, HistoryListItem};
 use crate::hotkeys::{self, ShortcutKind, Shortcuts};
 use crate::state::{AppState, ImageFormat, PendingCapture, Preferences};
 use crate::startup::{self, StartupStatus};
-use crate::windows::{
+use crate::windows::{open_pin, open_pin_centred, 
     cancel_capture_overlay, close_history_window, overlay_painted, pending_freeze, hide_capture_overlay, hide_editor_window, open_capture_overlay,
     open_editor_from_history, open_editor_with_history, show_capture_overlay, show_editor_window,
     show_history_window,
@@ -491,4 +491,66 @@ pub async fn finish_fullscreen_capture(app: AppHandle) -> Result<(), String> {
         .crop(position.x, position.y, size.width, size.height)
         .ok_or_else(|| "the monitor is outside the frozen screen".to_string())?;
     open_editor_with_history(&app, capture::encode_png(cropped)?)
+}
+
+/// Pins a selected area of the frozen screen, in place.
+#[tauri::command]
+pub async fn finish_pin_capture(app: AppHandle, x: i32, y: i32, width: u32, height: u32) -> Result<(), String> {
+    let (_, desktop) = app
+        .state::<AppState>()
+        .freeze()
+        .ok_or_else(|| "there is no frozen screen to pin".to_string())?;
+    let cropped = desktop
+        .crop(x, y, width, height)
+        .ok_or_else(|| "the selection is outside the screen".to_string())?;
+    let png = capture::encode_png(cropped)?;
+
+    hide_capture_overlay(&app)?;
+    app.state::<AppState>().clear_freeze();
+    // The pin takes the spot the selection was in; the overlay was only ever
+    // in the way, so the app the user was in gets the keyboard back.
+    let handle = app.clone();
+    app.run_on_main_thread(move || {
+        if let Err(err) = open_pin(&handle, png, x, y) {
+            eprintln!("could not pin the screenshot: {err}");
+        }
+        crate::windows::restore_foreground_after_pin();
+    })
+    .map_err(|e| e.to_string())
+}
+
+/// Pins the editor's current picture (a PNG, base64).
+#[tauri::command]
+pub async fn pin_image(app: AppHandle, png_base64: String) -> Result<(), String> {
+    use base64::Engine;
+    let png = base64::engine::general_purpose::STANDARD
+        .decode(png_base64)
+        .map_err(|e| e.to_string())?;
+    let handle = app.clone();
+    app.run_on_main_thread(move || {
+        if let Err(err) = open_pin_centred(&handle, png) {
+            eprintln!("could not pin the screenshot: {err}");
+        }
+    })
+    .map_err(|e| e.to_string())
+}
+
+/// A pin's picture as raw PNG bytes, for its window to show.
+#[tauri::command]
+pub fn take_pin_image(app: AppHandle, id: u64) -> Result<tauri::ipc::Response, String> {
+    let png = app
+        .state::<AppState>()
+        .pin_png(id)
+        .ok_or_else(|| format!("pin {id} is gone"))?;
+    Ok(tauri::ipc::Response::new(png.as_ref().clone()))
+}
+
+/// Copies a pin's picture to the clipboard.
+#[tauri::command]
+pub fn copy_pin_image(app: AppHandle, id: u64) -> Result<(), String> {
+    let png = app
+        .state::<AppState>()
+        .pin_png(id)
+        .ok_or_else(|| format!("pin {id} is gone"))?;
+    clipboard::copy_png_bytes(&app, &png)
 }

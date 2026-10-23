@@ -52,7 +52,9 @@
     "share": "Paylaş…",
     "dragOut": "Görüntüyü başka bir uygulamaya sürükleyin",
     "dragFailed": "Sürükleme başlatılamadı ~ tekrar deneyin",
-    "shareFailed": "Paylaş açılamadı ~ tekrar deneyin"
+    "shareFailed": "Paylaş açılamadı ~ tekrar deneyin",
+    "pin": "Ekrana sabitle",
+    "pinFailed": "Sabitlenemedi ~ tekrar deneyin"
   },
   "background": {
     "white": "Beyaz",
@@ -95,7 +97,9 @@
     "modeFullscreen": "Tam ekran",
     "modeWindow": "Pencere",
     "modeText": "Metin",
-    "size": "Seçim boyutu"
+    "size": "Seçim boyutu",
+    "modePin": "Sabitle",
+    "pinHint": "Ekrana sabitlemek için bir alanın üzerinde sürükleyin · İptal için Esc"
   },
   "settings": {
     "fullScreen": "Tam ekran",
@@ -192,5 +196,9 @@
     "dropHint": "Shota'da açmak için bırakın",
     "pasteAction": "Panodaki görüntüyü aç",
     "explorerVerb": "Shota ile düzenle"
+  },
+  "pin": {
+    "close": "Kapat",
+    "copied": "Kopyalandı"
   }
 }

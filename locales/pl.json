@@ -52,7 +52,9 @@
     "share": "Udostępnij…",
     "dragOut": "Przeciągnij obraz do innej aplikacji",
     "dragFailed": "Nie udało się rozpocząć przeciągania ~ spróbuj ponownie",
-    "shareFailed": "Nie udało się otworzyć udostępniania ~ spróbuj ponownie"
+    "shareFailed": "Nie udało się otworzyć udostępniania ~ spróbuj ponownie",
+    "pin": "Przypnij na ekranie",
+    "pinFailed": "Nie udało się przypiąć ~ spróbuj ponownie"
   },
   "background": {
     "white": "Biały",
@@ -95,7 +97,9 @@
     "modeFullscreen": "Cały ekran",
     "modeWindow": "Okno",
     "modeText": "Tekst",
-    "size": "Rozmiar zaznaczenia"
+    "size": "Rozmiar zaznaczenia",
+    "modePin": "Przypnij",
+    "pinHint": "Przeciągnij po obszarze, aby przypiąć go na ekranie · Esc anuluje"
   },
   "settings": {
     "fullScreen": "Cały ekran",
@@ -192,5 +196,9 @@
     "dropHint": "Upuść, aby otworzyć w Shota",
     "pasteAction": "Otwórz obraz ze schowka",
     "explorerVerb": "Edytuj w Shota"
+  },
+  "pin": {
+    "close": "Zamknij",
+    "copied": "Skopiowano"
   }
 }

@@ -85,6 +85,18 @@ export const tauriApi = {
   /** Captures the whole monitor under the cursor from the frozen screen. */
   finishFullscreenCapture: () => invoke<void>("finish_fullscreen_capture"),
 
+  /** Pins a selected area of the frozen screen where it was taken. */
+  finishPinCapture: (x: number, y: number, width: number, height: number) =>
+    invoke<void>("finish_pin_capture", { x, y, width, height }),
+
+  /** Pins an image (a PNG, base64) in the middle of the screen. */
+  pinImage: (pngBase64: string) => invoke<void>("pin_image", { pngBase64 }),
+
+  /** A pinned screenshot's PNG, for its window to show. */
+  takePinImage: (id: number) => invoke<ArrayBuffer>("take_pin_image", { id }),
+
+  copyPinImage: (id: number) => invoke<void>("copy_pin_image", { id }),
+
   finishTextCapture: (x: number, y: number, width: number, height: number) =>
     invoke<{ kind: "qr" | "text" | "none"; text: string }>("finish_text_capture", { x, y, width, height }),
 

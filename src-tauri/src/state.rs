@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fs;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
@@ -220,6 +220,9 @@ pub struct AppState {
     /// The overlay is on screen. A second press then must not freeze the
     /// screen again, or it would freeze the overlay itself.
     overlay_open: AtomicBool,
+    /// The PNG of every pinned screenshot that is still on screen, by pin id.
+    pins: Mutex<HashMap<u64, Arc<Vec<u8>>>>,
+    pin_seq: AtomicU64,
 }
 
 impl AppState {
@@ -234,6 +237,8 @@ impl AppState {
             freeze_seq: AtomicU64::new(0),
             freeze_pending: AtomicBool::new(false),
             overlay_open: AtomicBool::new(false),
+            pins: Mutex::new(HashMap::new()),
+            pin_seq: AtomicU64::new(0),
         }
     }
 
@@ -363,6 +368,22 @@ impl AppState {
 
     pub fn set_overlay_open(&self, open: bool) {
         self.overlay_open.store(open, Ordering::SeqCst);
+    }
+
+    /// Keeps a pinned screenshot's PNG and returns the id of the pin.
+    pub fn add_pin(&self, png: Arc<Vec<u8>>) -> u64 {
+        let id = self.pin_seq.fetch_add(1, Ordering::SeqCst) + 1;
+        self.pins.lock().unwrap().insert(id, png);
+        id
+    }
+
+    pub fn pin_png(&self, id: u64) -> Option<Arc<Vec<u8>>> {
+        self.pins.lock().unwrap().get(&id).cloned()
+    }
+
+    /// Forgets a pin whose window has gone.
+    pub fn remove_pin(&self, id: u64) {
+        self.pins.lock().unwrap().remove(&id);
     }
 
     pub fn mark_overlay_ready(&self) {

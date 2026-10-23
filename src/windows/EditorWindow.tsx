@@ -207,6 +207,15 @@ export function EditorWindow() {
       });
   };
 
+  const handlePin = () => {
+    const dataUrl = canvasRef.current?.exportDataUrl();
+    if (!dataUrl) return;
+    tauriApi.pinImage(toBase64Payload(dataUrl)).catch((err) => {
+      console.error("pinning failed", err);
+      showToast(t("editor.pinFailed"));
+    });
+  };
+
   const handleShare = () => {
     const dataUrl = canvasRef.current?.exportDataUrl();
     if (!dataUrl) return;
@@ -295,6 +304,7 @@ export function EditorWindow() {
         onCopy={handleCopy}
         onSave={handleSave}
         onShare={handleShare}
+        onPin={handlePin}
         onDragOut={handleDragOut}
       />
     </div>

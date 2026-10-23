@@ -52,7 +52,9 @@
     "share": "Share…",
     "dragOut": "Drag the image into another app",
     "dragFailed": "Couldn't start the drag ~ try again",
-    "shareFailed": "Couldn't open Share ~ try again"
+    "shareFailed": "Couldn't open Share ~ try again",
+    "pin": "Pin on screen",
+    "pinFailed": "Couldn't pin ~ try again"
   },
   "background": {
     "white": "White",
@@ -95,7 +97,9 @@
     "modeFullscreen": "Fullscreen",
     "modeWindow": "Window",
     "modeText": "Text",
-    "size": "Selection size"
+    "size": "Selection size",
+    "modePin": "Pin",
+    "pinHint": "Drag over an area to pin it on screen · Esc to cancel"
   },
   "settings": {
     "fullScreen": "Full screen",
@@ -192,5 +196,9 @@
     "dropHint": "Drop to open in Shota",
     "pasteAction": "Open image from clipboard",
     "explorerVerb": "Edit with Shota"
+  },
+  "pin": {
+    "close": "Close",
+    "copied": "Copied"
   }
 }

@@ -52,7 +52,9 @@
     "share": "공유…",
     "dragOut": "이미지를 다른 앱으로 끌어다 놓기",
     "dragFailed": "끌기를 시작할 수 없습니다 ~ 다시 시도하세요",
-    "shareFailed": "공유를 열 수 없습니다 ~ 다시 시도하세요"
+    "shareFailed": "공유를 열 수 없습니다 ~ 다시 시도하세요",
+    "pin": "화면에 고정",
+    "pinFailed": "고정할 수 없습니다 ~ 다시 시도하세요"
   },
   "background": {
     "white": "흰색",
@@ -95,7 +97,9 @@
     "modeFullscreen": "전체 화면",
     "modeWindow": "창",
     "modeText": "텍스트",
-    "size": "선택 영역 크기"
+    "size": "선택 영역 크기",
+    "modePin": "고정",
+    "pinHint": "영역 위로 드래그하여 화면에 고정 · Esc로 취소"
   },
   "settings": {
     "fullScreen": "전체 화면",
@@ -192,5 +196,9 @@
     "dropHint": "놓아서 Shota에서 열기",
     "pasteAction": "클립보드 이미지 열기",
     "explorerVerb": "Shota로 편집"
+  },
+  "pin": {
+    "close": "닫기",
+    "copied": "복사됨"
   }
 }

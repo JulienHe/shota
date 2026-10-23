@@ -52,7 +52,9 @@
     "share": "分享…",
     "dragOut": "將圖片拖曳到其他應用程式",
     "dragFailed": "無法開始拖曳 ~ 請重試",
-    "shareFailed": "無法開啟分享 ~ 請重試"
+    "shareFailed": "無法開啟分享 ~ 請重試",
+    "pin": "釘選到螢幕",
+    "pinFailed": "無法釘選 ~ 請重試"
   },
   "background": {
     "white": "白色",
@@ -95,7 +97,9 @@
     "modeFullscreen": "全螢幕",
     "modeWindow": "視窗",
     "modeText": "文字",
-    "size": "選取範圍大小"
+    "size": "選取範圍大小",
+    "modePin": "釘選",
+    "pinHint": "拖曳選取區域並將其釘選在螢幕上 · 按 Esc 取消"
   },
   "settings": {
     "fullScreen": "全螢幕",
@@ -192,5 +196,9 @@
     "dropHint": "放開以在 Shota 中開啟",
     "pasteAction": "開啟剪貼簿中的圖片",
     "explorerVerb": "用 Shota 編輯"
+  },
+  "pin": {
+    "close": "關閉",
+    "copied": "已複製"
   }
 }

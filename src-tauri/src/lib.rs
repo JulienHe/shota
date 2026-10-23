@@ -84,6 +84,12 @@ pub fn run() {
             Ok(())
         })
         .on_window_event(|window, event| {
+            // A pin's picture is only kept while its window exists.
+            if let tauri::WindowEvent::Destroyed = event {
+                if let Some(id) = windows::pin_id(window.label()) {
+                    window.state::<state::AppState>().remove_pin(id);
+                }
+            }
             // shota lives in the tray; closing the shortcuts window just hides it
             // instead of quitting the whole app.
             if window.label() == "main" {
@@ -119,6 +125,10 @@ pub fn run() {
             commands::overlay_painted_command,
             commands::finish_text_capture,
             commands::finish_fullscreen_capture,
+            commands::finish_pin_capture,
+            commands::pin_image,
+            commands::take_pin_image,
+            commands::copy_pin_image,
             commands::get_shortcuts,
             commands::set_shortcut,
             commands::finish_region_capture,

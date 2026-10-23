@@ -52,7 +52,9 @@
     "share": "分享…",
     "dragOut": "将图片拖到其他应用",
     "dragFailed": "无法开始拖动 ~ 请重试",
-    "shareFailed": "无法打开分享 ~ 请重试"
+    "shareFailed": "无法打开分享 ~ 请重试",
+    "pin": "置顶到屏幕",
+    "pinFailed": "无法置顶 ~ 请重试"
   },
   "background": {
     "white": "白色",
@@ -95,7 +97,9 @@
     "modeFullscreen": "全屏",
     "modeWindow": "窗口",
     "modeText": "文字",
-    "size": "选区大小"
+    "size": "选区大小",
+    "modePin": "置顶",
+    "pinHint": "拖动选择区域并将其置顶显示 · 按 Esc 取消"
   },
   "settings": {
     "fullScreen": "全屏",
@@ -192,5 +196,9 @@
     "dropHint": "松开以在 Shota 中打开",
     "pasteAction": "打开剪贴板中的图片",
     "explorerVerb": "用 Shota 编辑"
+  },
+  "pin": {
+    "close": "关闭",
+    "copied": "已复制"
   }
 }

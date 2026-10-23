@@ -1,12 +1,14 @@
 mod editor;
 mod history;
 mod overlay;
+mod pin;
 
 pub use editor::{
     hide_editor_window, open_editor_from_history, open_editor_with_history, prewarm_editor_window,
     show_editor_window,
 };
 pub use history::{close_history_window, show_history_window, toggle_history_window};
+pub use pin::{open_pin, open_pin_centred, pin_id};
 pub use overlay::{cancel_capture_overlay, hide_capture_overlay, open_capture_overlay, overlay_painted, pending_freeze, prewarm_capture_overlay, show_capture_overlay};
 
 use tauri::{AppHandle, LogicalPosition, LogicalSize, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
@@ -59,6 +61,31 @@ pub(super) fn place_chromeless_window(
 
     exclude_from_capture(window);
     disable_show_animation(window);
+    Ok(())
+}
+
+/// Puts the window's *drawing area* exactly at a rectangle of the desktop, pixel for pixel.
+///
+/// A window is positioned by its outer edge, but the page is drawn inside it,
+/// and Windows gives even a borderless window an invisible frame (a few pixels
+/// each side, scaled by DPI). Positioning the outer edge at the desktop's
+/// corner left the page offset by that frame, so the frozen screen sat a pixel
+/// or two off from the live one underneath: the whole picture visibly shifted
+/// when the overlay appeared. So the size is set first, the frame measured, and
+/// the window moved back by it.
+pub(super) fn place_client_area(window: &WebviewWindow, x: i32, y: i32, width: u32, height: u32) -> Result<(), String> {
+    window.set_size(tauri::PhysicalSize::new(width, height)).map_err(|e| e.to_string())?;
+    window
+        .set_position(tauri::PhysicalPosition::new(x, y))
+        .map_err(|e| e.to_string())?;
+    let outer = window.outer_position().map_err(|e| e.to_string())?;
+    let inner = window.inner_position().map_err(|e| e.to_string())?;
+    let (frame_x, frame_y) = (inner.x - outer.x, inner.y - outer.y);
+    if frame_x != 0 || frame_y != 0 {
+        window
+            .set_position(tauri::PhysicalPosition::new(x - frame_x, y - frame_y))
+            .map_err(|e| e.to_string())?;
+    }
     Ok(())
 }
 
@@ -284,6 +311,12 @@ pub(super) fn reveal_and_focus(window: &WebviewWindow) {
 pub(super) fn reveal_and_focus(window: &WebviewWindow) {
     cloak_window(window, false);
     let _ = window.set_focus();
+}
+
+/// After a pin has been put on screen: give the keyboard back to the app the
+/// user was in, so pinning does not leave focus on an invisible overlay.
+pub fn restore_foreground_after_pin() {
+    restore_foreground();
 }
 
 #[cfg(not(windows))]

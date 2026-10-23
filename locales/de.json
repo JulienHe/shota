@@ -52,7 +52,9 @@
     "share": "Teilen…",
     "dragOut": "Bild in eine andere App ziehen",
     "dragFailed": "Ziehen fehlgeschlagen ~ erneut versuchen",
-    "shareFailed": "Teilen konnte nicht geöffnet werden ~ erneut versuchen"
+    "shareFailed": "Teilen konnte nicht geöffnet werden ~ erneut versuchen",
+    "pin": "Auf dem Bildschirm anheften",
+    "pinFailed": "Anheften fehlgeschlagen ~ erneut versuchen"
   },
   "background": {
     "white": "Weiß",
@@ -95,7 +97,9 @@
     "modeFullscreen": "Vollbild",
     "modeWindow": "Fenster",
     "modeText": "Text",
-    "size": "Größe der Auswahl"
+    "size": "Größe der Auswahl",
+    "modePin": "Anheften",
+    "pinHint": "Über einen Bereich ziehen, um ihn auf dem Bildschirm anzuheften · Esc zum Abbrechen"
   },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",
@@ -192,5 +196,9 @@
     "dropHint": "Zum Öffnen in Shota ablegen",
     "pasteAction": "Bild aus Zwischenablage öffnen",
     "explorerVerb": "Mit Shota bearbeiten"
+  },
+  "pin": {
+    "close": "Schließen",
+    "copied": "Kopiert"
   }
 }

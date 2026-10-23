@@ -9,7 +9,8 @@
     "main",
     "overlay",
     "editor",
-    "history"
+    "history",
+    "pin-*"
   ],
   "permissions": [
     "global-shortcut:default"
