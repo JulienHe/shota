@@ -629,3 +629,18 @@ pub fn set_scroll_auto(app: AppHandle, enabled: bool) {
         session.auto.store(enabled, std::sync::atomic::Ordering::SeqCst);
     }
 }
+
+/// Shows the calling window without taking the focus away from whatever is
+/// being captured. The scrolling capture's backdrop and panel are built hidden
+/// and revealed by their own page once it has painted, so a white, empty
+/// window is never seen while the page loads.
+#[tauri::command]
+pub fn show_without_focus(window: tauri::WebviewWindow) {
+    #[cfg(windows)]
+    if let Ok(hwnd) = window.hwnd() {
+        use windows::Win32::UI::WindowsAndMessaging::{ShowWindow, SW_SHOWNOACTIVATE};
+        let _ = unsafe { ShowWindow(hwnd, SW_SHOWNOACTIVATE) };
+    }
+    #[cfg(not(windows))]
+    let _ = window.show();
+}

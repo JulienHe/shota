@@ -13,7 +13,5 @@ body,
   box-sizing: border-box;
   /* One huge shadow dims everything outside the area. */
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.45);
-  outline: 2px solid rgba(255, 255, 255, 0.9);
-  outline-offset: 1px;
   pointer-events: none;
 }

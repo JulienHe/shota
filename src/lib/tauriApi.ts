@@ -114,6 +114,9 @@ export const tauriApi = {
   /** Ends a scrolling capture and throws it away. */
   cancelScrollCapture: () => invoke<void>("cancel_scroll_capture"),
 
+  /** Reveals the calling window, built hidden, without taking the focus. */
+  showWithoutFocus: () => invoke<void>("show_without_focus"),
+
   /** Lets Shota scroll the content itself during a scrolling capture (or stops it). */
   setScrollAuto: (enabled: boolean) => invoke<void>("set_scroll_auto", { enabled }),
 

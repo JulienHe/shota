@@ -37,6 +37,8 @@ pub fn build_scroll_frame(app: &AppHandle, region: (i32, i32, u32, u32)) -> Resu
         .resizable(false)
         .shadow(false)
         .focused(false)
+        // Shown by its own page once painted (`show_without_focus`).
+        .visible(false)
         .build()
         .map_err(|e| e.to_string())?;
 

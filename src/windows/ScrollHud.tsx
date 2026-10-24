@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { tauriApi } from "../lib/tauriApi";
-import { useTransparentWindow } from "../lib/windowChrome";
+import { afterNextPaint, useTransparentWindow } from "../lib/windowChrome";
 import { t } from "../lib/i18n";
 import "./ScrollHud.css";
 
@@ -21,6 +21,9 @@ export function ScrollHud() {
   const [progress, setProgress] = useState<Progress>({ height: 0, frames: 1, phase: "waiting" });
 
   useTransparentWindow();
+  useEffect(() => {
+    afterNextPaint().then(() => tauriApi.showWithoutFocus());
+  }, []);
 
   useEffect(() => {
     const unlisten = listen<Progress>("shota://scroll-progress", (event) => setProgress(event.payload));
