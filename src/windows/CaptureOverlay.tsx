@@ -152,6 +152,7 @@ export function CaptureOverlay() {
   useEffect(() => {
     const unlisten = listen<number>("shota://freeze", (event) => {
       handled.current = null;
+      focusedOnce.current = false;
       // Every capture starts in area mode, whatever the last one used. The page
       // is reused, so nothing resets by itself.
       setTextMode(false);
@@ -171,6 +172,28 @@ export function CaptureOverlay() {
       unlisten.then((fn) => fn());
     };
   }, [showFrozen, setSnapMode]);
+
+  // Alt-Tab away from the overlay means the frozen picture is no longer what
+  // is wanted: the user is going to another window, and the still copy of the
+  // old one would sit over it hiding the change. Show the live screen (the
+  // scrolling view) instead, where the area can then be chosen.
+  const focusedOnce = useRef(false);
+  useEffect(() => {
+    const onFocus = () => {
+      focusedOnce.current = true;
+    };
+    const onBlur = () => {
+      if (!focusedOnce.current) return;
+      focusedOnce.current = false;
+      chooseRef.current("scroll");
+    };
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, []);
 
   useEffect(() => {
     // The window is created hidden (see overlay.rs) specifically so it can't
