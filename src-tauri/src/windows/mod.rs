@@ -10,7 +10,7 @@ pub use editor::{open_editor_with_document,
     show_editor_window,
 };
 pub use history::{close_history_window, show_history_window, toggle_history_window};
-pub use scroll_hud::{close_scroll_hud, open_scroll_hud};
+pub use scroll_hud::{close_scroll_hud, open_scroll_hud, scroll_windows_visible};
 pub use pin::{open_pin, open_pin_centred, pin_id};
 pub use overlay::{cancel_capture_overlay, hide_capture_overlay, open_capture_overlay, overlay_painted, pending_freeze, prewarm_capture_overlay, show_capture_overlay};
 

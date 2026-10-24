@@ -66,6 +66,8 @@ pub struct Session {
     /// Whether Shota scrolls the content itself. Off until the user asks: it
     /// takes the pointer and turns the wheel, which must never happen unasked.
     pub auto: AtomicBool,
+    /// Set when the capture is over, which stops the key watcher.
+    pub ended: AtomicBool,
 }
 
 #[derive(Serialize, Clone)]
@@ -79,17 +81,28 @@ struct Progress {
 
 /// Starts a scrolling capture of `region` on a thread of its own and returns
 /// at once. At most one runs at a time.
-pub fn start(app: &AppHandle, region: Region) -> Result<(), String> {
+pub fn start(app: &AppHandle, region: Region, hide_overlay: impl FnOnce() + Send + 'static) -> Result<(), String> {
     let session = app
         .state::<AppState>()
         .begin_scroll_session()
         .ok_or_else(|| "a scrolling capture is already running".to_string())?;
 
+    // The dimmed backdrop and the panel go up first, and the selection overlay
+    // only leaves once they are on screen, so the screen never flashes back to
+    // undimmed in between.
     open_scroll_hud(app, (region.x, region.y, region.width, region.height));
-
     let handle = app.clone();
     std::thread::spawn(move || {
+        let deadline = Instant::now() + Duration::from_millis(1200);
+        while Instant::now() < deadline && !crate::windows::scroll_windows_visible(&handle) {
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        hide_overlay();
+        // Enter and Esc are watched on a thread of their own: a press is over
+        // in well under the time one look at the screen can take.
+        watch_keys(&session);
         let result = run(&handle, region, &session);
+        session.ended.store(true, Ordering::SeqCst);
         close_scroll_hud(&handle);
         handle.state::<AppState>().end_scroll_session();
         match result {
@@ -105,6 +118,25 @@ pub fn start(app: &AppHandle, region: Region) -> Result<(), String> {
         }
     });
     Ok(())
+}
+
+/// Sets `finish` on Enter and `cancel` on Esc, whichever window has the keyboard.
+fn watch_keys(session: &std::sync::Arc<Session>) {
+    let session = session.clone();
+    std::thread::spawn(move || {
+        // Keys already held when this began (the one that ended the selection)
+        // must not count.
+        let mut keys = Keys::new();
+        while !session.ended.load(Ordering::SeqCst) {
+            if keys.escape_pressed() {
+                session.cancel.store(true, Ordering::SeqCst);
+            }
+            if keys.enter_pressed() {
+                session.finish.store(true, Ordering::SeqCst);
+            }
+            std::thread::sleep(Duration::from_millis(8));
+        }
+    });
 }
 
 fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<RgbaImage>, String> {
@@ -130,17 +162,14 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
     // Whether our own wheel clicks have been seen to move the content.
     let mut auto_works = false;
     let started = Instant::now();
-    // Keys already held when this began (the Enter or Esc that ended the
-    // selection) must not count as the user asking to finish.
-    let mut keys = Keys::new();
 
     progress(app, stitcher.height(), frames, "waiting");
 
     loop {
-        if session.cancel.load(Ordering::SeqCst) || keys.escape_pressed() {
+        if session.cancel.load(Ordering::SeqCst) {
             return Ok(None);
         }
-        if session.finish.load(Ordering::SeqCst) || keys.enter_pressed() {
+        if session.finish.load(Ordering::SeqCst) {
             break;
         }
         let limit = max_height(region.width);

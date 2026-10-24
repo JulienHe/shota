@@ -90,3 +90,10 @@ fn build(app: &AppHandle, region: (i32, i32, u32, u32)) -> Result<(), String> {
     exclude_from_capture(&window);
     place_client_area(&window, x, y, width, height)
 }
+
+/// Whether the dimmed backdrop and the panel are both on screen.
+pub fn scroll_windows_visible(app: &AppHandle) -> bool {
+    [HUD_LABEL, super::scroll_frame::FRAME_LABEL]
+        .iter()
+        .all(|label| app.get_webview_window(label).and_then(|w| w.is_visible().ok()).unwrap_or(false))
+}

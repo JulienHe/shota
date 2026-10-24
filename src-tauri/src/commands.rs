@@ -599,11 +599,13 @@ pub fn save_project(
 /// the keyboard and the wheel back to the app underneath, and start.
 #[tauri::command]
 pub async fn finish_scroll_selection(app: AppHandle, x: i32, y: i32, width: u32, height: u32) -> Result<(), String> {
-    hide_capture_overlay(&app)?;
-    app.state::<AppState>().clear_freeze();
-    // The content has to receive the scrolling, not the overlay.
-    crate::windows::restore_foreground_after_pin();
-    crate::scroll_capture::start(&app, crate::scroll_capture::Region { x, y, width, height })
+    let handle = app.clone();
+    crate::scroll_capture::start(&app, crate::scroll_capture::Region { x, y, width, height }, move || {
+        let _ = hide_capture_overlay(&handle);
+        handle.state::<AppState>().clear_freeze();
+        // The content has to receive the scrolling, not the overlay.
+        crate::windows::restore_foreground_after_pin();
+    })
 }
 
 /// The panel's "Done": stop scrolling and open what has been captured.
