@@ -110,8 +110,6 @@
     "modeWindow": "Okno",
     "modeText": "Tekst",
     "size": "Rozmiar zaznaczenia",
-    "modePin": "Przypnij",
-    "pinHint": "Przeciągnij po obszarze, aby przypiąć go na ekranie · Esc anuluje",
     "modeScroll": "Przewijanie",
     "scrollHint": "Przeciągnij po treści, aby ją przewinąć i przechwycić (beta) · Esc anuluje"
   },

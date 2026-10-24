@@ -110,8 +110,6 @@
     "modeWindow": "窗口",
     "modeText": "文字",
     "size": "选区大小",
-    "modePin": "置顶",
-    "pinHint": "拖动选择区域并将其置顶显示 · 按 Esc 取消",
     "modeScroll": "滚动",
     "scrollHint": "在内容上拖动，自动滚动并截取（测试版） · 按 Esc 取消"
   },

@@ -110,8 +110,6 @@
     "modeWindow": "Janela",
     "modeText": "Texto",
     "size": "Tamanho da seleção",
-    "modePin": "Fixar",
-    "pinHint": "Arraste sobre uma área para fixá-la na tela · Esc para cancelar",
     "modeScroll": "Rolagem",
     "scrollHint": "Arraste sobre o conteúdo para rolar e capturar (beta) · Esc para cancelar"
   },

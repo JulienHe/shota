@@ -56,19 +56,15 @@ export function CaptureOverlay() {
   // T switches the selection from "take a picture" to "copy the text (or QR
   // code) in it". Each capture starts in picture mode.
   const [textMode, setTextMode] = useState(false);
-  // P switches the selection to "pin it on screen".
-  const [pinMode, setPinMode] = useState(false);
   // S switches the selection to "scroll and capture it all" (beta).
   const [scrollMode, setScrollMode] = useState(false);
   const mode: CaptureMode = snapMode
     ? "window"
     : textMode
       ? "text"
-      : pinMode
-        ? "pin"
-        : scrollMode
-          ? "scroll"
-          : "area";
+      : scrollMode
+        ? "scroll"
+        : "area";
   const chooseRef = useRef<(choice: CaptureChoice) => void>(() => {});
   // The answer to a text selection, shown in the middle of the screen.
   const [status, setStatus] = useState<{ working: boolean; message: string } | null>(null);
@@ -103,9 +99,6 @@ export function CaptureOverlay() {
       } else if (e.code === "KeyS") {
         e.preventDefault();
         chooseRef.current("scroll");
-      } else if (e.code === "KeyP") {
-        e.preventDefault();
-        chooseRef.current("pin");
       } else if (e.code === "KeyF") {
         e.preventDefault();
         chooseRef.current("fullscreen");
@@ -119,7 +112,6 @@ export function CaptureOverlay() {
   useEffect(() => {
     if (snapMode) {
       setTextMode(false);
-      setPinMode(false);
       setScrollMode(false);
     }
   }, [snapMode]);
@@ -163,7 +155,6 @@ export function CaptureOverlay() {
       // Every capture starts in area mode, whatever the last one used. The page
       // is reused, so nothing resets by itself.
       setTextMode(false);
-      setPinMode(false);
       setScrollMode(false);
       setSnapMode(false);
       setStatus(null);
@@ -202,7 +193,6 @@ export function CaptureOverlay() {
     }
     setDrag(null);
     setTextMode(choice === "text");
-    setPinMode(choice === "pin");
     setScrollMode(choice === "scroll");
     setSnapMode(choice === "window");
   };
@@ -300,16 +290,6 @@ export function CaptureOverlay() {
         return;
       }
 
-      if (pinMode) {
-        await tauriApi.finishPinCapture(
-          Math.round(resolvedOrigin.x + localX * scale),
-          Math.round(resolvedOrigin.y + localY * scale),
-          Math.round(width * scale),
-          Math.round(height * scale),
-        );
-        return;
-      }
-
       if (textMode) {
         await readSelection(
           Math.round(resolvedOrigin.x + localX * scale),
@@ -382,11 +362,9 @@ export function CaptureOverlay() {
           ? t("overlay.snapHint")
           : textMode
             ? t("overlay.textHint")
-            : pinMode
-              ? t("overlay.pinHint")
-              : scrollMode
-                ? t("overlay.scrollHint")
-                : t("overlay.dragHint")}
+            : scrollMode
+              ? t("overlay.scrollHint")
+              : t("overlay.dragHint")}
         {mode === "area" && <div className="capture-overlay__hint-sub">{t("overlay.loupeHint")}</div>}
       </div>
 

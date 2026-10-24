@@ -110,8 +110,6 @@
     "modeWindow": "Fenêtre",
     "modeText": "Texte",
     "size": "Taille de la sélection",
-    "modePin": "Épingler",
-    "pinHint": "Faites glisser sur une zone pour l'épingler à l'écran · Échap pour annuler",
     "modeScroll": "Défilement",
     "scrollHint": "Faites glisser sur le contenu pour le faire défiler et le capturer (bêta) · Échap pour annuler"
   },

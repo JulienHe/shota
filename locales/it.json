@@ -110,8 +110,6 @@
     "modeWindow": "Finestra",
     "modeText": "Testo",
     "size": "Dimensione della selezione",
-    "modePin": "Fissa",
-    "pinHint": "Trascina su un'area per fissarla sullo schermo · Esc per annullare",
     "modeScroll": "Scorrimento",
     "scrollHint": "Trascina sul contenuto per scorrerlo e catturarlo (beta) · Esc per annullare"
   },

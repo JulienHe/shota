@@ -1,9 +1,9 @@
-import { AppWindow, ChevronsDown, Monitor, Pin, Scan, ScanText, type LucideIcon } from "lucide-react";
+import { AppWindow, ChevronsDown, Monitor, Scan, ScanText, type LucideIcon } from "lucide-react";
 import { t } from "../../lib/i18n";
 import "./CaptureModeBar.css";
 
 /** What a drag (or click) on the overlay does. Fullscreen is not a mode: choosing it captures at once. */
-export type CaptureMode = "area" | "window" | "scroll" | "text" | "pin";
+export type CaptureMode = "area" | "window" | "scroll" | "text";
 export type CaptureChoice = CaptureMode | "fullscreen";
 
 interface Choice {
@@ -23,7 +23,6 @@ const GROUPS: Choice[][] = [
   ],
   [
     { id: "text", icon: ScanText, label: "overlay.modeText", key: "T" },
-    { id: "pin", icon: Pin, label: "overlay.modePin", key: "P" },
   ],
 ];
 

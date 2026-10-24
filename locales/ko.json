@@ -110,8 +110,6 @@
     "modeWindow": "창",
     "modeText": "텍스트",
     "size": "선택 영역 크기",
-    "modePin": "고정",
-    "pinHint": "영역 위로 드래그하여 화면에 고정 · Esc로 취소",
     "modeScroll": "스크롤",
     "scrollHint": "내용 위로 드래그하여 스크롤하며 캡처 (베타) · Esc로 취소"
   },

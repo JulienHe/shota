@@ -110,8 +110,6 @@
     "modeWindow": "Ventana",
     "modeText": "Texto",
     "size": "Tamaño de la selección",
-    "modePin": "Fijar",
-    "pinHint": "Arrastra sobre una zona para fijarla en pantalla · Esc para cancelar",
     "modeScroll": "Desplazamiento",
     "scrollHint": "Arrastra sobre el contenido para desplazarlo y capturarlo (beta) · Esc para cancelar"
   },

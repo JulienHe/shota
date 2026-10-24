@@ -110,8 +110,6 @@
     "modeWindow": "Venster",
     "modeText": "Tekst",
     "size": "Grootte van de selectie",
-    "modePin": "Vastzetten",
-    "pinHint": "Sleep over een gebied om het op het scherm vast te zetten · Esc om te annuleren",
     "modeScroll": "Scrollen",
     "scrollHint": "Sleep over de inhoud om te scrollen en vast te leggen (bèta) · Esc om te annuleren"
   },

@@ -110,8 +110,6 @@
     "modeWindow": "Window",
     "modeText": "Text",
     "size": "Selection size",
-    "modePin": "Pin",
-    "pinHint": "Drag over an area to pin it on screen · Esc to cancel",
     "modeScroll": "Scrolling",
     "scrollHint": "Drag over the content to scroll and capture it (beta) · Esc to cancel"
   },

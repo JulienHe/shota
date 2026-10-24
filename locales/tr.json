@@ -110,8 +110,6 @@
     "modeWindow": "Pencere",
     "modeText": "Metin",
     "size": "Seçim boyutu",
-    "modePin": "Sabitle",
-    "pinHint": "Ekrana sabitlemek için bir alanın üzerinde sürükleyin · İptal için Esc",
     "modeScroll": "Kaydırma",
     "scrollHint": "İçeriği kaydırıp yakalamak için üzerinde sürükleyin (beta) · İptal için Esc"
   },
