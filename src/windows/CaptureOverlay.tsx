@@ -368,7 +368,7 @@ export function CaptureOverlay() {
 
   return (
     <div
-      className="capture-overlay"
+      className={`capture-overlay${scrollMode ? " capture-overlay--live" : ""}`}
       onMouseDown={handleMouseDown}
       onWheel={handleWheel}
       onContextMenu={handleContextMenu}
@@ -410,7 +410,7 @@ export function CaptureOverlay() {
         </div>
       )}
 
-      {!snapMode && pointer && (
+      {!snapMode && !scrollMode && pointer && (
         <Magnifier source={canvasRef} x={pointer.x} y={pointer.y} span={SPANS[spanIndex]} caption={loupeCaption} />
       )}
     </div>

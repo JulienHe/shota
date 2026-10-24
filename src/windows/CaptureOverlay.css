@@ -134,3 +134,14 @@
     transform: rotate(360deg);
   }
 }
+
+/* Scrolling capture works on the live screen, not the frozen copy: the page
+   has to be scrolled and windows switched before and after choosing the area,
+   so the still picture is put away and only a light dimming is left. */
+.capture-overlay--live {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.capture-overlay--live .capture-overlay__frozen {
+  display: none;
+}
