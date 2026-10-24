@@ -20,9 +20,21 @@ const MIN_TEXTURE: usize = 4;
 const MIN_VOTING_ROWS: usize = 8;
 /// The share of voting rows that must agree for a shift to be believed.
 const MIN_AGREEMENT: f64 = 0.8;
+/// Below this share even a standout shift is not believed.
+const MIN_SHARE: f64 = 0.05;
+/// How many times better than any other shift the best has to be, when it is
+/// under MIN_AGREEMENT.
+const STANDS_OUT: f64 = 6.0;
 /// Pixels sampled per row are every this-many-th, which is plenty to tell
 /// rows apart and keeps a 4K frame cheap.
 const SAMPLE_STRIDE: u32 = 3;
+/// Each row is also read in this many vertical blocks. A video, a carousel or
+/// a live counter changes some blocks while the rest of the row (text,
+/// borders, other posts) stays put, so a row agrees when most of the blocks
+/// that have anything in them agree, instead of needing every pixel to.
+const BLOCKS: usize = 8;
+/// The share of a row's non-blank blocks that must be equal for the row to agree.
+const BLOCK_AGREEMENT: f64 = 0.6;
 
 /// What a new frame did to the picture.
 #[derive(Debug, PartialEq, Eq)]
@@ -44,35 +56,71 @@ pub enum Step {
 struct Rows {
     hashes: Vec<u64>,
     textured: Vec<bool>,
+    blocks: Vec<[u64; BLOCKS]>,
+    /// Bit n set: block n of the row has something in it.
+    filled: Vec<u8>,
 }
 
 fn rows_of(frame: &RgbaImage) -> Rows {
     let (width, height) = frame.dimensions();
     let mut hashes = Vec::with_capacity(height as usize);
     let mut textured = Vec::with_capacity(height as usize);
+    let mut blocks = Vec::with_capacity(height as usize);
+    let mut filled = Vec::with_capacity(height as usize);
     let mut seen: Vec<u32> = Vec::with_capacity(8);
     for y in 0..height {
         let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
+        let mut block_hash = [0xcbf2_9ce4_8422_2325u64; BLOCKS];
+        let mut block_seen: [Vec<u32>; BLOCKS] = Default::default();
         seen.clear();
         let mut x = 0;
         while x < width {
             let p = frame.get_pixel(x, y).0;
             let value = u32::from_le_bytes([p[0], p[1], p[2], 0]);
+            let block = (x as usize * BLOCKS / width as usize).min(BLOCKS - 1);
             // The low bits are dropped: the same content is not always drawn
             // bit for bit the same (gradients, video compression, text smoothing).
             for byte in [p[0] >> 3, p[1] >> 3, p[2] >> 3] {
                 hash ^= byte as u64;
                 hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
+                block_hash[block] ^= byte as u64;
+                block_hash[block] = block_hash[block].wrapping_mul(0x0000_0100_0000_01b3);
             }
             if seen.len() < MIN_TEXTURE && !seen.contains(&value) {
                 seen.push(value);
             }
+            if block_seen[block].len() < MIN_TEXTURE && !block_seen[block].contains(&value) {
+                block_seen[block].push(value);
+            }
             x += SAMPLE_STRIDE;
+        }
+        let mut mask = 0u8;
+        for (n, colours) in block_seen.iter().enumerate() {
+            if colours.len() >= MIN_TEXTURE {
+                mask |= 1 << n;
+            }
         }
         hashes.push(hash);
         textured.push(seen.len() >= MIN_TEXTURE);
+        blocks.push(block_hash);
+        filled.push(mask);
     }
-    Rows { hashes, textured }
+    Rows { hashes, textured, blocks, filled }
+}
+
+/// Whether old row `old` of `previous` and row `new` of `next` are the same
+/// row: None if neither has anything in it (it says nothing), otherwise
+/// whether enough of the blocks that do agree.
+fn rows_agree(previous: &Rows, old: usize, next: &Rows, new: usize) -> Option<bool> {
+    let mask = previous.filled[old] | next.filled[new];
+    if mask == 0 {
+        return None;
+    }
+    let total = mask.count_ones() as usize;
+    let equal = (0..BLOCKS)
+        .filter(|n| mask & (1 << n) != 0 && previous.blocks[old][*n] == next.blocks[new][*n])
+        .count();
+    Some(equal as f64 >= total as f64 * BLOCK_AGREEMENT)
 }
 
 enum Bands {
@@ -121,10 +169,16 @@ impl Stitcher {
 
         let (top, bottom) = match self.bands(&rows) {
             Bands::Identical => return Step::NoChange,
-            Bands::AllStatic => return Step::NoMatch,
+            Bands::AllStatic => return Step::NoChange,
             Bands::Live { top, bottom } => (top, bottom),
         };
         let live = top..height - bottom;
+
+        // Nothing moved if the rows still line up where they are: only a video,
+        // a carousel or a counter changed.
+        if best_shift_from(&self.previous_rows, &rows, 0..height, 0) == Some(0) {
+            return Step::NoChange;
+        }
 
         // Which way did the content go? Down the page is the usual case; up
         // is the user scrolling back, which is just as good a view of the page.
@@ -254,36 +308,51 @@ fn static_band<'a>(pairs: impl Iterator<Item = (&'a u64, &'a u64)>) -> usize {
 /// The shift (in rows, content moved up) at which the new frame best agrees
 /// with the previous one within the `live` rows, or None if no shift is
 /// believable.
-fn best_shift(previous: &Rows, next: &Rows, live: std::ops::Range<usize>) -> Option<usize> {
-    let span = live.end - live.start;
-    let mut best: Option<(usize, usize, usize)> = None; // (shift, agreeing, voting)
-    for shift in 1..span {
-        // New row i is old row i + shift, for i in live.start .. live.end - shift.
-        let mut agreeing = 0;
-        let mut voting = 0;
-        for i in live.start..live.end - shift {
-            let old = i + shift;
-            if !(next.textured[i] || previous.textured[old]) {
-                continue;
-            }
+/// The share of the voting rows in `live` that agree when the new frame is
+/// the old one moved up by `shift`; None if too few rows vote.
+fn agreement_at(previous: &Rows, next: &Rows, live: std::ops::Range<usize>, shift: usize) -> Option<f64> {
+    let mut agreeing = 0;
+    let mut voting = 0;
+    for i in live.start..live.end - shift {
+        if let Some(agrees) = rows_agree(previous, i + shift, next, i) {
             voting += 1;
-            if next.hashes[i] == previous.hashes[old] {
-                agreeing += 1;
-            }
-        }
-        if voting < MIN_VOTING_ROWS {
-            continue;
-        }
-        let better = match best {
-            None => true,
-            Some((_, best_agreeing, _)) => agreeing > best_agreeing,
-        };
-        if better {
-            best = Some((shift, agreeing, voting));
+            agreeing += agrees as usize;
         }
     }
-    let (shift, agreeing, voting) = best?;
-    (agreeing as f64 / voting as f64 >= MIN_AGREEMENT).then_some(shift)
+    (voting >= MIN_VOTING_ROWS).then(|| agreeing as f64 / voting as f64)
+}
+
+fn best_shift(previous: &Rows, next: &Rows, live: std::ops::Range<usize>) -> Option<usize> {
+    best_shift_from(previous, next, live, 1)
+}
+
+/// The shift (in rows, content moved up, `from` or more) at which the new frame
+/// agrees with the previous one clearly better than at any other shift.
+///
+/// "Clearly" is what makes this work on a page with video on it: the rows
+/// with the video in never agree, so even the right shift may only reach a
+/// half or less, but every wrong shift gets close to nothing, and the right
+/// one stands out. A page of repeating rows has several shifts that agree about
+/// equally, and is refused instead of guessed at.
+fn best_shift_from(previous: &Rows, next: &Rows, live: std::ops::Range<usize>, from: usize) -> Option<usize> {
+    let span = live.end - live.start;
+    let mut shares: Vec<(usize, f64)> = Vec::new();
+    for shift in from..span {
+        if let Some(share) = agreement_at(previous, next, live.clone(), shift) {
+            shares.push((shift, share));
+        }
+    }
+    let &(shift, best) = shares.iter().max_by(|x, y| x.1.partial_cmp(&y.1).unwrap_or(std::cmp::Ordering::Equal))?;
+    if best < MIN_SHARE {
+        return None;
+    }
+    // The nearest rivals are the same match smeared over a few rows; skip them.
+    let rival = shares
+        .iter()
+        .filter(|(other, _)| other.abs_diff(shift) > 4)
+        .map(|(_, share)| *share)
+        .fold(0.0, f64::max);
+    (best >= MIN_AGREEMENT || best >= rival * STANDS_OUT).then_some(shift)
 }
 
 #[cfg(test)]
