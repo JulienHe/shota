@@ -6,6 +6,7 @@ import { EditorWindow } from "./windows/EditorWindow";
 import { HistoryBar } from "./windows/HistoryBar";
 import { PinWindow } from "./windows/PinWindow";
 import { ScrollHud } from "./windows/ScrollHud";
+import { ScrollFrame } from "./windows/ScrollFrame";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { tauriApi } from "./lib/tauriApi";
 import { setLocale } from "./lib/i18n";
@@ -38,6 +39,7 @@ function App() {
   else if (label === "history") content = <HistoryBar />;
   else if (label?.startsWith("pin-")) content = <PinWindow label={label} />;
   else if (label === "scroll-hud") content = <ScrollHud />;
+  else if (label === "scroll-frame") content = <ScrollFrame />;
   else content = <SettingsWindow />;
 
   return <ErrorBoundary>{content}</ErrorBoundary>;

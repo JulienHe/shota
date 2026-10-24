@@ -7,6 +7,7 @@
 
 use tauri::{AppHandle, Manager, WebviewUrl, WebviewWindowBuilder};
 
+use super::scroll_frame::{build_scroll_frame, close_scroll_frame};
 use super::{disable_show_animation, exclude_from_capture, place_client_area};
 
 pub const HUD_LABEL: &str = "scroll-hud";
@@ -21,6 +22,10 @@ const MARGIN: f64 = 28.0;
 pub fn open_scroll_hud(app: &AppHandle, region: (i32, i32, u32, u32)) {
     let handle = app.clone();
     let _ = app.run_on_main_thread(move || {
+        // The dimmed backdrop first, so the panel sits above it.
+        if let Err(err) = build_scroll_frame(&handle, region) {
+            eprintln!("could not show the scrolling capture area: {err}");
+        }
         if let Err(err) = build(&handle, region) {
             eprintln!("could not show the scrolling capture panel: {err}");
         }
@@ -30,6 +35,7 @@ pub fn open_scroll_hud(app: &AppHandle, region: (i32, i32, u32, u32)) {
 pub fn close_scroll_hud(app: &AppHandle) {
     let handle = app.clone();
     let _ = app.run_on_main_thread(move || {
+        close_scroll_frame(&handle);
         if let Some(window) = handle.get_webview_window(HUD_LABEL) {
             let _ = window.destroy();
         }

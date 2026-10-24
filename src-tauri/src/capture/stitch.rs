@@ -19,7 +19,7 @@ const MIN_TEXTURE: usize = 4;
 /// Fewer voting rows than this and the match is not trusted.
 const MIN_VOTING_ROWS: usize = 8;
 /// The share of voting rows that must agree for a shift to be believed.
-const MIN_AGREEMENT: f64 = 0.9;
+const MIN_AGREEMENT: f64 = 0.8;
 /// Pixels sampled per row are every this-many-th, which is plenty to tell
 /// rows apart and keeps a 4K frame cheap.
 const SAMPLE_STRIDE: u32 = 3;
@@ -58,7 +58,9 @@ fn rows_of(frame: &RgbaImage) -> Rows {
         while x < width {
             let p = frame.get_pixel(x, y).0;
             let value = u32::from_le_bytes([p[0], p[1], p[2], 0]);
-            for byte in [p[0], p[1], p[2]] {
+            // The low bits are dropped: the same content is not always drawn
+            // bit for bit the same (gradients, video compression, text smoothing).
+            for byte in [p[0] >> 3, p[1] >> 3, p[2] >> 3] {
                 hash ^= byte as u64;
                 hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
             }
@@ -97,6 +99,11 @@ impl Stitcher {
     pub fn new(first: RgbaImage) -> Self {
         let previous_rows = rows_of(&first);
         Self { image: first.clone(), previous: first, previous_rows, footer: None, trimmed: false, offset: 0 }
+    }
+
+    /// The last picture that lined up (for diagnosing ones that do not).
+    pub fn previous(&self) -> &RgbaImage {
+        &self.previous
     }
 
     /// The picture's height so far, footer excluded.

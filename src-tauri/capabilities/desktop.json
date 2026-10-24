@@ -11,7 +11,8 @@
     "editor",
     "history",
     "pin-*",
-    "scroll-hud"
+    "scroll-hud",
+    "scroll-frame"
   ],
   "permissions": [
     "global-shortcut:default"

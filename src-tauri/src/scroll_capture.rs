@@ -126,6 +126,7 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
     let mut idle = 0u32;
     let mut mismatches = 0u32;
     let mut moved_once = false;
+    let mut lost = 0u32;
     // Whether our own wheel clicks have been seen to move the content.
     let mut auto_works = false;
     let started = Instant::now();
@@ -178,6 +179,7 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
             now
         };
 
+        let last_frame = frame.clone();
         let step = stitcher.push(frame);
         match step {
             Step::Appended(shift) => {
@@ -219,6 +221,7 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
                 progress(app, stitcher.height(), frames, "scrolling");
             }
             Step::NoMatch => {
+                keep_for_diagnosis(stitcher.previous(), &last_frame, &mut lost);
                 if !auto {
                     // Scrolled further than the pictures overlap. Say so, and
                     // keep looking: scrolling back a little will line up again.
@@ -238,6 +241,19 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
 
     progress(app, stitcher.height(), frames, "stitching");
     Ok(Some(stitcher.finish()))
+}
+
+/// Beta: the first few pictures that would not line up are kept in the temp
+/// folder, so that a capture that loses its place can be looked at afterwards.
+fn keep_for_diagnosis(before: &RgbaImage, after: &RgbaImage, count: &mut u32) {
+    if *count >= 4 {
+        return;
+    }
+    *count += 1;
+    let dir = std::env::temp_dir().join("shota-scroll-lost");
+    let _ = std::fs::create_dir_all(&dir);
+    let _ = before.save(dir.join(format!("{count}-before.png")));
+    let _ = after.save(dir.join(format!("{count}-after.png")));
 }
 
 fn progress(app: &AppHandle, height: u32, frames: u32, phase: &'static str) {

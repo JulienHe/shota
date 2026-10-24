@@ -2,6 +2,7 @@ mod editor;
 mod history;
 mod overlay;
 mod pin;
+mod scroll_frame;
 mod scroll_hud;
 
 pub use editor::{open_editor_with_document, 
