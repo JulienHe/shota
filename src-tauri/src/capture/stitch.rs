@@ -183,18 +183,6 @@ impl Stitcher {
         }
     }
 
-    /// Whether `frame` is the previous view with the content moved *down*
-    /// (scrolled up, or the wrong way), and by how many rows.
-    pub fn scrolled_up_by(&self, frame: &RgbaImage) -> Option<u32> {
-        if frame.dimensions() != self.previous.dimensions() {
-            return None;
-        }
-        let rows = rows_of(frame);
-        let Bands::Live { top, bottom } = self.bands(&rows) else { return None };
-        let height = frame.height() as usize;
-        best_shift(&rows, &self.previous_rows, top..height - bottom).map(|rows| rows as u32)
-    }
-
     /// The parts of `rows` that did not move relative to the previous view.
     fn bands(&self, rows: &Rows) -> Bands {
         let height = rows.hashes.len();
@@ -359,15 +347,6 @@ mod tests {
         assert!(matches!(stitcher.push(view(&page, 900, 400)), Step::Appended(100)));
         let result = stitcher.finish();
         assert!(same(&result, &view(&page, 300, 1000)));
-    }
-
-    #[test]
-    fn content_that_went_the_other_way_is_recognised() {
-        let page = page(1500);
-        let stitcher = Stitcher::new(view(&page, 600, 400));
-        assert_eq!(stitcher.scrolled_up_by(&view(&page, 450, 400)), Some(150));
-        // Forward movement is not "up", and an unrelated picture is nothing.
-        assert_eq!(stitcher.scrolled_up_by(&view(&page, 750, 400)), None);
     }
 
     #[test]
