@@ -192,7 +192,9 @@
     "tokensButton": "Offri qualche token",
     "tokensFree": "Oppure lascia una stella su GitHub: è gratis e aiuta molto",
     "explorerMenu": "Modifica con Shota in Esplora file",
-    "explorerMenuHint": "Aggiunge «Modifica con Shota» al menu del tasto destro sulle immagini. In Windows 11 si trova in Mostra altre opzioni."
+    "explorerMenuHint": "Aggiunge «Modifica con Shota» al menu del tasto destro sulle immagini. In Windows 11 si trova in Mostra altre opzioni.",
+    "toolbar": "Mostra la barra di cattura",
+    "toolbarHint": "Apre la barra sullo schermo in diretta, per cambiare finestra e scorrere prima. Da qui parte la cattura a scorrimento."
   },
   "error": {
     "title": "Shota ha riscontrato un problema",

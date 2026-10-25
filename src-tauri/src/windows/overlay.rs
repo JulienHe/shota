@@ -90,6 +90,18 @@ fn build_overlay_window(app: &AppHandle, x: f64, y: f64, width: f64, height: f64
 /// specifically so it can be revealed instantly, already loaded and styled,
 /// instead of recreating it (and re-triggering a white flash) every time.
 pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
+    open_overlay(app, false)
+}
+
+/// The overlay over the live screen, nothing frozen: for scrolling capture,
+/// where the page has to be moved and windows switched before the area is
+/// chosen. Area, window and text still work from here (they read the screen
+/// as it is when chosen).
+pub fn open_capture_overlay_live(app: &AppHandle) -> Result<(), String> {
+    open_overlay(app, true)
+}
+
+fn open_overlay(app: &AppHandle, live: bool) -> Result<(), String> {
     let state = app.state::<AppState>();
     // Already showing, or already on its way: a second grab now would capture
     // the overlay itself, or race the first.
@@ -100,7 +112,8 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
 
     let handle = app.clone();
     std::thread::spawn(move || {
-        match capture::capture_desktop() {
+        let grabbed = if live { Err(String::new()) } else { capture::capture_desktop() };
+        match grabbed {
             Ok(desktop) => {
                 // Dev builds keep the last frozen picture, to settle "what did the
                 // freeze actually capture?" when the overlay looks wrong.
@@ -114,7 +127,9 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
                 handle.state::<AppState>().set_freeze(desktop);
             }
             Err(err) => {
-                eprintln!("could not freeze the screen, opening over the live one: {err}");
+                if !live {
+                    eprintln!("could not freeze the screen, opening over the live one: {err}");
+                }
                 handle.state::<AppState>().clear_freeze();
             }
         }

@@ -83,7 +83,7 @@ mod imp {
     const REINSTALL_EVERY_MS: u32 = 250;
 
     /// One slot per kind, in `ShortcutKind` declaration order.
-    static BINDINGS: Mutex<[Option<Modifiers>; 3]> = Mutex::new([None; 3]);
+    static BINDINGS: Mutex<[Option<Modifiers>; 4]> = Mutex::new([None; 4]);
     static APP: OnceLock<AppHandle> = OnceLock::new();
     static STARTED: Once = Once::new();
     /// When the last handled half of a press arrived, in `now_ms` terms.
@@ -96,11 +96,12 @@ mod imp {
             ShortcutKind::Fullscreen => 0,
             ShortcutKind::Area => 1,
             ShortcutKind::History => 2,
+            ShortcutKind::Toolbar => 3,
         }
     }
 
     fn kind_at(index: usize) -> ShortcutKind {
-        [ShortcutKind::Fullscreen, ShortcutKind::Area, ShortcutKind::History][index]
+        [ShortcutKind::Fullscreen, ShortcutKind::Area, ShortcutKind::History, ShortcutKind::Toolbar][index]
     }
 
     pub fn bind(app: &AppHandle, kind: ShortcutKind, mods: Modifiers) {
@@ -118,7 +119,7 @@ mod imp {
     /// Releases every binding, for recording a new shortcut. The hook itself
     /// stays installed; with nothing bound it passes every key through.
     pub fn clear() {
-        *BINDINGS.lock().unwrap() = [None; 3];
+        *BINDINGS.lock().unwrap() = [None; 4];
     }
 
     pub fn is_bound(kind: ShortcutKind) -> bool {

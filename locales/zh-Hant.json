@@ -192,7 +192,9 @@
     "tokensButton": "贊助一些 token",
     "tokensFree": "或是在 GitHub 上按個星，免費又很有幫助",
     "explorerMenu": "在檔案總管中顯示「用 Shota 編輯」",
-    "explorerMenuHint": "在圖片的右鍵選單中加入「用 Shota 編輯」。在 Windows 11 中位於「顯示更多選項」裡。"
+    "explorerMenuHint": "在圖片的右鍵選單中加入「用 Shota 編輯」。在 Windows 11 中位於「顯示更多選項」裡。",
+    "toolbar": "顯示擷取列",
+    "toolbarHint": "在即時畫面上開啟擷取列，可先切換視窗、捲動頁面。捲動擷取從這裡開始。"
   },
   "error": {
     "title": "Shota 發生問題",

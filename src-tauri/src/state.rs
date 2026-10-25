@@ -9,7 +9,7 @@ use tauri::{AppHandle, Manager};
 use crate::capture::Desktop;
 use crate::hotkeys::{
     ShortcutKind, Shortcuts, DEFAULT_AREA_SHORTCUT, DEFAULT_FULLSCREEN_SHORTCUT,
-    DEFAULT_HISTORY_SHORTCUT,
+    DEFAULT_HISTORY_SHORTCUT, DEFAULT_TOOLBAR_SHORTCUT,
 };
 
 /// A capture handed off to the editor window: a key for fetching the raw
@@ -38,6 +38,8 @@ struct PersistedSettings {
     area_shortcut: String,
     #[serde(default = "default_history_shortcut")]
     history_shortcut: String,
+    #[serde(default = "default_toolbar_shortcut")]
+    toolbar_shortcut: String,
     /// None means "follow Windows", which is the default and what most
     /// people should stay on. Only set when the user picks a language
     /// explicitly, so changing the OS language keeps working for everyone
@@ -170,6 +172,10 @@ fn default_history_shortcut() -> String {
     DEFAULT_HISTORY_SHORTCUT.to_string()
 }
 
+fn default_toolbar_shortcut() -> String {
+    DEFAULT_TOOLBAR_SHORTCUT.to_string()
+}
+
 impl Default for PersistedSettings {
     fn default() -> Self {
         Self {
@@ -177,6 +183,7 @@ impl Default for PersistedSettings {
             fullscreen_shortcut: default_fullscreen_shortcut(),
             area_shortcut: default_area_shortcut(),
             history_shortcut: default_history_shortcut(),
+            toolbar_shortcut: default_toolbar_shortcut(),
             language: None,
             preferences: Preferences::default(),
         }
@@ -310,6 +317,7 @@ impl AppState {
             fullscreen: settings.fullscreen_shortcut.clone(),
             area: settings.area_shortcut.clone(),
             history: settings.history_shortcut.clone(),
+            toolbar: settings.toolbar_shortcut.clone(),
         }
     }
 
@@ -319,6 +327,7 @@ impl AppState {
             ShortcutKind::Fullscreen => settings.fullscreen_shortcut = accelerator,
             ShortcutKind::Area => settings.area_shortcut = accelerator,
             ShortcutKind::History => settings.history_shortcut = accelerator,
+            ShortcutKind::Toolbar => settings.toolbar_shortcut = accelerator,
         }
         let _ = write_settings(app, &settings);
     }

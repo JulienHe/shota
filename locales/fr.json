@@ -192,7 +192,9 @@
     "tokensButton": "Offrir quelques tokens",
     "tokensFree": "Ou mettez une étoile sur GitHub, c'est gratuit et ça aide beaucoup",
     "explorerMenu": "Modifier avec Shota dans l'Explorateur",
-    "explorerMenuHint": "Ajoute « Modifier avec Shota » au clic droit sur les images. Sous Windows 11, c'est dans Afficher plus d'options."
+    "explorerMenuHint": "Ajoute « Modifier avec Shota » au clic droit sur les images. Sous Windows 11, c'est dans Afficher plus d'options.",
+    "toolbar": "Afficher la barre de capture",
+    "toolbarHint": "Ouvre la barre sur l'écran en direct, pour changer de fenêtre et défiler d'abord. C'est ici que démarre la capture avec défilement."
   },
   "error": {
     "title": "Shota a rencontré un problème",

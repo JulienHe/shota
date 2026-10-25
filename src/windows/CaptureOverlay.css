@@ -139,7 +139,9 @@
    has to be scrolled and windows switched before and after choosing the area,
    so the still picture is put away and only a light dimming is left. */
 .capture-overlay--live {
-  background: rgba(0, 0, 0, 0.18);
+  /* Nearly clear, but not quite: a fully transparent window lets clicks fall
+     through to what is underneath. */
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .capture-overlay--live .capture-overlay__frozen {

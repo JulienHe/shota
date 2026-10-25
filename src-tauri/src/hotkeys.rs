@@ -5,7 +5,7 @@ use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 use crate::capture;
 use crate::snapshot_hook;
 use crate::state::AppState;
-use crate::windows::{open_capture_overlay, open_editor_with_history, toggle_history_window};
+use crate::windows::{open_capture_overlay, open_capture_overlay_live, open_editor_with_history, toggle_history_window};
 
 // A global shortcut can only be held by one process at a time, so a debug
 // build and an installed release build fight over these: whichever registers
@@ -25,6 +25,8 @@ pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+PrintScreen";
 pub const DEFAULT_AREA_SHORTCUT: &str = "PrintScreen";
 #[cfg(not(debug_assertions))]
 pub const DEFAULT_HISTORY_SHORTCUT: &str = "Shift+PrintScreen";
+#[cfg(not(debug_assertions))]
+pub const DEFAULT_TOOLBAR_SHORTCUT: &str = "Alt+PrintScreen";
 
 #[cfg(debug_assertions)]
 pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Alt+3";
@@ -32,6 +34,8 @@ pub const DEFAULT_FULLSCREEN_SHORTCUT: &str = "Ctrl+Alt+3";
 pub const DEFAULT_AREA_SHORTCUT: &str = "Ctrl+Alt+4";
 #[cfg(debug_assertions)]
 pub const DEFAULT_HISTORY_SHORTCUT: &str = "Ctrl+Alt+5";
+#[cfg(debug_assertions)]
+pub const DEFAULT_TOOLBAR_SHORTCUT: &str = "Ctrl+Alt+6";
 
 #[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq, Debug)]
 #[serde(rename_all = "snake_case")]
@@ -39,15 +43,20 @@ pub enum ShortcutKind {
     Fullscreen,
     Area,
     History,
+    /// The capture bar over the live screen, nothing frozen: the way in for
+    /// scrolling capture, where the page has to be moved and windows switched.
+    Toolbar,
 }
 
-const ALL_KINDS: [ShortcutKind; 3] = [ShortcutKind::Area, ShortcutKind::Fullscreen, ShortcutKind::History];
+const ALL_KINDS: [ShortcutKind; 4] =
+    [ShortcutKind::Area, ShortcutKind::Fullscreen, ShortcutKind::History, ShortcutKind::Toolbar];
 
 #[derive(Serialize, Clone, Debug)]
 pub struct Shortcuts {
     pub fullscreen: String,
     pub area: String,
     pub history: String,
+    pub toolbar: String,
 }
 
 impl Shortcuts {
@@ -56,6 +65,7 @@ impl Shortcuts {
             ShortcutKind::Fullscreen => &self.fullscreen,
             ShortcutKind::Area => &self.area,
             ShortcutKind::History => &self.history,
+            ShortcutKind::Toolbar => &self.toolbar,
         }
     }
 }
@@ -65,6 +75,7 @@ pub fn defaults() -> Shortcuts {
         fullscreen: DEFAULT_FULLSCREEN_SHORTCUT.to_string(),
         area: DEFAULT_AREA_SHORTCUT.to_string(),
         history: DEFAULT_HISTORY_SHORTCUT.to_string(),
+        toolbar: DEFAULT_TOOLBAR_SHORTCUT.to_string(),
     }
 }
 
@@ -121,6 +132,11 @@ pub fn fire(app: &AppHandle, kind: ShortcutKind) {
         ShortcutKind::Area => {
             if let Err(err) = open_capture_overlay(app) {
                 eprintln!("failed to open capture overlay: {err}");
+            }
+        }
+        ShortcutKind::Toolbar => {
+            if let Err(err) = open_capture_overlay_live(app) {
+                eprintln!("failed to open the capture bar: {err}");
             }
         }
         ShortcutKind::History => {

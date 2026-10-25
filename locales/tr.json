@@ -192,7 +192,9 @@
     "tokensButton": "Biraz token ısmarla",
     "tokensFree": "Ya da GitHub'da yıldız ver; ücretsiz ve çok işe yarıyor",
     "explorerMenu": "Gezgin'de Shota ile düzenle",
-    "explorerMenuHint": "Görüntülerin sağ tık menüsüne \"Shota ile düzenle\" ekler. Windows 11'de Diğer seçenekleri göster altındadır."
+    "explorerMenuHint": "Görüntülerin sağ tık menüsüne \"Shota ile düzenle\" ekler. Windows 11'de Diğer seçenekleri göster altındadır.",
+    "toolbar": "Yakalama çubuğunu göster",
+    "toolbarHint": "Çubuğu canlı ekranın üzerinde açar; önce pencere değiştirip kaydırabilirsiniz. Kaydırmalı yakalama buradan başlar."
   },
   "error": {
     "title": "Shota bir sorunla karşılaştı",

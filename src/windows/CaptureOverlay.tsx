@@ -58,6 +58,8 @@ export function CaptureOverlay() {
   const [textMode, setTextMode] = useState(false);
   // S switches the selection to "scroll and capture it all" (beta).
   const [scrollMode, setScrollMode] = useState(false);
+  // Opened over the live screen (the toolbar shortcut): nothing is frozen.
+  const [liveScreen, setLiveScreen] = useState(false);
   const mode: CaptureMode = snapMode
     ? "window"
     : textMode
@@ -129,6 +131,7 @@ export function CaptureOverlay() {
     try {
       if (canvas) {
         const context = canvas.getContext("2d", { willReadFrequently: true });
+        setLiveScreen(id === 0);
         if (id === 0 || !context) {
           // No frozen screen this time: clear the last one so it can't show.
           context?.clearRect(0, 0, canvas.width, canvas.height);
@@ -362,7 +365,7 @@ export function CaptureOverlay() {
 
   return (
     <div
-      className={`capture-overlay${scrollMode ? " capture-overlay--live" : ""}`}
+      className={`capture-overlay${scrollMode || liveScreen ? " capture-overlay--live" : ""}`}
       onMouseDown={handleMouseDown}
       onWheel={handleWheel}
       onContextMenu={handleContextMenu}
@@ -402,7 +405,7 @@ export function CaptureOverlay() {
         </div>
       )}
 
-      {!snapMode && !scrollMode && pointer && (
+      {!snapMode && !scrollMode && !liveScreen && pointer && (
         <Magnifier source={canvasRef} x={pointer.x} y={pointer.y} span={SPANS[spanIndex]} caption={loupeCaption} />
       )}
     </div>

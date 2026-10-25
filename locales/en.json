@@ -192,7 +192,9 @@
     "tokensButton": "Chip in some tokens",
     "tokensFree": "Or star it on GitHub, which is free and helps a lot",
     "explorerMenu": "Edit with Shota in Explorer",
-    "explorerMenuHint": "Adds \"Edit with Shota\" to the right-click menu on images. On Windows 11 it's under Show more options."
+    "explorerMenuHint": "Adds \"Edit with Shota\" to the right-click menu on images. On Windows 11 it's under Show more options.",
+    "toolbar": "Show the capture bar",
+    "toolbarHint": "Opens the bar over the live screen, so you can switch windows and scroll first. Home of scrolling capture."
   },
   "error": {
     "title": "Shota hit a problem",

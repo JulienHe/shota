@@ -192,7 +192,9 @@
     "tokensButton": "Aportar unos tokens",
     "tokensFree": "O dale una estrella en GitHub, que es gratis y ayuda mucho",
     "explorerMenu": "Editar con Shota en el Explorador",
-    "explorerMenuHint": "Añade «Editar con Shota» al menú contextual de las imágenes. En Windows 11 está en Mostrar más opciones."
+    "explorerMenuHint": "Añade «Editar con Shota» al menú contextual de las imágenes. En Windows 11 está en Mostrar más opciones.",
+    "toolbar": "Mostrar la barra de captura",
+    "toolbarHint": "Abre la barra sobre la pantalla en vivo, para cambiar de ventana y desplazarte antes. Aquí empieza la captura con desplazamiento."
   },
   "error": {
     "title": "Shota ha encontrado un problema",

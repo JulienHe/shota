@@ -192,7 +192,9 @@
     "tokensButton": "Ein paar Tokens spendieren",
     "tokensFree": "Oder gib einen Stern auf GitHub, das ist kostenlos und hilft sehr",
     "explorerMenu": "Mit Shota bearbeiten im Explorer",
-    "explorerMenuHint": "Fügt „Mit Shota bearbeiten“ zum Rechtsklickmenü von Bildern hinzu. Unter Windows 11 unter Weitere Optionen anzeigen."
+    "explorerMenuHint": "Fügt „Mit Shota bearbeiten“ zum Rechtsklickmenü von Bildern hinzu. Unter Windows 11 unter Weitere Optionen anzeigen.",
+    "toolbar": "Aufnahmeleiste anzeigen",
+    "toolbarHint": "Öffnet die Leiste über dem Live-Bildschirm, damit du zuerst Fenster wechseln und scrollen kannst. Hier startet die Scroll-Aufnahme."
   },
   "error": {
     "title": "Shota hat ein Problem festgestellt",

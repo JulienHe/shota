@@ -192,7 +192,9 @@
     "tokensButton": "Dorzuć trochę tokenów",
     "tokensFree": "Albo daj gwiazdkę na GitHubie, to nic nie kosztuje i bardzo pomaga",
     "explorerMenu": "Edytuj w Shota w Eksploratorze",
-    "explorerMenuHint": "Dodaje „Edytuj w Shota” do menu prawego przycisku na obrazach. W Windows 11 jest w Pokaż więcej opcji."
+    "explorerMenuHint": "Dodaje „Edytuj w Shota” do menu prawego przycisku na obrazach. W Windows 11 jest w Pokaż więcej opcji.",
+    "toolbar": "Pokaż pasek przechwytywania",
+    "toolbarHint": "Otwiera pasek nad bieżącym ekranem, aby najpierw przełączyć okna i przewinąć. Stąd zaczyna się przechwytywanie z przewijaniem."
   },
   "error": {
     "title": "Shota napotkała problem",

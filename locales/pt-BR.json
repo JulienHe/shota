@@ -192,7 +192,9 @@
     "tokensButton": "Contribuir com alguns tokens",
     "tokensFree": "Ou dê uma estrela no GitHub, que é grátis e ajuda muito",
     "explorerMenu": "Editar com o Shota no Explorador",
-    "explorerMenuHint": "Adiciona \"Editar com o Shota\" ao menu do botão direito nas imagens. No Windows 11 fica em Mostrar mais opções."
+    "explorerMenuHint": "Adiciona \"Editar com o Shota\" ao menu do botão direito nas imagens. No Windows 11 fica em Mostrar mais opções.",
+    "toolbar": "Mostrar a barra de captura",
+    "toolbarHint": "Abre a barra sobre a tela ao vivo, para trocar de janela e rolar antes. É daqui que começa a captura com rolagem."
   },
   "error": {
     "title": "O Shota encontrou um problema",

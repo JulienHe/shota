@@ -192,7 +192,9 @@
     "tokensButton": "トークンを差し入れる",
     "tokensFree": "GitHub でスターを付けるだけでも、無料で大きな助けになります",
     "explorerMenu": "エクスプローラーに「Shota で編集」を表示",
-    "explorerMenuHint": "画像の右クリックメニューに「Shota で編集」を追加します。Windows 11 では「その他のオプションを確認」の中にあります。"
+    "explorerMenuHint": "画像の右クリックメニューに「Shota で編集」を追加します。Windows 11 では「その他のオプションを確認」の中にあります。",
+    "toolbar": "キャプチャバーを表示",
+    "toolbarHint": "ライブ画面の上にバーを開き、先にウィンドウを切り替えたりスクロールしたりできます。スクロールキャプチャの入口です。"
   },
   "error": {
     "title": "Shota で問題が発生しました",

@@ -12,6 +12,7 @@ import "./ShortcutsPage.css";
 const GLOBAL_ROWS: { kind: ShortcutKind; label: string; hint?: string }[] = [
   { kind: "area", label: "settings.areaWindow", hint: "settings.areaHint" },
   { kind: "fullscreen", label: "settings.fullScreen" },
+  { kind: "toolbar", label: "settings.toolbar", hint: "settings.toolbarHint" },
   { kind: "history", label: "settings.history", hint: "settings.historyHint" },
 ];
 

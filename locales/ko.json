@@ -192,7 +192,9 @@
     "tokensButton": "토큰 보태기",
     "tokensFree": "GitHub에서 별을 눌러 주셔도 무료이면서 큰 도움이 됩니다",
     "explorerMenu": "탐색기에 'Shota로 편집' 표시",
-    "explorerMenuHint": "이미지의 마우스 오른쪽 메뉴에 'Shota로 편집'을 추가합니다. Windows 11에서는 '더 많은 옵션 표시' 안에 있습니다."
+    "explorerMenuHint": "이미지의 마우스 오른쪽 메뉴에 'Shota로 편집'을 추가합니다. Windows 11에서는 '더 많은 옵션 표시' 안에 있습니다.",
+    "toolbar": "캡처 바 표시",
+    "toolbarHint": "실시간 화면 위에 바를 열어 먼저 창을 전환하고 스크롤할 수 있습니다. 스크롤 캡처의 시작점입니다."
   },
   "error": {
     "title": "Shota에 문제가 발생했습니다",

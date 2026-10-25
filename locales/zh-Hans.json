@@ -192,7 +192,9 @@
     "tokensButton": "赞助一些 token",
     "tokensFree": "或者在 GitHub 上点个星，免费又很有帮助",
     "explorerMenu": "在资源管理器中显示“用 Shota 编辑”",
-    "explorerMenuHint": "在图片的右键菜单中添加“用 Shota 编辑”。在 Windows 11 中位于“显示更多选项”里。"
+    "explorerMenuHint": "在图片的右键菜单中添加“用 Shota 编辑”。在 Windows 11 中位于“显示更多选项”里。",
+    "toolbar": "显示截图栏",
+    "toolbarHint": "在实时画面上打开截图栏，可先切换窗口、滚动页面。滚动截图从这里开始。"
   },
   "error": {
     "title": "Shota 遇到问题",

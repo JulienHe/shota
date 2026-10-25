@@ -192,7 +192,9 @@
     "tokensButton": "Doneer wat tokens",
     "tokensFree": "Of geef een ster op GitHub, dat is gratis en helpt echt",
     "explorerMenu": "Bewerken met Shota in Verkenner",
-    "explorerMenuHint": "Voegt \"Bewerken met Shota\" toe aan het rechtermuisknopmenu van afbeeldingen. In Windows 11 onder Meer opties weergeven."
+    "explorerMenuHint": "Voegt \"Bewerken met Shota\" toe aan het rechtermuisknopmenu van afbeeldingen. In Windows 11 onder Meer opties weergeven.",
+    "toolbar": "Opnamebalk tonen",
+    "toolbarHint": "Opent de balk over het live scherm, zodat je eerst van venster kunt wisselen en scrollen. Hier begint de scrollende opname."
   },
   "error": {
     "title": "Shota liep tegen een probleem aan",

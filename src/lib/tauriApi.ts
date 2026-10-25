@@ -18,7 +18,7 @@ export interface PendingCapture {
   shapes_json: string | null;
 }
 
-export type ShortcutKind = "fullscreen" | "area" | "history";
+export type ShortcutKind = "fullscreen" | "area" | "history" | "toolbar";
 export type GlobalShortcuts = Record<ShortcutKind, string>;
 
 export type ImageFormat = "png" | "jpeg" | "webp";
