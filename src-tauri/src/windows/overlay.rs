@@ -311,6 +311,12 @@ pub fn hide_capture_overlay(app: &AppHandle) -> Result<(), String> {
     app.state::<AppState>().set_overlay_open(false);
     if let Some(window) = app.get_webview_window(OVERLAY_LABEL) {
         cloak_window(&window, true);
+        // The page still holds the last frozen picture. Windows can show a
+        // window's last rendered frame for an instant when it is next revealed,
+        // before the new picture has painted, which looked like the page
+        // jumping back to where it was at the previous capture. Wipe it while
+        // hidden.
+        let _ = window.emit("shota://overlay-hidden", ());
     }
     Ok(())
 }

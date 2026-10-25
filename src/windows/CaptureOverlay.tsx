@@ -133,6 +133,8 @@ export function CaptureOverlay() {
           // No frozen screen this time: clear the last one so it can't show.
           context?.clearRect(0, 0, canvas.width, canvas.height);
         } else {
+          // Nothing of the last capture may be on show while the new one loads.
+          context.clearRect(0, 0, canvas.width, canvas.height);
           const bytes = await tauriApi.takeFreeze(id);
           const [width, height] = new Int32Array(bytes, 0, 4);
           canvas.width = width;
@@ -147,6 +149,18 @@ export function CaptureOverlay() {
       console.error("could not paint the frozen screen", err);
     }
     tauriApi.overlayPainted(id).catch((err) => console.error("overlay_painted failed", err));
+  }, []);
+
+  useEffect(() => {
+    // Hidden: forget the frozen picture, so the next reveal can never flash
+    // the previous capture's screen before the new one is drawn.
+    const unlisten = listen("shota://overlay-hidden", () => {
+      const canvas = canvasRef.current;
+      canvas?.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    return () => {
+      unlisten.then((fn) => fn());
+    };
   }, []);
 
   useEffect(() => {
