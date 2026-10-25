@@ -102,6 +102,15 @@ pub fn open_capture_overlay(app: &AppHandle) -> Result<(), String> {
     std::thread::spawn(move || {
         match capture::capture_desktop() {
             Ok(desktop) => {
+                // Dev builds keep the last frozen picture, to settle "what did the
+                // freeze actually capture?" when the overlay looks wrong.
+                #[cfg(debug_assertions)]
+                {
+                    let copy = desktop.image.clone();
+                    std::thread::spawn(move || {
+                        let _ = copy.save(std::env::temp_dir().join("shota-last-freeze.png"));
+                    });
+                }
                 handle.state::<AppState>().set_freeze(desktop);
             }
             Err(err) => {
