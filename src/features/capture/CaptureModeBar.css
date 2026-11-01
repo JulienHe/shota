@@ -100,7 +100,7 @@
 }
 
 /* The size menu: groups of named sizes, the size on the right. */
-/* The sizes menu's button: a square, the height of the size boxes. */
+/* The sizes menu's button: a square, styled like the mode buttons. */
 .mode-bar__square {
   display: flex;
   align-items: center;
@@ -110,15 +110,19 @@
   margin-left: 4px;
   padding: 0;
   border: 0;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  color: rgba(255, 255, 255, 0.8);
+  border-radius: 11px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
 }
 
-.mode-bar__square:hover,
+.mode-bar__square:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
 .mode-bar__square--active {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.14);
   color: #fff;
 }
 
