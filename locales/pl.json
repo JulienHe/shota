@@ -111,7 +111,9 @@
     "modeText": "Tekst",
     "size": "Rozmiar zaznaczenia",
     "modeScroll": "Przewijanie",
-    "scrollHint": "Przeciągnij po treści, aby ją przewinąć i przechwycić (beta) · Esc anuluje"
+    "scrollHint": "Przeciągnij po treści, aby ją przewinąć i przechwycić (beta) · Esc anuluje",
+    "width": "Szerokość",
+    "height": "Wysokość"
   },
   "settings": {
     "fullScreen": "Cały ekran",

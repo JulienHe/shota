@@ -111,7 +111,9 @@
     "modeText": "Texte",
     "size": "Taille de la sélection",
     "modeScroll": "Défilement",
-    "scrollHint": "Faites glisser sur le contenu pour le faire défiler et le capturer (bêta) · Échap pour annuler"
+    "scrollHint": "Faites glisser sur le contenu pour le faire défiler et le capturer (bêta) · Échap pour annuler",
+    "width": "Largeur",
+    "height": "Hauteur"
   },
   "settings": {
     "fullScreen": "Plein écran",

@@ -111,7 +111,9 @@
     "modeText": "Text",
     "size": "Größe der Auswahl",
     "modeScroll": "Scrollen",
-    "scrollHint": "Über den Inhalt ziehen, um ihn scrollend aufzunehmen (Beta) · Esc zum Abbrechen"
+    "scrollHint": "Über den Inhalt ziehen, um ihn scrollend aufzunehmen (Beta) · Esc zum Abbrechen",
+    "width": "Breite",
+    "height": "Höhe"
   },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",

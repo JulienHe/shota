@@ -8,7 +8,7 @@ import { useGlobalCursor } from "../features/capture/useGlobalCursor";
 import { useWindowSnap } from "../features/capture/useWindowSnap";
 import { SpotlightMask, HoleRect } from "../features/capture/SpotlightMask";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
-import { CaptureModeBar, CaptureChoice, CaptureMode } from "../features/capture/CaptureModeBar";
+import { CaptureModeBar, CaptureChoice, CaptureMode, FixedSizeText } from "../features/capture/CaptureModeBar";
 import { DEFAULT_SPAN_INDEX, hexAt, Magnifier, SPANS } from "../features/capture/Magnifier";
 import "./CaptureOverlay.css";
 import { t } from "../lib/i18n";
@@ -36,6 +36,18 @@ const HINT_KEYS = {
 } as const;
 
 const LOUPE_ZOOM_KEY = "shota.loupeZoom";
+const FIXED_SIZE_KEY = "shota.fixedSize";
+
+/** The size boxes' text from the last capture, so a favourite size is one click away. */
+function readFixedSize(): FixedSizeText {
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(FIXED_SIZE_KEY) ?? "null");
+    if (typeof stored?.width === "string" && typeof stored?.height === "string") return stored;
+  } catch {
+    // Storage can be unavailable; no size set is fine.
+  }
+  return { width: "", height: "" };
+}
 
 /** The loupe's zoom, remembered between captures (and restarts, where storage allows). */
 function readLoupeZoom(): number {
@@ -70,6 +82,16 @@ export function CaptureOverlay() {
   // Set when this page itself asked for a fresh frozen screen: the mode the
   // user just chose has to survive it (a new capture otherwise starts in area).
   const keepMode = useRef(false);
+  // Typed into the bar's size boxes: when both are numbers, a capture is that
+  // size, a rectangle following the pointer that a click takes.
+  const [fixedText, setFixedText] = useState<FixedSizeText>(readFixedSize);
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(FIXED_SIZE_KEY, JSON.stringify(fixedText));
+    } catch {
+      // Not remembered; still applies for this capture.
+    }
+  }, [fixedText]);
   const mode: CaptureMode = snapMode
     ? "window"
     : textMode
@@ -113,6 +135,8 @@ export function CaptureOverlay() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.repeat || e.ctrlKey || e.altKey || e.metaKey) return;
+      // Typing in the size boxes is not a mode key.
+      if (e.target instanceof HTMLInputElement) return;
       if (e.code === "KeyT") {
         e.preventDefault();
         chooseRef.current("text");
@@ -273,6 +297,15 @@ export function CaptureOverlay() {
     // Only the primary button starts a selection; a right click copies a colour.
     if (e.button !== 0 || status) return;
     if (snapMode) return;
+    if (fixedRect) {
+      // A set size: the click takes the rectangle under the pointer.
+      setPointer(null);
+      complete(fixedRect.left, fixedRect.top, fixedRect.width, fixedRect.height).catch((err) => {
+        console.error("capture failed", err);
+        tauriApi.cancelCapture();
+      });
+      return;
+    }
     setDrag({ startX: e.clientX, startY: e.clientY, x: e.clientX, y: e.clientY });
   };
 
@@ -300,6 +333,25 @@ export function CaptureOverlay() {
     window.setTimeout(cancel, 1200);
   };
 
+  // Takes the selection `(localX, localY, width, height)`, in overlay CSS
+  // pixels, in whichever way the current mode says.
+  const complete = async (localX: number, localY: number, width: number, height: number) => {
+    const resolvedOrigin = origin ?? (await getCurrentWindow().outerPosition());
+    setPointer(null);
+
+    // The selection in physical screen pixels.
+    const rect = [
+      Math.round(resolvedOrigin.x + localX * scale),
+      Math.round(resolvedOrigin.y + localY * scale),
+      Math.round(width * scale),
+      Math.round(height * scale),
+    ] as const;
+
+    if (scrollMode) await tauriApi.finishScrollSelection(...rect);
+    else if (textMode) await readSelection(...rect);
+    else await tauriApi.finishRegionCapture(...rect);
+  };
+
   const handleMouseUp = async () => {
     try {
       if (snapMode && hoveredWindow) {
@@ -309,8 +361,6 @@ export function CaptureOverlay() {
       }
       if (!drag) return;
 
-      const resolvedOrigin = origin ?? (await getCurrentWindow().outerPosition());
-
       const localX = Math.min(drag.startX, drag.x);
       const localY = Math.min(drag.startY, drag.y);
       const width = Math.abs(drag.x - drag.startX);
@@ -318,19 +368,7 @@ export function CaptureOverlay() {
       setDrag(null);
 
       if (width < 4 || height < 4) return;
-      setPointer(null);
-
-      // The selection in physical screen pixels.
-      const rect = [
-        Math.round(resolvedOrigin.x + localX * scale),
-        Math.round(resolvedOrigin.y + localY * scale),
-        Math.round(width * scale),
-        Math.round(height * scale),
-      ] as const;
-
-      if (scrollMode) await tauriApi.finishScrollSelection(...rect);
-      else if (textMode) await readSelection(...rect);
-      else await tauriApi.finishRegionCapture(...rect);
+      await complete(localX, localY, width, height);
     } catch (err) {
       // Otherwise a failed capture leaves the overlay hidden (Rust hides it
       // before attempting the capture) with nothing telling the user it
@@ -353,14 +391,31 @@ export function CaptureOverlay() {
         }
       : null;
 
-  const selectionStyle = drag
+  // The rectangle of the typed size, centred on the pointer and kept on screen.
+  const fixedWidth = Number(fixedText.width);
+  const fixedHeight = Number(fixedText.height);
+  const fixedRect =
+    !snapMode && !drag && pointer && fixedWidth >= 8 && fixedHeight >= 8
+      ? (() => {
+          const width = Math.min(fixedWidth / scale, window.innerWidth);
+          const height = Math.min(fixedHeight / scale, window.innerHeight);
+          return {
+            left: Math.min(Math.max(pointer.x - width / 2, 0), window.innerWidth - width),
+            top: Math.min(Math.max(pointer.y - height / 2, 0), window.innerHeight - height),
+            width,
+            height,
+          };
+        })()
+      : null;
+
+  const selectionStyle = fixedRect ?? (drag
     ? {
         left: Math.min(drag.startX, drag.x),
         top: Math.min(drag.startY, drag.y),
         width: Math.abs(drag.x - drag.startX),
         height: Math.abs(drag.y - drag.startY),
       }
-    : null;
+    : null);
 
   // Physical pixels per CSS pixel of the frozen screen: the unit a capture is
   // actually made in, and the one worth showing.
@@ -395,7 +450,7 @@ export function CaptureOverlay() {
         />
       )}
 
-      <CaptureModeBar mode={mode} onChoose={choose} size={selectionSize} />
+      <CaptureModeBar mode={mode} onChoose={choose} size={selectionSize} fixed={fixedText} onFixedChange={setFixedText} />
 
       {status && (
         <div className="capture-overlay__status">

@@ -111,7 +111,9 @@
     "modeText": "Text",
     "size": "Selection size",
     "modeScroll": "Scrolling",
-    "scrollHint": "Drag over the content to scroll and capture it (beta) · Esc to cancel"
+    "scrollHint": "Drag over the content to scroll and capture it (beta) · Esc to cancel",
+    "width": "Width",
+    "height": "Height"
   },
   "settings": {
     "fullScreen": "Full screen",

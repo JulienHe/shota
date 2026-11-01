@@ -111,7 +111,9 @@
     "modeText": "テキスト",
     "size": "選択範囲のサイズ",
     "modeScroll": "スクロール",
-    "scrollHint": "内容の上をドラッグしてスクロールしながらキャプチャ（ベータ） · Esc でキャンセル"
+    "scrollHint": "内容の上をドラッグしてスクロールしながらキャプチャ（ベータ） · Esc でキャンセル",
+    "width": "幅",
+    "height": "高さ"
   },
   "settings": {
     "fullScreen": "画面全体",

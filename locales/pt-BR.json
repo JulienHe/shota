@@ -111,7 +111,9 @@
     "modeText": "Texto",
     "size": "Tamanho da seleção",
     "modeScroll": "Rolagem",
-    "scrollHint": "Arraste sobre o conteúdo para rolar e capturar (beta) · Esc para cancelar"
+    "scrollHint": "Arraste sobre o conteúdo para rolar e capturar (beta) · Esc para cancelar",
+    "width": "Largura",
+    "height": "Altura"
   },
   "settings": {
     "fullScreen": "Tela inteira",

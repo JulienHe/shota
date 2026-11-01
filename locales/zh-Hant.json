@@ -111,7 +111,9 @@
     "modeText": "文字",
     "size": "選取範圍大小",
     "modeScroll": "捲動",
-    "scrollHint": "在內容上拖曳，自動捲動並擷取（測試版） · 按 Esc 取消"
+    "scrollHint": "在內容上拖曳，自動捲動並擷取（測試版） · 按 Esc 取消",
+    "width": "寬度",
+    "height": "高度"
   },
   "settings": {
     "fullScreen": "全螢幕",

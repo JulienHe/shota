@@ -111,7 +111,9 @@
     "modeText": "Tekst",
     "size": "Grootte van de selectie",
     "modeScroll": "Scrollen",
-    "scrollHint": "Sleep over de inhoud om te scrollen en vast te leggen (bèta) · Esc om te annuleren"
+    "scrollHint": "Sleep over de inhoud om te scrollen en vast te leggen (bèta) · Esc om te annuleren",
+    "width": "Breedte",
+    "height": "Hoogte"
   },
   "settings": {
     "fullScreen": "Volledig scherm",

@@ -111,7 +111,9 @@
     "modeText": "Texto",
     "size": "Tamaño de la selección",
     "modeScroll": "Desplazamiento",
-    "scrollHint": "Arrastra sobre el contenido para desplazarlo y capturarlo (beta) · Esc para cancelar"
+    "scrollHint": "Arrastra sobre el contenido para desplazarlo y capturarlo (beta) · Esc para cancelar",
+    "width": "Ancho",
+    "height": "Alto"
   },
   "settings": {
     "fullScreen": "Pantalla completa",

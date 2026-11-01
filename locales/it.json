@@ -111,7 +111,9 @@
     "modeText": "Testo",
     "size": "Dimensione della selezione",
     "modeScroll": "Scorrimento",
-    "scrollHint": "Trascina sul contenuto per scorrerlo e catturarlo (beta) · Esc per annullare"
+    "scrollHint": "Trascina sul contenuto per scorrerlo e catturarlo (beta) · Esc per annullare",
+    "width": "Larghezza",
+    "height": "Altezza"
   },
   "settings": {
     "fullScreen": "Schermo intero",

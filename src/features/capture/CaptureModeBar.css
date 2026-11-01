@@ -80,6 +80,18 @@
   font-size: 17px;
   font-variant-numeric: tabular-nums;
   text-align: center;
+  border: 0;
+  outline: none;
+  width: 62px;
+  box-sizing: content-box;
+}
+
+.mode-bar__size-box:focus {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55);
+}
+
+.mode-bar__size-box::placeholder {
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .mode-bar__times {

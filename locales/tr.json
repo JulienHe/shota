@@ -111,7 +111,9 @@
     "modeText": "Metin",
     "size": "Seçim boyutu",
     "modeScroll": "Kaydırma",
-    "scrollHint": "İçeriği kaydırıp yakalamak için üzerinde sürükleyin (beta) · İptal için Esc"
+    "scrollHint": "İçeriği kaydırıp yakalamak için üzerinde sürükleyin (beta) · İptal için Esc",
+    "width": "Genişlik",
+    "height": "Yükseklik"
   },
   "settings": {
     "fullScreen": "Tam ekran",

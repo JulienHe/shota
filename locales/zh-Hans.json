@@ -111,7 +111,9 @@
     "modeText": "文字",
     "size": "选区大小",
     "modeScroll": "滚动",
-    "scrollHint": "在内容上拖动，自动滚动并截取（测试版） · 按 Esc 取消"
+    "scrollHint": "在内容上拖动，自动滚动并截取（测试版） · 按 Esc 取消",
+    "width": "宽度",
+    "height": "高度"
   },
   "settings": {
     "fullScreen": "全屏",
