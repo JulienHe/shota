@@ -234,6 +234,18 @@
     "outline": "輪郭の矢じり",
     "double": "両端"
   },
+  "shapeOptions": {
+    "blur": "ぼかし",
+    "pixelate": "モザイク",
+    "solid": "実線",
+    "dashed": "破線",
+    "dotted": "点線",
+    "strokeOnly": "線のみ",
+    "filled": "塗りつぶし",
+    "strokeOpacity": "線 + 不透明度",
+    "textOutline": "文字の縁取り",
+    "customColor": "カスタムカラー"
+  },
   "textPreset": {
     "title": "スタイル",
     "plain": "標準",

@@ -57,7 +57,7 @@ export function BottomBar({ zoom, onZoomChange, onZoomToFit, onCopy, onSave, onS
               setZoomOpen(false);
             }}
           >
-            Fit to window
+            {t("editor.zoomToFit")}
           </button>
           {ZOOM_PRESETS.map((preset) => (
             <button

@@ -28,6 +28,13 @@ interface DragRect {
 // further Win32 theory.
 const HORIZONTAL_HIGHLIGHT_CORRECTION_PX = 10;
 
+const HINT_KEYS = {
+  window: "overlay.snapHint",
+  text: "overlay.textHint",
+  scroll: "overlay.scrollHint",
+  area: "overlay.dragHint",
+} as const;
+
 const LOUPE_ZOOM_KEY = "shota.loupeZoom";
 
 /** The loupe's zoom, remembered between captures (and restarts, where storage allows). */
@@ -77,6 +84,9 @@ export function CaptureOverlay() {
   const [copied, setCopied] = useState<string | null>(null);
   const copiedTimer = useRef<number | undefined>(undefined);
 
+  // Clears a pending "Copied" timer if the overlay unmounts.
+  useEffect(() => () => window.clearTimeout(copiedTimer.current), []);
+
   const cancel = useCallback(() => {
     // The overlay window is hidden and reused rather than destroyed, so
     // React never remounts between captures ~ leaving `drag` set here would
@@ -89,8 +99,13 @@ export function CaptureOverlay() {
 
   // Toggling into window-snap mode mid-drag would otherwise leave a stale
   // selection rectangle stuck on screen, since nothing else clears it.
+  // It also isn't a selection to read or scroll, so leave those modes.
   useEffect(() => {
-    if (snapMode) setDrag(null);
+    if (snapMode) {
+      setDrag(null);
+      setTextMode(false);
+      setScrollMode(false);
+    }
   }, [snapMode]);
 
   useKeyboardShortcut({ key: "Escape" }, cancel, [cancel]);
@@ -112,14 +127,6 @@ export function CaptureOverlay() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
-
-  // Window snapping selects a window, not an area to read: leave text mode.
-  useEffect(() => {
-    if (snapMode) {
-      setTextMode(false);
-      setScrollMode(false);
-    }
-  }, [snapMode]);
 
   useTransparentWindow();
 
@@ -174,15 +181,13 @@ export function CaptureOverlay() {
       handled.current = null;
       if (keepMode.current) {
         keepMode.current = false;
-        setStatus(null);
-        void showFrozen(event.payload);
-        return;
+      } else {
+        // Every capture starts in area mode, whatever the last one used. The page
+        // is reused, so nothing resets by itself.
+        setTextMode(false);
+        setScrollMode(false);
+        setSnapMode(false);
       }
-      // Every capture starts in area mode, whatever the last one used. The page
-      // is reused, so nothing resets by itself.
-      setTextMode(false);
-      setScrollMode(false);
-      setSnapMode(false);
       setStatus(null);
       void showFrozen(event.payload);
     });
@@ -203,7 +208,9 @@ export function CaptureOverlay() {
     // flash WebView2's default white background before this runs. Waiting for
     // a real paint means the transparent styling above has actually landed
     // before Rust is asked to reveal the window.
-    afterNextPaint().then(() => tauriApi.overlayReady());
+    afterNextPaint()
+      .then(() => tauriApi.overlayReady())
+      .catch((err) => console.error("overlay_ready failed", err));
   }, []);
 
   // Picks a kind of capture. Fullscreen is not a mode, it captures at once.
@@ -313,32 +320,17 @@ export function CaptureOverlay() {
       if (width < 4 || height < 4) return;
       setPointer(null);
 
-      if (scrollMode) {
-        await tauriApi.finishScrollSelection(
-          Math.round(resolvedOrigin.x + localX * scale),
-          Math.round(resolvedOrigin.y + localY * scale),
-          Math.round(width * scale),
-          Math.round(height * scale),
-        );
-        return;
-      }
-
-      if (textMode) {
-        await readSelection(
-          Math.round(resolvedOrigin.x + localX * scale),
-          Math.round(resolvedOrigin.y + localY * scale),
-          Math.round(width * scale),
-          Math.round(height * scale),
-        );
-        return;
-      }
-
-      await tauriApi.finishRegionCapture(
+      // The selection in physical screen pixels.
+      const rect = [
         Math.round(resolvedOrigin.x + localX * scale),
         Math.round(resolvedOrigin.y + localY * scale),
         Math.round(width * scale),
         Math.round(height * scale),
-      );
+      ] as const;
+
+      if (scrollMode) await tauriApi.finishScrollSelection(...rect);
+      else if (textMode) await readSelection(...rect);
+      else await tauriApi.finishRegionCapture(...rect);
     } catch (err) {
       // Otherwise a failed capture leaves the overlay hidden (Rust hides it
       // before attempting the capture) with nothing telling the user it
@@ -376,9 +368,6 @@ export function CaptureOverlay() {
   const selectionSize = selectionStyle
     ? { width: Math.round(selectionStyle.width * frozenRatio), height: Math.round(selectionStyle.height * frozenRatio) }
     : null;
-  // The loupe names the colour under the cursor; this replaces it briefly ("Copied #…").
-  const loupeCaption = copied;
-
   return (
     <div
       className={`capture-overlay${scrollMode || liveScreen ? " capture-overlay--live" : ""}`}
@@ -391,13 +380,7 @@ export function CaptureOverlay() {
       <canvas ref={canvasRef} className="capture-overlay__frozen" />
 
       <div className="capture-overlay__hint">
-        {snapMode
-          ? t("overlay.snapHint")
-          : textMode
-            ? t("overlay.textHint")
-            : scrollMode
-              ? t("overlay.scrollHint")
-              : t("overlay.dragHint")}
+        {t(HINT_KEYS[mode])}
         {mode === "area" && <div className="capture-overlay__hint-sub">{t("overlay.loupeHint")}</div>}
       </div>
 
@@ -422,7 +405,7 @@ export function CaptureOverlay() {
       )}
 
       {!snapMode && !scrollMode && !liveScreen && pointer && (
-        <Magnifier source={canvasRef} x={pointer.x} y={pointer.y} span={SPANS[spanIndex]} caption={loupeCaption} />
+        <Magnifier source={canvasRef} x={pointer.x} y={pointer.y} span={SPANS[spanIndex]} caption={copied} />
       )}
     </div>
   );

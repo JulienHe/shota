@@ -234,6 +234,18 @@
     "outline": "Контурний кінець",
     "double": "З обох кінців"
   },
+  "shapeOptions": {
+    "blur": "Розмиття",
+    "pixelate": "Пікселізація",
+    "solid": "Суцільна",
+    "dashed": "Пунктирна",
+    "dotted": "Крапкова",
+    "strokeOnly": "Лише контур",
+    "filled": "Заливка",
+    "strokeOpacity": "Контур + прозорість",
+    "textOutline": "Контур тексту",
+    "customColor": "Власний колір"
+  },
   "textPreset": {
     "title": "Стилі",
     "plain": "Звичайний",

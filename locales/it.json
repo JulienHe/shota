@@ -234,6 +234,18 @@
     "outline": "Punta vuota",
     "double": "Entrambe le estremità"
   },
+  "shapeOptions": {
+    "blur": "Sfocatura",
+    "pixelate": "Pixelatura",
+    "solid": "Continua",
+    "dashed": "Tratteggiata",
+    "dotted": "Punteggiata",
+    "strokeOnly": "Solo contorno",
+    "filled": "Pieno",
+    "strokeOpacity": "Contorno + opacità",
+    "textOutline": "Contorno del testo",
+    "customColor": "Colore personalizzato"
+  },
   "textPreset": {
     "title": "Stili",
     "plain": "Semplice",

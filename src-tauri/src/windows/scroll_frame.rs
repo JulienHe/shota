@@ -4,9 +4,9 @@
 //! wheel reach the content underneath) and excluded from capture, so the
 //! pictures never show the dimming.
 
-use tauri::{AppHandle, Manager, WebviewUrl, WebviewWindowBuilder};
+use tauri::{AppHandle, Manager};
 
-use super::{disable_show_animation, exclude_from_capture, place_client_area};
+use super::{disable_show_animation, exclude_from_capture, monitor_under_region, place_client_area, scroll_window_builder};
 
 pub const FRAME_LABEL: &str = "scroll-frame";
 
@@ -17,28 +17,12 @@ pub fn build_scroll_frame(app: &AppHandle, region: (i32, i32, u32, u32)) -> Resu
         return Ok(());
     }
     let (rx, ry, rw, rh) = region;
-    let monitor = app
-        .monitor_from_point((rx + (rw / 2) as i32) as f64, (ry + (rh / 2) as i32) as f64)
-        .ok()
-        .flatten()
-        .or_else(|| app.primary_monitor().ok().flatten())
-        .ok_or_else(|| "no monitor found".to_string())?;
+    let monitor = monitor_under_region(app, region)?;
     let position = monitor.position();
     let size = monitor.size();
     let url = format!("index.html?r={},{},{},{}", rx - position.x, ry - position.y, rw, rh);
 
-    let window = WebviewWindowBuilder::new(app, FRAME_LABEL, WebviewUrl::App(url.into()))
-        .title("shota-scroll-frame")
-        .transparent(true)
-        .background_color(tauri::webview::Color(0, 0, 0, 0))
-        .decorations(false)
-        .always_on_top(true)
-        .skip_taskbar(true)
-        .resizable(false)
-        .shadow(false)
-        .focused(false)
-        // Shown by its own page once painted (`show_without_focus`).
-        .visible(false)
+    let window = scroll_window_builder(app, FRAME_LABEL, url, "shota-scroll-frame")
         .build()
         .map_err(|e| e.to_string())?;
 

@@ -74,20 +74,10 @@ export const tauriApi = {
 
   cancelCapture: () => invoke<void>("cancel_capture"),
 
-  openCaptureOverlay: () => invoke<void>("open_capture_overlay_command"),
-
   overlayReady: () => invoke<void>("overlay_ready"),
 
-  /**
-   * Reads the text, or the QR code, in a selected area and copies it. `kind`
-   * is "qr", "text", or "none" when nothing was found (nothing is copied then).
-   */
   /** Captures the whole monitor under the cursor from the frozen screen. */
   finishFullscreenCapture: () => invoke<void>("finish_fullscreen_capture"),
-
-  /** Pins a selected area of the frozen screen where it was taken. */
-  finishPinCapture: (x: number, y: number, width: number, height: number) =>
-    invoke<void>("finish_pin_capture", { x, y, width, height }),
 
   /** Pins an image (a PNG, base64) in the middle of the screen. */
   pinImage: (pngBase64: string) => invoke<void>("pin_image", { pngBase64 }),
@@ -123,6 +113,10 @@ export const tauriApi = {
   /** Lets Shota scroll the content itself during a scrolling capture (or stops it). */
   setScrollAuto: (enabled: boolean) => invoke<void>("set_scroll_auto", { enabled }),
 
+  /**
+   * Reads the text, or the QR code, in a selected area and copies it. `kind`
+   * is "qr", "text", or "none" when nothing was found (nothing is copied then).
+   */
   finishTextCapture: (x: number, y: number, width: number, height: number) =>
     invoke<{ kind: "qr" | "text" | "none"; text: string }>("finish_text_capture", { x, y, width, height }),
 
@@ -137,9 +131,6 @@ export const tauriApi = {
 
   /** The overlay has painted frozen screen `id` (or cleared itself, for 0): reveal it. */
   overlayPainted: (id: number) => invoke<void>("overlay_painted_command", { id }),
-
-  captureFullscreenNow: (monitorId?: number) =>
-    invoke<void>("capture_fullscreen_now", { monitorId: monitorId ?? null }),
 
   takePendingCapture: () => invoke<PendingCapture | null>("take_pending_capture"),
 

@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { tauriApi } from "../lib/tauriApi";
-import { afterNextPaint, useTransparentWindow } from "../lib/windowChrome";
+import { useRevealWithoutFocus, useTransparentWindow } from "../lib/windowChrome";
 import "./ScrollFrame.css";
 
 /**
@@ -12,9 +10,7 @@ import "./ScrollFrame.css";
  */
 export function ScrollFrame() {
   useTransparentWindow();
-  useEffect(() => {
-    afterNextPaint().then(() => tauriApi.showWithoutFocus());
-  }, []);
+  useRevealWithoutFocus();
   const [x, y, width, height] = (new URLSearchParams(window.location.search).get("r") ?? "0,0,0,0")
     .split(",")
     .map((value) => Number(value) / window.devicePixelRatio);

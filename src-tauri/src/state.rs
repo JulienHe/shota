@@ -345,10 +345,7 @@ impl AppState {
         write_settings(app, &settings)?;
         Ok((previous, next))
     }
-}
 
-
-impl AppState {
     /// Keeps `desktop` as the current frozen screen and returns its id.
     pub fn set_freeze(&self, desktop: Desktop) -> u64 {
         let id = self.freeze_seq.fetch_add(1, Ordering::SeqCst) + 1;

@@ -53,22 +53,12 @@ export function fitScale(image: Size, viewport: Size): number {
 }
 
 /**
- * A complete view (scale + pan) that centres an image in the viewport at
- * the given scale, or at the fitted scale when none is given.
+ * A complete view (scale + pan) that centres a box of content in the viewport
+ * at the given scale, or at the fitted scale when none is given.
  *
- * Both halves of this used to be written out twice in Canvas ~ once in
- * `zoomToFit` and again in the layout effect that reacts to a new image or
- * a resize ~ including the padding constant, which is exactly the kind of
- * thing that drifts between two copies.
- */
-export function centeredView(image: Size, viewport: Size, scale = fitScale(image, viewport)): ZoomState {
-  return centeredBoxView({ x: 0, y: 0, width: image.width, height: image.height }, viewport, scale);
-}
-
-/**
- * The same, for content that doesn't start at the image's origin ~ a frame
- * extends past the screenshot on every side, so what has to be centred is
- * the frame, which begins at negative image coordinates.
+ * The box is not always the image: a frame extends past the screenshot on
+ * every side, so what has to be centred is the frame, which begins at
+ * negative image coordinates.
  */
 export function centeredBoxView(
   box: Size & Point,

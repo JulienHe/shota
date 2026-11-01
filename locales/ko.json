@@ -234,6 +234,18 @@
     "outline": "윤곽선 화살촉",
     "double": "양쪽 끝"
   },
+  "shapeOptions": {
+    "blur": "흐림",
+    "pixelate": "픽셀화",
+    "solid": "실선",
+    "dashed": "파선",
+    "dotted": "점선",
+    "strokeOnly": "윤곽선만",
+    "filled": "채우기",
+    "strokeOpacity": "윤곽선 + 불투명도",
+    "textOutline": "텍스트 윤곽선",
+    "customColor": "사용자 지정 색상"
+  },
   "textPreset": {
     "title": "스타일",
     "plain": "기본",

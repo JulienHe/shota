@@ -234,6 +234,18 @@
     "outline": "Çerçeveli uç",
     "double": "İki uç"
   },
+  "shapeOptions": {
+    "blur": "Bulanıklaştır",
+    "pixelate": "Pikselleştir",
+    "solid": "Düz",
+    "dashed": "Kesikli",
+    "dotted": "Noktalı",
+    "strokeOnly": "Yalnızca kontur",
+    "filled": "Dolu",
+    "strokeOpacity": "Kontur + opaklık",
+    "textOutline": "Metin konturu",
+    "customColor": "Özel renk"
+  },
   "textPreset": {
     "title": "Stiller",
     "plain": "Düz",

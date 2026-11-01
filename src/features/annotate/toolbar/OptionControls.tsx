@@ -178,7 +178,7 @@ export function ColorPalette({
           onClick={() => onPick(c)}
         />
       ))}
-      <label className="shape-options__custom" title="Custom color">
+      <label className="shape-options__custom" title={t("shapeOptions.customColor")}>
         <input type="color" value={value} onChange={(e) => onPick(e.target.value)} />
       </label>
       <div className="shape-options__favorites">

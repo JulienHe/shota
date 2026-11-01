@@ -143,7 +143,7 @@ export function ShapeOptionsPanel() {
                 <button
                   type="button"
                   className={`shape-options__outline-toggle${style.blurEffect === "blur" ? " shape-options__outline-toggle--active" : ""}`}
-                  title="Blur"
+                  title={t("shapeOptions.blur")}
                   onClick={() => updateStyle({ blurEffect: "blur" })}
                 >
                   <Droplet size={15} strokeWidth={2} />
@@ -151,7 +151,7 @@ export function ShapeOptionsPanel() {
                 <button
                   type="button"
                   className={`shape-options__outline-toggle${style.blurEffect === "pixelate" ? " shape-options__outline-toggle--active" : ""}`}
-                  title="Pixelate"
+                  title={t("shapeOptions.pixelate")}
                   onClick={() => updateStyle({ blurEffect: "pixelate" })}
                 >
                   <Grid3x3 size={15} strokeWidth={2} />
@@ -194,7 +194,7 @@ export function ShapeOptionsPanel() {
                     }}
                   >
                     <LinePreview strokeStyle={s} />
-                    {s[0].toUpperCase() + s.slice(1)}
+                    {t(`shapeOptions.${s}`)}
                   </button>
                 ))}
               </div>
@@ -323,7 +323,7 @@ export function ShapeOptionsPanel() {
             <button
               type="button"
               className={`shape-options__outline-toggle${style.textStrokeEnabled ? " shape-options__outline-toggle--active" : ""}`}
-              title="Text outline"
+              title={t("shapeOptions.textOutline")}
               onClick={() => updateStyle({ textStrokeEnabled: !style.textStrokeEnabled })}
             >
               <TypeOutline size={15} strokeWidth={2} />
@@ -363,7 +363,11 @@ function FillModeSwatch({ mode, small }: { mode: FillMode; small?: boolean }) {
 }
 
 function FillModeOption({ mode, active, onClick }: { mode: FillMode; active: boolean; onClick: () => void }) {
-  const labels: Record<FillMode, string> = { none: "Stroke only", solid: "Filled", translucent: "Stroke + opacity" };
+  const labels: Record<FillMode, string> = {
+    none: t("shapeOptions.strokeOnly"),
+    solid: t("shapeOptions.filled"),
+    translucent: t("shapeOptions.strokeOpacity"),
+  };
   return (
     <button type="button" className={`dropdown__menu-item${active ? " dropdown__menu-item--active" : ""}`} onClick={onClick}>
       <FillModeSwatch mode={mode} />

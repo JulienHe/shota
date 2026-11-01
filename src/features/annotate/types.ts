@@ -233,11 +233,6 @@ export function spotlightFill(style: ShapeStyle): string {
   return hexToRgba(style.spotlightColor, style.spotlightOpacity);
 }
 
-/** The highlighter's ink, with opacity baked in (see {@link fillForStyle}). */
-export function highlightFill(style: ShapeStyle): string {
-  return hexToRgba(style.highlightColor, style.highlightOpacity);
-}
-
 export function createShapeId(): string {
   return `shape_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }

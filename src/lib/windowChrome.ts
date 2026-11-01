@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { tauriApi } from "./tauriApi";
 
 /**
  * Resolves once the browser has actually painted.
@@ -38,5 +39,17 @@ export function useTransparentWindow() {
     document.body.style.background = "transparent";
     const root = document.getElementById("root");
     if (root) root.style.background = "transparent";
+  }, []);
+}
+
+/**
+ * For windows built hidden that must appear without stealing the focus from
+ * the app being captured (scroll HUD and frame): reveals once painted.
+ */
+export function useRevealWithoutFocus() {
+  useEffect(() => {
+    afterNextPaint()
+      .then(() => tauriApi.showWithoutFocus())
+      .catch((err) => console.error("show_without_focus failed", err));
   }, []);
 }

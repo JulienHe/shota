@@ -234,6 +234,18 @@
     "outline": "Pusty grot",
     "double": "Oba końce"
   },
+  "shapeOptions": {
+    "blur": "Rozmycie",
+    "pixelate": "Pikselizacja",
+    "solid": "Ciągła",
+    "dashed": "Przerywana",
+    "dotted": "Kropkowana",
+    "strokeOnly": "Tylko kontur",
+    "filled": "Wypełnienie",
+    "strokeOpacity": "Kontur + krycie",
+    "textOutline": "Obrys tekstu",
+    "customColor": "Własny kolor"
+  },
   "textPreset": {
     "title": "Style",
     "plain": "Zwykły",

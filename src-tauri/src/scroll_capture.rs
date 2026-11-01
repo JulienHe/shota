@@ -34,9 +34,9 @@ const MAX_PIXELS: u64 = 150_000_000;
 const MAX_HEIGHT: u32 = 40_000;
 /// How long to let a scroll animation start before looking at the screen.
 const SETTLE_START: Duration = Duration::from_millis(140);
-/// Pause between looks while waiting for the content to stop moving.
 /// The gap between two looks that tell whether the content is moving on its own.
 const MOTION_PROBE: Duration = Duration::from_millis(60);
+/// Pause between looks while waiting for the content to stop moving.
 const SETTLE_POLL: Duration = Duration::from_millis(70);
 /// Give up waiting for it to stop and take it as it is.
 const SETTLE_LIMIT: Duration = Duration::from_millis(1500);
@@ -44,6 +44,8 @@ const SETTLE_LIMIT: Duration = Duration::from_millis(1500);
 const END_AFTER_IDLE: u32 = 4;
 /// Frames that could not be lined up, in a row, before it says so and stops.
 const MAX_MISMATCHES: u32 = 6;
+/// How many pictures that would not line up are kept for diagnosis.
+const MAX_KEPT_LOST: u32 = 4;
 /// How long to wait for scrolling to begin before ending with just the first picture.
 const WAIT_FOR_MOVEMENT: Duration = Duration::from_secs(25);
 /// The share of the area each scroll aims to move the content by. Enough
@@ -208,7 +210,9 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
             now
         };
 
-        let last_frame = frame.clone();
+        // Only the first few lost frames are kept for diagnosis, so only then
+        // is a copy of this (large) picture worth making.
+        let last_frame = (lost < MAX_KEPT_LOST).then(|| frame.clone());
         let step = stitcher.push(frame);
         match step {
             Step::Appended(shift) => {
@@ -250,7 +254,9 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
                 progress(app, stitcher.height(), frames, "scrolling");
             }
             Step::NoMatch => {
-                keep_for_diagnosis(stitcher.previous(), &last_frame, &mut lost);
+                if let Some(last_frame) = &last_frame {
+                    keep_for_diagnosis(stitcher.previous(), last_frame, &mut lost);
+                }
                 if !auto {
                     // Scrolled further than the pictures overlap. Say so, and
                     // keep looking: scrolling back a little will line up again.
@@ -275,9 +281,6 @@ fn run(app: &AppHandle, region: Region, session: &Session) -> Result<Option<Rgba
 /// Beta: the first few pictures that would not line up are kept in the temp
 /// folder, so that a capture that loses its place can be looked at afterwards.
 fn keep_for_diagnosis(before: &RgbaImage, after: &RgbaImage, count: &mut u32) {
-    if *count >= 4 {
-        return;
-    }
     *count += 1;
     let dir = std::env::temp_dir().join("shota-scroll-lost");
     let _ = std::fs::create_dir_all(&dir);
@@ -361,6 +364,14 @@ mod input {
         (unsafe { GetAsyncKeyState(vk) } as u16 & 0x8000) != 0
     }
 
+    /// True when `vk` has gone down since `was_down` was last updated.
+    fn pressed(vk: i32, was_down: &mut bool) -> bool {
+        let now = down(vk);
+        let pressed = now && !*was_down;
+        *was_down = now;
+        pressed
+    }
+
     /// Edge-detected Enter and Esc: only a press that begins after this was made.
     pub struct Keys {
         enter_was_down: bool,
@@ -373,17 +384,11 @@ mod input {
         }
 
         pub fn enter_pressed(&mut self) -> bool {
-            let now = down(VK_RETURN.0 as i32);
-            let pressed = now && !self.enter_was_down;
-            self.enter_was_down = now;
-            pressed
+            pressed(VK_RETURN.0 as i32, &mut self.enter_was_down)
         }
 
         pub fn escape_pressed(&mut self) -> bool {
-            let now = down(VK_ESCAPE.0 as i32);
-            let pressed = now && !self.escape_was_down;
-            self.escape_was_down = now;
-            pressed
+            pressed(VK_ESCAPE.0 as i32, &mut self.escape_was_down)
         }
     }
 }

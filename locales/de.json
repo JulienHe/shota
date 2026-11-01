@@ -234,6 +234,18 @@
     "outline": "Offene Spitze",
     "double": "Beide Enden"
   },
+  "shapeOptions": {
+    "blur": "Weichzeichnen",
+    "pixelate": "Verpixeln",
+    "solid": "Durchgezogen",
+    "dashed": "Gestrichelt",
+    "dotted": "Gepunktet",
+    "strokeOnly": "Nur Kontur",
+    "filled": "Gefüllt",
+    "strokeOpacity": "Kontur + Deckkraft",
+    "textOutline": "Textkontur",
+    "customColor": "Eigene Farbe"
+  },
   "textPreset": {
     "title": "Stile",
     "plain": "Einfach",

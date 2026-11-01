@@ -234,6 +234,18 @@
     "outline": "Контурный наконечник",
     "double": "С обоих концов"
   },
+  "shapeOptions": {
+    "blur": "Размытие",
+    "pixelate": "Пикселизация",
+    "solid": "Сплошная",
+    "dashed": "Пунктирная",
+    "dotted": "Точечная",
+    "strokeOnly": "Только контур",
+    "filled": "Заливка",
+    "strokeOpacity": "Контур + прозрачность",
+    "textOutline": "Контур текста",
+    "customColor": "Свой цвет"
+  },
   "textPreset": {
     "title": "Стили",
     "plain": "Обычный",

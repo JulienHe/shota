@@ -234,6 +234,18 @@
     "outline": "Pointe creuse",
     "double": "Aux deux bouts"
   },
+  "shapeOptions": {
+    "blur": "Flou",
+    "pixelate": "Pixeliser",
+    "solid": "Continu",
+    "dashed": "Tirets",
+    "dotted": "Pointillé",
+    "strokeOnly": "Contour seul",
+    "filled": "Plein",
+    "strokeOpacity": "Contour + opacité",
+    "textOutline": "Contour du texte",
+    "customColor": "Couleur personnalisée"
+  },
   "textPreset": {
     "title": "Styles",
     "plain": "Simple",

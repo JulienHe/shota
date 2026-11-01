@@ -1,5 +1,6 @@
 import { Component, ReactNode } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { t } from "../lib/i18n";
 
 interface Props {
   children: ReactNode;
@@ -48,7 +49,8 @@ export class ErrorBoundary extends Component<Props, State> {
           }}
           data-tauri-drag-region
         >
-          <div>Something went wrong.</div>
+          <div>{t("error.title")}</div>
+          <div style={{ opacity: 0.8 }}>{t("error.body")}</div>
           <pre style={{ fontSize: 12, opacity: 0.7, maxWidth: 480, whiteSpace: "pre-wrap" }}>
             {this.state.error.message}
           </pre>
@@ -64,7 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
               cursor: "pointer",
             }}
           >
-            Close window
+            {t("error.close")}
           </button>
         </div>
       );

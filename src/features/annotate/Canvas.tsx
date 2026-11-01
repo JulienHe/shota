@@ -436,11 +436,11 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
         // Optimistic: confirm and return to Select right away rather than
         // waiting on the async clipboard write ~ it's effectively always
         // fast, so waiting just adds a felt delay.
-        showToast(`Copied ${hex.toUpperCase()}`);
+        showToast(t("editor.copiedHex", { hex: hex.toUpperCase() }));
         setActiveTool("select");
         writeText(hex).catch((err) => {
           console.error("copy hex failed", err);
-          showToast("Copy failed ~ try again");
+          showToast(t("editor.copyFailed"));
         });
         return;
       }
@@ -553,7 +553,7 @@ export function Canvas({ ref, onZoomChange }: CanvasProps) {
       // marks), so those tools stay selected; everything else returns to Select.
       if (!isStrokeLike(finished)) setActiveTool("select");
     }
-  }, [spacePressed, activeTool, addShape, setActiveTool]);
+  }, [spacePressed, addShape, setActiveTool]);
 
   const handleStageClick = useCallback(
     () => {

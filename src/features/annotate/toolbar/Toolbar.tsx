@@ -50,6 +50,10 @@ const LAYOUT: (ToolId | ToolId[])[][] = [
 
 const actionFor = (tool: ToolId) => `tool.${tool}` as EditorActionId;
 
+/** Tooltip: the tool's name and the key that selects it. */
+const toolLabel = (tool: ToolId, bindings: Record<EditorActionId, string>) =>
+  `${t(ALL_TOOLS[tool].name)} (${formatAcceleratorLabel(bindings[actionFor(tool)])})`;
+
 function ToolGroup({ members }: { members: ToolId[] }) {
   const activeTool = useToolStore((s) => s.activeTool);
   const setActiveTool = useToolStore((s) => s.setActiveTool);
@@ -64,12 +68,11 @@ function ToolGroup({ members }: { members: ToolId[] }) {
     if (members.includes(activeTool)) setLast(activeTool);
   }, [activeTool, members]);
 
-  const { icon, name } = ALL_TOOLS[shown];
   return (
     <div className="toolbar__group" ref={anchorRef}>
       <IconButton
-        icon={icon}
-        label={`${t(name)} (${formatAcceleratorLabel(bindings[actionFor(shown)])})`}
+        icon={ALL_TOOLS[shown].icon}
+        label={toolLabel(shown, bindings)}
         active={members.includes(activeTool)}
         onClick={() => setActiveTool(shown)}
       />
@@ -127,12 +130,11 @@ export function Toolbar() {
             {index > 0 && <div className="toolbar__divider" />}
             {cluster.map((entry) => {
               if (Array.isArray(entry)) return <ToolGroup key={entry.join("-")} members={entry} />;
-              const { icon, name } = ALL_TOOLS[entry];
               return (
                 <IconButton
                   key={entry}
-                  icon={icon}
-                  label={`${t(name)} (${formatAcceleratorLabel(bindings[actionFor(entry)])})`}
+                  icon={ALL_TOOLS[entry].icon}
+                  label={toolLabel(entry, bindings)}
                   active={activeTool === entry}
                   onClick={() => setActiveTool(entry)}
                 />

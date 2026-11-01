@@ -19,30 +19,6 @@ const OVERLAY_LABEL: &str = "overlay";
 // while the pre-warmed window is loading (see `prewarm_capture_overlay`).
 const OFFSCREEN_POS: f64 = -32000.0;
 
-fn virtual_desktop_bounds(app: &AppHandle) -> Result<(f64, f64, f64, f64), String> {
-    let monitors = app.available_monitors().map_err(|e| e.to_string())?;
-    let (min_x, min_y, max_x, max_y) = monitors.iter().fold(
-        (i32::MAX, i32::MAX, i32::MIN, i32::MIN),
-        |(min_x, min_y, max_x, max_y), m| {
-            let pos = m.position();
-            let size = m.size();
-            (
-                min_x.min(pos.x),
-                min_y.min(pos.y),
-                max_x.max(pos.x + size.width as i32),
-                max_y.max(pos.y + size.height as i32),
-            )
-        },
-    );
-    let scale = monitors.first().map(|m| m.scale_factor()).unwrap_or(1.0);
-    Ok((
-        min_x as f64 / scale,
-        min_y as f64 / scale,
-        (max_x - min_x) as f64 / scale,
-        (max_y - min_y) as f64 / scale,
-    ))
-}
-
 /// The virtual desktop in physical pixels: where it starts (can be negative)
 /// and how big it is. The frozen screen is exactly this big.
 fn physical_desktop_bounds(app: &AppHandle) -> Result<(i32, i32, u32, u32), String> {
@@ -64,6 +40,19 @@ fn physical_desktop_bounds(app: &AppHandle) -> Result<(i32, i32, u32, u32), Stri
         return Err("no monitors".to_string());
     }
     Ok((min_x, min_y, (max_x - min_x) as u32, (max_y - min_y) as u32))
+}
+
+/// The virtual desktop in logical units (by the first monitor's scale), for
+/// sizing a newly built window.
+fn virtual_desktop_bounds(app: &AppHandle) -> Result<(f64, f64, f64, f64), String> {
+    let (x, y, width, height) = physical_desktop_bounds(app)?;
+    let scale = app
+        .available_monitors()
+        .map_err(|e| e.to_string())?
+        .first()
+        .map(|m| m.scale_factor())
+        .unwrap_or(1.0);
+    Ok((x as f64 / scale, y as f64 / scale, width as f64 / scale, height as f64 / scale))
 }
 
 fn build_overlay_window(app: &AppHandle, x: f64, y: f64, width: f64, height: f64) -> Result<WebviewWindow, String> {
@@ -173,8 +162,6 @@ fn open_overlay(app: &AppHandle, live: bool) -> Result<(), String> {
 /// Main thread. Puts the overlay over the desktop and tells its page to paint
 /// the frozen screen.
 fn present_overlay(app: &AppHandle) -> Result<(), String> {
-    let (x, y, width, height) = virtual_desktop_bounds(app)?;
-
     if let Some(existing) = app.get_webview_window(OVERLAY_LABEL) {
         // The pre-warmed window (or one left over from a prior capture) may
         // still be positioned/sized for a stale monitor layout ~ put it back
@@ -199,6 +186,7 @@ fn present_overlay(app: &AppHandle) -> Result<(), String> {
         return Ok(());
     }
 
+    let (x, y, width, height) = virtual_desktop_bounds(app)?;
     app.state::<AppState>().reset_overlay_ready();
     build_overlay_window(app, x, y, width, height)?;
     Ok(())
@@ -207,17 +195,14 @@ fn present_overlay(app: &AppHandle) -> Result<(), String> {
 /// Tells the overlay page a frozen screen is waiting, or, if there isn't one
 /// (the grab failed), reveals it over the live screen.
 fn announce_freeze(app: &AppHandle) {
-    let state = app.state::<AppState>();
-    match state.freeze() {
-        Some((id, _)) => {
-            let _ = app.emit("shota://freeze", id);
-        }
-        // Id 0 tells the page to clear whatever it last painted and report
-        // back, so a stale frozen screen never shows over the live one.
-        None => {
-            let _ = app.emit("shota://freeze", 0u64);
-        }
-    }
+    let _ = app.emit("shota://freeze", current_freeze_id(app));
+}
+
+/// The id of the frozen screen held now. 0 means none, which tells the page
+/// to clear whatever it last painted and report back, so a stale frozen
+/// screen never shows over the live one.
+fn current_freeze_id(app: &AppHandle) -> u64 {
+    app.state::<AppState>().freeze().map(|(id, _)| id).unwrap_or(0)
 }
 
 /// Freezes the screen under an overlay that was opened over the live one: the
@@ -253,18 +238,12 @@ pub fn refreeze_overlay(app: &AppHandle) -> Result<(), String> {
 /// waiting. Asked for by the page when it mounts, because an event sent before
 /// it had mounted is lost.
 pub fn pending_freeze(app: &AppHandle) -> Option<u64> {
-    let state = app.state::<AppState>();
-    if state.is_freeze_pending() {
-        Some(state.freeze().map(|(id, _)| id).unwrap_or(0))
-    } else {
-        None
-    }
+    app.state::<AppState>().is_freeze_pending().then(|| current_freeze_id(app))
 }
 
 /// The overlay page has painted frozen screen `id`: show it.
 pub fn overlay_painted(app: &AppHandle, id: u64) {
-    let current = app.state::<AppState>().freeze().map(|(current, _)| current).unwrap_or(0);
-    if current == id {
+    if current_freeze_id(app) == id {
         reveal_overlay(app);
     }
 }

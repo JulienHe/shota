@@ -234,6 +234,18 @@
     "outline": "Open punt",
     "double": "Beide uiteinden"
   },
+  "shapeOptions": {
+    "blur": "Vervagen",
+    "pixelate": "Pixeleren",
+    "solid": "Doorlopend",
+    "dashed": "Gestreept",
+    "dotted": "Gestippeld",
+    "strokeOnly": "Alleen lijn",
+    "filled": "Gevuld",
+    "strokeOpacity": "Lijn + dekking",
+    "textOutline": "Tekstomtrek",
+    "customColor": "Eigen kleur"
+  },
   "textPreset": {
     "title": "Stijlen",
     "plain": "Gewoon",

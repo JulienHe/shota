@@ -234,6 +234,18 @@
     "outline": "Outline head",
     "double": "Both ends"
   },
+  "shapeOptions": {
+    "blur": "Blur",
+    "pixelate": "Pixelate",
+    "solid": "Solid",
+    "dashed": "Dashed",
+    "dotted": "Dotted",
+    "strokeOnly": "Stroke only",
+    "filled": "Filled",
+    "strokeOpacity": "Stroke + opacity",
+    "textOutline": "Text outline",
+    "customColor": "Custom color"
+  },
   "textPreset": {
     "title": "Styles",
     "plain": "Plain",

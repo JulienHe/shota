@@ -30,24 +30,9 @@ fn stage(png_base64: &str, name: &str) -> Result<(PathBuf, Vec<u8>), String> {
     let dir = staging_dir();
     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
     sweep(&dir);
-    let path = dir.join(format!("{}.png", file_stem(name)));
+    let path = dir.join(format!("{}.png", crate::file_save::sanitize_file_name(name)));
     std::fs::write(&path, &bytes).map_err(|e| e.to_string())?;
     Ok((path, bytes))
-}
-
-/// The user's file-name pattern can contain anything a title does; a path
-/// can't. Same characters Windows refuses in a file name.
-fn file_stem(name: &str) -> String {
-    let cleaned: String = name
-        .chars()
-        .map(|c| if "<>:\"/\\|?*".contains(c) || c.is_control() { '-' } else { c })
-        .collect();
-    let cleaned = cleaned.trim().trim_end_matches('.').to_string();
-    if cleaned.is_empty() {
-        "Shota".to_string()
-    } else {
-        cleaned
-    }
 }
 
 fn sweep(dir: &Path) {
@@ -97,7 +82,7 @@ pub fn drag_out(window: &WebviewWindow, png_base64: &str, name: &str) -> Result<
 /// Opens the Windows Share sheet for the image.
 pub fn share(app: &AppHandle, window: &WebviewWindow, png_base64: &str, name: &str) -> Result<(), String> {
     let (path, _) = stage(png_base64, name)?;
-    imp::show(app, window, &path, &file_stem(name))
+    imp::show(app, window, &path, &crate::file_save::sanitize_file_name(name))
 }
 
 #[cfg(windows)]
@@ -193,18 +178,5 @@ mod imp {
 
     pub fn show(_app: &AppHandle, _window: &WebviewWindow, _path: &Path, _title: &str) -> Result<(), String> {
         Err("sharing is only available on Windows".to_string())
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn file_stem_replaces_what_windows_refuses() {
-        assert_eq!(file_stem("Shota 2026-10-15 10:30"), "Shota 2026-10-15 10-30");
-        assert_eq!(file_stem("a/b\\c?"), "a-b-c-");
-        assert_eq!(file_stem("  "), "Shota");
-        assert_eq!(file_stem("name."), "name");
     }
 }

@@ -234,6 +234,18 @@
     "outline": "空心箭头",
     "double": "双向箭头"
   },
+  "shapeOptions": {
+    "blur": "模糊",
+    "pixelate": "像素化",
+    "solid": "实线",
+    "dashed": "虚线",
+    "dotted": "点线",
+    "strokeOnly": "仅描边",
+    "filled": "填充",
+    "strokeOpacity": "描边 + 不透明度",
+    "textOutline": "文字描边",
+    "customColor": "自定义颜色"
+  },
   "textPreset": {
     "title": "样式",
     "plain": "常规",

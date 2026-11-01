@@ -4,10 +4,21 @@ use tauri_plugin_dialog::DialogExt;
 
 use crate::state::{AppState, ImageFormat};
 
+/// Where a Save As dialog should start: the folder chosen in settings, or
+/// failing that the last folder saved to, or failing that the Desktop.
+pub fn default_directory(app: &AppHandle) -> Option<String> {
+    let state = app.state::<AppState>();
+    state
+        .preferences()
+        .save_dir
+        .filter(|dir| std::path::Path::new(dir).is_dir())
+        .or_else(|| state.last_save_dir())
+        .or_else(|| app.path().desktop_dir().ok().map(|p| p.to_string_lossy().to_string()))
+}
+
 /// Opens a native "Save As" dialog and writes the given base64 image there.
 ///
-/// The dialog starts in the folder chosen in settings, or failing that the
-/// last folder saved to, or failing that the Desktop. The image arrives
+/// The dialog starts in `default_directory`. The image arrives
 /// already encoded in `format`: the canvas that rendered it can encode PNG,
 /// JPEG and WebP itself, so Rust never re-decodes a multi-megabyte image
 /// just to change its container.
@@ -17,20 +28,7 @@ pub fn save_image(
     suggested_name: &str,
     format: ImageFormat,
 ) -> Result<Option<String>, String> {
-    let state = app.state::<AppState>();
-
-    let default_dir = state
-        .preferences()
-        .save_dir
-        .filter(|dir| std::path::Path::new(dir).is_dir())
-        .or_else(|| state.last_save_dir())
-        .or_else(|| {
-            app.path()
-                .desktop_dir()
-                .ok()
-                .map(|p| p.to_string_lossy().to_string())
-        });
-
+    let default_dir = default_directory(app);
     let file_name = format!("{}.{}", sanitize_file_name(suggested_name), format.extension());
     let mut builder = app.dialog().file().set_file_name(&file_name);
     if let Some(dir) = &default_dir {
@@ -53,7 +51,7 @@ pub fn save_image(
     std::fs::write(&path, bytes).map_err(|e| e.to_string())?;
 
     if let Some(parent) = path.parent() {
-        state.set_last_save_dir(app, parent.to_string_lossy().to_string());
+        app.state::<AppState>().set_last_save_dir(app, parent.to_string_lossy().to_string());
     }
 
     Ok(Some(path.to_string_lossy().to_string()))
@@ -62,7 +60,7 @@ pub fn save_image(
 /// Strips what Windows refuses in a file name. The pattern is free text
 /// typed in settings, so `{date}` producing slashes in some locale, or
 /// someone typing a colon, must not turn into a save that fails.
-fn sanitize_file_name(name: &str) -> String {
+pub fn sanitize_file_name(name: &str) -> String {
     let cleaned: String = name
         .chars()
         .map(|c| if c.is_control() || r#"<>:"/\|?*"#.contains(c) { '-' } else { c })

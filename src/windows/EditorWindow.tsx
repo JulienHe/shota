@@ -91,7 +91,9 @@ export function EditorWindow() {
           // has actually had a chance to paint, rather than the instant React
           // commits the state update, which is what was showing the *previous*
           // capture for a moment on every capture after the first.
-          afterNextPaint().then(() => tauriApi.editorReady());
+          afterNextPaint()
+            .then(() => tauriApi.editorReady())
+            .catch((err) => console.error("editor_ready failed", err));
         };
 
         // A capture that was cropped, rotated or flipped is stored as the
@@ -197,8 +199,7 @@ export function EditorWindow() {
     closeEditor();
   };
 
-  // Both read the same cached PNG export Copy does, so neither waits on a
-  // fresh render. Always PNG: lossless, and every app accepts it.
+  // The suggested file name for whatever is exported, from the user's pattern.
   const exportedFileName = () => {
     const { imageWidth, imageHeight } = useDocumentStore.getState();
     const pattern = usePreferencesStore.getState().preferences?.fileNamePattern ?? "Shota {date} {time}";
@@ -282,13 +283,8 @@ export function EditorWindow() {
       clearToast();
       return;
     }
-    const { imageWidth, imageHeight } = useDocumentStore.getState();
-    const name = formatFileName(preferences?.fileNamePattern ?? "Shota {date} {time}", new Date(), {
-      width: imageWidth,
-      height: imageHeight,
-    });
     try {
-      const path = await tauriApi.saveImageAs(toBase64Payload(dataUrl), name, format);
+      const path = await tauriApi.saveImageAs(toBase64Payload(dataUrl), exportedFileName(), format);
       // `path` is null if the user cancelled the native save dialog ~ stay
       // open in that case since nothing actually happened. On an actual
       // save, close right away rather than clearing the toast and lingering.

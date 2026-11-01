@@ -234,6 +234,18 @@
     "outline": "Punta hueca",
     "double": "Ambos extremos"
   },
+  "shapeOptions": {
+    "blur": "Desenfoque",
+    "pixelate": "Pixelar",
+    "solid": "Continua",
+    "dashed": "Discontinua",
+    "dotted": "Punteada",
+    "strokeOnly": "Solo contorno",
+    "filled": "Relleno",
+    "strokeOpacity": "Contorno + opacidad",
+    "textOutline": "Contorno del texto",
+    "customColor": "Color personalizado"
+  },
   "textPreset": {
     "title": "Estilos",
     "plain": "Normal",

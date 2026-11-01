@@ -104,7 +104,7 @@ pub fn prewarm_editor_window(app: &AppHandle) {
 
 /// Opens the editor right away, then saves the capture into history in the
 /// background ~ used by every capture path (fullscreen/area/window), so
-/// every capture shows up in the Ctrl+Shift+6 carousel regardless of
+/// every capture shows up in the history strip regardless of
 /// whether the user ends up saving or copying it.
 ///
 /// The history id is generated up front (cheap ~ just a timestamp) so the

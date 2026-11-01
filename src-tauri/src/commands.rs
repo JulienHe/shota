@@ -92,8 +92,6 @@ pub async fn history_usage(app: AppHandle) -> Result<history::HistoryUsage, Stri
     history::usage(&app)
 }
 
-/// Whether Windows is holding Print Screen for the Snipping Tool, which
-/// would swallow Shota's default capture shortcut before it ever arrives.
 /// Whether this copy runs from the Store package, where some settings (the
 /// Explorer menu) are fixed by the manifest instead of being toggleable.
 #[tauri::command]
@@ -101,6 +99,8 @@ pub fn is_store_install() -> bool {
     crate::startup::is_packaged()
 }
 
+/// Whether Windows is holding Print Screen for the Snipping Tool, which
+/// would swallow Shota's default capture shortcut before it ever arrives.
 #[tauri::command]
 pub fn print_screen_owned_by_snipping_tool() -> bool {
     crate::printscreen::owned_by_snipping_tool()
@@ -192,6 +192,15 @@ pub fn overlay_painted_command(app: AppHandle, id: u64) -> Result<(), String> {
         .map_err(|e| e.to_string())
 }
 
+/// The selection cropped out of the frozen screen, or `missing` when there
+/// is no frozen screen (the overlay was opened over the live one).
+fn crop_frozen(app: &AppHandle, x: i32, y: i32, width: u32, height: u32, missing: &str) -> Result<image::RgbaImage, String> {
+    let (_, desktop) = app.state::<AppState>().freeze().ok_or_else(|| missing.to_string())?;
+    desktop
+        .crop(x, y, width, height)
+        .ok_or_else(|| "the selection is outside the screen".to_string())
+}
+
 /// Shared by `finish_region_capture` and `finish_window_capture`: hide the
 /// overlay (its selection rectangle / dimming) and give the compositor a
 /// moment to actually repaint without it before grabbing pixels ~ otherwise
@@ -221,14 +230,11 @@ pub async fn finish_region_capture(
     // cropped from that copy: it is exactly what the user saw, it needs no
     // moment for the overlay to disappear first, and it already spans however
     // many monitors the selection touched.
-    if let Some((_, desktop)) = app.state::<AppState>().freeze() {
+    if app.state::<AppState>().freeze().is_some() {
+        let cropped = crop_frozen(&app, x, y, width, height, "no frozen screen")?;
         hide_capture_overlay(&app)?;
         app.state::<AppState>().clear_freeze();
-        let cropped = desktop
-            .crop(x, y, width, height)
-            .ok_or_else(|| "the selection is outside the screen".to_string())?;
-        let png = capture::encode_png(cropped)?;
-        return open_editor_with_history(&app, png);
+        return open_editor_with_history(&app, capture::encode_png(cropped)?);
     }
     finish_capture(&app, || capture::capture_region(x, y, width, height))
 }
@@ -438,13 +444,7 @@ pub struct TextCapture {
 /// The overlay stays open for the caller to show the answer in, and closes it.
 #[tauri::command]
 pub async fn finish_text_capture(app: AppHandle, x: i32, y: i32, width: u32, height: u32) -> Result<TextCapture, String> {
-    let (_, desktop) = app
-        .state::<AppState>()
-        .freeze()
-        .ok_or_else(|| "there is no frozen screen to read".to_string())?;
-    let image = desktop
-        .crop(x, y, width, height)
-        .ok_or_else(|| "the selection is outside the screen".to_string())?;
+    let image = crop_frozen(&app, x, y, width, height, "there is no frozen screen to read")?;
 
     let found = tauri::async_runtime::spawn_blocking(move || -> Result<TextCapture, String> {
         if let Some(content) = crate::qr::decode_qr(&image) {
@@ -503,13 +503,7 @@ pub async fn finish_fullscreen_capture(app: AppHandle) -> Result<(), String> {
 /// Pins a selected area of the frozen screen, in place.
 #[tauri::command]
 pub async fn finish_pin_capture(app: AppHandle, x: i32, y: i32, width: u32, height: u32) -> Result<(), String> {
-    let (_, desktop) = app
-        .state::<AppState>()
-        .freeze()
-        .ok_or_else(|| "there is no frozen screen to pin".to_string())?;
-    let cropped = desktop
-        .crop(x, y, width, height)
-        .ok_or_else(|| "the selection is outside the screen".to_string())?;
+    let cropped = crop_frozen(&app, x, y, width, height, "there is no frozen screen to pin")?;
     let png = capture::encode_png(cropped)?;
 
     hide_capture_overlay(&app)?;
@@ -521,7 +515,7 @@ pub async fn finish_pin_capture(app: AppHandle, x: i32, y: i32, width: u32, heig
         if let Err(err) = open_pin(&handle, png, x, y) {
             eprintln!("could not pin the screenshot: {err}");
         }
-        crate::windows::restore_foreground_after_pin();
+        crate::windows::restore_foreground();
     })
     .map_err(|e| e.to_string())
 }
@@ -578,18 +572,12 @@ pub fn save_project(
     let original = history::get_entry(&app, &history_id)?.image_bytes;
     let text = crate::project::build(&original, &document_json, &app.package_info().version.to_string())?;
 
-    let state = app.state::<AppState>();
-    let directory = state
-        .preferences()
-        .save_dir
-        .filter(|dir| std::path::Path::new(dir).is_dir())
-        .or_else(|| state.last_save_dir())
-        .or_else(|| app.path().desktop_dir().ok().map(|p| p.to_string_lossy().to_string()));
+    let directory = file_save::default_directory(&app);
 
     let mut dialog = app
         .dialog()
         .file()
-        .set_file_name(format!("{}.{}", suggested_name.trim(), crate::project::EXTENSION))
+        .set_file_name(format!("{}.{}", file_save::sanitize_file_name(&suggested_name), crate::project::EXTENSION))
         .add_filter("Shota", &[crate::project::EXTENSION]);
     if let Some(directory) = &directory {
         dialog = dialog.set_directory(directory);
@@ -611,7 +599,7 @@ pub async fn finish_scroll_selection(app: AppHandle, x: i32, y: i32, width: u32,
         let _ = hide_capture_overlay(&handle);
         handle.state::<AppState>().clear_freeze();
         // The content has to receive the scrolling, not the overlay.
-        crate::windows::restore_foreground_after_pin();
+        crate::windows::restore_foreground();
     })
 }
 

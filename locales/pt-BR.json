@@ -234,6 +234,18 @@
     "outline": "Ponta vazada",
     "double": "Nas duas pontas"
   },
+  "shapeOptions": {
+    "blur": "Desfoque",
+    "pixelate": "Pixelar",
+    "solid": "Contínua",
+    "dashed": "Tracejada",
+    "dotted": "Pontilhada",
+    "strokeOnly": "Somente contorno",
+    "filled": "Preenchido",
+    "strokeOpacity": "Contorno + opacidade",
+    "textOutline": "Contorno do texto",
+    "customColor": "Cor personalizada"
+  },
   "textPreset": {
     "title": "Estilos",
     "plain": "Simples",

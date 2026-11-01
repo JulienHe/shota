@@ -46,6 +46,40 @@ pub(super) fn chromeless_window_builder<'a>(
         .visible(true)
 }
 
+/// Builder for the scrolling capture's backdrop and panel: like the chromeless
+/// preset, but no shadow, never focused (the content being captured keeps the
+/// keyboard) and built hidden, because their own page reveals them once painted
+/// (`show_without_focus`).
+pub(super) fn scroll_window_builder<'a>(
+    app: &'a AppHandle,
+    label: &'a str,
+    url: String,
+    title: &'a str,
+) -> WebviewWindowBuilder<'a, tauri::Wry, AppHandle> {
+    WebviewWindowBuilder::new(app, label, WebviewUrl::App(url.into()))
+        .title(title)
+        .transparent(true)
+        .background_color(tauri::webview::Color(0, 0, 0, 0))
+        .decorations(false)
+        .always_on_top(true)
+        .skip_taskbar(true)
+        .resizable(false)
+        .shadow(false)
+        .focused(false)
+        .visible(false)
+}
+
+/// The monitor holding the middle of `region` (x, y, width, height in desktop
+/// pixels), else the primary one.
+pub(super) fn monitor_under_region(app: &AppHandle, region: (i32, i32, u32, u32)) -> Result<tauri::Monitor, String> {
+    let (x, y, width, height) = region;
+    app.monitor_from_point((x + (width / 2) as i32) as f64, (y + (height / 2) as i32) as f64)
+        .ok()
+        .flatten()
+        .or_else(|| app.primary_monitor().ok().flatten())
+        .ok_or_else(|| "no monitor found".to_string())
+}
+
 /// Places a freshly built chromeless window and applies the two DWM tweaks
 /// both of them want.
 pub(super) fn place_chromeless_window(
@@ -248,8 +282,10 @@ pub(super) fn remember_foreground() {
 /// Call right after cloaking one of Shota's windows. Hands the foreground
 /// back to the remembered app, but only if Shota still holds it: when the
 /// user has already clicked elsewhere, taking focus back would be rude.
+/// Also used after a pin or a scrolling-capture selection, where the overlay
+/// was only ever in the way and must not be left holding the keyboard.
 #[cfg(windows)]
-pub(super) fn restore_foreground() {
+pub fn restore_foreground() {
     use std::sync::atomic::Ordering;
     use windows::Win32::Foundation::HWND;
     use windows::Win32::UI::WindowsAndMessaging::{
@@ -316,17 +352,11 @@ pub(super) fn reveal_and_focus(window: &WebviewWindow) {
     let _ = window.set_focus();
 }
 
-/// After a pin has been put on screen: give the keyboard back to the app the
-/// user was in, so pinning does not leave focus on an invisible overlay.
-pub fn restore_foreground_after_pin() {
-    restore_foreground();
-}
-
 #[cfg(not(windows))]
 pub(super) fn remember_foreground() {}
 
 #[cfg(not(windows))]
-pub(super) fn restore_foreground() {}
+pub fn restore_foreground() {}
 
 #[cfg(not(windows))]
 pub(super) fn round_window_corners(_window: &WebviewWindow) {}
