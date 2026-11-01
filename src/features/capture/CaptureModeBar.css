@@ -29,7 +29,7 @@
 .mode-bar__group {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
 }
 
 .mode-bar__divider {
@@ -43,9 +43,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  min-width: 92px;
-  padding: 11px 14px 9px;
+  gap: 4px;
+  min-width: 76px;
+  padding: 8px 10px 6px;
   border: 0;
   border-radius: 11px;
   background: transparent;
@@ -100,8 +100,26 @@
 }
 
 /* The size menu: groups of named sizes, the size on the right. */
-.mode-bar__button--icon {
-  padding: 8px 10px;
+/* The sizes menu's button: a square, the height of the size boxes. */
+.mode-bar__square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-left: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.mode-bar__square:hover,
+.mode-bar__square--active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
 
 .mode-bar__presets {

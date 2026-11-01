@@ -89,10 +89,26 @@ export function CaptureModeBar({ mode, onChoose, size, fixed, onFixedChange }: C
       </div>
 
       <div className="mode-bar__pill mode-bar__pill--size" aria-label={t("overlay.size")}>
+        {(["width", "height"] as const).map((field, index) => (
+          <Fragment key={field}>
+            {index > 0 && <span className="mode-bar__times">×</span>}
+            <input
+              className="mode-bar__size-box"
+              inputMode="numeric"
+              aria-label={t(field === "width" ? "overlay.width" : "overlay.height")}
+              placeholder="–"
+              value={fixed[field] || (size ? String(size[field]) : "")}
+              onChange={(e) => onFixedChange({ ...fixed, [field]: e.target.value.replace(/D/g, "").slice(0, 5) })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.currentTarget.blur();
+              }}
+            />
+          </Fragment>
+        ))}
         <button
           ref={presetsAnchor}
           type="button"
-          className={`mode-bar__button mode-bar__button--icon${presetsOpen ? " mode-bar__button--active" : ""}`}
+          className={`mode-bar__square${presetsOpen ? " mode-bar__square--active" : ""}`}
           title={t("overlay.presets")}
           aria-label={t("overlay.presets")}
           aria-expanded={presetsOpen}
@@ -135,22 +151,6 @@ export function CaptureModeBar({ mode, onChoose, size, fixed, onFixedChange }: C
             ))}
           </div>
         </Popover>
-        {(["width", "height"] as const).map((field, index) => (
-          <Fragment key={field}>
-            {index > 0 && <span className="mode-bar__times">×</span>}
-            <input
-              className="mode-bar__size-box"
-              inputMode="numeric"
-              aria-label={t(field === "width" ? "overlay.width" : "overlay.height")}
-              placeholder="–"
-              value={fixed[field] || (size ? String(size[field]) : "")}
-              onChange={(e) => onFixedChange({ ...fixed, [field]: e.target.value.replace(/D/g, "").slice(0, 5) })}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") e.currentTarget.blur();
-              }}
-            />
-          </Fragment>
-        ))}
       </div>
     </div>
   );
