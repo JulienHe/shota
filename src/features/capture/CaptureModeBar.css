@@ -98,3 +98,33 @@
   color: rgba(255, 255, 255, 0.55);
   font-size: 15px;
 }
+
+/* The size menu: groups of named sizes, the size on the right. */
+.mode-bar__button--icon {
+  padding: 8px 10px;
+}
+
+.mode-bar__presets {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 260px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.mode-bar__preset {
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.mode-bar__preset-title {
+  padding: 8px 8px 4px;
+  font-size: 11px;
+  color: #71717a;
+}
+
+.mode-bar__preset-size {
+  color: #71717a;
+  font-variant-numeric: tabular-nums;
+}

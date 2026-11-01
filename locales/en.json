@@ -113,7 +113,11 @@
     "modeScroll": "Scrolling",
     "scrollHint": "Drag over the content to scroll and capture it (beta) · Esc to cancel",
     "width": "Width",
-    "height": "Height"
+    "height": "Height",
+    "presets": "Common sizes",
+    "presetFree": "Free selection",
+    "presetSocial": "Social media",
+    "presetScreen": "Screen"
   },
   "settings": {
     "fullScreen": "Full screen",

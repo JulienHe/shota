@@ -113,7 +113,11 @@
     "modeScroll": "Desplazamiento",
     "scrollHint": "Arrastra sobre el contenido para desplazarlo y capturarlo (beta) · Esc para cancelar",
     "width": "Ancho",
-    "height": "Alto"
+    "height": "Alto",
+    "presets": "Tamaños habituales",
+    "presetFree": "Selección libre",
+    "presetSocial": "Redes sociales",
+    "presetScreen": "Pantalla"
   },
   "settings": {
     "fullScreen": "Pantalla completa",

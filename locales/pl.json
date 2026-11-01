@@ -113,7 +113,11 @@
     "modeScroll": "Przewijanie",
     "scrollHint": "Przeciągnij po treści, aby ją przewinąć i przechwycić (beta) · Esc anuluje",
     "width": "Szerokość",
-    "height": "Wysokość"
+    "height": "Wysokość",
+    "presets": "Popularne rozmiary",
+    "presetFree": "Dowolne zaznaczenie",
+    "presetSocial": "Media społecznościowe",
+    "presetScreen": "Ekran"
   },
   "settings": {
     "fullScreen": "Cały ekran",

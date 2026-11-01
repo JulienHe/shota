@@ -113,7 +113,11 @@
     "modeScroll": "スクロール",
     "scrollHint": "内容の上をドラッグしてスクロールしながらキャプチャ（ベータ） · Esc でキャンセル",
     "width": "幅",
-    "height": "高さ"
+    "height": "高さ",
+    "presets": "よく使うサイズ",
+    "presetFree": "自由に選択",
+    "presetSocial": "SNS",
+    "presetScreen": "画面"
   },
   "settings": {
     "fullScreen": "画面全体",

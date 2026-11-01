@@ -36,18 +36,7 @@ const HINT_KEYS = {
 } as const;
 
 const LOUPE_ZOOM_KEY = "shota.loupeZoom";
-const FIXED_SIZE_KEY = "shota.fixedSize";
-
-/** The size boxes' text from the last capture, so a favourite size is one click away. */
-function readFixedSize(): FixedSizeText {
-  try {
-    const stored = JSON.parse(window.localStorage.getItem(FIXED_SIZE_KEY) ?? "null");
-    if (typeof stored?.width === "string" && typeof stored?.height === "string") return stored;
-  } catch {
-    // Storage can be unavailable; no size set is fine.
-  }
-  return { width: "", height: "" };
-}
+const NO_FIXED_SIZE: FixedSizeText = { width: "", height: "" };
 
 /** The loupe's zoom, remembered between captures (and restarts, where storage allows). */
 function readLoupeZoom(): number {
@@ -84,14 +73,8 @@ export function CaptureOverlay() {
   const keepMode = useRef(false);
   // Typed into the bar's size boxes: when both are numbers, a capture is that
   // size, a rectangle following the pointer that a click takes.
-  const [fixedText, setFixedText] = useState<FixedSizeText>(readFixedSize);
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(FIXED_SIZE_KEY, JSON.stringify(fixedText));
-    } catch {
-      // Not remembered; still applies for this capture.
-    }
-  }, [fixedText]);
+  // Each capture starts without one (see the freeze listener).
+  const [fixedText, setFixedText] = useState<FixedSizeText>(NO_FIXED_SIZE);
   const mode: CaptureMode = snapMode
     ? "window"
     : textMode
@@ -211,6 +194,7 @@ export function CaptureOverlay() {
         setTextMode(false);
         setScrollMode(false);
         setSnapMode(false);
+        setFixedText(NO_FIXED_SIZE);
       }
       setStatus(null);
       void showFrozen(event.payload);

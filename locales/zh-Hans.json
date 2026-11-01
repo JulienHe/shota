@@ -113,7 +113,11 @@
     "modeScroll": "滚动",
     "scrollHint": "在内容上拖动，自动滚动并截取（测试版） · 按 Esc 取消",
     "width": "宽度",
-    "height": "高度"
+    "height": "高度",
+    "presets": "常用尺寸",
+    "presetFree": "自由选择",
+    "presetSocial": "社交媒体",
+    "presetScreen": "屏幕"
   },
   "settings": {
     "fullScreen": "全屏",

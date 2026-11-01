@@ -113,7 +113,11 @@
     "modeScroll": "Прокрутка",
     "scrollHint": "Виділіть вміст, щоб прокрутити й зняти його повністю (бета) · Esc — скасувати",
     "width": "Ширина",
-    "height": "Висота"
+    "height": "Висота",
+    "presets": "Типові розміри",
+    "presetFree": "Вільне виділення",
+    "presetSocial": "Соцмережі",
+    "presetScreen": "Екран"
   },
   "settings": {
     "fullScreen": "Увесь екран",

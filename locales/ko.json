@@ -113,7 +113,11 @@
     "modeScroll": "스크롤",
     "scrollHint": "내용 위로 드래그하여 스크롤하며 캡처 (베타) · Esc로 취소",
     "width": "너비",
-    "height": "높이"
+    "height": "높이",
+    "presets": "자주 쓰는 크기",
+    "presetFree": "자유 선택",
+    "presetSocial": "소셜 미디어",
+    "presetScreen": "화면"
   },
   "settings": {
     "fullScreen": "전체 화면",

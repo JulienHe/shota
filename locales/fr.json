@@ -113,7 +113,11 @@
     "modeScroll": "Défilement",
     "scrollHint": "Faites glisser sur le contenu pour le faire défiler et le capturer (bêta) · Échap pour annuler",
     "width": "Largeur",
-    "height": "Hauteur"
+    "height": "Hauteur",
+    "presets": "Tailles courantes",
+    "presetFree": "Sélection libre",
+    "presetSocial": "Réseaux sociaux",
+    "presetScreen": "Écran"
   },
   "settings": {
     "fullScreen": "Plein écran",

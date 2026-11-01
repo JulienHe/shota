@@ -1,5 +1,7 @@
-import { Fragment } from "react";
-import { AppWindow, ChevronsDown, Monitor, Scan, ScanText, type LucideIcon } from "lucide-react";
+import { Fragment, useRef, useState } from "react";
+import { AppWindow, ChevronsDown, Monitor, Proportions, Scan, ScanText, type LucideIcon } from "lucide-react";
+import { Popover } from "../../components/Popover";
+import { SIZE_PRESET_GROUPS } from "./sizePresets";
 import { t } from "../../lib/i18n";
 import "./CaptureModeBar.css";
 
@@ -54,6 +56,8 @@ export interface FixedSizeText {
  */
 export function CaptureModeBar({ mode, onChoose, size, fixed, onFixedChange }: CaptureModeBarProps) {
   const stop = (e: React.SyntheticEvent) => e.stopPropagation();
+  const [presetsOpen, setPresetsOpen] = useState(false);
+  const presetsAnchor = useRef<HTMLButtonElement>(null);
 
   return (
     <div
@@ -85,6 +89,52 @@ export function CaptureModeBar({ mode, onChoose, size, fixed, onFixedChange }: C
       </div>
 
       <div className="mode-bar__pill mode-bar__pill--size" aria-label={t("overlay.size")}>
+        <button
+          ref={presetsAnchor}
+          type="button"
+          className={`mode-bar__button mode-bar__button--icon${presetsOpen ? " mode-bar__button--active" : ""}`}
+          title={t("overlay.presets")}
+          aria-label={t("overlay.presets")}
+          aria-expanded={presetsOpen}
+          onClick={() => setPresetsOpen((open) => !open)}
+        >
+          <Proportions size={22} strokeWidth={1.6} />
+        </button>
+        <Popover open={presetsOpen} onClose={() => setPresetsOpen(false)} anchorRef={presetsAnchor} placement="top" align="end">
+          <div className="mode-bar__presets">
+            <button
+              type="button"
+              className="dropdown__menu-item mode-bar__preset"
+              onClick={() => {
+                onFixedChange({ width: "", height: "" });
+                setPresetsOpen(false);
+              }}
+            >
+              {t("overlay.presetFree")}
+            </button>
+            {SIZE_PRESET_GROUPS.map((group) => (
+              <Fragment key={group.title}>
+                <div className="mode-bar__preset-title">{t(group.title)}</div>
+                {group.presets.map((preset) => (
+                  <button
+                    key={preset.name}
+                    type="button"
+                    className="dropdown__menu-item mode-bar__preset"
+                    onClick={() => {
+                      onFixedChange({ width: String(preset.width), height: String(preset.height) });
+                      setPresetsOpen(false);
+                    }}
+                  >
+                    <span>{preset.name}</span>
+                    <span className="mode-bar__preset-size">
+                      {preset.width}×{preset.height}
+                    </span>
+                  </button>
+                ))}
+              </Fragment>
+            ))}
+          </div>
+        </Popover>
         {(["width", "height"] as const).map((field, index) => (
           <Fragment key={field}>
             {index > 0 && <span className="mode-bar__times">×</span>}

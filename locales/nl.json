@@ -113,7 +113,11 @@
     "modeScroll": "Scrollen",
     "scrollHint": "Sleep over de inhoud om te scrollen en vast te leggen (bèta) · Esc om te annuleren",
     "width": "Breedte",
-    "height": "Hoogte"
+    "height": "Hoogte",
+    "presets": "Gangbare formaten",
+    "presetFree": "Vrije selectie",
+    "presetSocial": "Sociale media",
+    "presetScreen": "Scherm"
   },
   "settings": {
     "fullScreen": "Volledig scherm",

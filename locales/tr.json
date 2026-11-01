@@ -113,7 +113,11 @@
     "modeScroll": "Kaydırma",
     "scrollHint": "İçeriği kaydırıp yakalamak için üzerinde sürükleyin (beta) · İptal için Esc",
     "width": "Genişlik",
-    "height": "Yükseklik"
+    "height": "Yükseklik",
+    "presets": "Yaygın boyutlar",
+    "presetFree": "Serbest seçim",
+    "presetSocial": "Sosyal medya",
+    "presetScreen": "Ekran"
   },
   "settings": {
     "fullScreen": "Tam ekran",

@@ -113,7 +113,11 @@
     "modeScroll": "Rolagem",
     "scrollHint": "Arraste sobre o conteúdo para rolar e capturar (beta) · Esc para cancelar",
     "width": "Largura",
-    "height": "Altura"
+    "height": "Altura",
+    "presets": "Tamanhos comuns",
+    "presetFree": "Seleção livre",
+    "presetSocial": "Redes sociais",
+    "presetScreen": "Tela"
   },
   "settings": {
     "fullScreen": "Tela inteira",

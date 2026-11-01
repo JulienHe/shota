@@ -113,7 +113,11 @@
     "modeScroll": "捲動",
     "scrollHint": "在內容上拖曳，自動捲動並擷取（測試版） · 按 Esc 取消",
     "width": "寬度",
-    "height": "高度"
+    "height": "高度",
+    "presets": "常用尺寸",
+    "presetFree": "自由選取",
+    "presetSocial": "社群媒體",
+    "presetScreen": "螢幕"
   },
   "settings": {
     "fullScreen": "全螢幕",

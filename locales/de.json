@@ -113,7 +113,11 @@
     "modeScroll": "Scrollen",
     "scrollHint": "Über den Inhalt ziehen, um ihn scrollend aufzunehmen (Beta) · Esc zum Abbrechen",
     "width": "Breite",
-    "height": "Höhe"
+    "height": "Höhe",
+    "presets": "Gängige Größen",
+    "presetFree": "Freie Auswahl",
+    "presetSocial": "Soziale Medien",
+    "presetScreen": "Bildschirm"
   },
   "settings": {
     "fullScreen": "Gesamter Bildschirm",

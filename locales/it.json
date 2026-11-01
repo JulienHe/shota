@@ -113,7 +113,11 @@
     "modeScroll": "Scorrimento",
     "scrollHint": "Trascina sul contenuto per scorrerlo e catturarlo (beta) · Esc per annullare",
     "width": "Larghezza",
-    "height": "Altezza"
+    "height": "Altezza",
+    "presets": "Dimensioni comuni",
+    "presetFree": "Selezione libera",
+    "presetSocial": "Social media",
+    "presetScreen": "Schermo"
   },
   "settings": {
     "fullScreen": "Schermo intero",
