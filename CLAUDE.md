@@ -374,7 +374,7 @@ Other things to keep:
 which only compares how consecutive pictures differ. That is deliberate: on the development
 machine injected wheel input is sometimes dropped (the loop then waits for the user to scroll by
 hand) and was once measured turning the *opposite way* from what its sign says, so the first
-scroll that moves the content the wrong way flips the wheel (`Stitcher::scrolled_up_by`).
+scroll that moves the content the wrong way flips the wheel (`Step::Back`).
 
 When testing, close the editor first. A finished capture opens the editor at the same screen
 position, so the next run's region sits over Shota's own window and the wheel zooms that instead.

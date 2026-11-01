@@ -16,6 +16,7 @@ polish, translations and dependencies; minors (0.x.0) are features. 0.9 is follo
 | 0.9.0 | Text and pins | Copy text from an area (Windows OCR), QR codes, pin a screenshot above other windows, a bar of capture kinds on the overlay |
 | 0.10.0 | Editor depth | Arrow heads, text styles, favourite colours, frame looks and shapes, export size, rotate and flip (with crop ratios), edits remembered with the capture, `.shota` project files |
 | 0.11.0 | Scrolling capture | Beta, on its own because it's the riskiest piece: drag over the content and Shota scrolls it and joins the pictures (or scroll by hand), keeping stuck headers and footers once |
+| 0.13.0 | Release | 0.9 to 0.12 shipped together: the capture bar over the live screen (Alt+Print Screen), exact sizes and size presets, scrolling capture reworked (manual first, up and down, video-tolerant), and a cleanup pass |
 | 0.12.0 | Interface | Toolbar tools in clusters with the shapes sharing one button, a bottom bar that keeps only drag, Copy and Save with the rest in a "..." menu (Share, Pin, export size, projects). Settings were already grouped by page and are unchanged |
 | 0.12.x | Hardening | Feature freeze, bugs, performance, translation review |
 | 1.0 | Stable | See below |
