@@ -134,6 +134,7 @@ pub fn run() {
             commands::cancel_scroll_capture,
             commands::set_scroll_auto,
             commands::show_without_focus,
+            commands::refreeze_overlay,
             commands::pin_image,
             commands::take_pin_image,
             commands::copy_pin_image,

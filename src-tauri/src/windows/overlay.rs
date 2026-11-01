@@ -220,6 +220,35 @@ fn announce_freeze(app: &AppHandle) {
     }
 }
 
+/// Freezes the screen under an overlay that was opened over the live one: the
+/// overlay is put away for the grab (it would be in the picture), then the new
+/// frozen screen is announced and revealed like any other.
+pub fn refreeze_overlay(app: &AppHandle) -> Result<(), String> {
+    let state = app.state::<AppState>();
+    if state.is_freeze_pending() {
+        return Ok(());
+    }
+    state.set_freeze_pending(true);
+    hide_capture_overlay(app)?;
+    let handle = app.clone();
+    std::thread::spawn(move || {
+        // Let the overlay finish leaving the screen before the grab.
+        std::thread::sleep(std::time::Duration::from_millis(120));
+        match capture::capture_desktop() {
+            Ok(desktop) => {
+                handle.state::<AppState>().set_freeze(desktop);
+            }
+            Err(err) => {
+                eprintln!("could not freeze the screen: {err}");
+                handle.state::<AppState>().clear_freeze();
+            }
+        }
+        let on_main = handle.clone();
+        let _ = handle.run_on_main_thread(move || announce_freeze(&on_main));
+    });
+    Ok(())
+}
+
 /// The id of the frozen screen the overlay page should paint, if one is
 /// waiting. Asked for by the page when it mounts, because an event sent before
 /// it had mounted is lost.

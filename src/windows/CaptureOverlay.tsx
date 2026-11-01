@@ -60,6 +60,9 @@ export function CaptureOverlay() {
   const [scrollMode, setScrollMode] = useState(false);
   // Opened over the live screen (the toolbar shortcut): nothing is frozen.
   const [liveScreen, setLiveScreen] = useState(false);
+  // Set when this page itself asked for a fresh frozen screen: the mode the
+  // user just chose has to survive it (a new capture otherwise starts in area).
+  const keepMode = useRef(false);
   const mode: CaptureMode = snapMode
     ? "window"
     : textMode
@@ -169,6 +172,12 @@ export function CaptureOverlay() {
   useEffect(() => {
     const unlisten = listen<number>("shota://freeze", (event) => {
       handled.current = null;
+      if (keepMode.current) {
+        keepMode.current = false;
+        setStatus(null);
+        void showFrozen(event.payload);
+        return;
+      }
       // Every capture starts in area mode, whatever the last one used. The page
       // is reused, so nothing resets by itself.
       setTextMode(false);
@@ -209,6 +218,13 @@ export function CaptureOverlay() {
       return;
     }
     setDrag(null);
+    if (liveScreen && choice === "text") {
+      // Reading text needs a still picture: freeze the screen now.
+      keepMode.current = true;
+      tauriApi.refreezeOverlay().catch(() => {
+        keepMode.current = false;
+      });
+    }
     setTextMode(choice === "text");
     setScrollMode(choice === "scroll");
     setSnapMode(choice === "window");

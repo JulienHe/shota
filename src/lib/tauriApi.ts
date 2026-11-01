@@ -114,6 +114,9 @@ export const tauriApi = {
   /** Ends a scrolling capture and throws it away. */
   cancelScrollCapture: () => invoke<void>("cancel_scroll_capture"),
 
+  /** Freezes the screen under an overlay opened over the live one. */
+  refreezeOverlay: () => invoke<void>("refreeze_overlay"),
+
   /** Reveals the calling window, built hidden, without taking the focus. */
   showWithoutFocus: () => invoke<void>("show_without_focus"),
 

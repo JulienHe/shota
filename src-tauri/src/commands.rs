@@ -470,10 +470,17 @@ pub async fn finish_text_capture(app: AppHandle, x: i32, y: i32, width: u32, hei
 /// Captures the whole monitor under the cursor, from the frozen screen.
 #[tauri::command]
 pub async fn finish_fullscreen_capture(app: AppHandle) -> Result<(), String> {
-    let (_, desktop) = app
-        .state::<AppState>()
-        .freeze()
-        .ok_or_else(|| "there is no frozen screen to capture".to_string())?;
+    // From the frozen screen; or, when the overlay was opened over the live
+    // one (the capture bar shortcut), from the screen as it is once the
+    // overlay has gone.
+    let desktop = match app.state::<AppState>().freeze() {
+        Some((_, desktop)) => desktop,
+        None => {
+            hide_capture_overlay(&app)?;
+            std::thread::sleep(std::time::Duration::from_millis(120));
+            std::sync::Arc::new(capture::capture_desktop()?)
+        }
+    };
 
     let monitor = match app.cursor_position().ok().and_then(|p| app.monitor_from_point(p.x, p.y).ok().flatten()) {
         Some(monitor) => monitor,
@@ -645,4 +652,12 @@ pub fn show_without_focus(window: tauri::WebviewWindow) {
     }
     #[cfg(not(windows))]
     let _ = window.show();
+}
+
+/// The overlay was opened over the live screen and the user chose a mode that
+/// reads a still picture (text): freeze the screen now. The overlay steps out
+/// of the way for the grab and comes back showing the frozen copy.
+#[tauri::command]
+pub async fn refreeze_overlay(app: AppHandle) -> Result<(), String> {
+    crate::windows::refreeze_overlay(&app)
 }
